@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-005
 phase: Dify-ECS
+wave: W10
 depends_on: [KS-DIFY-ECS-003, KS-RETRIEVAL-008]
 files_touched:
   - knowledge_serving/serving/log_writer.py

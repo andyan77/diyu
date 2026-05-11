@@ -1,6 +1,7 @@
 ---
 task_id: KS-CD-002
 phase: CD
+wave: W8
 depends_on: [KS-DIFY-ECS-003, KS-DIFY-ECS-004]
 files_touched:
   - scripts/rollback_to_compile_run.py

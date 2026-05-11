@@ -1,6 +1,7 @@
 ---
 task_id: KS-SCHEMA-003
 phase: Schema
+wave: W1
 depends_on: [KS-S0-006]
 files_touched:
   - knowledge_serving/schema/context_bundle.schema.json

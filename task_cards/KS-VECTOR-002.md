@@ -1,6 +1,7 @@
 ---
 task_id: KS-VECTOR-002
 phase: Vector
+wave: W7
 depends_on: [KS-VECTOR-001]
 files_touched:
   - knowledge_serving/vector_payloads/qdrant_payload_schema.json

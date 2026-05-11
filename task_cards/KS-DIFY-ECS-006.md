@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-006
 phase: Dify-ECS
+wave: W11
 depends_on: [KS-DIFY-ECS-003, KS-DIFY-ECS-004, KS-DIFY-ECS-005]
 files_touched:
   - scripts/ecs_e2e_smoke.py

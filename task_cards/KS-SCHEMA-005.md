@@ -1,6 +1,7 @@
 ---
 task_id: KS-SCHEMA-005
 phase: Schema
+wave: W2
 depends_on: [KS-SCHEMA-001, KS-SCHEMA-002, KS-SCHEMA-003, KS-SCHEMA-004]
 files_touched:
   - knowledge_serving/README.md

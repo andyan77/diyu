@@ -1,6 +1,7 @@
 ---
 task_id: KS-COMPILER-012
 phase: Compiler
+wave: W3
 depends_on: [KS-SCHEMA-002]
 files_touched:
   - knowledge_serving/control/context_bundle_log.csv

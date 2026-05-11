@@ -1,6 +1,7 @@
 ---
 task_id: KS-POLICY-004
 phase: Policy
+wave: W4
 depends_on: [KS-COMPILER-010]
 files_touched:
   - knowledge_serving/policies/retrieval_policy.yaml

@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-001
 phase: Dify-ECS
+wave: W1
 depends_on: [KS-S0-003]
 files_touched:
   - scripts/ingest_from_ecs.py

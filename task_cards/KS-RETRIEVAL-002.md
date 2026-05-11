@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-002
 phase: Retrieval
+wave: W4
 depends_on: [KS-S0-005, KS-COMPILER-002]
 files_touched:
   - knowledge_serving/serving/intent_classifier.py

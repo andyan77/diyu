@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-010
 phase: Dify-ECS
+wave: W11
 depends_on: [KS-DIFY-ECS-005]
 files_touched:
   - scripts/replay_context_bundle.py

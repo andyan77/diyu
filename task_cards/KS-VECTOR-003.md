@@ -1,6 +1,7 @@
 ---
 task_id: KS-VECTOR-003
 phase: Vector
+wave: W7
 depends_on: [KS-VECTOR-001, KS-S0-004]
 files_touched:
   - knowledge_serving/scripts/qdrant_filter_smoke.py

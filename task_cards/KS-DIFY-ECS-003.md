@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-003
 phase: Dify-ECS
+wave: W6
 depends_on: [KS-COMPILER-013, KS-DIFY-ECS-002]
 files_touched:
   - knowledge_serving/scripts/upload_serving_views_to_ecs.py

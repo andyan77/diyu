@@ -1,6 +1,7 @@
 ---
 task_id: KS-CD-001
 phase: CD
+wave: W13
 depends_on: [KS-COMPILER-013, KS-RETRIEVAL-009, KS-VECTOR-003, KS-DIFY-ECS-006, KS-DIFY-ECS-007, KS-DIFY-ECS-008, KS-DIFY-ECS-009, KS-DIFY-ECS-010]
 files_touched:
   - .github/workflows/serving.yml

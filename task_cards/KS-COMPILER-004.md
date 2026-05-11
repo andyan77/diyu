@@ -1,6 +1,7 @@
 ---
 task_id: KS-COMPILER-004
 phase: Compiler
+wave: W3
 depends_on: [KS-SCHEMA-005]
 files_touched:
   - knowledge_serving/scripts/compile_play_card_view.py

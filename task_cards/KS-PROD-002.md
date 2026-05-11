@@ -1,6 +1,7 @@
 ---
 task_id: KS-PROD-002
 phase: Production-Readiness
+wave: W12
 depends_on: [KS-DIFY-ECS-006]
 files_touched:
   - knowledge_serving/tests/test_tenant_isolation_e2e.py

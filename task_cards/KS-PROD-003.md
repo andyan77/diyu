@@ -1,6 +1,7 @@
 ---
 task_id: KS-PROD-003
 phase: Production-Readiness
+wave: W10
 depends_on: [KS-RETRIEVAL-008, KS-POLICY-005]
 files_touched:
   - knowledge_serving/tests/test_llm_assist_boundary.py

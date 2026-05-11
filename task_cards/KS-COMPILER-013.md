@@ -1,6 +1,7 @@
 ---
 task_id: KS-COMPILER-013
 phase: Compiler
+wave: W5
 depends_on: [KS-COMPILER-001, KS-COMPILER-002, KS-COMPILER-003, KS-COMPILER-004, KS-COMPILER-005, KS-COMPILER-006, KS-COMPILER-007, KS-COMPILER-008, KS-COMPILER-009, KS-COMPILER-010, KS-COMPILER-011, KS-COMPILER-012]
 files_touched:
   - knowledge_serving/scripts/validate_serving_governance.py

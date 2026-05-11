@@ -1,6 +1,7 @@
 ---
 task_id: KS-COMPILER-010
 phase: Compiler
+wave: W3
 depends_on: [KS-SCHEMA-002, KS-S0-005]
 files_touched:
   - knowledge_serving/scripts/compile_retrieval_policy_view.py

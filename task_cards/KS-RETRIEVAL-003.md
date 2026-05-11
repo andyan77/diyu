@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-003
 phase: Retrieval
+wave: W4
 depends_on: [KS-SCHEMA-004]
 files_touched:
   - knowledge_serving/serving/business_brief_checker.py

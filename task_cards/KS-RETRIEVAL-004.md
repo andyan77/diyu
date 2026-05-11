@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-004
 phase: Retrieval
+wave: W7
 depends_on: [KS-COMPILER-003, KS-COMPILER-009, KS-POLICY-001]
 files_touched:
   - knowledge_serving/serving/recipe_selector.py

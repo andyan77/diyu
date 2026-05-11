@@ -1,7 +1,7 @@
 # 最终报告 · final_report
 
-> 自动生成于 2026-05-12 00:43:32 · 由 `scripts/render_final_report.py` 从 audit_status.json + 磁盘真相渲染
-> audit_status 时间戳与本报告时间戳同步：2026-05-12 00:43:32
+> 自动生成于 2026-05-12 02:03:33 · 由 `scripts/render_final_report.py` 从 audit_status.json + 磁盘真相渲染
+> audit_status 时间戳与本报告时间戳同步：2026-05-12 02:03:33
 
 ## 1 · 27 道硬门成绩
 
@@ -10,27 +10,27 @@
 | Gate | Name | Status | Summary |
 | --- | --- | --- | --- |
 | G1 | schema_canonical | ✅ pass | 9 tables, definitions OK |
-| G0 | csv_structure_check | ✅ pass | 清单写入: /home/faye/20-血肉-2F种子/clean_output/audit/_process/csv_struct_violations.csv |
-| G2 | validate_csv_strict | ✅ pass | 清单: /home/faye/20-血肉-2F种子/clean_output/audit/_process/csv_violations.csv |
-| G5 | register_enum | ✅ pass | 违反: 0 → /home/faye/20-血肉-2F种子/clean_output/audit/_process/register_enum_violations.csv |
+| G0 | csv_structure_check | ✅ pass | 清单写入: /home/faye/diyu/clean_output/audit/_process/csv_struct_violations.csv |
+| G2 | validate_csv_strict | ✅ pass | 清单: /home/faye/diyu/clean_output/audit/_process/csv_violations.csv |
+| G5 | register_enum | ✅ pass | 违反: 0 → /home/faye/diyu/clean_output/audit/_process/register_enum_violations.csv |
 | G6 | load_to_sqlite | ? deprecated_pass |      ALLOW_DEPRECATED_LOAD_TO_SQLITE=1 python3 clean_output/scripts/load_to_sqlite.py |
-| G7 | task_cards_status | ✅ pass | 已写: /home/faye/20-血肉-2F种子/clean_output/audit/task_cards.md |
+| G7 | task_cards_status | ✅ pass | 已写: /home/faye/diyu/clean_output/audit/task_cards.md |
 | G8a | ddl_sync | ✅ pass |    CHECK 表达：CHECK (brand_layer = 'domain_general' OR brand_layer = 'needs_review' OR (bran |
-| G8b | ddl_check_demo | ✅ pass | 日志: /home/faye/20-血肉-2F种子/clean_output/storage/sqlite3_demo_log.txt |
+| G8b | ddl_check_demo | ✅ pass | 日志: /home/faye/diyu/clean_output/storage/sqlite3_demo_log.txt |
 | Gv | verify_reverse_traceability | ✅ pass | ✅ 反向追溯链路全通 |
 | G9 | manifest_consistency | ✅ pass | ✅ manifest 与磁盘真相一致 |
-| G10 | brand_residue_in_csv | ✅ pass | 清单    : /home/faye/20-血肉-2F种子/clean_output/audit/_process/brand_residue_in_csv.csv |
-| G11 | yaml_csv_field_sync | ✅ pass | 清单    : /home/faye/20-血肉-2F种子/clean_output/audit/_process/yaml_csv_sync_violations.csv |
-| G12 | coverage_closure | ✅ pass |   json -> /home/faye/20-血肉-2F种子/clean_output/audit/coverage_status.json |
-| G13 | anchor_quote_authenticity | ✅ pass | 违反: 0 → /home/faye/20-血肉-2F种子/clean_output/audit/_process/anchor_quote_violations.csv |
+| G10 | brand_residue_in_csv | ✅ pass | 清单    : /home/faye/diyu/clean_output/audit/_process/brand_residue_in_csv.csv |
+| G11 | yaml_csv_field_sync | ✅ pass | 清单    : /home/faye/diyu/clean_output/audit/_process/yaml_csv_sync_violations.csv |
+| G12 | coverage_closure | ✅ pass |   json -> /home/faye/diyu/clean_output/audit/coverage_status.json |
+| G13 | anchor_quote_authenticity | ✅ pass | 违反: 0 → /home/faye/diyu/clean_output/audit/_process/anchor_quote_violations.csv |
 | G14 | fk_constraints | ✅ pass |   ✅ DB FK + 应用层引用全绿 |
 | G15 | clean_output_purity | ✅ pass |   ✅ 顶层结构 + 残留扫描全绿（prompt §2 七子目录纪律遵守） |
-| G16a | parse_md_source_units | ✅ pass |   → /home/faye/20-血肉-2F种子/clean_output/audit/source_unit_inventory.csv |
+| G16a | parse_md_source_units | ✅ pass |   → /home/faye/diyu/clean_output/audit/source_unit_inventory.csv |
 | G16b | compute_knowledge_point_coverage | ✅ pass |   → coverage_status.json (knowledge_point_coverage 字段) |
 | G16c | knowledge_point_coverage_baseline | ✅ pass |   ✅ 通过基线（实际抽取粒度为'概念级 pack' 非'玩法卡级'，保底 20.0%） |
 | G16d_a | build_source_unit_adjudication | ✅ pass | 已写入 coverage_status.json · layer_distribution (W11 三层防漂移) |
 | G16d_b | check_source_unit_adjudication | ✅ pass |   ✅ 全部 source_unit 有合法 adjudication_status；pending 全部具名+优先级+理由 |
-| G17a | build_evidence_row_adjudication | ✅ pass | 输出: /home/faye/20-血肉-2F种子/clean_output/audit/evidence_row_adjudication.csv |
+| G17a | build_evidence_row_adjudication | ✅ pass | 输出: /home/faye/diyu/clean_output/audit/evidence_row_adjudication.csv |
 | G17b | check_evidence_row_adjudication | ✅ pass |   ✅ row 级裁决账本完整、覆盖率 100%、无未签字 needs_human_review |
 | G18 | derived_doc_freshness | ✅ pass |   ✅ 派生文档全部带合法 frontmatter；live 文档与 manifest 数值一致 |
 | G19 | layer_adjudication | ✅ pass |   ✅ G19 通过：W11 三层裁决完整、契约合规、无未签字行 |

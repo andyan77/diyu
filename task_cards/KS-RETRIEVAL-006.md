@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-006
 phase: Retrieval
+wave: W7
 depends_on: [KS-VECTOR-001, KS-POLICY-005]
 files_touched:
   - knowledge_serving/serving/vector_retrieval.py

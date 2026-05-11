@@ -1,6 +1,7 @@
 ---
 task_id: KS-POLICY-003
 phase: Policy
+wave: W4
 depends_on: [KS-COMPILER-011]
 files_touched:
   - knowledge_serving/policies/merge_precedence_policy.yaml

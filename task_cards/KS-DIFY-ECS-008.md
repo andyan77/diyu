@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-008
 phase: Dify-ECS
+wave: W12
 depends_on: [KS-DIFY-ECS-007]
 files_touched:
   - docs/dify_chatflow_nodes.md

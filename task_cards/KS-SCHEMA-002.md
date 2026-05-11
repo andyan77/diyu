@@ -1,6 +1,7 @@
 ---
 task_id: KS-SCHEMA-002
 phase: Schema
+wave: W1
 depends_on: [KS-S0-006]
 files_touched:
   - knowledge_serving/schema/control_tables.schema.json

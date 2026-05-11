@@ -1,6 +1,7 @@
 ---
 task_id: KS-PROD-001
 phase: Production-Readiness
+wave: W14
 depends_on: [KS-CD-001]
 files_touched:
   - knowledge_serving/scripts/run_serving_regression_tests.py

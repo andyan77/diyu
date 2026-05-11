@@ -1,6 +1,7 @@
 ---
 task_id: KS-POLICY-005
 phase: Policy
+wave: W0
 depends_on: []
 files_touched:
   - knowledge_serving/policies/model_policy.yaml

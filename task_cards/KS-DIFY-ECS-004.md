@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-004
 phase: Dify-ECS
+wave: W7
 depends_on: [KS-VECTOR-001, KS-POLICY-005, KS-S0-003]
 files_touched:
   - knowledge_serving/scripts/upload_qdrant_chunks.py

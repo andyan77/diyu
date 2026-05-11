@@ -1,6 +1,7 @@
 ---
 task_id: KS-COMPILER-003
 phase: Compiler
+wave: W4
 depends_on: [KS-COMPILER-002, KS-SCHEMA-004]
 files_touched:
   - knowledge_serving/scripts/compile_generation_recipe_view.py

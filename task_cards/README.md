@@ -131,6 +131,41 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 
 完整 DAG 见 `dag.csv` 与 `validate_task_cards.py --print-dag`。
 
+## 7.1 波次划分 / Wave Schedule（按依赖拓扑分层）
+
+> 划分原则：**同一波次内的卡，依赖全部落在更早波次**，因此波次内卡片**可并行**实施；**跨波次必须串行**。波次号在 `dag.csv` 的 `wave` 列是机器可读真源；本表是人类可读视图。
+
+| Wave | 卡数 | 阻塞下一波的关键产物 | 卡片清单 | 状态 |
+|---|---|---|---|---|
+| **W0** | 7 | clean_output 真源基线 + manifest hash + LLM 边界 model_policy | KS-S0-001..006, KS-POLICY-005 | ✅ **done (7/7)** |
+| **W1** | 5 | 4 份 JSON schema + ECS 容器骨架 | KS-SCHEMA-001..004, KS-DIFY-ECS-001 | ⬜ not_started |
+| **W2** | 2 | serving 目录骨架 + ECS Compose 联调 | KS-SCHEMA-005, KS-DIFY-ECS-002 | ⬜ not_started |
+| **W3** | 11 | 7 view + 4 control（除 view_pack_overlay 与 P1 总闸） | KS-COMPILER-001/002/004/005/006/007/008/009/010/011/012 | ⬜ not_started |
+| **W4** | 6 | overlay view + 2 policy（fallback/merge） + 3 召回起点 | KS-COMPILER-003, KS-POLICY-003/004, KS-RETRIEVAL-001/002/003 | ⬜ not_started |
+| **W5** | 1 | **S1-S7 compile 总闸**（compile_run_id 全链路） | KS-COMPILER-013 | ⬜ not_started |
+| **W6** | 5 | guardrail + retrieval policy + structured 召回 + 向量库初始化 + ECS 双写 | KS-POLICY-001/002, KS-RETRIEVAL-005, KS-VECTOR-001, KS-DIFY-ECS-003 | ⬜ not_started |
+| **W7** | 6 | structured 召回链 + 向量回归 + ECS Qdrant 灌库 + replay 准备 | KS-RETRIEVAL-004/006, KS-VECTOR-002/003, KS-DIFY-ECS-004/009 | ⬜ not_started |
+| **W8** | 2 | 召回合流 + 回滚预案 | KS-RETRIEVAL-007, KS-CD-002 | ⬜ not_started |
+| **W9** | 1 | 召回排序/裁剪/输出 | KS-RETRIEVAL-008 | ⬜ not_started |
+| **W10** | 3 | 召回 13 步全链汇总 + ECS API 集成 + LLM 边界回归 | KS-RETRIEVAL-009, KS-DIFY-ECS-005, KS-PROD-003 | ⬜ not_started |
+| **W11** | 3 | 端到端冒烟 + Chatflow + replay | KS-DIFY-ECS-006/007/010 | ⬜ not_started |
+| **W12** | 2 | guardrail 集成 + 跨租户回归 | KS-DIFY-ECS-008, KS-PROD-002 | ⬜ not_started |
+| **W13** | 1 | **CI/CD 流水线总闸（S0-S13 全绿）** | KS-CD-001 | ⬜ not_started |
+| **W14** | 1 | **S1-S13 上线总回归** | KS-PROD-001 | ⬜ not_started |
+| **合计** | **56** | — | — | **7/56 done = 12.5%** |
+
+**波次推进规则**：
+
+1. **同波次并行 / 跨波次串行**：W_n 内任意卡可并发开工；W_{n+1} 必须等 W_n **全部 done** 才能起跑（DAG 严格约束）。
+2. **关键瓶颈卡**（单卡独占一个波次，是后续工作的全局总闸）：
+   - **W5 · KS-COMPILER-013**（S1-S7 compile 总闸）→ 卡住整个 Policy / Retrieval / Vector / Dify-ECS 链
+   - **W9 · KS-RETRIEVAL-008**（召回输出层）→ 卡住 Retrieval 汇总与 ECS API
+   - **W13 · KS-CD-001**（CI/CD 总闸）→ 卡住上线总回归
+   - **W14 · KS-PROD-001**（最终验收）→ 项目终点
+   建议在 W3/W7/W11 收尾前提前为这三张瓶颈卡预审 Independent Reviewer Prompt，避免到点才发现阻塞。
+3. **状态同步**：每张卡 `status` 流转必须同步更新对应 `dag.csv` 行的 `status` 字段；`wave` 字段只在拓扑结构变化（新增 / 删除卡或修改 `depends_on`）时才动，普通状态推进**不要**改 wave。
+4. **W0 已完成证据**：见 commit `1fee254 W0 全完成 · 7/7 + Qdrant healthy + manifest hash` 及 `clean_output/audit/baseline_alignment_KS-S0-001.md`。
+
 ## 8. 状态流转
 
 ```

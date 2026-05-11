@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-002
 phase: Dify-ECS
+wave: W2
 depends_on: [KS-DIFY-ECS-001]
 files_touched:
   - scripts/reconcile_ecs_pg_vs_nine_tables.py

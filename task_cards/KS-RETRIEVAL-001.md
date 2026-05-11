@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-001
 phase: Retrieval
+wave: W4
 depends_on: [KS-COMPILER-008]
 files_touched:
   - knowledge_serving/serving/tenant_scope_resolver.py

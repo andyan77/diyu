@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-009
 phase: Dify-ECS
+wave: W7
 depends_on: [KS-POLICY-002]
 files_touched:
   - knowledge_serving/serving/guardrail.py

@@ -1,6 +1,7 @@
 ---
 task_id: KS-VECTOR-001
 phase: Vector
+wave: W6
 depends_on: [KS-COMPILER-013, KS-POLICY-005]
 files_touched:
   - knowledge_serving/scripts/build_qdrant_payloads.py

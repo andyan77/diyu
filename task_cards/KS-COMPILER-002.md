@@ -1,6 +1,7 @@
 ---
 task_id: KS-COMPILER-002
 phase: Compiler
+wave: W3
 depends_on: [KS-SCHEMA-005, KS-S0-005]
 files_touched:
   - knowledge_serving/scripts/compile_content_type_view.py

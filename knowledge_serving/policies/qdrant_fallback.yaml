@@ -1,0 +1,55 @@
+# qdrant_fallback.yaml · KS-S0-004 · Qdrant 不可用时的降级策略
+# Qdrant down → fallback strategy (structured-only retrieval)
+# ===================================================================
+# 契约 / contract:
+#   - 当 check_qdrant_health.py --strict --env staging 探活 down 时
+#     serving 不全挂，按本策略降级为 structured-only 召回
+#   - 本文件是 Phase 2 唯一权威降级决策；运行时不允许私自走其它策略
+# ===================================================================
+
+policy_id: qdrant_fallback_v1
+task_card: KS-S0-004
+schema_version: 1
+last_updated: 2026-05-12
+
+# 触发条件 / triggers
+when:
+  qdrant_status: down                 # /healthz 或 /readyz 非 200 即视为 down
+  detection_source: scripts/check_qdrant_health.py
+  evaluation_env: staging             # prod 走 KS-CD-001 单独决议，不复用本文件
+
+# 降级动作 / fallback strategy
+strategy:
+  name: structured_only               # 关闭向量召回，只跑结构化 SQL/CSV 召回
+  description: |
+    Qdrant 不可用时，retrieval router 关闭 vector 通道；
+    只保留 structured（9 表 SQL）+ play_card / runtime_asset 直查通道。
+
+# 健康检查参数 / health probe params
+probe:
+  endpoint_priority: ["/readyz", "/healthz", "/collections"]
+  timeout_seconds: 5                  # 单次探活超时
+  retry_attempts: 3                   # 失败重试次数
+  retry_interval_seconds: 2           # 重试间隔
+  degraded_latency_ms_threshold: 1500 # 超过即标 degraded（非 down）
+
+# 降级期望 / fallback expectations
+expectations:
+  retrieval_coverage_floor: 0.5       # 结构化通道最低召回覆盖（≥50% query 仍可返回）
+  latency_budget_ms: 3000             # 降级模式 e2e 延迟预算
+  user_visible_message: "向量召回暂不可用，已切换结构化召回"
+  log_marker: "FALLBACK_STRUCTURED_ONLY"
+  alert: true                         # 触发后必须告警，不允许静默
+
+# 恢复条件 / recovery
+recovery:
+  consecutive_healthy_probes: 3       # 连续 3 次健康才认为恢复
+  cool_down_seconds: 60               # 防抖窗口
+
+# 与 KS-S0-004 §6 测试矩阵的对应 / test matrix mapping
+test_matrix_alignment:
+  qdrant_down_strict: "exit 1 + fallback_signal=structured_only"
+  qdrant_down_nonstrict: "返回 fallback_signal=structured_only"
+  latency_over_threshold: "标 degraded，不立即触发 fallback"
+  api_key_error: "exit 1（凭据错独立于 down）"
+  prod_endpoint_misuse: "脚本层硬拒绝"

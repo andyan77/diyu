@@ -1,57 +1,57 @@
-task_id,phase,depends_on,s_gates,plan_sections,writes_clean_output,status
-KS-S0-001,S0,,S0,"§12 S0;§A2.1",true,done
-KS-S0-002,S0,KS-S0-001,S0,"§12 S0;§A2.2",true,done
-KS-S0-003,S0,,S0,"§A2.4",true,done
-KS-S0-004,S0,KS-S0-003,S0,"§A2.5;§8",true,done
-KS-S0-005,S0,,S0,"§3.2;§A2.6",false,done
-KS-S0-006,S0,KS-S0-001,S0,"§2;§A2",true,done
-KS-SCHEMA-001,Schema,KS-S0-006,,"§3;§2",false,not_started
-KS-SCHEMA-002,Schema,KS-S0-006,,"§4",false,not_started
-KS-SCHEMA-003,Schema,KS-S0-006,,"§5",false,not_started
-KS-SCHEMA-004,Schema,KS-S0-006,S11,"§A4;§3.3",false,not_started
-KS-SCHEMA-005,Schema,KS-SCHEMA-001;KS-SCHEMA-002;KS-SCHEMA-003;KS-SCHEMA-004,,"§11",false,not_started
-KS-COMPILER-001,Compiler,KS-SCHEMA-005;KS-S0-005,S1;S2;S3;S4,"§3.1",false,not_started
-KS-COMPILER-002,Compiler,KS-SCHEMA-005;KS-S0-005,S1;S2;S3;S4,"§3.2",false,not_started
-KS-COMPILER-003,Compiler,KS-COMPILER-002;KS-SCHEMA-004,S11,"§3.3",false,not_started
-KS-COMPILER-004,Compiler,KS-SCHEMA-005,S6,"§3.4",false,not_started
-KS-COMPILER-005,Compiler,KS-SCHEMA-005,S1,"§3.5",false,not_started
-KS-COMPILER-006,Compiler,KS-SCHEMA-005,S3,"§3.6",false,not_started
-KS-COMPILER-007,Compiler,KS-SCHEMA-005,S5,"§3.7",false,not_started
-KS-COMPILER-008,Compiler,KS-SCHEMA-002,,"§4.1",false,not_started
-KS-COMPILER-009,Compiler,KS-SCHEMA-002,S7,"§4.2",false,not_started
-KS-COMPILER-010,Compiler,KS-SCHEMA-002;KS-S0-005,,"§4.3",false,not_started
-KS-COMPILER-011,Compiler,KS-SCHEMA-002,,"§4.4",false,not_started
-KS-COMPILER-012,Compiler,KS-SCHEMA-002,S8,"§4.5",false,not_started
-KS-COMPILER-013,Compiler,KS-COMPILER-001;KS-COMPILER-002;KS-COMPILER-003;KS-COMPILER-004;KS-COMPILER-005;KS-COMPILER-006;KS-COMPILER-007;KS-COMPILER-008;KS-COMPILER-009;KS-COMPILER-010;KS-COMPILER-011;KS-COMPILER-012,S1;S2;S3;S4;S5;S6;S7,"§12 S1-S7",false,not_started
-KS-POLICY-001,Policy,KS-COMPILER-013,S7,"§7",false,not_started
-KS-POLICY-002,Policy,KS-COMPILER-013,S11,"§10",false,not_started
-KS-POLICY-003,Policy,KS-COMPILER-011,,"§4.4",false,not_started
-KS-POLICY-004,Policy,KS-COMPILER-010,,"§4.3",false,not_started
-KS-POLICY-005,Policy,,S12,"§9.1",false,done
-KS-RETRIEVAL-001,Retrieval,KS-COMPILER-008,S9,"§6.1",false,not_started
-KS-RETRIEVAL-002,Retrieval,KS-S0-005;KS-COMPILER-002,,"§6.2;§6.3",false,not_started
-KS-RETRIEVAL-003,Retrieval,KS-SCHEMA-004,S11,"§6.4",false,not_started
-KS-RETRIEVAL-004,Retrieval,KS-COMPILER-003;KS-COMPILER-009;KS-POLICY-001,S7,"§6.5;§6.6",false,not_started
-KS-RETRIEVAL-005,Retrieval,KS-COMPILER-013,S2,"§6.7",false,not_started
-KS-RETRIEVAL-006,Retrieval,KS-VECTOR-001;KS-POLICY-005,S10,"§6.8;§8",false,not_started
-KS-RETRIEVAL-007,Retrieval,KS-RETRIEVAL-005;KS-RETRIEVAL-006;KS-POLICY-001;KS-POLICY-003,S7,"§6.9;§6.10;§6.11",false,not_started
-KS-RETRIEVAL-008,Retrieval,KS-RETRIEVAL-007;KS-COMPILER-012,S8,"§6.12;§6.13;§5",false,not_started
-KS-RETRIEVAL-009,Retrieval,KS-RETRIEVAL-001;KS-RETRIEVAL-002;KS-RETRIEVAL-003;KS-RETRIEVAL-004;KS-RETRIEVAL-005;KS-RETRIEVAL-006;KS-RETRIEVAL-007;KS-RETRIEVAL-008,S7;S8;S9;S10;S11,"§B Phase3",false,not_started
-KS-VECTOR-001,Vector,KS-COMPILER-013;KS-POLICY-005,S10,"§8",false,not_started
-KS-VECTOR-002,Vector,KS-VECTOR-001,S10,"§8",false,not_started
-KS-VECTOR-003,Vector,KS-VECTOR-001;KS-S0-004,S10,"§8;§B Phase4",false,not_started
-KS-DIFY-ECS-001,Dify-ECS,KS-S0-003,,"§A1;§A2.4",false,not_started
-KS-DIFY-ECS-002,Dify-ECS,KS-DIFY-ECS-001,,"§A1",false,not_started
-KS-DIFY-ECS-003,Dify-ECS,KS-COMPILER-013;KS-DIFY-ECS-002,,"§11;§A1",false,not_started
-KS-DIFY-ECS-004,Dify-ECS,KS-VECTOR-001;KS-POLICY-005;KS-S0-003,S10;S12,"§8;§9.1",false,not_started
-KS-DIFY-ECS-005,Dify-ECS,KS-DIFY-ECS-003;KS-RETRIEVAL-008,S8,"§4.5;§9.3",false,not_started
-KS-DIFY-ECS-006,Dify-ECS,KS-DIFY-ECS-003;KS-DIFY-ECS-004;KS-DIFY-ECS-005,S8;S9,"§B Phase5",false,not_started
-KS-DIFY-ECS-007,Dify-ECS,KS-RETRIEVAL-009,,"§5",false,not_started
-KS-DIFY-ECS-008,Dify-ECS,KS-DIFY-ECS-007,,"§10",false,not_started
-KS-DIFY-ECS-009,Dify-ECS,KS-POLICY-002,S11,"§10;§7",false,not_started
-KS-DIFY-ECS-010,Dify-ECS,KS-DIFY-ECS-005,S8,"§B Phase5",false,not_started
-KS-CD-001,CD,KS-COMPILER-013;KS-RETRIEVAL-009;KS-VECTOR-003;KS-DIFY-ECS-006;KS-DIFY-ECS-007;KS-DIFY-ECS-008;KS-DIFY-ECS-009;KS-DIFY-ECS-010,S0;S1;S2;S3;S4;S5;S6;S7;S8;S9;S10;S11;S12;S13,"§12",false,not_started
-KS-CD-002,CD,KS-DIFY-ECS-003;KS-DIFY-ECS-004,,"§A3;§B Phase4",false,not_started
-KS-PROD-001,Production-Readiness,KS-CD-001,S1;S2;S3;S4;S5;S6;S7;S8;S9;S10;S11;S12;S13,"§12",false,not_started
-KS-PROD-002,Production-Readiness,KS-DIFY-ECS-006,S9,"§12 S9;§A3",false,not_started
-KS-PROD-003,Production-Readiness,KS-RETRIEVAL-008;KS-POLICY-005,S13,"§9.2;§12 S13",false,not_started
+task_id,phase,wave,depends_on,s_gates,plan_sections,writes_clean_output,status
+KS-S0-001,S0,W0,,S0,"§12 S0;§A2.1",true,done
+KS-S0-002,S0,W0,KS-S0-001,S0,"§12 S0;§A2.2",true,done
+KS-S0-003,S0,W0,,S0,"§A2.4",true,done
+KS-S0-004,S0,W0,KS-S0-003,S0,"§A2.5;§8",true,done
+KS-S0-005,S0,W0,,S0,"§3.2;§A2.6",false,done
+KS-S0-006,S0,W0,KS-S0-001,S0,"§2;§A2",true,done
+KS-POLICY-005,Policy,W0,,S12,"§9.1",false,done
+KS-SCHEMA-001,Schema,W1,KS-S0-006,,"§3;§2",false,not_started
+KS-SCHEMA-002,Schema,W1,KS-S0-006,,"§4",false,not_started
+KS-SCHEMA-003,Schema,W1,KS-S0-006,,"§5",false,not_started
+KS-SCHEMA-004,Schema,W1,KS-S0-006,S11,"§A4;§3.3",false,not_started
+KS-DIFY-ECS-001,Dify-ECS,W1,KS-S0-003,,"§A1;§A2.4",false,not_started
+KS-SCHEMA-005,Schema,W2,KS-SCHEMA-001;KS-SCHEMA-002;KS-SCHEMA-003;KS-SCHEMA-004,,"§11",false,not_started
+KS-DIFY-ECS-002,Dify-ECS,W2,KS-DIFY-ECS-001,,"§A1",false,not_started
+KS-COMPILER-001,Compiler,W3,KS-SCHEMA-005;KS-S0-005,S1;S2;S3;S4,"§3.1",false,not_started
+KS-COMPILER-002,Compiler,W3,KS-SCHEMA-005;KS-S0-005,S1;S2;S3;S4,"§3.2",false,not_started
+KS-COMPILER-004,Compiler,W3,KS-SCHEMA-005,S6,"§3.4",false,not_started
+KS-COMPILER-005,Compiler,W3,KS-SCHEMA-005,S1,"§3.5",false,not_started
+KS-COMPILER-006,Compiler,W3,KS-SCHEMA-005,S3,"§3.6",false,not_started
+KS-COMPILER-007,Compiler,W3,KS-SCHEMA-005,S5,"§3.7",false,not_started
+KS-COMPILER-008,Compiler,W3,KS-SCHEMA-002,,"§4.1",false,not_started
+KS-COMPILER-009,Compiler,W3,KS-SCHEMA-002,S7,"§4.2",false,not_started
+KS-COMPILER-010,Compiler,W3,KS-SCHEMA-002;KS-S0-005,,"§4.3",false,not_started
+KS-COMPILER-011,Compiler,W3,KS-SCHEMA-002,,"§4.4",false,not_started
+KS-COMPILER-012,Compiler,W3,KS-SCHEMA-002,S8,"§4.5",false,not_started
+KS-COMPILER-003,Compiler,W4,KS-COMPILER-002;KS-SCHEMA-004,S11,"§3.3",false,not_started
+KS-POLICY-003,Policy,W4,KS-COMPILER-011,,"§4.4",false,not_started
+KS-POLICY-004,Policy,W4,KS-COMPILER-010,,"§4.3",false,not_started
+KS-RETRIEVAL-001,Retrieval,W4,KS-COMPILER-008,S9,"§6.1",false,not_started
+KS-RETRIEVAL-002,Retrieval,W4,KS-S0-005;KS-COMPILER-002,,"§6.2;§6.3",false,not_started
+KS-RETRIEVAL-003,Retrieval,W4,KS-SCHEMA-004,S11,"§6.4",false,not_started
+KS-COMPILER-013,Compiler,W5,KS-COMPILER-001;KS-COMPILER-002;KS-COMPILER-003;KS-COMPILER-004;KS-COMPILER-005;KS-COMPILER-006;KS-COMPILER-007;KS-COMPILER-008;KS-COMPILER-009;KS-COMPILER-010;KS-COMPILER-011;KS-COMPILER-012,S1;S2;S3;S4;S5;S6;S7,"§12 S1-S7",false,not_started
+KS-POLICY-001,Policy,W6,KS-COMPILER-013,S7,"§7",false,not_started
+KS-POLICY-002,Policy,W6,KS-COMPILER-013,S11,"§10",false,not_started
+KS-RETRIEVAL-005,Retrieval,W6,KS-COMPILER-013,S2,"§6.7",false,not_started
+KS-VECTOR-001,Vector,W6,KS-COMPILER-013;KS-POLICY-005,S10,"§8",false,not_started
+KS-DIFY-ECS-003,Dify-ECS,W6,KS-COMPILER-013;KS-DIFY-ECS-002,,"§11;§A1",false,not_started
+KS-RETRIEVAL-004,Retrieval,W7,KS-COMPILER-003;KS-COMPILER-009;KS-POLICY-001,S7,"§6.5;§6.6",false,not_started
+KS-RETRIEVAL-006,Retrieval,W7,KS-VECTOR-001;KS-POLICY-005,S10,"§6.8;§8",false,not_started
+KS-VECTOR-002,Vector,W7,KS-VECTOR-001,S10,"§8",false,not_started
+KS-VECTOR-003,Vector,W7,KS-VECTOR-001;KS-S0-004,S10,"§8;§B Phase4",false,not_started
+KS-DIFY-ECS-004,Dify-ECS,W7,KS-VECTOR-001;KS-POLICY-005;KS-S0-003,S10;S12,"§8;§9.1",false,not_started
+KS-DIFY-ECS-009,Dify-ECS,W7,KS-POLICY-002,S11,"§10;§7",false,not_started
+KS-RETRIEVAL-007,Retrieval,W8,KS-RETRIEVAL-005;KS-RETRIEVAL-006;KS-POLICY-001;KS-POLICY-003,S7,"§6.9;§6.10;§6.11",false,not_started
+KS-CD-002,CD,W8,KS-DIFY-ECS-003;KS-DIFY-ECS-004,,"§A3;§B Phase4",false,not_started
+KS-RETRIEVAL-008,Retrieval,W9,KS-RETRIEVAL-007;KS-COMPILER-012,S8,"§6.12;§6.13;§5",false,not_started
+KS-RETRIEVAL-009,Retrieval,W10,KS-RETRIEVAL-001;KS-RETRIEVAL-002;KS-RETRIEVAL-003;KS-RETRIEVAL-004;KS-RETRIEVAL-005;KS-RETRIEVAL-006;KS-RETRIEVAL-007;KS-RETRIEVAL-008,S7;S8;S9;S10;S11,"§B Phase3",false,not_started
+KS-DIFY-ECS-005,Dify-ECS,W10,KS-DIFY-ECS-003;KS-RETRIEVAL-008,S8,"§4.5;§9.3",false,not_started
+KS-PROD-003,Production-Readiness,W10,KS-RETRIEVAL-008;KS-POLICY-005,S13,"§9.2;§12 S13",false,not_started
+KS-DIFY-ECS-006,Dify-ECS,W11,KS-DIFY-ECS-003;KS-DIFY-ECS-004;KS-DIFY-ECS-005,S8;S9,"§B Phase5",false,not_started
+KS-DIFY-ECS-007,Dify-ECS,W11,KS-RETRIEVAL-009,,"§5",false,not_started
+KS-DIFY-ECS-010,Dify-ECS,W11,KS-DIFY-ECS-005,S8,"§B Phase5",false,not_started
+KS-DIFY-ECS-008,Dify-ECS,W12,KS-DIFY-ECS-007,,"§10",false,not_started
+KS-PROD-002,Production-Readiness,W12,KS-DIFY-ECS-006,S9,"§12 S9;§A3",false,not_started
+KS-CD-001,CD,W13,KS-COMPILER-013;KS-RETRIEVAL-009;KS-VECTOR-003;KS-DIFY-ECS-006;KS-DIFY-ECS-007;KS-DIFY-ECS-008;KS-DIFY-ECS-009;KS-DIFY-ECS-010,S0;S1;S2;S3;S4;S5;S6;S7;S8;S9;S10;S11;S12;S13,"§12",false,not_started
+KS-PROD-001,Production-Readiness,W14,KS-CD-001,S1;S2;S3;S4;S5;S6;S7;S8;S9;S10;S11;S12;S13,"§12",false,not_started

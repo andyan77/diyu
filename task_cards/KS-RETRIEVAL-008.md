@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-008
 phase: Retrieval
+wave: W9
 depends_on: [KS-RETRIEVAL-007, KS-COMPILER-012]
 files_touched:
   - knowledge_serving/serving/context_bundle_builder.py

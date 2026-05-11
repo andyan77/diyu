@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-007
 phase: Retrieval
+wave: W8
 depends_on: [KS-RETRIEVAL-005, KS-RETRIEVAL-006, KS-POLICY-001, KS-POLICY-003]
 files_touched:
   - knowledge_serving/serving/brand_overlay_retrieval.py

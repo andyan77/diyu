@@ -20,7 +20,7 @@
       "name": "csv_structure_check",
       "status": "pass",
       "rc": 0,
-      "summary": "清单写入: /home/faye/20-血肉-2F种子/clean_output/audit/_process/csv_struct_violations.csv",
+      "summary": "清单写入: /home/faye/diyu/clean_output/audit/_process/csv_struct_violations.csv",
       "evidence_path": "audit/_process/csv_struct_violations.csv"
     },
     {
@@ -28,7 +28,7 @@
       "name": "validate_csv_strict",
       "status": "pass",
       "rc": 0,
-      "summary": "清单: /home/faye/20-血肉-2F种子/clean_output/audit/_process/csv_violations.csv",
+      "summary": "清单: /home/faye/diyu/clean_output/audit/_process/csv_violations.csv",
       "evidence_path": "audit/_process/csv_violations.csv"
     },
     {
@@ -36,7 +36,7 @@
       "name": "register_enum",
       "status": "pass",
       "rc": 0,
-      "summary": "违反: 0 → /home/faye/20-血肉-2F种子/clean_output/audit/_process/register_enum_violations.csv",
+      "summary": "违反: 0 → /home/faye/diyu/clean_output/audit/_process/register_enum_violations.csv",
       "evidence_path": "audit/_process/register_enum_violations.csv"
     },
     {
@@ -52,7 +52,7 @@
       "name": "task_cards_status",
       "status": "pass",
       "rc": 0,
-      "summary": "已写: /home/faye/20-血肉-2F种子/clean_output/audit/task_cards.md",
+      "summary": "已写: /home/faye/diyu/clean_output/audit/task_cards.md",
       "evidence_path": "audit/task_cards.md"
     },
     {
@@ -68,7 +68,7 @@
       "name": "ddl_check_demo",
       "status": "pass",
       "rc": 0,
-      "summary": "日志: /home/faye/20-血肉-2F种子/clean_output/storage/sqlite3_demo_log.txt",
+      "summary": "日志: /home/faye/diyu/clean_output/storage/sqlite3_demo_log.txt",
       "evidence_path": "storage/sqlite3_demo_log.txt"
     },
     {
@@ -92,7 +92,7 @@
       "name": "brand_residue_in_csv",
       "status": "pass",
       "rc": 0,
-      "summary": "清单    : /home/faye/20-血肉-2F种子/clean_output/audit/_process/brand_residue_in_csv.csv",
+      "summary": "清单    : /home/faye/diyu/clean_output/audit/_process/brand_residue_in_csv.csv",
       "evidence_path": "audit/_process/brand_residue_in_csv.csv"
     },
     {
@@ -100,7 +100,7 @@
       "name": "yaml_csv_field_sync",
       "status": "pass",
       "rc": 0,
-      "summary": "清单    : /home/faye/20-血肉-2F种子/clean_output/audit/_process/yaml_csv_sync_violations.csv",
+      "summary": "清单    : /home/faye/diyu/clean_output/audit/_process/yaml_csv_sync_violations.csv",
       "evidence_path": "audit/_process/yaml_csv_sync_violations.csv"
     },
     {
@@ -108,7 +108,7 @@
       "name": "coverage_closure",
       "status": "pass",
       "rc": 0,
-      "summary": "  json -> /home/faye/20-血肉-2F种子/clean_output/audit/coverage_status.json",
+      "summary": "  json -> /home/faye/diyu/clean_output/audit/coverage_status.json",
       "evidence_path": "audit/coverage_status.json"
     },
     {
@@ -116,7 +116,7 @@
       "name": "anchor_quote_authenticity",
       "status": "pass",
       "rc": 0,
-      "summary": "违反: 0 → /home/faye/20-血肉-2F种子/clean_output/audit/_process/anchor_quote_violations.csv",
+      "summary": "违反: 0 → /home/faye/diyu/clean_output/audit/_process/anchor_quote_violations.csv",
       "evidence_path": "audit/_process/anchor_quote_violations.csv"
     },
     {
@@ -140,7 +140,7 @@
       "name": "parse_md_source_units",
       "status": "pass",
       "rc": 0,
-      "summary": "  → /home/faye/20-血肉-2F种子/clean_output/audit/source_unit_inventory.csv",
+      "summary": "  → /home/faye/diyu/clean_output/audit/source_unit_inventory.csv",
       "evidence_path": "audit/source_unit_inventory.csv"
     },
     {
@@ -180,7 +180,7 @@
       "name": "build_evidence_row_adjudication",
       "status": "pass",
       "rc": 0,
-      "summary": "输出: /home/faye/20-血肉-2F种子/clean_output/audit/evidence_row_adjudication.csv",
+      "summary": "输出: /home/faye/diyu/clean_output/audit/evidence_row_adjudication.csv",
       "evidence_path": "audit/evidence_row_adjudication.csv"
     },
     {
@@ -224,5 +224,5 @@
       "evidence_path": "runtime_assets/runtime_asset_index.csv"
     }
   ],
-  "rendered_at": "2026-05-12 00:43:32"
+  "rendered_at": "2026-05-12 02:03:33"
 }

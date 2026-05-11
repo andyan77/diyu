@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-005
 phase: Retrieval
+wave: W6
 depends_on: [KS-COMPILER-013]
 files_touched:
   - knowledge_serving/serving/structured_retrieval.py

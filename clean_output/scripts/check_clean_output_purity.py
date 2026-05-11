@@ -45,10 +45,12 @@ ALLOWED_AUDIT_TOP = {
     "review_sample.csv",
     "pack_review_must.csv",
     "_process",  # 工程过程产物子目录
-    # KS-S0-001 / 002 / 003 · Phase 2 启动期 audit 证据 / Phase 2 kickoff audit evidence
+    # KS-S0-001 / 002 / 003 / 004 / 006 · Phase 2 启动期 audit 证据 / Phase 2 kickoff audit evidence
     "baseline_alignment_KS-S0-001.md",     # W12 基线对齐证据 / baseline alignment evidence
     "db_state_evidence_KS-S0-002.md",      # knowledge.db 废弃事实快照 / deprecation state snapshot
     "key_rotation_log_KS-S0-003.md",       # 密钥治理日志 / key governance log
+    "qdrant_health_KS-S0-004.json",        # KS-S0-004 Qdrant 健康检查 CI artifact
+    "source_manifest.json",                # KS-S0-006 source_manifest_hash 产物 / Phase 2 真源冻结快照
     "known_risk_accepted_2026-05-12.md",   # 已知风险接受记录 / known risk accepted log
 }
 

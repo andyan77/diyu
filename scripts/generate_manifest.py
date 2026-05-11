@@ -37,7 +37,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CO = ROOT / "clean_output"
-MANIFEST = CO / "manifest.json"
+# KS-S0-006 §1 / §4 / §5 明文：产物路径 = clean_output/audit/source_manifest.json
+# 不要写 clean_output/manifest.json（那是 Phase 1 build_manifest.py 的产物，结构不同）
+MANIFEST = CO / "audit" / "source_manifest.json"
 
 WHITELIST_PATTERNS = [
     ("nine_tables", "*.csv"),

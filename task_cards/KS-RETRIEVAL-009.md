@@ -1,6 +1,7 @@
 ---
 task_id: KS-RETRIEVAL-009
 phase: Retrieval
+wave: W10
 depends_on: [KS-RETRIEVAL-001, KS-RETRIEVAL-002, KS-RETRIEVAL-003, KS-RETRIEVAL-004, KS-RETRIEVAL-005, KS-RETRIEVAL-006, KS-RETRIEVAL-007, KS-RETRIEVAL-008]
 files_touched:
   - knowledge_serving/scripts/run_context_retrieval_demo.py

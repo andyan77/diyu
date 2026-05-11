@@ -1,6 +1,7 @@
 ---
 task_id: KS-DIFY-ECS-007
 phase: Dify-ECS
+wave: W11
 depends_on: [KS-RETRIEVAL-009]
 files_touched:
   - knowledge_serving/serving/api/retrieve_context.py
