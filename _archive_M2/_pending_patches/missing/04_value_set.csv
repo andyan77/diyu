@@ -1,0 +1,16 @@
+VS-KP-product_attribute-enterprise-narrative-six-section-shell-narrative_subtypes,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+VS-KP-service_judgment-store-daily-three-required-elements-axis,store_space_50pct,店铺空间画面占比≥50%,1,domain_general,KP-service_judgment-store-daily-three-required-elements
+VS-KP-service_judgment-store-daily-three-required-elements-axis,store_props_3plus,门店特有物件出现≥3 次,2,domain_general,KP-service_judgment-store-daily-three-required-elements
+VS-KP-service_judgment-store-daily-three-required-elements-axis,retail_action_1plus,真实零售运营动作≥1,3,domain_general,KP-service_judgment-store-daily-three-required-elements
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_1_generic_soothing,泛用抚慰型,1,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_2_3am_poetic,凌晨三点诗意型,2,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_3_adult_breakdown,成年人崩溃型,3,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_4_rhetorical_question,反问灌输型,4,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_5_parallelism_chicken_soup,排比鸡汤型,5,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_6_metaphor_overload,隐喻过载型,6,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_7_empty_motivation,空洞励志型,7,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_8_ai_voiceover,AI 配音腔,8,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern,pattern_9_filter_bgm_packaging,滤镜+BGM 包装型,9,domain_general,KP-training_unit-emotion-expression-9-ai-tone-banlist
+VS-KP-training_unit-emotion-expression-truth-3-questions-prepublish-anchor,visual_anchor,画面锚点,1,domain_general,KP-training_unit-emotion-expression-truth-3-questions-prepublish
+VS-KP-training_unit-emotion-expression-truth-3-questions-prepublish-anchor,emotional_anchor,情感锚点,2,domain_general,KP-training_unit-emotion-expression-truth-3-questions-prepublish
+VS-KP-training_unit-emotion-expression-truth-3-questions-prepublish-anchor,external_anchor,外部锚点,3,domain_general,KP-training_unit-emotion-expression-truth-3-questions-prepublish

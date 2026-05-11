@@ -1,0 +1,106 @@
+pack_id: KP-training_unit-collect-real-action-before-script
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  采集岗位知识素材时，必须按"真实动作 → 真实判断 → 真实困境 → 真实话术 → 真实情绪 → 总结性表达"
+  的固定顺序去收，禁止先收"岗位应该说什么"的口号；否则采到的全是漂亮话，
+  最终填不出 authenticity_anchors（真实性锚点）和 typical_scenarios（典型场景），
+  人设会被现场识破为空壳。
+
+scenario:
+  who:
+    primary_role: 知识工程 / 内容运营 / 品牌访谈采集者
+    target_audience: 岗位画像（RoleProfile）冷启动数据底座
+  when:
+    trigger: 启动任意 RoleProfile 的素材采集（访谈 / 现场拍摄 / 文档整理）
+    context: 服装零售人设系统冷启动阶段，需要为通用 Persona 提供岗位真实感
+  what:
+    action_type: material_collection_priority
+    decision_or_action: |
+      错误动作：先问"这个岗位应该传达什么价值观 / 该说哪些标准话术"，
+        然后回头补动作和案例。
+      正确动作：先观察、记录、追问"今天你做了什么 / 怎么判断 / 卡在哪 / 当时怎么说 / 当时什么感受"，
+        最后才让被访者做总结。
+      为什么错：人对"该说什么"会自动美化，对"刚才发生了什么"才会暴露真实判断逻辑。
+      如何纠正：访谈大纲与拍摄脚本一律以动作题开头，禁止以"请总结"开头。
+      掌握检查：每条岗位素材都能回答"具体什么时候做了什么"，而不仅有一句结论。
+  result:
+    success_pattern: |
+      采集完成后能直接落到 authenticity_anchors / typical_scenarios / emotional_spectrum
+      三类字段中至少两类，岗位画像看起来像活的。
+    flip_pattern: |
+      采集材料里全是"用心服务""专业判断""坚守品牌"等总结句，
+      没有一句能还原"那天发生了什么"，最终人设输出被一线识破为模板套话。
+  underlying_mechanism: |
+      认知科学层面：人在"应当陈述模式"下会自动调用社会期望话语，
+      只有在回忆具体事件时才会暴露真实判断链；
+      业务层面：岗位真实感的可信度来自"动作 + 判断 + 翻车 + 修复"的颗粒度，
+      口号与价值主张无法支撑这种颗粒度。
+  boundary:
+    applicable_when: 任意 RoleProfile 冷启动素材采集 / 岗位访谈 / 一线复盘整理
+    not_applicable_when: |
+      品牌唯一层（FounderProfile）的价值主张采集 → 必须直接听创始人原话，
+      不强行套"先动作后总结"顺序；
+      纯合规 / 法律 / 财务 SOP 整理 → 文档为主，动作题不适用。
+  alternative_path:
+    - 被访者不擅长讲动作 → 改为现场跟拍 + 事后回看，每个画面追问"刚才那一步在判断什么"
+    - 时间极紧 → 优先收 1 条真实失败案例 + 1 条真实成功动作，胜过 10 条总结句
+    - 远程采集 → 让被访者用语音回放当天 1 个具体场景，禁止文字总结提交
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md
+  source_anchor: 二、冷启动阶段的统一采集原则 · 2.1 先收"岗位真的会发生什么"，不先收"岗位应该说什么"
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    岗位知识素材优先级必须是：1. 真实动作 → 2. 真实判断 → 3. 真实困境 →
+    4. 真实话术 → 5. 真实情绪 → 6. 再往后才是总结性表达。
+    否则最容易采到一堆漂亮口号，最后填不出 authenticity_anchors（真实性锚点）
+    与 typical_scenarios（典型场景）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐全（含 boundary / alternative_path）。
+    Gate 2：从 rule + value_set(collection_order) + call_mapping 可反推
+    "动作优先于总结，6 阶段固定顺序，否则人设空壳"。
+    Gate 3：跨任意品牌、跨任意岗位画像采集普适。
+    Gate 4：可被 store_training（采集培训）与人设冷启动流程调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      岗位素材采集方法论，与笛语具体内容无关，任意品牌的人设冷启动都直接可用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  field:
+    - {field_id: FD-TrainingMaterial-collection_priority, owner_type: TrainingMaterial, field_name: collection_priority, data_type: enum_ordered}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-collect-real-action-before-script-priority_chain, owner_field: collection_priority, definition: "岗位素材采集 6 阶段固定顺序：动作→判断→困境→话术→情绪→总结"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-collect-real-action-before-script-priority_chain, value: real_action, label: 真实动作, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-collect-real-action-before-script-priority_chain, value: real_judgment, label: 真实判断, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-collect-real-action-before-script-priority_chain, value: real_difficulty, label: 真实困境, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-collect-real-action-before-script-priority_chain, value: real_script, label: 真实话术, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-collect-real-action-before-script-priority_chain, value: real_emotion, label: 真实情绪, ordinal: 5}
+    - {value_set_id: VS-KP-training_unit-collect-real-action-before-script-priority_chain, value: summary_expression, label: 总结性表达, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-training_unit-collect-real-action-before-script, rule_type: material_collection_policy, applicable_when: "启动 RoleProfile 冷启动素材采集 / 岗位访谈大纲设计", success_scenario: "按 6 阶段顺序采集，落到 authenticity_anchors / typical_scenarios / emotional_spectrum 至少两类", flip_scenario: "先收口号后补动作，材料只剩漂亮总结句，人设被识破为模板", alternative_boundary: "FounderProfile 价值主张采集与合规类 SOP 整理不强套此顺序"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-collect-real-action-before-script, source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md, source_anchor: 二、2.1, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-cra1, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"applies_to":"all_first_batch_role_profiles","role_layer":"persona_authenticity_base"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-collect-real-action-before-script, runtime_method: store_training, input_types: ["RoleProfile","TrainingMaterial"], output_types: ["MaterialCollectionGuide"]}

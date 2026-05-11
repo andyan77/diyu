@@ -1,0 +1,104 @@
+pack_id: KP-product_attribute-compatibility-edge-support-risk-reason-shell
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  `(:Persona)-[:COMPATIBLE_WITH]->(:ContentType)` 真源边的字段壳硬冻结为三件套：
+  `support ∈ {now, enhanced, custom, unsupported}`（4 档支持度）+
+  `risk ∈ {low, medium, high}`（3 档风险）+
+  `reason: string`（当 `support != "now"` 时**建议**说明原因）。
+  这三个字段的语义、枚举值、运营展示档映射均不可被任意品牌重新定义；
+  `support` 控制"系统能不能给"，`risk` 控制"放出来要不要提示"，两者**正交**——
+  `support=now` 也可能伴 `risk=medium`（如情绪表达类内容），不允许用 `support` 取代 `risk`。
+
+scenario:
+  who:
+    primary_role: 兼容边数据录入者 / 派生视图实现者 / 运营展示档前端
+    target_audience: 任意品牌的 Persona × ContentType 兼容矩阵建设方
+  when:
+    trigger: 录入或复核任意一条 Persona × CT 兼容边时；前端展示档计算时；prompt 前置判断时
+    context: 三套通用 Persona × 18 个 ContentType = 54 条兼容边数据是 Q4 向 Step 3 输出的核心
+  what:
+    action_type: compatibility_edge_field_shell_definition
+    decision_or_action: |
+      录入边时必填 support + risk，reason 在 support != now 时建议填；
+      展示档按 §6.2 组合表映射；risk 始终独立继承不被 support 覆盖
+  result:
+    success_pattern: |-
+      `support=now, risk=low` → 默认可用 + 不提示；
+      `support=now, risk=medium`（如 emotion_expression）→ 默认可用 + 风险提示；
+      `support=enhanced, risk=medium` → 补充配置后可用 + 风险提示；
+      `support=unsupported, risk=high` → 不建议
+    flip_pattern: |-
+      用 `support=custom` 表达"风险高"——错位，应继续用 `support` 表达系统能力 + 用 `risk=high` 表达风险；
+      或自造第 5 档（如 `experimental` / `beta`）→ 违反字段壳硬冻结
+  underlying_mechanism: |
+      "能不能给"（系统能力）与"要不要提示"（业务风险）是两种不同决策维度，
+      混在一起会让派生视图无法独立调控"展示档"与"风险标签"——
+      运营可能想"补充配置后可用 + 不提示风险"也可能想"默认可用 + 高风险提示"，必须分维。
+  boundary:
+    applicable_when: 任意品牌的 Persona × CT 兼容边录入与展示档派生
+    not_applicable_when: 派生视图最终展示档（由组合公式计算，不是字段壳）；其他边类型（COMPATIBLE_WITH 之外的边不复用此壳）
+  alternative_path:
+    - 若未来需要"试运行"档 → 在 support 上加注释属性而不扩枚举，或走单独 lifecycle 状态机，不改字段壳
+    - 若需更细的风险分类（品牌风险 / 真实性风险 / 平台错位）→ 拆为 risk_kind 子字段，不动 risk 三档主壳
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md
+  source_anchor: §2.1 工程字段 + §2.2 四档 support 业务解释 + §2.3 三档 risk 风险解释 + §9.2 字段口径
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    support: now | enhanced | custom | unsupported
+    risk: low | medium | high
+    reason: string，可选（当 support != "now" 时建议说明原因）
+    now=默认可用 / enhanced=补充配置后可用 / custom=品牌级 / 特殊场景 / unsupported=不建议
+    low=常规风险可默认放行 / medium=表达偏差或风格偏移建议提示 / high=品牌/真实性/平台错位风险高不应默认放行
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field（COMPATIBLE_WITH.support / .risk / .reason 三字段定义）+ 04_value_set（4+3 枚举）+
+      06_rule（support 与 risk 正交不可互换规则）可反推全部字段壳语义。
+    Gate 3：跨品牌通用——任何品牌录入 Persona×CT 兼容边都使用同一字段壳。
+    Gate 4：可被 edge_validation / prompt_pre_check / capability_discovery 三类调用消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 兼容边的字段壳与枚举集——任意品牌共用的 schema 元规则；具体 Persona×CT 取值（如笛语 styling_advisor 的 54 行）才是 brand 层数据
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-COMPATIBLE_WITH-support, owner_type: COMPATIBLE_WITH, field_name: support, data_type: enum}
+    - {field_id: FD-COMPATIBLE_WITH-risk, owner_type: COMPATIBLE_WITH, field_name: risk, data_type: enum}
+    - {field_id: FD-COMPATIBLE_WITH-reason, owner_type: COMPATIBLE_WITH, field_name: reason, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-compatibility-edge-support-risk-reason-shell-support-vs-risk-orthogonal, owner_field: COMPATIBLE_WITH.support_x_risk, definition: "support 表达系统能力（能不能给），risk 表达业务风险（要不要提示）；两维度正交，禁止用 support 取代 risk 或反之"}
+  value_set:
+    - {value_set_id: VS-COMPATIBLE_WITH-support, owner_field: COMPATIBLE_WITH.support, value_code: now, value_label: "默认可用"}
+    - {value_set_id: VS-COMPATIBLE_WITH-support, owner_field: COMPATIBLE_WITH.support, value_code: enhanced, value_label: "补充配置后可用"}
+    - {value_set_id: VS-COMPATIBLE_WITH-support, owner_field: COMPATIBLE_WITH.support, value_code: custom, value_label: "品牌级 / 特殊场景"}
+    - {value_set_id: VS-COMPATIBLE_WITH-support, owner_field: COMPATIBLE_WITH.support, value_code: unsupported, value_label: "不建议"}
+    - {value_set_id: VS-COMPATIBLE_WITH-risk, owner_field: COMPATIBLE_WITH.risk, value_code: low, value_label: "常规风险，可默认放行"}
+    - {value_set_id: VS-COMPATIBLE_WITH-risk, owner_field: COMPATIBLE_WITH.risk, value_code: medium, value_label: "存在表达偏差或风格偏移风险，建议提示"}
+    - {value_set_id: VS-COMPATIBLE_WITH-risk, owner_field: COMPATIBLE_WITH.risk, value_code: high, value_label: "品牌 / 真实性 / 平台错位风险高，不应默认放行"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-compatibility-edge-support-risk-reason-shell, rule_type: compatibility_edge_field_shell_definition, applicable_when: "录入或复核 Persona × ContentType 兼容边时", success_scenario: "support+risk 双维度独立标注，reason 在 support!=now 时填", flip_scenario: "用 support=custom 表达高风险 / 自造第 5 档枚举 / 把 risk 与 support 合并", alternative_boundary: "需要试运行档走 lifecycle 状态机，不扩 support 枚举"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-compatibility-edge-support-risk-reason-shell, source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md, source_anchor: §2.1 + §2.2 + §2.3 + §9.2, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Persona-compatible_with_content_type-ContentType-shell-binding, source_type: Persona, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"shell_fields":["support","risk","reason"],"support_enum":["now","enhanced","custom","unsupported"],"risk_enum":["low","medium","high"]}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-edge_validation-KP-product_attribute-compatibility-edge-support-risk-reason-shell, runtime_method: edge_validation, input_types: CompatibilityEdgeRecord, output_types: EdgeShellComplianceResult}

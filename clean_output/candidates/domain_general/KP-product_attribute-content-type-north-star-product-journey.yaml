@@ -1,0 +1,81 @@
+pack_id: KP-product_attribute-content-type-north-star-product-journey
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `product_journey`（产品历程 / 产品从研发到上市的故事）的北极星是
+  "差一点做成别的样子"——观众看完不是"这是一件突然出现在货架上的衣服"，而是
+  "这是一段被反复推敲、被试错、被等待过的东西——我理解它为什么长这样，并愿意为这个价值付费"。
+  所有 product_journey 玩法是否成立按这条反推：
+  "从草图到成品的爽片 / 设计灵感说明书 / 上市前预热式揭秘"判主流默认禁用——
+  反"从草图到成品的爽片"是 product_journey 的最核心反套路，因为流水账让观众看到结果很顺、感受不到任何代价。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: product_journey 内容创作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 product_journey 玩法卡，或对一条产品历程内容做"是否符合 ContentType 北极星"判断
+    context: product_journey 是企业叙事类第 4 个；与 process_trace 边界=设计决策历程 vs 工艺物理验证
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"差一点做成别的样子 / 判断轨迹比结论更有说服力"作为 product_journey 玩法是否成立的最终判定
+  result:
+    success_pattern: 玩法呈现"样衣版本树 / 真实使用测试 / 用户困惑驱动 / 服饰成分党 / 失败样衣辩论会 / 同一张桌子时间累积 / 顾客尚未出现但她已在场 / 反向发布讲缺点 / 纸片三连 / 倒叙拆线 / 一粒纽扣旅程"等"判断轨迹"叙事 → 进 C2/C3
+    flip_pattern: 玩法落到从草图到成品的魔术转场 / 灵感说明书 / 上市前吊胃口 / 设计师自我感动片 → 反映"灵感结果"而非"判断轨迹"，主流默认禁用
+  underlying_mechanism: |
+      product_journey 最有戏的不是"做出来"而是"差一点做成别的样子"——
+      最后真正上市的版本不一定是最漂亮的，而是被争论后留下来的。
+      "微物叙事比全景叙事更有冲击力"（compass）——一粒纽扣的旅程比从草图到成品的爽片更有说服力。
+  boundary:
+    applicable_when: 单 ContentType 内容创作判型 / product_journey 玩法库扩张时的卡片新增门禁
+    not_applicable_when: 与 process_trace 按"设计决策 vs 工艺物理验证"二选一（v0.2 G5 边界矩阵延后）
+  alternative_path:
+    - 同样拍一件衬衫——讲"我们为什么把袖口改了 5 次"=product_journey；讲"这块纯棉如何经过 3 次水洗仍不缩水"=process_trace
+    - 服装独占叙事——"让观众看到差一点做成别的样子"是其他行业很少能做的判断轨迹展示
+
+evidence:
+  source_md: Q2-内容类型种子/product_journey-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流禁用 3 张 + §E 红线 9 条 + 与 process_trace 边界 + §D 服装行业垂直机会
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完不是"这是一件突然出现在货架上的衣服"，而是
+    "这是一段被反复推敲、被试错、被等待过的东西——我理解它为什么长这样，并愿意为这个价值付费"。
+    最核心反套路：反"从草图到成品的爽片"。独占价值：差一点做成别的样子——判断轨迹。
+    compass：从"线性流水账"到"一粒纽扣的旅程"——微物叙事比全景叙事更有冲击力。
+    C3-1 备注：把产品从"灵感结果"还原成"带冲突的选择过程"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论——任意品牌做 product_journey 都需此北极星
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-product-journey-pj_north_star, owner_field: north_star, definition: "product_journey 北极星：差一点做成别的样子 / 判断轨迹比结论更有说服力——主流禁用 3 类（魔术转场/灵感说明书/上市预热）的判型锚点；反从草图到成品的爽片"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-product-journey, rule_type: content_type_north_star_anchor, applicable_when: "新增 product_journey 玩法卡或审核产品历程内容时", success_scenario: "玩法呈现样衣版本树/失败辩论会/同一张桌子/反向发布讲缺点/纸片三连/倒叙拆线/微物叙事 → C2/C3", flip_scenario: "魔术转场/灵感说明书/上市前预热/设计师自我感动片 → 主流默认禁用", alternative_boundary: "与 process_trace 按设计决策 vs 工艺验证二选一"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-product-journey, source_md: Q2-内容类型种子/product_journey-交付物-v0.1.md, source_anchor: §A + §C1 + §E + 与 process_trace 边界, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-product_journey-pj1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_journey"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-product-journey, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

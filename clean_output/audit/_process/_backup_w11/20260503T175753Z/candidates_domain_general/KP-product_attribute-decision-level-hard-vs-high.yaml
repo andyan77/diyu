@@ -1,0 +1,93 @@
+pack_id: KP-product_attribute-decision-level-hard-vs-high
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  属性的 decision_level（决策级别）正式冻结为两档：硬改搭配结论的 6 属性是
+  fit / length / material / color / occasion / season（任一变化整套推荐重算）；
+  高频改搭配结论的 6 属性是 neckline / sleeve_length / waistline / rise / pattern / layer_role；
+  这是 attribute_dictionary 中 decision_level 字段的取值依据，不允许在两档外随意打标。
+
+scenario:
+  who:
+    primary_role: Attribute 字典维护者 / 推荐引擎设计者
+    target_audience: 搭配推荐 / 陈列分组 / 培训分级的下游消费者
+  when:
+    trigger: 新增或维护 Attribute 时填写 decision_level
+    context: 冷启动 P0；与 KP-product_attribute-shared-6-decision-dims 配套
+  what:
+    action_type: attribute_decision_level_classification
+    decision_or_action: 按"硬改 / 高频改"两档冻结 12 个属性的决策级别，其余字段默认低决策（仅展示）
+  result:
+    success_pattern: |
+      推荐引擎遇到硬改属性变化时，自动触发整套重算；
+      高频改属性变化时，可保留主件只换辅件；
+      培训按决策级别分轻重，新人先学硬改 6 属性的判断。
+    flip_pattern: |
+      把 occasion 标成高频而非硬改 → 商务场合穿了 athleisure 单品被推荐过来；
+      把 sleeve_length 标成硬改 → 顾客只想换袖长却被重算整套，体验疲劳。
+  underlying_mechanism: |
+      decision_level 不是属性的"重要程度"，而是它"撬动整套推荐重算"的杠杆等级。
+      硬改属性是搭配场景的边界条件；高频改属性是套内调整变量。
+  boundary:
+    applicable_when: 这 12 个具名属性
+    not_applicable_when: 展示字段（fabric_story / care_instruction 等，详见 KP-product_attribute-display-only-fields）
+  alternative_path:
+    - 出现新硬改属性候选 → 进字典升级提案，不私自加档
+    - 同一属性在不同 Category 决策权重差异大 → 在 Attribute 字典中按 Category 维度细化，不打破两档结构
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md
+  source_anchor: 6.4 哪些属性会真正改变搭配结论
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    硬改搭配结论的属性：fit / length / material / color / occasion / season。
+    这些一变，整套推荐通常要重算。
+    高频改搭配结论的属性：neckline / sleeve_length / waistline / rise / pattern / layer_role。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 9 表（decision_level 字段 + hard 6 + high 6 value_set + 分级规则 + 两条 semantic）可反推"两档分级 / 杠杆等级 / 硬改触发重算"三条核心语义。
+    Gate 3：通用属性分级方法。
+    Gate 4：可被 outfit_recommendation 重算决策与 store_training 分级训练消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用属性分级方法
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-decision-level-hard-vs-high-decision_level, owner_field: decision_level, definition: "decision_level=hard：变化触发整套推荐重算；decision_level=high：变化触发套内辅件调整不重算主件"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-hard, value: fit, label: 版型, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-hard, value: length, label: 长度, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-hard, value: material, label: 材质, ordinal: 3}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-hard, value: color, label: 颜色, ordinal: 4}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-hard, value: occasion, label: 场合, ordinal: 5}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-hard, value: season, label: 季节, ordinal: 6}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-high, value: neckline, label: 领型, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-high, value: sleeve_length, label: 袖长, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-high, value: waistline, label: 腰线, ordinal: 3}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-high, value: rise, label: 腰头高度, ordinal: 4}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-high, value: pattern, label: 图案, ordinal: 5}
+    - {value_set_id: VS-KP-product_attribute-decision-level-hard-vs-high-high, value: layer_role, label: 层次角色, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-product_attribute-decision-level-hard-vs-high, rule_type: attribute_decision_level_classification, applicable_when: "Attribute 字典 decision_level 取值时", success_scenario: "硬改触发整套重算高频改触发套内调整", flip_scenario: "决策级别错标→推荐重算时机错位", alternative_boundary: "新候选→走字典升级；Category 差异→维度细化不破档"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-decision-level-hard-vs-high, source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md, source_anchor: 6.4, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-product_attribute-decision-level-hard-vs-high, runtime_method: outfit_recommendation, input_types: [Product, Attribute], output_types: [StylingRule]}

@@ -1,0 +1,73 @@
+pack_id: KP-service_judgment-ready-made-full-set
+granularity_layer: L3
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"你直接给我搭一套，我不想自己想"时，导购第一动作是先判断她要的是省心、要的是速度、还是确实不会搭——三种动机的推法不同；
+  第一套解决"现成"，第二套才决定"值不值得整套带走"；断码可救但必须保整体气质，禁一件一件乱换。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: ready_made_full_set（现成成套型）顾客
+  when:
+    trigger: 顾客原话"你直接给我搭一套，我不想自己想"
+    context: 高频出现于午休/下班后短时间窗；顾客主动放弃挑选权
+  what:
+    action_type: motive_disambiguation_then_set
+    decision_or_action: |
+      第一步：在 30 秒内判断动机——省心？速度？还是不会搭？
+      第二步：先陈列后开口，把模特位/成套位先指给她看。
+      第三步：第一套保"现成可带"，第二套必须强化"整套的逻辑成立性"（颜色、气质、场景一致）。
+      第四步：库存断码 → 一件一件换会破坏整体感；必须按"同气质同场景"维度成对替换。
+  result:
+    success_pattern: 顾客认同第二套整体感，整套带走或带 2 件以上
+    flip_pattern: 把"现成"理解成"快速凑"，断码后随手换件，整体气质崩，顾客只带 1 件甚至空手走
+  underlying_mechanism: |
+      "现成成套"的核心价值是"完整逻辑"而不是"完整件数"；
+      不判动机就推 = 用速度逻辑推一个其实想要省心的客；
+      乱换件 = 把"逻辑"卖成"凑数"。
+  boundary:
+    applicable_when: 顾客主动放弃挑选权的接客
+    not_applicable_when: 顾客明确"我自己挑，你别管" → 转随便看路径
+  alternative_path:
+    - 整套断码 → 退回到"主件 + 1 件辅件"的最小成套，不强凑 3 件
+    - 顾客对成套位某件不满 → 同气质同场景替换，不跨气质替换
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、5. ready_made_full_set + 三、4）先陈列后开口 + 三、1）卡在第二套
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："你直接给我搭一套，我不想自己想。"
+    店员第一反应：先判断她要的是省心、速度，还是她确实不会搭。
+    最容易卡住：第二套。第一套只解决"现成"，第二套才解决"值不值得整套带走"。
+    库存不理想怎么转向：可救，但必须保整体感觉。不是一件一件乱换，是保留同一气质和同一使用场景。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 display_guidance 与 inventory_rescue 双路联动。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用成套接客判断。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-ready-made-full-set}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-ready-made-full-set}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-ready-made-full-set}
+    - {mapping_id: CM-display_guidance-KP-service_judgment-ready-made-full-set}

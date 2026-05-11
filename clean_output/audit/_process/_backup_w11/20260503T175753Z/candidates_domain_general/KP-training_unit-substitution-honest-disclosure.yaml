@@ -1,0 +1,107 @@
+pack_id: KP-training_unit-substitution-honest-disclosure
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  柜台前做替代款 / 近色 / 整套转向时，必须明确告知顾客"哪里变了，为什么仍成立"——
+  把替代款假装成同款是门店最伤信任的错误，短期可能成交，长期一定退货 + 失客；
+  顾客愿意买替代，是因为她信任你的解释，不是因为你瞒得好。
+  本规则同步约束"硬推不合尺码"和"颜色断了乱换"两类相关救场错误。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 一线导购 + 仓库主管（涉及替代品报送）
+  when:
+    trigger: 顾客想买的款断码 / 断色 / 缺整套配件 → 进入替代或转向路径
+    context: 任意品类，断码与近色救场最高频
+  what:
+    action_type: substitution_honest_disclosure
+    decision_or_action: |
+      错误动作：把替代款说成原款；硬推不合尺码；断色后乱换颜色不解释；只说"没有了"就结束。
+      正确动作：第一步明确告知"这是替代款 / 近色 / 整套转向"；
+        第二步说清"哪里变了"（哪个属性 / 颜色 / 尺码不同）；
+        第三步说明"为什么仍成立"（场景仍匹配 / 体感相近 / 视觉重心一致）；
+        第四步邀请顾客确认这一变化是否可接受。
+      为什么错：把替代说成原款是一次性透支整段顾客关系；
+        顾客回家发现差异后退货 + 拉黑门店，损失远大于这一单。
+      如何纠正：班前会用 mystery_shopper_reflection 复盘真实案例；
+        让员工亲自当顾客角色感受被瞒后的情绪。
+      掌握检查：神秘顾客式抽测后顾客能复述
+        "我买的是替代 X，原款 Y 缺 Z，导购说仍成立的理由是 …"
+  result:
+    success_pattern: |
+      顾客清楚知道自己买的是什么，对门店的诚实建立长期信任；
+      即便本次转向，未来仍会回头；退货率明显低于硬推或假冒同款门店。
+    flip_pattern: |
+      顾客回家发现替代款与原款差距 → 退货 + 差评 + 不再光顾；
+      门店在该顾客社交圈被打上"卖货不老实"标签，连带影响新客。
+  underlying_mechanism: |
+      门店与顾客之间唯一持续的资产是信任，且信任不对称——
+      建立慢、损坏快、几乎不可恢复；
+      诚实告知是把短期单据让给长期复购的最低成本投资。
+  boundary:
+    applicable_when: 任何替代 / 近色 / 转向 / 尺码替换的救场场景
+    not_applicable_when: |
+      原款仍在仓但需调拨（不是替代）→ 用调拨话术，不走本规则；
+      顾客明确说"我自己看好了我要这件" → 尊重她的决定，不要节外生枝。
+  alternative_path:
+    - 替代距离过远（顾客想要 A 但只能给 Z）→ 直接放弃推荐，不要硬转
+    - 顾客对替代不接受 → 提供调拨 / 预订路径，不要硬推
+    - 多个替代候选 → 列 2 个让顾客选，导购说明各自差异
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 五、C8 inventory_rescue_at_counter · 八、inventory_rescue_error_catalog I1-I8
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    C8 inventory_rescue_at_counter（柜台前库存救场）
+    正确动作：讲清是同款替代、近色替代，还是整套转向
+    错误动作：把替代款说成原款
+    为什么错：最伤信任
+    怎么纠正：承认变化，再解释为什么仍成立
+    学会判定：顾客能清楚知道"哪里变了，为什么还能买"
+    I1 hide_stock_problem（隐瞒库存问题）/ I2 fake_same_item_substitution（把替代款假装同款）/
+    I3 push_wrong_size_to_force_sale（硬推不合尺码）/ I4 color_substitution_without_reason（断色后乱换颜色）/
+    I7 no_redirect_path（只有否定，没有转向）/ I8 redirect_too_far（转向过远）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1 8 要素齐全；Gate 2 rule + value_set(error_class) 反推
+    "诚实承认变化 + 解释为什么仍成立"。Gate 3 通用。Gate 4 可被 store_training 与 inventory_rescue 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用诚信救场原则，不含笛语专属。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set:
+    - {value_set_id: VS-KP-training_unit-substitution-honest-disclosure-rescue_error, value: hide_stock_problem, label: 隐瞒库存问题, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-substitution-honest-disclosure-rescue_error, value: fake_same_item_substitution, label: 替代款假装同款, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-substitution-honest-disclosure-rescue_error, value: push_wrong_size_to_force_sale, label: 硬推不合尺码, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-substitution-honest-disclosure-rescue_error, value: color_substitution_without_reason, label: 断色后乱换颜色不解释, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-substitution-honest-disclosure-rescue_error, value: no_redirect_path, label: 只否定无转向, ordinal: 5}
+    - {value_set_id: VS-KP-training_unit-substitution-honest-disclosure-rescue_error, value: redirect_too_far, label: 转向过远, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-training_unit-substitution-honest-disclosure, rule_type: substitution_disclosure_policy, applicable_when: "顾客想买的款断码/断色/缺整套→进入替代或转向", success_scenario: "明确告知是替代+说清哪里变了+解释为什么仍成立+邀请确认，长期信任建立", flip_scenario: "把替代说成同款/硬推不合尺码/不解释换色/只否定不转向，退货+差评+连带新客流失", alternative_boundary: "替代过远→直接放弃；调拨场景走调拨话术不走本规则；顾客已自决→尊重"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-substitution-honest-disclosure, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 五、C8 + 八、I1-I8, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm09, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["sales_associate","warehouse_supervisor"],"role_layer":"frontline"}'}
+    - {relation_id: RE-TrainingMaterial-requires_inventory_state-InventoryState-tm09, source_type: TrainingMaterial, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"states":["size_broken","color_broken","set_incomplete"]}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-substitution-honest-disclosure, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingScript"]}
+    - {mapping_id: CM-inventory_rescue-KP-training_unit-substitution-honest-disclosure, runtime_method: inventory_rescue, input_types: ["InventoryState","CustomerScenario"], output_types: ["RescueScript","RiskDisclosure"]}

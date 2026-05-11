@@ -1,0 +1,100 @@
+pack_id: KP-training_unit-lifestyle-expression-old-defines-premium
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: low
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "用旧衣服的磨损史反向定义真正的高级感"
+  steps:
+    - "摊开旧衣服拍袖口内衬和修补线"
+    - "穿着它做三件小事"
+    - "回桌面再添一处今天痕迹"
+  anti_pattern: "把高级感拍成崭新精致没有时间和陪伴证据"
+  duration: medium
+  audience: "认同耐穿可修补价值的人群"
+  source_pack_id: KP-training_unit-lifestyle-expression-old-defines-premium
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  lifestyle_expression（生活方式表达）的"衣物磨损史"玩法用"旧"反向定义高级——把一件穿了很久的外套摊开，
+  袖口起球、内衬磨亮、口袋边缘有自己缝的线，手指摸过那些地方，然后穿上它出门做三件小事，每做完一件回桌面
+  给外套加一处痕迹，最后挂回门口 + 字幕"我喜欢会留下痕迹的东西"。这是极少数能直接引出"耐穿 / 可修补 / 售后 /
+  环保"卖点而不尬的玩法。配方关键：高级 = 陪伴 ≠ 更新；服装是"陪伴的证据"而非"消耗品"。本玩法与反消费主义 /
+  长期主义品牌叙事同构，是降维到 1 人 1 手机尺度的"repair / 旧物故事"叙事方向。
+
+scenario:
+  who:
+    primary_role: 生活方式类内容创作者 / 长期主义品牌
+    target_audience: lifestyle_expression 突破性档；目标观众接受反消费主义高级感
+  when:
+    trigger: 想自然引出"耐穿 / 可修补 / 售后 / 环保"卖点但不想尬硬广
+    context: 反消费主义高级感是下一个窗口；TikTok 2026 强调 emotional ROI
+  what:
+    action_type: old_defines_premium_narrative
+    decision_or_action: 摊开旧衣 + 手指摸过磨损处 + 穿上做生活任务 + 加痕迹 + 挂回 + 一句字幕
+  result:
+    success_pattern: 观众接住"高级不是更新而是陪伴"/ 自然引出耐穿可修补卖点 / 品牌"长期主义"叙事可信
+    flip_pattern: 把"旧"做成营销噱头（伪做旧 / 摆拍磨损）→ 违反"真实磨损"硬约束 / 观众秒识破
+  underlying_mechanism: |
+      生活方式内容的服装钩子有三种：价值观筛子（C3-1 拒绝）/ 情绪护城河（C3-2 反差）/ 陪伴证据（C3-5 旧衣）。
+      "陪伴证据"维度是反消费主义窗口最直接的对接口——其他两维度无法承载"耐穿 / 修补 / 售后"卖点。
+      关键约束：磨损必须真实，AI 不能替代真实磨损（一旦伪造即识破）。
+  boundary:
+    applicable_when: lifestyle_expression 突破性档；C3-5 衣物磨损史；长期主义 / 反消费主义品牌叙事
+    not_applicable_when: 快时尚品牌（与"陪伴 ≠ 更新"价值观冲突）；新品发布场景（与"旧"叙事矛盾）
+  alternative_path:
+    - 品牌为快时尚 / 新品发布 → 改用 C3-3 气味叙事或 C3-6 散文电影意识流（不依赖旧物）
+    - 创作者无足够磨损的旧衣 → 进入 unprocessable，不许伪做旧（违反 §E E2 真实使用痕迹要求）
+
+evidence:
+  source_md: Q2-内容类型种子/lifestyle_expression-交付物-v0.1.md
+  source_anchor: §C 玩法卡 #C3-5 衣物磨损史 + §D 三个未被开发的角度 第 3 条
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    开场是把一件穿了很久的外套摊在桌上：袖口起球、内衬磨亮、口袋边缘有一条自己缝的线
+    观众接住"高级不是更新，是陪伴"——对服装品牌会转化为"值得信赖的耐用与价值观"
+    可自然引出"耐穿 / 可修补 / 售后 / 环保"而不尬——"repair / 旧物故事"叙事方向，降维到手机与个人生活的尺度
+    这一条和反消费主义 / 长期主义品牌叙事同构，是极少数能直接引出"耐穿 / 可修补"卖点而不尬的玩法
+    "以旧为高级"——反消费主义高级感是下一个窗口
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（旧物叙事玩法）+ 03_semantic（高级 = 陪伴 ≠ 更新）+ 05_relation（lifestyle_expression ↔ 长期主义品牌）可反推核心语义。
+    Gate 3：长期主义 / 反消费主义品牌可使用此玩法；快时尚不适用（已注明边界）。
+    Gate 4：可被 content_generation 在 lifestyle_expression 玩法选择时消费——按品牌定位过滤是否适用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论 + 反消费主义 / 长期主义叙事路径；不含具体笛语品牌调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-lifestyle-expression-old-defines-premium-meaning, owner_field: premium_meaning_in_lifestyle, definition: "lifestyle_expression 中'高级'的定义 = 陪伴 ≠ 更新；服装在此是'陪伴的证据'/'旧物故事'载体，可直接对接反消费主义窗口"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-lifestyle-expression-old-defines-premium, rule_type: old_defines_premium, applicable_when: "lifestyle_expression 突破性档；长期主义/反消费主义品牌叙事", success_scenario: "真实磨损 + 陪伴叙事自然引出耐穿可修补卖点品牌长期主义可信", flip_scenario: "伪做旧或摆拍磨损 → 违反真实约束观众秒识破", alternative_boundary: "快时尚品牌或新品发布 → 改用气味叙事/散文电影；无足够磨损旧衣 → 进 unprocessable 不许伪做"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-lifestyle-expression-old-defines-premium, source_md: Q2-内容类型种子/lifestyle_expression-交付物-v0.1.md, source_anchor: §C C3-5 + §D 第 3 条, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-lif02, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"lifestyle_expression","brand_alignment":["long_termism","anti_consumerism"],"misaligned":["fast_fashion","new_release_focus"]}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-lifestyle-expression-old-defines-premium, runtime_method: content_generation, input_types: '["ContentType","BrandPositioning"]', output_types: '["PlayCardSelection"]', governing_rules_json: '["RL-KP-training_unit-lifestyle-expression-old-defines-premium"]'}

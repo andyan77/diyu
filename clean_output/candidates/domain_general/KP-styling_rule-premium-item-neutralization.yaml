@@ -1,0 +1,87 @@
+pack_id: KP-styling_rule-premium-item-neutralization
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  皮草/亮片/绸缎/重工外套等贵气单品要配基础休闲件降压，把"好看但不敢买"拉回成交区；
+  晚宴/婚礼/典礼等明确礼服场景反而该顺贵气走，不强行中和。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长（贵价感商品负责人）
+    target_audience: 设计感强 / 贵价感强 / 顾客容易"看着好看但不敢买"的商品对应客群
+  when:
+    trigger: 难卖主推款上身 / 顾客试穿后说"好看但是不敢穿出去"
+    context: 贵气单品成套搭配
+  what:
+    action_type: premium_neutralization_decision
+    decision_or_action: |
+      皮草 + 牛仔，缎面半裙 + 针织，亮片上衣 + 西裤；
+      中和单品必须保留"哑光、基础、低压力"特征。
+  result:
+    success_pattern: 顾客觉得"我也能穿出门"，难卖主推款被拉回成交区。
+    flip_pattern: 贵气单品再叠贵气单品，顾客觉得视觉压迫太强、日常没法穿，掉头。
+  underlying_mechanism: |
+      "贵气感"和"日常感"在视觉上互斥；
+      用基础休闲单品降低视觉压迫感是公开抽取协议样例规则的原理。
+  boundary:
+    applicable_when: 难卖主推款 / 设计感与贵价感强的商品 / 日常零售推荐
+    not_applicable_when: 婚礼 / 晚宴 / 典礼等明确礼服场景（反转：顺贵气走）
+  alternative_path:
+    - 中和单品断货 → 替代必须保留"哑光、基础、低压力"特征
+    - 进入礼服场景 → 反转放行，不强行中和
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 08 premium_item_neutralization_rule + 6.3 soft_rule + 6.4 反转四
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    皮草、亮片、绸缎、重工外套等贵气单品，要配基础休闲件降压。
+    仓库已直接把这条作为规则样例写进抽取协议，原理是"用基础款休闲单品搭配奢华单品，降低视觉压迫感"。
+    works_in：皮草 + 牛仔，缎面半裙 + 针织，亮片上衣 + 西裤。
+    fails_in：贵气单品再叠贵气单品。
+    中和单品必须保留"哑光、基础、低压力"特征。
+    会反转的规则四：晚宴、婚礼、典礼场景里，不一定要中和，反而可以顺着贵气走。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；本条是抽取协议官方样例规则。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 贵气中和是基础搭配通识，公开抽取协议直接列为样例。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-premium-item-neutralization-neutralizer_role, owner_field: rule_name, definition: "贵气单品中和法：用哑光/基础/低压力单品降低奢华单品视觉压迫感"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-premium-item-neutralization-premium_items, value: fur, label: 皮草, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-premium-item-neutralization-premium_items, value: sequins, label: 亮片, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-premium-item-neutralization-premium_items, value: satin, label: 绸缎, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-premium-item-neutralization-premium_items, value: heavy_craft_outer, label: 重工外套, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-premium-item-neutralization-neutralizer_traits, value: matte, label: 哑光, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-premium-item-neutralization-neutralizer_traits, value: basic, label: 基础, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-premium-item-neutralization-neutralizer_traits, value: low_pressure, label: 低压力, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-styling_rule-premium-item-neutralization, rule_type: soft_rule, applicable_when: "难卖主推款/设计感强商品/日常零售推荐", success_scenario: "贵气+基础休闲降压顾客觉得能穿出门", flip_scenario: "贵气叠贵气视觉压迫顾客掉头", alternative_boundary: "中和单品保留哑光/基础/低压力特征；婚礼/晚宴/典礼反转放行"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-premium-item-neutralization, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 08 + 6.3 + 6.4 反转四, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-prem01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"soft_rule","focus":"premium_neutralization"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-prem02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"难卖主推款必须和基础款一起出"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-prem03, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"教员工把好看但不敢买拉回成交区"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-premium-item-neutralization, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-premium-item-neutralization, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

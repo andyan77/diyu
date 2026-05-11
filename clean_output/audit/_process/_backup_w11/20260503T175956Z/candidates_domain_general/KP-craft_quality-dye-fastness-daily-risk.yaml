@@ -1,0 +1,95 @@
+pack_id: KP-craft_quality-dye-fastness-daily-risk
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: craft_quality
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  染整 / 色牢度是"日常使用风险工艺"——色牢度不只针对深色，
+  浅深拼接、浅色内搭、包带摩擦、汗液摩擦都要看；
+  凡是顾客会长期背包 / 贴身穿 / 浅深叠穿的单品，必须把褪色 / 沾色风险前置说明。
+
+scenario:
+  who:
+    primary_role: 门店导购 / merchandising_director
+    target_audience: 长期背包党 / 贴身穿浅色内搭 / 浅深叠穿的顾客；推深色款 + 浅色搭配的场景
+  when:
+    trigger: 顾客试穿浅深拼接 / 深色款；或导购准备推荐与浅色叠穿
+    context: 牛仔 / 深色棉 / 拼接款 / 含真丝 / 醋酸的浅色叠穿场景
+  what:
+    action_type: craft_quality_disclosure_color_fastness
+    decision_or_action: |
+      不要默认"深色才看色牢度"——浅深拼接 / 浅色内搭 / 包带摩擦 / 汗液摩擦同样要看；
+      推荐前主动告知褪色 / 沾色风险（首次单洗 / 同色洗 / 干洗 / 包带摩擦位先褪）；
+      浅深叠穿场景显式提示风险并建议同色或隔层；
+      新款主推前先做内部沾色测试再上推荐。
+  result:
+    success_pattern: |
+      顾客接受首次单洗 / 同色洗的洗护建议，沾色 / 褪色未发生或发生于预期内；
+      浅深叠穿顾客接受隔层建议无染色事故。
+    flip_pattern: |
+      只对深色才提风险 → 浅深拼接款顾客发现拼接处沾色 → 退换或差评；
+      未提示包带 / 汗液位 → 顾客发现局部褪色认定品质问题；
+      把白色衬衣染色归因为"顾客洗错了" → 信任受损。
+  underlying_mechanism: |
+      染料对纤维的结合方式（化学键 / 范德华力 / 物理嵌入）决定耐摩擦 / 耐汗渍 / 耐光等不同色牢度；
+      靛蓝对棉只是表面附着 → 摩擦掉色明显；
+      浅深对接处任何湿摩擦或长时间贴合都可能发生迁移。
+  boundary:
+    applicable_when: 浅深拼接 / 深色 / 浅色内搭 / 长期背包 / 汗液场景
+    not_applicable_when: |
+      明确标 ISO 105 各类色牢度 ≥4 级且证据可见的款（仍建议首次单洗）；
+      纯展示用陈列道具。
+  alternative_path:
+    - 如果顾客特别在意沾色 → 推荐已水洗退浆款或浅色款本身
+    - 如果浅深叠穿不可避免 → 建议加内搭隔层或选耐摩擦色牢度高的款
+    - 如果店内疑似沾色风险高 → 直接做内部沾色 / 摩擦测试再决定推荐与否
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 五、首批 CraftKnowledge 正式冻结清单 · 4. 染整 / 色牢度
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    这组正式定义为"日常使用风险工艺"。
+    不是只有深色才要看色牢度，浅深拼接、浅色内搭、包带摩擦、汗液摩擦都要看。
+    凡是顾客会长期背包、贴身穿、或者浅深叠穿的单品，都必须把褪色 / 沾色风险前置说明。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"日常使用风险工艺定义 + 反深色专属误区 + 四大风险位"。
+    Gate 3：通用色牢度判断。
+    Gate 4：可被 outfit_recommendation / store_training 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用染整 / 色牢度判断，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CraftKnowledge, type_name: CraftKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-craft_quality-dye-fastness-daily-risk-daily_use_risk, owner_field: craft_feature, definition: "染整/色牢度是日常使用风险工艺，不仅针对深色，浅深拼接/包带/汗液都要看"}
+  value_set:
+    - {value_set_id: VS-KP-craft_quality-dye-fastness-daily-risk-risk_position, value: dark_to_light_seam, label: 浅深拼接处}
+    - {value_set_id: VS-KP-craft_quality-dye-fastness-daily-risk-risk_position, value: light_inner_layer, label: 浅色内搭}
+    - {value_set_id: VS-KP-craft_quality-dye-fastness-daily-risk-risk_position, value: bag_strap_friction, label: 包带摩擦}
+    - {value_set_id: VS-KP-craft_quality-dye-fastness-daily-risk-risk_position, value: sweat_friction, label: 汗液摩擦}
+  rule:
+    - {rule_id: RL-KP-craft_quality-dye-fastness-daily-risk, rule_type: craft_quality_disclosure, applicable_when: "推浅深拼接/深色/长期背包/浅色叠穿单品", success_scenario: "前置褪色沾色风险+建议首次单洗 → 顾客无染色事故", flip_scenario: "只对深色提风险 → 拼接沾色或包带褪色 → 退换/差评", alternative_boundary: "在意沾色→水洗退浆或浅色款；浅深叠穿→加隔层或选高色牢度款"}
+  evidence:
+    - {evidence_id: EV-KP-craft_quality-dye-fastness-daily-risk, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 五、4. 染整 / 色牢度, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-craft_quality-dye-fastness-daily-risk, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-store_training-KP-craft_quality-dye-fastness-daily-risk, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

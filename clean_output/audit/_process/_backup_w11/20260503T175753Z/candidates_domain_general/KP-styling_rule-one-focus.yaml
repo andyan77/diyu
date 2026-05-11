@@ -1,0 +1,81 @@
+pack_id: KP-styling_rule-one-focus
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  一套里只留一个主角：颜色、版型、材质、设计四选一——零售穿搭不是造型比赛，
+  哪里都厉害最后哪里都不好卖；舞台造型与时装表达型内容不在此限。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长
+    target_audience: 绝大多数顾客，尤其第一次种草、连带销售场景
+  when:
+    trigger: 接客推荐 / 上身搭配定稿 / 担心顾客被"穿太满"劝退
+    context: 整套搭配的视觉焦点选择
+  what:
+    action_type: single_focus_decision
+    decision_or_action: |
+      四选一：颜色主角 / 版型主角 / 材质主角 / 设计主角；
+      其余单品全部降噪做基础与衬托；主角断货时替代必须保留主角功能。
+  result:
+    success_pattern: 顾客一眼锁定主角后愿意成交，其余单品作为延展连带成立。
+    flip_pattern: 亮片上衣 + 花裙 + 金属鞋 + 大耳环——画面满，但顾客无法决定看哪里，最终不下单。
+  underlying_mechanism: |
+      门店成交是"减少决策成本"的过程；
+      多焦点等于无焦点，顾客的视线没有落点，购买动机就找不到出口。
+  boundary:
+    applicable_when: 第一次种草 / 连带销售 / 通勤盘 / 安全成交盘
+    not_applicable_when: 舞台造型 / 时装表达 / 强风格内容片
+  alternative_path:
+    - 主角断货 → 替代保留"主角功能"（如颜色主角→换同饱和度同位置的另一件）
+    - 其他单品继续降噪，不顺势叠新焦点
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 04 one_focus_rule + 6.2 hard_rule
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    一套里只留一个主角：颜色主角、版型主角、材质主角、设计主角，四选一。
+    零售穿搭不是造型比赛；哪里都厉害，最后往往哪里都不好卖。
+    works_in：亮色外套 + 基础内搭；设计感上衣 + 干净下装。
+    fails_in：亮片上衣 + 花裙 + 金属鞋 + 大耳环。
+    主角断货时，替代保留"主角功能"，其他单品继续降噪。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；可被推荐/培训/陈列三路调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 单一主角是零售穿搭通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-one-focus-focus_axes, owner_field: rule_name, definition: "一身一个主角法：四选一焦点轴=颜色/版型/材质/设计"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-one-focus-focus_axes, value: color, label: 颜色主角, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-one-focus-focus_axes, value: silhouette, label: 版型主角, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-one-focus-focus_axes, value: material, label: 材质主角, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-one-focus-focus_axes, value: design, label: 设计主角, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-styling_rule-one-focus, rule_type: hard_rule, applicable_when: "第一次种草/连带销售/安全成交盘", success_scenario: "单一主角+其余降噪顾客一眼锁定", flip_scenario: "亮片+花+金属+大耳环顾客不下单", alternative_boundary: "舞台/时装表达不在此限；主角断货替代保留主角功能"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-one-focus, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 04 + 6.2, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-foc01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"hard_rule","focus":"single_focus"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-foc02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"橱窗与人台必须有明确主角"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-one-focus, runtime_method: outfit_recommendation, input_types: [Product], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-one-focus, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

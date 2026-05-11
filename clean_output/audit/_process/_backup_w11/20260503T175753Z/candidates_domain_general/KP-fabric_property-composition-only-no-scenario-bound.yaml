@@ -1,0 +1,94 @@
+pack_id: KP-fabric_property-composition-only-no-scenario-bound
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  只讲成分不讲穿着情境是高频误判——成分只是起点，
+  真正决定成交是否成立的是顾客的场景、动作、出汗、久坐、洗护、摩擦六维情境；
+  门店推荐必须把"成分讲解"和"情境询问"绑定为一对动作。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional
+    target_audience: 习惯只问"是什么材质"做决策的顾客；导购只回答成分不询问场景的接客模式
+  when:
+    trigger: 推荐或回答只停留在成分层（"含 60% 棉""真丝""粘胶"）
+    context: 任何面料推荐场景；尤其是同一面料在不同顾客 / 不同场景下结论可能完全相反的款
+  what:
+    action_type: misjudgment_correction_composition_only
+    decision_or_action: |
+      把"讲成分"和"问情境"绑定为一对必做动作；
+      回答成分前或同时问清楚六维情境：场景 / 动作 / 出汗 / 久坐 / 洗护 / 摩擦；
+      根据情境得出真正的推荐结论而非仅按成分；
+      培训中显式禁止"只讲成分不讲场景"的话术。
+  result:
+    success_pattern: |
+      推荐含成分讲解 + 情境询问双层结构；同款不同顾客得出不同建议但都成立；
+      退货率下降，顾客认为店员"懂行"。
+    flip_pattern: |
+      只讲成分忽略场景 → 同款卖给情境不匹配的顾客 → 上身后翻车 → 退换或差评；
+      把所有亚麻顾客都当一种顾客 → 久坐通勤顾客遭遇出褶投诉。
+  underlying_mechanism: |
+      面料表现是材料属性 × 情境作用力的函数；
+      只看成分忽略情境会把多维问题压缩成单维 → 推荐失真；
+      同样成分在不同场景下可能正好相反（如纯棉适合家常但不适合商务出差皱紧）。
+  boundary:
+    applicable_when: 所有面料推荐场景；店员任意成分讲解动作
+    not_applicable_when: |
+      纯快闪展示陈列（无推荐目的）；
+      顾客明确只为收藏 / 收纳购买不实穿。
+  alternative_path:
+    - 如果情境信息不全 → 主动问 1-2 个关键问题（"你日常通勤几小时""怎么洗""背包吗"）
+    - 如果顾客拒绝回答情境 → 改用风险列举 + 让顾客自评接受度
+    - 如果是培训中遇到 → 用 do_dont_contrast 形式做强化
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 六、首批高频误判 · 误判 6：只讲成分，不讲穿着情境
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    正式纠偏：成分只是起点，真正决定成交的是场景、动作、出汗、久坐、洗护、摩擦。
+    落盘对象：Product（商品）、product_review（产品测评）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"成分≠结论 + 六维情境 + 双层动作绑定"。
+    Gate 3：跨服装零售通用接客判断。
+    Gate 4：可被 store_training / outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用接客方法论误判，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-composition-only-no-scenario-bound-composition_plus_scenario, owner_field: hand_feel, definition: "成分只是起点，必须与穿着情境绑定才能得出推荐结论"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-composition-only-no-scenario-bound-scenario_dim, value: occasion, label: 场景}
+    - {value_set_id: VS-KP-fabric_property-composition-only-no-scenario-bound-scenario_dim, value: motion, label: 动作}
+    - {value_set_id: VS-KP-fabric_property-composition-only-no-scenario-bound-scenario_dim, value: sweat, label: 出汗}
+    - {value_set_id: VS-KP-fabric_property-composition-only-no-scenario-bound-scenario_dim, value: long_sit, label: 久坐}
+    - {value_set_id: VS-KP-fabric_property-composition-only-no-scenario-bound-scenario_dim, value: care, label: 洗护}
+    - {value_set_id: VS-KP-fabric_property-composition-only-no-scenario-bound-scenario_dim, value: friction, label: 摩擦}
+  rule:
+    - {rule_id: RL-KP-fabric_property-composition-only-no-scenario-bound, rule_type: misjudgment_correction, applicable_when: "店员推荐或回答只停留在成分层", success_scenario: "讲成分+问六维情境绑定动作 → 同款不同顾客得不同建议都成立", flip_scenario: "只讲成分忽略场景 → 情境不匹配翻车 → 退换/差评", alternative_boundary: "情境信息不全→问1-2关键问题；顾客拒答→列风险让自评；培训→用do_dont_contrast"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-composition-only-no-scenario-bound, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 六、误判 6, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-fabric_property-composition-only-no-scenario-bound, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-composition-only-no-scenario-bound, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}

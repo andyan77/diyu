@@ -1,0 +1,15 @@
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-emotion-expression
+FD-ContentType-failure_immunity_level,ContentType,failure_immunity_level,string,,,domain_general,KP-product_attribute-content-type-north-star-emotion-expression
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-process-trace
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-product-copy-general
+FD-ContentType-output_form,ContentType,output_form,string,,,domain_general,KP-product_attribute-content-type-north-star-product-copy-general
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-product-journey
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-product-review
+FD-ContentType-north_star,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-mainstream_played_out,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-advanced_play,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-breakthrough_play,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-industry_vertical_lift,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-forbidden_plays,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-production_difficulty,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-voice_archetype,ContentType,voice_archetype,enum,VS-pcg-voice-archetype,,domain_general,KP-product_attribute-pcg-five-voice-archetypes

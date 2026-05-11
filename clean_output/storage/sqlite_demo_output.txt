@@ -1,0 +1,47 @@
+=== 装载 9 张 CSV ===
+01_object_type: 18 rows loaded
+02_field: 98 rows loaded
+03_semantic: 163 rows loaded
+04_value_set: 604 rows loaded
+05_relation: 173 rows loaded
+06_rule: 201 rows loaded
+07_evidence: 201 rows loaded
+08_lifecycle: 1 rows loaded
+09_call_mapping: 243 rows loaded
+
+=== 模板 1 · domain_general 单层 ===
+rule (domain_general): 193
+evidence (domain_general): 193
+
+=== 模板 2 · 笛语应用 (domain_general + brand_faye) ===
+rule (笛语): 200
+rule 中 brand_faye 独立行: 7
+
+=== 模板 3 · 未来 brand_xyz 应用 ===
+rule (假想 brand_xyz): 193 （与 domain_general 行数一致，证明开放扩展无需改 schema）
+
+=== 反向追溯样例 · 取 1 条规则 → MD ===
+ → ('RL-KP-fabric_property-linen-natural-creases', 'Q7Q12-搭配陈列业务包/面料工艺品质判断包.md', '四、首批 FabricKnowledge 正式冻结清单 · 2. 亚麻 / 棉麻类')
+ → ('RL-KP-service_judgment-comfort-sensitive-trigger', 'Q7Q12-搭配陈列业务包/门店接客场景包.md', '二、10 类进店目的 · 8. comfort_sensitive')
+ → ('RL-KP-display_rule-full-look-no-broken-size', 'Q7Q12-搭配陈列业务包/陈列方法包.md', '二、6. full_look_display + 三、2)/3) + 四、联动')
+
+=== CHECK 断言验证 · 多租户漂移行 ===
+漂移行数: 0 （应为 0）
+
+=== 完整性断言 · evidence 必填 ===
+evidence 关键字段空: 0 （应为 0）
+
+=== 跨表 JOIN · 库存救场规则 + 状态枚举 ===
+inventory 类规则数: 5
+
+=== Object_type 白名单验证 ===
+入库 18 类: ['Attribute', 'CallMapping', 'Category', 'Collection', 'ContentType', 'CraftKnowledge', 'CustomerScenario', 'DisplayGuide', 'Evidence', 'FabricKnowledge', 'InventoryState', 'Persona', 'PlatformTone', 'PrivateOutletChannel', 'Product', 'RoleProfile', 'StylingRule', 'TrainingMaterial']
+
+=== W8 #9 brand_xyz 临时演练 · 演示多租户隔离实效 ===
+（说明：本批源料无真实笛语调性，brand_faye=0；用 brand_xyz 临时样本演证 schema 已就绪）
+  插入 demo 行：rule_id=RL-DEMO-brand_xyz-priority-tone, brand_layer=brand_xyz
+  domain_general 单层: 193 行
+  brand_xyz 应用 (dg + xyz): 194 行 = 193 + 1
+  brand_faye 应用 (dg + faye): 仍是 193 行（faye=0 等同 dg）
+  ✅ brand_X (大写) 被 GLOB CHECK 拒绝
+  ✅ 演示数据已回滚，candidates / yaml / db 持久层不受影响

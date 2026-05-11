@@ -1,0 +1,103 @@
+pack_id: KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  系统中"平台"层必须由两类并列实体共同承载：PlatformTone（公域分发位 / 有算法分发，如小红书 / 抖音 / 视频号 / 公众号 / B 站 / 微博 / 快手）
+  与 PrivateOutletChannel（私域出口位 / 无算法分发 靠强关系链，如朋友圈 / 微信群 / 微信私信）；
+  两者是 schema 元规则上的并列对象类型，**不能合并为单一 Platform 实体**，也**不能用一个抽象统称（如 DistributionTarget）替代**——
+  因为公域与私域的算法机制、内容形态约束、风险类型、转化路径完全不同；服装零售的导购转化主战场天然落在 PrivateOutletChannel，
+  若 schema 只建 PlatformTone，导购朋友圈这条最强转化链路在系统视野里直接漏掉。
+
+scenario:
+  who:
+    primary_role: 知识工程 / Schema 设计者 / 派生视图引擎实现者
+    target_audience: 9 表 object_type 维护 / Q3 平台分层引用方 / 内容生成 Skill
+  when:
+    trigger: 设计或评审"平台"层对象类型 / Q3 真源被 Q4 引用时如何承接 / 想引入新统称实体时
+    context: Q3 v1 真源 + Q4 矩阵承接；冷启动 P0；与 KP-service_judgment-platform-derivation-not-source 配套
+  what:
+    action_type: parallel_object_type_specification
+    decision_or_action: |
+      正确动作：保留 PlatformTone 与 PrivateOutletChannel 两个并列对象类型，分别承载公域 / 私域的真源；
+      "平台"在叙述层只作描述性统称，不引入新实体类型。
+      错误动作：① 把两者合并为单一 Platform 实体（algorithmic_distribution 字段标 true/false 区分）→
+      公域与私域的字段差异（如算法权重 / 关系链密度 / 内容形态约束）被压扁，丢失业务表达；
+      ② 引入 DistributionTarget 抽象层 → 多一层间接，派生公式查表多一跳，且诱导后续把"分发目标"变成新真源边。
+  result:
+    success_pattern: |
+      派生视图引擎按两类对象分别查 Q3 SUPPORTS_PLATFORM tier，导购内容线既能命中小红书（PlatformTone, P0_native）
+      也能命中朋友圈（PrivateOutletChannel, P0_native）；服装零售导购转化主路径在 schema 里完整可见。
+    flip_pattern: |
+      Schema 只建 PlatformTone，把朋友圈 / 微信群挂在 PlatformTone 下加 distribution_type="private" 字段
+      → 派生视图按"平台"轴查询时，公域逻辑（看算法热度）被错套到私域（看强关系链触达），
+      导致"导购在朋友圈发什么"被按"小红书算法偏好"算，私域转化被误导。
+  underlying_mechanism: |
+    公域 vs 私域是两套不同的内容分发物理机制：
+    - 公域：算法分发主导，内容→冷启池→标签→人群推送，依赖内容自身吸引力，受平台规则约束
+    - 私域：关系链分发主导，内容→已加好友/已入群，依赖发布者与受众的既有信任关系，无算法干预
+    两套机制的字段结构、tier 含义、内容形态约束、风险类型差异巨大，
+    强行合并等于把"机场航班调度"和"小区快递入户"塞进同一张表。
+  boundary:
+    applicable_when: 任何涉及"平台"层 schema 设计 / 派生视图查 tier / Q3 真源被引用的场景
+    not_applicable_when: |
+      运营叙述层用"平台"作为口语统称是允许的，不破坏 schema；
+      未来出现第三类（如外部联盟自动分发）→ 新增第三个并列实体类型，不强行合并
+  alternative_path:
+    - 想统一查询入口 → 在派生视图引擎内提供 union 视图，但底层两类对象类型分离不变
+    - 想加跨两者的共同字段（如承载实体名）→ 用 supertype 抽象（如 DistributionPoint 抽象层）但保留两个具体类型，不合并
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md
+  source_anchor: §1.3 平台一词的本稿统称说明 + §3.3 为什么必须同时覆盖公域分发位与私域出口位
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    1.3：公域分发位（有算法分发）→ PlatformTone / 私域出口位（无算法分发，靠强关系链）→ PrivateOutletChannel；
+    "平台"是描述性统称，不是新引入的实体类型，不写入图谱。具体对象仍以 Q3 真源中的 PlatformTone / PrivateOutletChannel 两个并列实体为准。
+    3.3：在服装零售实际场景里，sales_associate 挂接 styling_advisor 以后，最核心的分发战场之一不是只有公域平台，
+    而是：朋友圈 / 微信群 / 私信触达 / 一对一转发；如果 Q4 兼容矩阵只覆盖公域平台，就会把导购这条最强转化链路从系统视野里漏掉，
+    导致 Step 3 种子数据准备与真实业务错位。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（含两条 flip 反例：合并为 Platform / 引入 DistributionTarget）。
+    Gate 2：从 01_object_type（PlatformTone + PrivateOutletChannel 两条）+ 06_rule（parallel_object_type_specification）+ 03_semantic 可反推
+    "两个并列对象类型 / 不合并不引入抽象统称 / 服装零售导购私域不可漏" 三条核心语义。
+    Gate 3：跨服装零售品牌通用，所有依赖私域转化的零售业态都需此 schema。
+    Gate 4：可被 platform_adaptation 与内容生成前置渠道覆盖校验消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: Schema 元规则——"平台"层并列对象类型设计，与品牌无关；与 KP-service_judgment-platform-derivation-not-source 配套但角度不同（前者讲不立新真源边，本条讲两个并列实体不能合并）
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-PlatformTone, type_name: PlatformTone, supertype: domain_object}
+    - {type_id: OT-PrivateOutletChannel, type_name: PrivateOutletChannel, supertype: domain_object}
+  field:
+    - {field_id: FD-PlatformTone-distribution_mechanism, owner_type: PlatformTone, field_name: distribution_mechanism, data_type: string}
+    - {field_id: FD-PrivateOutletChannel-distribution_mechanism, owner_type: PrivateOutletChannel, field_name: distribution_mechanism, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel-platformtone, owner_field: PlatformTone, definition: "公域分发位：有算法分发，内容经冷启池/标签/人群推送进入受众视野；首批承载小红书/抖音/视频号/快手/公众号/B站/微博"}
+    - {semantic_id: SM-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel-privateoutletchannel, owner_field: PrivateOutletChannel, definition: "私域出口位：无算法分发，靠强关系链触达；首批承载微信朋友圈/微信群/微信私信"}
+    - {semantic_id: SM-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel-no-merge, owner_field: parallel_typing, definition: "两类对象类型在 schema 上必须并列；不合并为单一 Platform 实体；不引入 DistributionTarget 抽象统称替代"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel-distribution_mechanism, value: algorithmic, label: 算法分发（公域）, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel-distribution_mechanism, value: relational_chain, label: 关系链分发（私域）, ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel, rule_type: parallel_object_type_specification, applicable_when: "设计或评审平台层对象类型 / Q3 真源被 Q4 引用时", success_scenario: "保留两类并列实体 派生引擎正确区分公私域查 tier 导购私域转化主路径完整可见", flip_scenario: "合并为单一 Platform 或引入 DistributionTarget→公私域字段差异被压扁→私域转化被算法逻辑误导", alternative_boundary: "口语统称允许；新增第三类→新增并列实体；想统一查询→union 视图层 不合并底层"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel, source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md, source_anchor: §1.3 + §3.3, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-platform_adaptation-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel, runtime_method: platform_adaptation, input_types: [Persona, ContentType], output_types: [PlatformTone, PrivateOutletChannel]}

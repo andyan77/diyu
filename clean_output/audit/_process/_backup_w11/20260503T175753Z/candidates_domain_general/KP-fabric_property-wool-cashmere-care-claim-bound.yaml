@@ -1,0 +1,97 @@
+pack_id: KP-fabric_property-wool-cashmere-care-claim-bound
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  羊毛 / 羊绒 / 毛混类的卖点不是"软"而是保暖、弹性回复、表面质感和体面感；
+  能否机洗只看洗护标 / care claim，不许凭销售经验拍脑袋；
+  必须前置摩擦位起球、包带处先老、局部起毛、毡缩、刺痒、肩肘膝鼓包六类风险，
+  并破除"含毛=高级"和"羊绒=永远不起球"的误判。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional（商品专业者）
+    target_audience: 询问羊毛 / 羊绒 / 毛混外套 / 大衣 / 针织 / 围巾的顾客（包括"一律机洗烘干"和"只看含毛量"的）
+  when:
+    trigger: 顾客问"能不能机洗""会不会起球""含毛多吗"或导购把"含毛"当万能卖点
+    context: 秋冬通勤 / 大衣 / 针织 / 外套陈列；含洗护标 / 不含洗护标信息的差异
+  what:
+    action_type: fabric_recommendation_with_care_claim_check
+    decision_or_action: |
+      推荐前先翻洗护标 / care claim 而不是用销售经验答能否机洗；
+      把卖点改写为保暖 + 弹性回复 + 表面质感 + 体面感；
+      同步前置六类风险位（摩擦位起球 / 包带处先老 / 局部起毛 / 毡缩 / 刺痒 / 肩肘膝鼓包）；
+      纱支 / 织法 / 克重不同时显式区分细软 vs 略扎。
+  result:
+    success_pattern: |
+      顾客接受"能不能机洗看洗护标"的口径，按标洗护后无毡缩或质量纠纷；
+      理解"羊绒也会起球"，对包带 / 摩擦位起球有心理预期。
+    flip_pattern: |
+      导购拍脑袋说"羊毛都要手洗"或"羊绒不起球"；
+      顾客按错误指引洗护或对起球认定品质问题 → 退换或差评；
+      只看含毛比例不看纱支克重 → 顾客买到含毛但刺痒的款误以为品控差。
+  underlying_mechanism: |
+      羊毛 / 羊绒鳞片层在湿热加机械力下毡缩；只有经过特殊防缩整理且洗护标
+      明确允许才可机洗；起球与摩擦力 / 纱线松紧 / 短纤含量相关，含羊绒不能阻止起球；
+      细软 vs 刺痒由纤维直径（micron）决定，不是含毛量决定。
+  boundary:
+    applicable_when: 主成分含羊毛 / 羊绒 / 毛混的针织 / 大衣 / 围巾 / 西装；任何"能不能机洗"问询
+    not_applicable_when: |
+      明确标"全防缩处理 / Total Easy Care / Machine Washable"且整件可机洗的款；
+      纯展示用 / 短时拍摄。
+  alternative_path:
+    - 如果顾客一律机洗烘干 → 推荐 Machine Washable 防缩羊毛或羊毛混化纤
+    - 如果顾客刺痒敏感 → 推荐美利奴 / 高支细纱羊毛或羊绒主导款
+    - 如果顾客介意起球 → 推荐紧捻高密针织或带防起球整理的款
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 四、首批 FabricKnowledge 正式冻结清单 · 5. 羊毛 / 羊绒 / 毛混类
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    最容易误导的是"含毛=高级""羊绒=永远不起球""毛类=都要手洗"。
+    正式风险提示冻结为：摩擦位起球、包带处先老、局部起毛、毡缩、刺痒、肩肘膝鼓包。
+    能否机洗必须看洗护标；Woolmark 明确说明，只有洗护声明允许机洗的 wool garment 才可安全机洗。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全；boundary 明确（看 care claim）。
+    Gate 2：可反推"能否机洗看标 + 三大误判破除 + 六类风险位"。
+    Gate 3：通用毛纺纤维判断。
+    Gate 4：可被 outfit_recommendation / store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用毛纺纤维特性 + Woolmark 国际口径，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-wool-cashmere-care-claim-bound-care_claim_first, owner_field: risk_alerts, definition: "羊毛/羊绒/毛混能否机洗只看洗护标 care claim，不许凭销售经验"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-wool-cashmere-care-claim-bound-risk_position, value: friction_pilling, label: 摩擦位起球}
+    - {value_set_id: VS-KP-fabric_property-wool-cashmere-care-claim-bound-risk_position, value: bag_strap_aging, label: 包带处先老}
+    - {value_set_id: VS-KP-fabric_property-wool-cashmere-care-claim-bound-risk_position, value: spot_fuzzing, label: 局部起毛}
+    - {value_set_id: VS-KP-fabric_property-wool-cashmere-care-claim-bound-risk_position, value: felting_shrink, label: 毡缩}
+    - {value_set_id: VS-KP-fabric_property-wool-cashmere-care-claim-bound-risk_position, value: prickling, label: 刺痒}
+    - {value_set_id: VS-KP-fabric_property-wool-cashmere-care-claim-bound-risk_position, value: shoulder_elbow_knee_bulge, label: 肩肘膝鼓包}
+  rule:
+    - {rule_id: RL-KP-fabric_property-wool-cashmere-care-claim-bound, rule_type: fabric_recommendation_disclosure, applicable_when: "面料=羊毛/羊绒/毛混 且 顾客问机洗或起球或刺痒", success_scenario: "先看 care claim 再答 + 前置六类风险 + 破除三大误判 → 顾客按标洗护无纠纷", flip_scenario: "拍脑袋答机洗或承诺羊绒不起球 → 毡缩或起球 → 退换/差评", alternative_boundary: "一律机洗→Machine Washable防缩款；刺痒敏感→美利奴细支；介意起球→紧捻高密针织"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-wool-cashmere-care-claim-bound, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 四、5. 羊毛 / 羊绒 / 毛混类, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-wool-cashmere-care-claim-bound, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-store_training-KP-fabric_property-wool-cashmere-care-claim-bound, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

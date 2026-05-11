@@ -1,0 +1,95 @@
+pack_id: KP-styling_rule-daily-fragment-single-chair-time-fold
+granularity_layer: L2
+production_tier: long_term
+default_call_pool: true
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  daily_fragment 内容里，"同一把椅子四次"是一条用**单地点 + 时段道具替身**
+  在 4 小时内拍完的"陪伴感"碎片玩法——手机固定拍一把椅子或店里的试衣凳，
+  早上椅子上是一件外套（出门）；中午是一杯喝到一半的咖啡（撑住）；
+  傍晚是一只购物袋（松一口气）；夜里是一盏小灯照着空椅子（回到自己）。
+  每次出现你都只露出手：把东西放下、停两秒、又拿走。
+  服装在此作为"情绪载体"出现（外套 = 出门的勇气），而不是商品——
+  这是品牌把 daily_fragment 做成"温柔叙事"且**不需 long_term 跨日素材**的入口。
+
+scenario:
+  who:
+    primary_role: daily_fragment 内容创作者 / 服装品牌内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=daily_fragment 单日完成卡时）
+  when:
+    trigger: 想做陪伴感但创作者只能在单日 4 小时内完成 / 品牌想做"温柔叙事"
+    context: daily_fragment C3-1 是 long_term 跨日，本卡是单日时段折叠——为单条 4 小时基线提供单日替代
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 单机位 + 4 个时段（清晨/中午/傍晚/夜）+ 4 件道具替身 + 只露手 + 每次停 2 秒 + 弱字幕
+  result:
+    success_pattern: |-
+      0-7 清晨椅子+外套+字幕"出门" → 7-15 中午半杯咖啡+字幕"撑住" →
+      15-23 傍晚购物袋+字幕"松一口气" → 23-30 夜里小灯照空椅+字幕"回到自己"
+      → 观众脑补完"你的一天" → 服装作为情绪载体被自然接住
+    flip_pattern: |-
+      把椅子换成商品陈列摆拍 / 字幕讲产品卖点 / 加 BGM 顶节奏
+      → 退化为"商品摆拍碎片"，丢失"我也有一把椅子装着我的一天"的共鸣
+      或拍成"店内 vlog"加旁白 → 滑向 store_daily 而非 daily_fragment
+  underlying_mechanism: |
+      daily_fragment 真正的抓力是"用单点重复表达时间"。同一把椅子四次让"时间"
+      自己说话——道具替身（外套 / 咖啡 / 购物袋 / 灯）承担情绪叙事，
+      手作为"人存在过的证据"。服装在这里不是"被穿"而是"被放下"——
+      这是服装情绪化叙事的独占语法，与 OOTD"穿在身上展示"完全相反。
+  boundary:
+    applicable_when: 1 人 1 手机 / 4 小时内完成 / 单日就能拍完 / 预算 0 / 剪辑极省
+    not_applicable_when: 想跨日捕捉变化 → C3-1 同一角落 5-7 天 / 想出镜建人格 → personal_vlog / 想拍商品 → OOTD 或 product_review
+  alternative_path:
+    - 与 C3-1 跨日重复版形成"单日 vs 跨日"二维分工
+    - 与 C3-2 不拍脸痕迹版互补：本卡走"时段道具替身"，C3-2 走"物件痕迹近景"
+
+evidence:
+  source_md: Q2-内容类型种子/daily_fragment-交付物-v0.1.md
+  source_anchor: §C3-5 同一把椅子四次（单地点时间折叠）
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-5：手机固定拍一把椅子或店里的试衣凳。早上椅子上是一件外套；中午是一杯喝到一半的咖啡；
+    傍晚是一只购物袋；夜里是一盏小灯照着空椅子。每次出现你都只露出手：把东西放下、停两秒、又拿走。
+    观众不会看到你的行程，但会在脑子里补完"你的一天"——接住"我也有一把椅子装着我的一天"。
+    服装钩子：服装作为"情绪载体"出现（外套 = 出门的勇气）——极适合做品牌的温柔叙事。
+    打破"碎片必须多地点"，用单地点做时间结构。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation（compatible_with_content_type=daily_fragment / play_card=C3-5）+ 09_call_mapping
+    可反推"DF 单日时段折叠 / 服装作为情绪载体非商品 / 与 OOTD 穿身展示的反向边界"。
+    Gate 3：跨品牌通用——任意品牌可做温柔叙事。
+    Gate 4：可被 content_generation 调用，按"4 时段道具替身清单"生成分镜。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 daily_fragment 玩法格式，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-daily-fragment-single-chair-time-fold, rule_type: content_play_card_anchor, applicable_when: "daily_fragment 单日 4 小时内完成 / 服装品牌做温柔叙事", success_scenario: "单机位+4 时段道具替身（外套/咖啡/购物袋/灯）+只露手+停 2 秒 → 服装作为情绪载体", flip_scenario: "换成商品摆拍/字幕讲卖点/加 BGM → 退化为商品碎片或 store_daily", alternative_boundary: "想跨日 → C3-1 同一角落 / 想出镜 → personal_vlog / 想拍商品 → OOTD 或 product_review"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-daily-fragment-single-chair-time-fold, source_md: Q2-内容类型种子/daily_fragment-交付物-v0.1.md, source_anchor: §C3-5, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-daily_fragment-df3, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"daily_fragment","play_card":"C3-5","time_dimension":"single_day_segment_fold"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-daily-fragment-single-chair-time-fold, runtime_method: content_generation, input_types: ContentType+TimeSegmentPropCatalog, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

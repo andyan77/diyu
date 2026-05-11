@@ -1,0 +1,94 @@
+pack_id: KP-fabric_property-gloss-not-equal-luxe
+granularity_layer: L3
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  "有光泽"不等于"显贵"——光泽会同步放大体表痕迹、褶印、贴肉和廉价感；
+  推荐前必须区分"显贵光泽"vs"显廉价光泽"，不是所有亮度都加分。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional
+    target_audience: 被光泽吸引并默认"亮 = 高级"的顾客；导购把光泽当通用加分项的场景
+  when:
+    trigger: 顾客或导购把光泽等同于显贵
+    context: 真丝 / 醋酸缎 / 涤纶仿丝缎 / 高密涤纶 / PU 涂层款
+  what:
+    action_type: misjudgment_correction_gloss_eq_luxe
+    decision_or_action: |
+      把"光泽"重新定位为放大器属性——显贵和显廉价它都会放大；
+      区分两类光泽：自然柔和光（真丝 / 重磅缎）vs 塑料反光（薄聚酯 / 廉价涂层）；
+      推荐前评估顾客体表敏感度 + 灯光环境；
+      塑料反光款不许喊"高级 / 显贵"。
+  result:
+    success_pattern: |
+      顾客接受"光泽是放大器"概念，按自身条件选自然柔和光款；
+      避开塑料反光款无显廉价投诉。
+    flip_pattern: |
+      把任何光泽卖成"显贵" → 顾客买回家在自然光下看到塑料感 → 退换或差评；
+      把光泽卖给体表敏感顾客而未提示放大效应 → 上身后体表痕迹明显 → 退换。
+  underlying_mechanism: |
+      光泽来自表面光反射；自然光泽来自纤维结构（真丝棱镜 / 高支棉）—— 漫反射均匀；
+      塑料反光来自合成纤维表面或涂层 → 镜面反射强烈；
+      高反光均会放大体表凸起 / 褶印 / 贴肉。
+  boundary:
+    applicable_when: 任何含光泽款；店员或顾客把光泽当加分项的场景
+    not_applicable_when: |
+      明确做"金属光泽 / 派对款"的非"显贵"语境；
+      展示道具用陈列。
+  alternative_path:
+    - 如果顾客真要"显贵" → 推荐自然柔和光款（重磅真丝 / 醋酸缎）
+    - 如果顾客在意体表痕迹 → 转向哑光仿缎或带肌理款
+    - 如果是塑料反光款 → 改卖点为"派对 / 短时穿着 / 视觉亮点"
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 六、首批高频误判 · 误判 4：把"有光泽"当成"显贵"
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    正式纠偏：光泽会同步放大体表痕迹、褶印、贴肉和廉价感；不是所有光泽都显贵。
+    落盘对象：StylingRule（搭配规则）、Product（商品）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"光泽放大器属性 + 两类光泽区分 + 塑料反光不许喊高级"。
+    Gate 3：通用光泽认知误判。
+    Gate 4：可被 store_training / outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用光泽误判判断，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-gloss-not-equal-luxe-gloss_amplifier, owner_field: risk_alerts, definition: "光泽是放大器，会同步放大显贵和显廉价两端"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-gloss-not-equal-luxe-gloss_kind, value: natural_soft_gloss, label: 自然柔和光}
+    - {value_set_id: VS-KP-fabric_property-gloss-not-equal-luxe-gloss_kind, value: plastic_specular, label: 塑料反光}
+    - {value_set_id: VS-KP-fabric_property-gloss-not-equal-luxe-amplified_signal, value: body_mark_visible, label: 体表痕迹}
+    - {value_set_id: VS-KP-fabric_property-gloss-not-equal-luxe-amplified_signal, value: wrinkle_visible, label: 褶印}
+    - {value_set_id: VS-KP-fabric_property-gloss-not-equal-luxe-amplified_signal, value: body_cling, label: 贴肉}
+    - {value_set_id: VS-KP-fabric_property-gloss-not-equal-luxe-amplified_signal, value: cheap_feel, label: 廉价感}
+  rule:
+    - {rule_id: RL-KP-fabric_property-gloss-not-equal-luxe, rule_type: misjudgment_correction, applicable_when: "店员或顾客把光泽等同显贵", success_scenario: "区分两类光泽+提示放大器属性 → 顾客按条件选自然柔和光款", flip_scenario: "把任何光泽卖成显贵 → 自然光下塑料感 → 退换/差评", alternative_boundary: "真要显贵→重磅真丝/醋酸缎；在意体表痕迹→哑光仿缎；塑料反光→改卖派对短时穿着"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-gloss-not-equal-luxe, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 六、误判 4, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-fabric_property-gloss-not-equal-luxe, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-gloss-not-equal-luxe, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}

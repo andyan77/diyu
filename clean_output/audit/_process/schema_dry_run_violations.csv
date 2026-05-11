@@ -1,0 +1,45 @@
+table,line,source_pack_id,field,violation
+02_field,86,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not of type 'string'
+02_field,86,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'ContentType'; '
+02_field,86,KP-product_attribute-enterprise-narrative-six-section-shell,field_name,None is not of type 'string'
+02_field,86,KP-product_attribute-enterprise-narrative-six-section-shell,data_type,None is not of type 'string'
+02_field,87,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not of type 'string'
+02_field,87,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'ContentType'; '
+02_field,87,KP-product_attribute-enterprise-narrative-six-section-shell,field_name,None is not of type 'string'
+02_field,87,KP-product_attribute-enterprise-narrative-six-section-shell,data_type,None is not of type 'string'
+02_field,88,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not of type 'string'
+02_field,88,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'ContentType'; '
+02_field,88,KP-product_attribute-enterprise-narrative-six-section-shell,field_name,None is not of type 'string'
+02_field,88,KP-product_attribute-enterprise-narrative-six-section-shell,data_type,None is not of type 'string'
+02_field,89,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not of type 'string'
+02_field,89,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'ContentType'; '
+02_field,89,KP-product_attribute-enterprise-narrative-six-section-shell,field_name,None is not of type 'string'
+02_field,89,KP-product_attribute-enterprise-narrative-six-section-shell,data_type,None is not of type 'string'
+02_field,90,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not of type 'string'
+02_field,90,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'ContentType'; '
+02_field,90,KP-product_attribute-enterprise-narrative-six-section-shell,field_name,None is not of type 'string'
+02_field,90,KP-product_attribute-enterprise-narrative-six-section-shell,data_type,None is not of type 'string'
+02_field,91,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not of type 'string'
+02_field,91,KP-product_attribute-enterprise-narrative-six-section-shell,owner_type,None is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'ContentType'; '
+02_field,91,KP-product_attribute-enterprise-narrative-six-section-shell,field_name,None is not of type 'string'
+02_field,91,KP-product_attribute-enterprise-narrative-six-section-shell,data_type,None is not of type 'string'
+02_field,97,KP-product_attribute-compatibility-edge-support-risk-reason-shell,owner_type,'COMPATIBLE_WITH' is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'Co
+02_field,98,KP-product_attribute-compatibility-edge-support-risk-reason-shell,owner_type,'COMPATIBLE_WITH' is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'Co
+02_field,99,KP-product_attribute-compatibility-edge-support-risk-reason-shell,owner_type,'COMPATIBLE_WITH' is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RoleProfile'; 'Persona'; 'Co
+02_field,100,KP-product_attribute-compatibility-derived-view-combination-formula,owner_type,'PersonaContentTypePlatformDerivedView' is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RolePr
+02_field,101,KP-product_attribute-compatibility-derived-view-combination-formula,owner_type,'PersonaContentTypePlatformDerivedView' is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RolePr
+03_semantic,106,KP-product_attribute-enterprise-narrative-six-section-shell,owner_field,None is not of type 'string'
+03_semantic,106,KP-product_attribute-enterprise-narrative-six-section-shell,definition,None is not of type 'string'
+03_semantic,107,KP-training_unit-enterprise-narrative-object-witness-over-talking-head,owner_field,None is not of type 'string'
+03_semantic,107,KP-training_unit-enterprise-narrative-object-witness-over-talking-head,definition,None is not of type 'string'
+03_semantic,108,KP-training_unit-enterprise-narrative-north-star-first,owner_field,None is not of type 'string'
+03_semantic,108,KP-training_unit-enterprise-narrative-north-star-first,definition,None is not of type 'string'
+04_value_set,441,KP-inventory_rescue-can-rescue-scenarios,value,None is not of type 'string'
+04_value_set,466,KP-inventory_rescue-no-rescue-scenarios,value,None is not of type 'string'
+04_value_set,541,KP-product_attribute-enterprise-narrative-six-section-shell,value,None is not of type 'string'
+04_value_set,542,KP-training_unit-enterprise-narrative-anti-ai-tone,value,None is not of type 'string'
+04_value_set,588,KP-product_attribute-compatibility-edge-support-risk-reason-shell,value,None is not of type 'string'
+04_value_set,589,KP-product_attribute-compatibility-edge-support-risk-reason-shell,value,None is not of type 'string'
+04_value_set,590,KP-product_attribute-compatibility-derived-view-combination-formula,value,None is not of type 'string'
+05_relation,162,KP-product_attribute-compatibility-derived-view-combination-formula,source_type,'PersonaContentTypePlatformDerivedView' is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMaterial'; 'RolePr
+05_relation,162,KP-product_attribute-compatibility-derived-view-combination-formula,target_type,'Persona+ContentType+PlatformTone|PrivateOutletChannel' is not one of ['Product'; 'Category'; 'Attribute'; 'Collection'; 'FabricKnowledge'; 'CraftKnowledge'; 'StylingRule'; 'DisplayGuide'; 'TrainingMa

@@ -1,0 +1,97 @@
+pack_id: KP-inventory_rescue-hard-block-five-conditions
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  库存决策硬拦截（hard_block）正式冻结为 5 类——size_unwearable /
+  inventory_stale / set_promise_broken / color_mandatory_missing /
+  trust_damage_substitution；命中任一类必须停止按原方案推荐 / 陈列 / 输出，
+  哪怕导购话术再好也不许继续，否则用沟通技巧覆盖物理事实=信任崩塌。
+
+scenario:
+  who:
+    primary_role: 门店导购 / 店长 / 内容生成系统 / 陈列负责人
+    target_audience: 推荐 / 陈列 / 接客 / 内容输出四条链路的所有触发点
+  when:
+    trigger: 任意推荐 / 陈列 / 内容输出动作即将落到顾客面前之前
+    context: 库存事实出现关键缺口或同步过期
+  what:
+    action_type: hard_block_gating
+    decision_or_action: |
+      运行库存决策时，先过 5 项硬拦截检查（任一命中=停）：
+        H1 size_unwearable：顾客核心尺码缺失 + 品类高 fit_sensitivity → 不得推
+        H2 inventory_stale：last_sync 过期无法确认实际可售 → 不得作为稳定可售输出
+        H3 set_promise_broken：内容/陈列/导购在卖整套感但关键件缺失 → 不得维持成套承诺
+        H4 color_mandatory_missing：颜色本身就是成交条件（婚礼/团购/亲子/送礼）→ 不得换色硬推
+        H5 trust_damage_substitution：替代后核心体感/廓形/场景已变还假装"差不多" → 不得继续替代
+      命中后正确动作：撤下原推荐/陈列 → 走 redirect 或 give_up 路径 → 登记失救入补货优先级。
+  result:
+    success_pattern: 顾客感到"门店在替我把关"——硬条件错位时被坦诚告知，复购信任建立
+    flip_pattern: 用话术绕过硬条件，顾客试穿/收货/到场后才发现错位，当场流失或日后差评
+  underlying_mechanism: |
+      hard_block 命中的 5 类都是"物理事实 / 时间锁 / 信任锚"层面的不可妥协项——
+      话术属于沟通层，沟通层不能覆盖物理层；强行覆盖=明知不行还说行=信任崩塌。
+  boundary:
+    applicable_when: 库存决策策略 inventory_decision_policy 在线运行时的所有入口
+    not_applicable_when: |
+      非关键参数仅细节断（应走 soft_substitute 路径，不是 hard_block）；
+      顾客自己明确放弃同款只问替代（不在 H 系列阻断范围）。
+  alternative_path:
+    - H2 inventory_stale → 触发库存重同步后再决策
+    - H1 / H4 命中且顾客愿等 → 预留款 + 到货通知
+    - H3 set_promise_broken → 拆为单品推荐并明示"这套当前不齐"
+    - H5 命中 → 直接退到 give_up_mode，不留尴尬
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/库存与替代包.md
+  source_anchor: 四、硬拦截与软替代 4.1 hard_block H1-H5
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    4.1 hard_block（硬拦截）
+    H1 size_unwearable（尺码不可穿）顾客核心尺码缺失，且品类高版型敏感
+    H2 inventory_stale（库存事实过期）last_sync 过旧，无法确认实际可售
+    H3 set_promise_broken（成套承诺失效）内容、陈列或导购在卖"整套感"，但关键件缺失
+    H4 color_mandatory_missing（强锚定颜色缺失）颜色本身就是成交条件
+    H5 trust_damage_substitution（替代会明显伤信任）替代后核心体感、廓形、场景已经变了还假装差不多
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全；5 类条件 + 触发动作 + 替代路径全具体。
+    Gate 2：从 9 表 value_set + rule + relation 可反推 5 类硬拦截条件与动作。
+    Gate 3：通用门店库存决策纪律，跨品牌通用。
+    Gate 4：可被 inventory_rescue / outfit_recommendation / display_guidance / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用门店纪律；与品牌调性 / 创始人画像无关。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+  semantic:
+    - {semantic_id: SM-KP-inventory_rescue-hard-block-five-conditions-hard_block, owner_field: rescue_disposition, definition: "hard_block 是库存决策的物理层硬拦截，5 类条件命中任一即停止原方案，话术不得绕过"}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-hard-block-five-conditions-hard_block, value: size_unwearable, label: 尺码不可穿, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-hard-block-five-conditions-hard_block, value: inventory_stale, label: 库存事实过期, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-hard-block-five-conditions-hard_block, value: set_promise_broken, label: 成套承诺失效, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-hard-block-five-conditions-hard_block, value: color_mandatory_missing, label: 强锚定颜色缺失, ordinal: 4}
+    - {value_set_id: VS-KP-inventory_rescue-hard-block-five-conditions-hard_block, value: trust_damage_substitution, label: 替代会明显伤信任, ordinal: 5}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-hard-block-five-conditions, rule_type: hard_block_gating, applicable_when: "任意推荐/陈列/接客/内容动作落地前", success_scenario: "命中即停顾客感到门店在替我把关复购信任建立", flip_scenario: "用话术绕过硬条件试穿/到场后流失或差评", alternative_boundary: "H2→重同步后再决策；H1/H4 顾客愿等→预留+到货通知；H3→拆单品并明示；H5→直接 give_up"}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-hard-block-five-conditions, source_md: Q7Q12-搭配陈列业务包/库存与替代包.md, source_anchor: 四、4.1 hard_block H1-H5, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-requires_inventory_state-InventoryState-hb01, source_type: StylingRule, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"forbid_on_match","values":["size_unwearable","inventory_stale","set_promise_broken","color_mandatory_missing","trust_damage_substitution"]}'}
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-hb01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"forbid_on_match","note":"H3 set_promise_broken 命中→撤成套陈列"}'}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-hard-block-five-conditions, runtime_method: inventory_rescue, input_types: [InventoryState, Product], output_types: [HardBlockDecision]}
+    - {mapping_id: CM-outfit_recommendation-KP-inventory_rescue-hard-block-five-conditions, runtime_method: outfit_recommendation, input_types: [Product, InventoryState], output_types: [OutfitPlan, HardBlockDecision]}

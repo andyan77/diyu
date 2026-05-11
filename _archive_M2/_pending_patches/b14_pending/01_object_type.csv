@@ -1,0 +1,17 @@
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-founder-ip
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-knowledge-sharing
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-talent-showcase
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-training-material
+OT-ContentType,ContentType,domain_object,domain_general,KP-styling_rule-behind-scenes-invisible-completion-cost
+OT-StylingRule,StylingRule,domain_object,domain_general,KP-styling_rule-behind-scenes-invisible-completion-cost
+OT-ContentType,ContentType,domain_object,domain_general,KP-styling_rule-talent-showcase-micro-skill-hundred-reps
+OT-StylingRule,StylingRule,domain_object,domain_general,KP-styling_rule-talent-showcase-micro-skill-hundred-reps
+OT-TrainingMaterial,TrainingMaterial,domain_object,domain_general,KP-training_unit-error-first-then-correct-replay
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-event-documentary-long-term-tier-discipline
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-humor-content-clothing-as-persona-switch
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-lifestyle-expression-old-defines-premium
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-lifestyle-expression-values-via-rejection
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-process-trace-stop-the-bad-one-builds-trust
+OT-TrainingMaterial,TrainingMaterial,domain_object,domain_general,KP-training_unit-sop-asmr-procedural-memory
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-talent-showcase-rescue-not-show-off

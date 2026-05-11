@@ -1,0 +1,98 @@
+pack_id: KP-craft_quality-brushing-napping-aging-speed
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: craft_quality
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  磨毛 / 拉毛 / 起绒 / 防起球是"第一触感与老化速度工艺"——上手讨喜不代表三次穿后还能讨喜，
+  问题往往不在设计而在表层处理与摩擦位耐受；
+  凡是卖点写"软 / 糯 / 绒 / 暖 / 亲肤"的单品，必须同步判断背包位、腋下、袖口、内侧
+  会不会先起毛、起球、发旧。
+
+scenario:
+  who:
+    primary_role: 门店导购 / merchandising_director
+    target_audience: 被"软糯绒暖亲肤"卖点吸引的顾客；商品 / 培训准备喊一手感卖点的人
+  when:
+    trigger: 准备使用"软 / 糯 / 绒 / 暖 / 亲肤"做主卖点
+    context: 卫衣 / 大衣 / 围巾 / 针织 / 毛绒类秋冬款
+  what:
+    action_type: craft_quality_check_aging_position
+    decision_or_action: |
+      把"软糯绒暖亲肤"卖点的资格门槛锁定为表层处理稳定 + 摩擦位耐受良好；
+      推荐前主动评估背包位 / 腋下 / 袖口 / 内侧是否易先起毛起球；
+      明显易短期老化的款不许喊"耐穿亲肤"，可改卖"季节性单品"或"短周期穿着" 框定预期；
+      防起球整理款保留"软糯"卖点。
+  result:
+    success_pattern: |
+      喊"软糯绒暖"的款都经得起三次以上穿着复检；顾客无三次后突然显旧的体感；
+      短周期款被框定预期不被误认耐穿。
+    flip_pattern: |
+      喊"软糯亲肤耐穿" → 三次后背包位起球 / 袖口发旧 / 内侧起毛 → 退换或差评；
+      把短周期款卖成"经典常穿" → 信任受损。
+  underlying_mechanism: |
+      磨毛 / 拉毛 / 起绒通过机械方式破坏纤维表面让短纤露出 → 第一触感软糯但短纤摩擦下易球化；
+      防起球整理通过单丝化或紧捻让短纤难以露出延缓老化；
+      背包 / 腋下 / 袖口 / 内侧是高摩擦区先暴露问题。
+  boundary:
+    applicable_when: 卫衣 / 大衣 / 围巾 / 针织 / 毛绒类；卖点含"软糯绒暖亲肤"的款
+    not_applicable_when: |
+      明确做"短季节单品"且预期框定的款；
+      展示用陈列道具。
+  alternative_path:
+    - 如果是高频背包党 → 推荐紧捻高密织法或防起球整理款
+    - 如果是短周期款 → 改卖点为"季节亮点"而非"经典常穿"
+    - 如果短期老化已显 → 直接调整推荐顺位
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 五、首批 CraftKnowledge 正式冻结清单 · 5. 磨毛 / 拉毛 / 起绒 / 防起球
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    这组正式定义为"第一触感与老化速度工艺"。
+    很多单品上手很讨喜，但三次之后就显旧，问题往往不在设计，而在表层处理和摩擦位耐受。
+    凡是卖点写"软、糯、绒、暖、亲肤"的单品，都要同步判断背包位、腋下、袖口、内侧会不会先起毛、起球、发旧。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"老化速度工艺定义 + 卖点门槛 + 四类摩擦位"。
+    Gate 3：通用表面整理判断。
+    Gate 4：可被 store_training / outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用表面整理工艺，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CraftKnowledge, type_name: CraftKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-craft_quality-brushing-napping-aging-speed-aging_speed_check, owner_field: craft_feature, definition: "磨毛/拉毛/起绒/防起球决定第一触感与老化速度，是软糯绒暖亲肤卖点的资格门槛"}
+  value_set:
+    - {value_set_id: VS-KP-craft_quality-brushing-napping-aging-speed-friction_position, value: bag_strap, label: 背包位}
+    - {value_set_id: VS-KP-craft_quality-brushing-napping-aging-speed-friction_position, value: armpit, label: 腋下}
+    - {value_set_id: VS-KP-craft_quality-brushing-napping-aging-speed-friction_position, value: cuff, label: 袖口}
+    - {value_set_id: VS-KP-craft_quality-brushing-napping-aging-speed-friction_position, value: inner_side, label: 内侧}
+    - {value_set_id: VS-KP-craft_quality-brushing-napping-aging-speed-failure_signal, value: pilling, label: 起球}
+    - {value_set_id: VS-KP-craft_quality-brushing-napping-aging-speed-failure_signal, value: fuzzing, label: 起毛}
+    - {value_set_id: VS-KP-craft_quality-brushing-napping-aging-speed-failure_signal, value: looking_old, label: 发旧}
+  rule:
+    - {rule_id: RL-KP-craft_quality-brushing-napping-aging-speed, rule_type: craft_promise_gate, applicable_when: "推荐用软糯绒暖亲肤做卖点的单品", success_scenario: "表层处理+摩擦位耐受到位 → 三次穿后无显旧 → 卖点成立", flip_scenario: "无防起球整理仍喊耐穿亲肤 → 三次后球化 → 退换/差评", alternative_boundary: "高频背包党→紧捻高密或防起球整理；短周期款→改卖季节亮点"}
+  evidence:
+    - {evidence_id: EV-KP-craft_quality-brushing-napping-aging-speed, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 五、5. 磨毛 / 拉毛 / 起绒 / 防起球, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-craft_quality-brushing-napping-aging-speed, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-craft_quality-brushing-napping-aging-speed, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}

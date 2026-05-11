@@ -1,0 +1,73 @@
+pack_id: KP-service_judgment-repeat-purchase-replenish
+granularity_layer: L3
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"我上次买那条裤子挺好穿的，再给我拿一条类似的"时，导购第一动作是先问她上次满意的是版型、长度、面料、颜色还是穿着场景——
+  老客拿旧款做对照，容错很低；断码可救但只能在"同逻辑"下替，不能用"差不多"糊弄老客。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: repeat_purchase_replenish（复购补货型）顾客
+  when:
+    trigger: 顾客原话"上次买那条裤子/那件外套挺好穿的，再拿一条/一件类似的"
+    context: 老客复购接客；顾客自带过往满意品作为参照系
+  what:
+    action_type: satisfaction_axis_disambiguation
+    decision_or_action: |
+      第一步：必须先问她上次满意的是哪一项——版型 / 长度 / 面料 / 颜色 / 场景。
+      第二步：锁定那一轴后再推第一套，其他维度可灵活替。
+      第三步：第二套要在同轴上演化（如同版型换季节面料），不要跨轴推荐。
+      第四步：原款断码 → 同逻辑下替（同轴对齐），禁用"差不多"糊弄。
+  result:
+    success_pattern: 顾客认可"这条和上次那条是一个逻辑"，复购完成且对店员信任加深
+    flip_pattern: 凭印象拿"差不多的"，顾客对照旧款发现核心轴不对，当场退或日后差评
+  underlying_mechanism: |
+      复购客的购买决策已经预设了一个"成功轴"（上次为什么满意）；
+      不识轴 = 在错的维度上替换，必然失败；
+      "差不多"糊弄 = 把老客当新客，破坏复购信任栈。
+  boundary:
+    applicable_when: 顾客带"上次买过"参照的接客
+    not_applicable_when: 顾客虽是老客但说"想换换风格" → 转 weekend_social 或 new_item 路径
+  alternative_path:
+    - 原款全断 → 同逻辑同轴替；明确告知"这是同一逻辑下的替代款"
+    - 顾客自己说不清满意点 → 拿出历史购买记录辅助回忆，再锁轴
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、10. repeat_purchase_replenish + 三、2）断码可救 + 三、5）必须先问再推
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："我上次买那条裤子挺好穿的，再给我拿一条类似的。"
+    店员第一反应：先问她上次满意的是版型、长度、面料、颜色，还是穿着场景。
+    最容易卡住：第二套。顾客会拿旧款做对照，容错很低。
+    库存不理想怎么转向：可救，但只能在同逻辑下替。不能拿"差不多"糊弄老客。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与老客复购数据系统联动。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用复购接客判断。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-repeat-purchase-replenish}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-repeat-purchase-replenish}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-repeat-purchase-replenish}
+    - {mapping_id: CM-outfit_recommendation-KP-service_judgment-repeat-purchase-replenish}

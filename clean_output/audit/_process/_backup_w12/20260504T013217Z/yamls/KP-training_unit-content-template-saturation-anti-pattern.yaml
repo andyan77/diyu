@@ -1,0 +1,63 @@
+pack_id: KP-training_unit-content-template-saturation-anti-pattern
+granularity_layer: L3
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 服装内容生产平台不能生成"显瘦/百搭/高级感/绝绝子/姐妹冲"这一类形容词模板与口播套路，必须先识别"已被用烂的玩法"并主动跳出，否则产出会立即被算法与观众归类为模板化批量内容、丧失差异化与信任。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: 零售品牌方/单店店主/加盟商的内容生成入口
+  when:
+    trigger: 用户调用平台生成 5 类通用 ContentType（product_review / store_daily / product_copy_general / training_material / emotion_expression）任一类的内容
+    context: 中文内容生态已进入"模板饱和"阶段——抖音/小红书的"3 秒变装+卡点+一句结论"、"开箱-上身-一句姐妹冲"、对镜怼脸金句、显瘦/百搭/高级感三件套全部进入"已被用烂"档；AI 工具反而在加速这种同质化
+  what:
+    action_type: anti_pattern_filter
+    decision_or_action: 在生成入口之前，先比对用户请求是否落入"已被用烂"清单（变装前后、haul 快剪、7 秒卡点、对镜怼脸+伤感 BGM、痛点-解决-限时优惠链、显瘦/百搭/高级感、姐妹冲、绝绝子、PPT 录屏培训、开门关门流水账门店日常等），如落入则强制走进阶/突破路径或要求用户改写
+  result:
+    success_pattern: 生成内容跳出形容词堆砌与同质模板，落地为具体动作/具体场景/具体身体感受/具体顾虑解除，使观众相信"这条不是 AI 批量"
+    flip_pattern: 直接套"显瘦/百搭/高级感+姐妹冲"或"开箱-上身-一句结论"模板生成，产出在第一秒就被识别为模板，观众默认"假，没真穿"，账号差异化归零
+  underlying_mechanism: 模板化等于"任何账号可互换"——观众能从模板识别出"批量"。三份通用类素材一致认定的反模式：形容词无触点、卡点同款、身材数据牌、痛点促销链、对镜独白。AI 容易复刻=人最容易跳过。
+  boundary:
+    applicable_when: 任何 5 类通用 ContentType 的内容生成调用
+    not_applicable_when: 用户已主动要求"模板对照样本"以做培训/审稿用途——此时模板化是有用的反例素材，不强制改写
+  alternative_path:
+    - 平台内置"已被用烂"识别清单 + 进阶/突破玩法库，按 ContentType 分别索引
+    - 当请求落入反模式时返回"该写法已饱和，建议改用：[体感测评/打包即内容/感官动词/微测验/沉默叙事]"
+
+evidence:
+  source_md: Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md
+  source_anchor: 三份 md 的"主流玩法（已被用烂）"全段
+  source_type: cross_source_consensus
+  inference_level: low
+  evidence_quote: |
+    通用类.md：所有词都可替换，几乎任何一条都能套到另一件衣服上；AI 最容易复制的，就是这种"形容词堆叠 + 参数播报"。
+    通用类compass.md：模板口播+同款BGM+同款剪辑，AI 最容易复刻；AI 工具现在正在放大模板问题。
+    deep-research-report.md：The overused formats are overused precisely because they're easy to template — and AI makes templating even easier, accelerating homogeneity. The winning move is not to generate "better" versions of existing templates but to generate in multiple distinct creative voices.
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 内容生产元规则，跨任意品牌、任意 ContentType 复用；可挂 content_generation 调用入口
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用零售内容生产纪律，剥离品牌主语后对任意品牌仍 100% 成立；属 SKILL §6.1.1"培训规则 / Schema 元规则"通用范畴
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType, TrainingMaterial]
+  field: []
+  semantic: [SM-template-saturation-anti-pattern]
+  value_set: [VS-overused-formats-blacklist]
+  relation: []
+  rule: [RL-content-template-saturation-anti-pattern]
+  evidence: [EV-content-template-saturation-anti-pattern]
+  lifecycle: []
+  call_mapping: [CM-content_generation-template-saturation-anti-pattern]

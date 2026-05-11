@@ -1,0 +1,84 @@
+pack_id: KP-display_rule-folded-display-purpose
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: display_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  folded_display（叠装位）的业务目标是"让顾客看见面料、顺手上手、顺手加购"——
+  适合 core_push_deep_stock / basic_replenishable / clearance_tail_stock 中可重复基础款；
+  必须放打开样件让顾客看到展开后的样子；最大反例是"叠太高 / 尺码混叠 / 没打开样件"——像买手店桌面但顾客不敢抽。
+  新人首批训练重点，最适合俯拍操作台 / Do/Don't / before-after 三种格式。
+
+scenario:
+  who:
+    primary_role: 新人陈列负责人（日常维护）
+    target_audience: 进入选购阶段后想上手感受面料的顾客
+  when:
+    trigger: 日常补货 / 上新衍生 / 折叠位维护
+    context: 针织 / 卫衣 / T 恤 / 牛仔 / 打底 / 基础款叠装位
+  what:
+    action_type: folded_display_setup
+    decision_or_action: 同款多色或同款多码分组叠放；保留 1 件打开样件；高度不超过手腕；尺码不混叠
+  result:
+    success_pattern: 顾客敢抽、能展开看面料、顺手加购，叠装位转化率提升
+    flip_pattern: 叠太高 / 尺码混叠 / 没有打开样件 / 只求齐不求顾客敢碰 → 像买手店桌面但顾客不敢抽
+  underlying_mechanism: |
+      叠装位是"上手位"——它承诺的是"你可以摸到、看到、试到"。
+      没打开样件 = 信息缺失（顾客不知展开长什么样），叠太高 = 不敢动。
+  boundary:
+    applicable_when: 折叠类基础款（针织 / 卫衣 / T 恤 / 牛仔 / 打底）
+    not_applicable_when: 主推 look（按 mannequin / front_hanging）；选择带（按 side_hanging）
+  alternative_path:
+    - 库存稀薄无法成叠 → 改为正挂位单挂或收回库
+    - 仅 1 个打开样件易脏 → 设置补换样件机制（每 2 小时检查）
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/陈列方法包.md
+  source_anchor: 二、5. folded_display + 三、5）适合培训新人 + 培训形态：俯拍 / Do/Don't / before-after
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    业务目标：让顾客看见面料、顺手上手、顺手加购。
+    最容易犯的错：叠太高；尺码混叠；没有打开样件；只求齐，不求顾客敢碰。
+    什么叫"看着高级但卖不动"：像买手店桌面，但顾客不敢抽、不知道展开后长什么样。
+    培训层级：首批重点给新人训练。最适合俯拍操作台、Do/Don't、before/after。
+    仓库培训真源也已把折叠、挂装、陈列 before/after、错误 vs 正确作为高价值训练形态。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 6 类陈列单元另外 5 个（window / mannequin / front_hanging / side_hanging / full_look）形成完整覆盖。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用叠装陈列纪律
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-display_rule-folded-display-purpose-purpose, owner_field: display_unit, definition: "folded_display 业务目标：促上手（看面料+敢抽+顺手加购）"}
+  value_set:
+    - {value_set_id: VS-KP-display_rule-folded-display-purpose-allowed_inventory, value: core_push_deep_stock, label: 主推深库存, ordinal: 1}
+    - {value_set_id: VS-KP-display_rule-folded-display-purpose-allowed_inventory, value: basic_replenishable, label: 基础可补, ordinal: 2}
+    - {value_set_id: VS-KP-display_rule-folded-display-purpose-allowed_inventory, value: clearance_tail_stock_basic, label: 清仓尾货中可重复基础款, ordinal: 3}
+    - {value_set_id: VS-KP-display_rule-folded-display-purpose-training_format, value: top_down_workbench, label: 俯拍操作台, ordinal: 1}
+    - {value_set_id: VS-KP-display_rule-folded-display-purpose-training_format, value: do_dont_contrast, label: Do/Don't 对照, ordinal: 2}
+    - {value_set_id: VS-KP-display_rule-folded-display-purpose-training_format, value: before_after_timelapse, label: before/after 延时复盘, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-display_rule-folded-display-purpose, rule_type: folded_display_setup, applicable_when: 日常补货/上新衍生/折叠位维护, success_scenario: 顾客敢抽能展开看面料顺手加购, flip_scenario: 叠太高/尺码混叠/没打开样件/只求齐, alternative_boundary: 库存稀薄→正挂单挂或收回库；样件易脏→2 小时补换机制}
+  evidence:
+    - {evidence_id: EV-KP-display_rule-folded-display-purpose}
+  relation:
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-folded01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"allow","values":["core_push_deep_stock","basic_replenishable","clearance_tail_stock_basic"]}'}
+    - {relation_id: RE-DisplayGuide-supports_training-TrainingMaterial-folded01, source_type: DisplayGuide, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"tier":"novice_priority","format":"top_down_workbench|do_dont_contrast|before_after_timelapse"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-display_rule-folded-display-purpose}
+    - {mapping_id: CM-store_training-KP-display_rule-folded-display-purpose}

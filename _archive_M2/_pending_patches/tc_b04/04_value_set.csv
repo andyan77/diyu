@@ -1,0 +1,30 @@
+VS-KP-service_judgment-second-third-set-blocker-blocker_scenarios,urgent_full_look,应急一身型,1,domain_general,KP-service_judgment-second-third-set-blocker
+VS-KP-service_judgment-second-third-set-blocker-blocker_scenarios,shape_correction,显瘦修身型,2,domain_general,KP-service_judgment-second-third-set-blocker
+VS-KP-service_judgment-second-third-set-blocker-blocker_scenarios,ready_made_full_set,现成成套型,3,domain_general,KP-service_judgment-second-third-set-blocker
+VS-KP-service_judgment-second-third-set-blocker-blocker_scenarios,new_item_cannot_style,新款不会搭型,4,domain_general,KP-service_judgment-second-third-set-blocker
+VS-KP-service_judgment-second-third-set-blocker-blocker_scenarios,budget_controlled,预算控制型,5,domain_general,KP-service_judgment-second-third-set-blocker
+VS-KP-inventory_rescue-can-rescue-scenarios-rescue_scenarios,commute_mainstay,通勤主力型,1,domain_general,KP-inventory_rescue-can-rescue-scenarios
+VS-KP-inventory_rescue-can-rescue-scenarios-rescue_scenarios,weekend_social,周末社交型,2,domain_general,KP-inventory_rescue-can-rescue-scenarios
+VS-KP-inventory_rescue-can-rescue-scenarios-rescue_scenarios,functional_gap_fill,功能补位型,3,domain_general,KP-inventory_rescue-can-rescue-scenarios
+VS-KP-inventory_rescue-can-rescue-scenarios-rescue_scenarios,new_item_cannot_style,新款不会搭型,4,domain_general,KP-inventory_rescue-can-rescue-scenarios
+VS-KP-inventory_rescue-can-rescue-scenarios-rescue_scenarios,repeat_purchase_replenish,复购补货型,5,domain_general,KP-inventory_rescue-can-rescue-scenarios
+VS-KP-inventory_rescue-no-rescue-scenarios-no_rescue_scenarios,shape_correction,显瘦修身型主件断,1,domain_general,KP-inventory_rescue-no-rescue-scenarios
+VS-KP-inventory_rescue-no-rescue-scenarios-no_rescue_scenarios,comfort_sensitive,体感敏感型同类问题,2,domain_general,KP-inventory_rescue-no-rescue-scenarios
+VS-KP-inventory_rescue-no-rescue-scenarios-no_rescue_scenarios,urgent_full_look_main_item,应急型主件断,3,domain_general,KP-inventory_rescue-no-rescue-scenarios
+VS-KP-display_rule-display-first-then-speak-display_first_scenarios,ready_made_full_set,现成成套型,1,domain_general,KP-display_rule-display-first-then-speak
+VS-KP-display_rule-display-first-then-speak-display_first_scenarios,new_item_cannot_style,新款不会搭型,2,domain_general,KP-display_rule-display-first-then-speak
+VS-KP-display_rule-display-first-then-speak-display_first_scenarios,weekend_social,周末社交型,3,domain_general,KP-display_rule-display-first-then-speak
+VS-KP-display_rule-display-first-then-speak-display_first_scenarios,visual_anchor_at_door,门口模特/成套位停留客,4,domain_general,KP-display_rule-display-first-then-speak
+VS-KP-service_judgment-must-ask-first-must_ask_scenarios,urgent_full_look,应急一身型,1,domain_general,KP-service_judgment-must-ask-first
+VS-KP-service_judgment-must-ask-first-must_ask_scenarios,shape_correction,显瘦修身型,2,domain_general,KP-service_judgment-must-ask-first
+VS-KP-service_judgment-must-ask-first-must_ask_scenarios,comfort_sensitive,体感敏感型,3,domain_general,KP-service_judgment-must-ask-first
+VS-KP-service_judgment-must-ask-first-must_ask_scenarios,budget_controlled,预算控制型,4,domain_general,KP-service_judgment-must-ask-first
+VS-KP-service_judgment-must-ask-first-must_ask_scenarios,functional_gap_fill,功能补位型,5,domain_general,KP-service_judgment-must-ask-first
+VS-KP-service_judgment-must-ask-first-must_ask_scenarios,repeat_purchase_replenish,复购补货型,6,domain_general,KP-service_judgment-must-ask-first
+VS-KP-training_unit-greeting-format-lock-training_format,branching_scenario,分支情境训练,1,domain_general,KP-training_unit-greeting-format-lock
+VS-KP-training_unit-greeting-format-lock-training_format,do_dont_contrast,Do/Don't 对照,2,domain_general,KP-training_unit-greeting-format-lock
+VS-KP-training_unit-greeting-format-lock-training_format,pre_shift_micro_coaching,班前微教练,3,domain_general,KP-training_unit-greeting-format-lock
+VS-KP-training_unit-greeting-format-lock-training_format,error_replay,错误先发生再倒回重来,4,domain_general,KP-training_unit-greeting-format-lock
+VS-KP-training_unit-greeting-format-lock-training_format_forbidden,long_video_lecture,长视频一次讲完,1,domain_general,KP-training_unit-greeting-format-lock
+VS-KP-training_unit-greeting-format-lock-training_format_forbidden,unified_script_drill,统一话术灌输,2,domain_general,KP-training_unit-greeting-format-lock
+VS-KP-training_unit-greeting-format-lock-training_format_forbidden,ppt_screen_recording,PPT 录屏,3,domain_general,KP-training_unit-greeting-format-lock

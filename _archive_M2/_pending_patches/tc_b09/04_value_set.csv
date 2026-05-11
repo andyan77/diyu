@@ -1,0 +1,9 @@
+VS-KP-training_unit-founder-profile-brand-unique-layer-layer,brand_unique,品牌唯一层,1,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+VS-KP-training_unit-founder-profile-brand-unique-layer-layer,generic,通用层,2,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+VS-KP-training_unit-founder-profile-brand-unique-layer-multiplicity,per_brand_0_or_1,每品牌 0/1,1,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+VS-KP-training_unit-founder-profile-soft-use-no-rename-mode,enabled,启用 FounderProfile + founder_ip,1,domain_general,KP-training_unit-founder-profile-soft-use-no-rename
+VS-KP-training_unit-founder-profile-soft-use-no-rename-mode,disabled,不启用（柔性跳过）,2,domain_general,KP-training_unit-founder-profile-soft-use-no-rename
+VS-KP-training_unit-founder-profile-soft-use-no-rename-mode,display_name_localized,object_type 不变仅 display_name 本地化,3,domain_general,KP-training_unit-founder-profile-soft-use-no-rename
+VS-KP-training_unit-persona-vs-roleprofile-layering-cold_start_cap,3,冷启动通用 Persona 上限,1,domain_general,KP-training_unit-persona-vs-roleprofile-layering
+VS-KP-training_unit-roleprofile-not-speaking-shell-function,knowledge_base,知识底座（允许）,1,domain_general,KP-training_unit-roleprofile-not-speaking-shell
+VS-KP-training_unit-roleprofile-not-speaking-shell-function,speaking_shell,说话身份壳（禁止）,2,domain_general,KP-training_unit-roleprofile-not-speaking-shell

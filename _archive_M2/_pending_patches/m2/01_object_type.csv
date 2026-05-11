@@ -1,0 +1,13 @@
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-emotion-expression
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-process-trace
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-product-copy-general
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-product-journey
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-north-star-product-review
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-pcg-five-voice-archetypes
+OT-ContentType,ContentType,domain_object,domain_general,KP-styling_rule-daily-fragment-no-face-traces
+OT-StylingRule,StylingRule,domain_object,domain_general,KP-styling_rule-daily-fragment-no-face-traces
+OT-ContentType,ContentType,domain_object,domain_general,KP-styling_rule-emotion-expression-clothes-as-emotion-vessel
+OT-StylingRule,StylingRule,domain_object,domain_general,KP-styling_rule-emotion-expression-clothes-as-emotion-vessel
+OT-ContentType,ContentType,domain_object,domain_general,KP-styling_rule-ootd-clothes-remember-today
+OT-StylingRule,StylingRule,domain_object,domain_general,KP-styling_rule-ootd-clothes-remember-today

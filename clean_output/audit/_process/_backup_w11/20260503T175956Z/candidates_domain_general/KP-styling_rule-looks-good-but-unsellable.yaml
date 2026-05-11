@@ -1,0 +1,101 @@
+pack_id: KP-styling_rule-looks-good-but-unsellable
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  搭配"看着成立、实际不好卖"有 7 类首批反例：全身 oversize / 无层次中性色 / 上下都强设计 /
+  腿线碎裂 / 贵气堆叠 / 正式休闲错位 / 只讲风格不讲问题解决的陈列盘——
+  Lookbook 与拍照成立不等于门店成交成立，陈列与推荐都要回避。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长 / 陈列负责人 / 培训官
+    target_audience: 整套搭配定稿 / 主推墙陈列 / 内容生成参考的全部岗位
+  when:
+    trigger: 搭配定稿前自检 / 陈列上墙前自检 / 培训反例对照
+    context: 整套搭配与陈列盘的反向校验
+  what:
+    action_type: anti_pattern_screening
+    decision_or_action: |
+      用 7 类反例做反向自检：
+        all_oversized_look / flat_neutral_look / double_statement_look /
+        fragmented_leg_line_look / luxury_overstack_look /
+        formal_casual_mismatch_look / theme_without_problem_solution_display；
+      命中任一 → 不上推荐、不上墙，回到对应正向规则修正。
+  result:
+    success_pattern: 上墙与上身搭配通过 7 类反例筛选，门店转化保持稳定。
+    flip_pattern: 命中任一反例仍上推荐 / 上墙——画面好看但顾客试穿后不下单或墙面无人停留。
+  underlying_mechanism: |
+      陈列与推荐的目标是"降低顾客理解成本、快速建立焦点、帮助顾客想象自己穿上后的样子"；
+      时装感画面与门店成交画面是两套语境，反例库就是把两者的差异显式锁定。
+  boundary:
+    applicable_when: 门店推荐 / 主推墙陈列 / 培训反例对照 / 内容生成参考
+    not_applicable_when: 拍摄型造型 / Lookbook 视觉企划 / 时装表达型内容片
+  alternative_path:
+    - 命中 all_oversized_look → 用 silhouette_balance_rule 修正
+    - 命中 fragmented_leg_line_look → 用 proportion_split_rule 修正
+    - 命中 luxury_overstack_look → 用 premium_item_neutralization_rule 修正
+    - 命中 formal_casual_mismatch_look → 用 formality_consistency_rule 修正
+    - 命中 theme_without_problem_solution_display → 改造为问题解决墙
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.6 哪些搭配"看着成立，实际不好卖"（首批反例库 7 类）
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    all_oversized_look：拍照有风格，门店里大多数顾客会觉得自己变壮。
+    flat_neutral_look：Lookbook 好看，试衣间容易被说"没精神"。
+    double_statement_look：内容里时髦，零售里容易"用力过猛"。
+    fragmented_leg_line_look：低腰 + 裤长 / 裙长截断 + 脚口再截断，最容易显短。
+    luxury_overstack_look：皮草配缎裙配闪鞋配大耳环，远看成立，近看日常没法卖。
+    formal_casual_mismatch_look：上半身很正式，下半身 / 配件明显太休闲。
+    theme_without_problem_solution_display：墙面漂亮，但导购接客时无法说清"这组解决什么问题"，转化率通常差。
+    陈列不是单纯做美，而是要降低顾客理解成本、快速建立焦点、帮助顾客想象自己穿上后的样子。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    G1 八要素齐全（success/flip 通过 7 类反例显式成对）。
+    G2 从 04_value_set（7 类反例）+ 06_rule + 09_call_mapping 可反推"哪些不能上墙、命中后回到哪条正向规则修正"。
+    G3 通用反例库。G4 可被 outfit_recommendation / display_guidance / store_training 三路调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 反例库是公开陈列方法论的对应负向锁定。
+  faye_review_required: false
+  splittable_components:
+    - 若后续单独治理某反例的细颗粒培训单元，可拆为单独 training_unit（不在本卡范围）
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-looks-good-but-unsellable-anti_patterns, owner_field: rule_name, definition: "看着成立实际不好卖：7 类反例库；门店推荐与陈列上墙前的反向自检清单"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-looks-good-but-unsellable-anti_patterns, value: all_oversized_look, label: 全身 oversize 盘, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-looks-good-but-unsellable-anti_patterns, value: flat_neutral_look, label: 无层次中性色盘, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-looks-good-but-unsellable-anti_patterns, value: double_statement_look, label: 上下都强设计盘, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-looks-good-but-unsellable-anti_patterns, value: fragmented_leg_line_look, label: 腿线碎裂盘, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-looks-good-but-unsellable-anti_patterns, value: luxury_overstack_look, label: 贵气堆叠盘, ordinal: 5}
+    - {value_set_id: VS-KP-styling_rule-looks-good-but-unsellable-anti_patterns, value: formal_casual_mismatch_look, label: 正式休闲错位盘, ordinal: 6}
+    - {value_set_id: VS-KP-styling_rule-looks-good-but-unsellable-anti_patterns, value: theme_without_problem_solution_display, label: 只讲风格不讲问题解决的陈列盘, ordinal: 7}
+  rule:
+    - {rule_id: RL-KP-styling_rule-looks-good-but-unsellable, rule_type: hard_rule, applicable_when: "门店推荐定稿/主推墙上墙/培训反例对照", success_scenario: "通过 7 类反例筛选门店转化稳定", flip_scenario: "命中任一反例仍上推荐或上墙顾客不停留不下单", alternative_boundary: "命中后回到对应正向规则修正：silhouette_balance/proportion_split/premium_item_neutralization/formality_consistency 或改造为问题解决墙"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-looks-good-but-unsellable, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.6, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-unsel01, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"主推墙上墙前反向自检"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-unsel02, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"sellable_vs_unsellable_set 对照"}'}
+    - {relation_id: RE-StylingRule-supports_styling-Product-unsel03, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"focus":"anti_pattern_screening"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-styling_rule-looks-good-but-unsellable, runtime_method: display_guidance, input_types: [DisplayGuide], output_types: [DisplayPlan]}
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-looks-good-but-unsellable, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-looks-good-but-unsellable, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

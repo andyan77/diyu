@@ -1,0 +1,97 @@
+pack_id: KP-styling_rule-ootd-route-fitness-not-display
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  outfit_of_the_day 内容里，"这套衣服不是为了拍照，是为了今天的路线"是
+  把 OOTD 从"展示搭配"反向升级成"展示生活适配"的核心玩法——
+  不是站镜前展示，而是跟着这套衣服走完整条真实路线：
+  早上骑车为什么外套要能挡风 / 进店为什么要能卷袖子 / 下午试衣时为什么鞋子不能太累 /
+  晚上和朋友见面为什么把头发放下后这套突然更松。
+  品牌卖点被转译为"挡得住风 / 收得起来 / 走得动 / 松得下来"四个**生活功能**字幕，
+  而不是"显瘦 / 高级 / 氛围感"等触发 OOTD E3 红线的空词。
+  这是服装行业 OOTD 最该狠狠干的方向——把"展示答案"变成"展示生活适配"。
+
+scenario:
+  who:
+    primary_role: outfit_of_the_day 内容创作者 / 服装品牌内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=outfit_of_the_day 选 C3 突破卡时）
+  when:
+    trigger: 想做 OOTD 但不想做镜前转圈 / 想避开商业化滑坡（OOTD 是 18 类 CT 中商业化风险最高）
+    context: OOTD 易翻车点是 C1-1 镜前转圈+SKU 清单（默认禁用）+ E3 空词红线；本卡用"路线适配"反破
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 1 人 1 手机跟拍真实路线（家→骑车→店→试衣→晚餐）+ 4 个功能字幕（挡得住风/收得起来/走得动/松得下来）
+  result:
+    success_pattern: |-
+      0-5 清晨骑车+外套被风鼓起+字幕"挡得住风" → 5-12 进店卷袖口+手表露出+字幕"收得起来" →
+      12-20 下午试衣低头看鞋+字幕"走得动" → 20-30 晚餐灯光下放下头发+外套显得更松+字幕"松得下来"
+      → 观众接住"这套穿搭有生活功能也有情绪功能"
+    flip_pattern: |-
+      把"功能"字幕换成"显瘦/高级/氛围感"空词 → 触发 E3 红线（默认禁用）
+      或把功能字幕加上 SKU 字幕清单 → 触发 E4 红线（满屏 SKU 像报菜名）
+      或把"路线"做成"摆拍多机位"丢失真实使用感 → 退化为镜前转圈变体
+  underlying_mechanism: |
+      OOTD 的核心是"今天为什么这样穿"——这是最难 AI 化的真实生活决策。
+      "路线适配"把决策反向证据化：观众不是听你说为什么，而是看衣服在生活动作里的反应。
+      这是服装行业 OOTD 区别于硬广 / 种草的关键护城河——AI 可以辅助路线建议 / 功能点清单，
+      但替代不了"真实路线"和"真实穿着的反馈"。
+  boundary:
+    applicable_when: 1 人 1 手机 / 真实路线 / 4 小时内 / 预算 0 / 服装本身确实有"生活功能"可拍
+    not_applicable_when: 重心是商品评测可信度证据 → product_review C3-1 一天只穿这一件 / 重心是个人情绪流 → personal_vlog / 商品本身无明显生活功能（如礼服）→ 改用 C3-2 身份协商或 C3-6 情绪衣橱
+  alternative_path:
+    - 与 C3-3 "衣服记住了今天"配合：本卡走"路线功能"，C3-3 走"时间痕迹"——可两个都做，单条选一个重心
+    - 与 product_review C3-1 "一天只穿这一件"互补：OOTD C3-1 重心是"穿搭决策的生活适配"，product_review C3-1 重心是"商品时间考验的体感证据"
+
+evidence:
+  source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md
+  source_anchor: §C3-1 这套衣服不是为了拍照，是为了今天的路线 + §E3/E4/E6 红线 + §D 服装行业垂直机会
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-1：不是站镜前展示，而是跟着这套衣服走完整条路线：早上骑车为什么外套要能挡风、
+    进店为什么要能卷袖子、下午试衣时为什么鞋子不能太累、晚上和朋友见面为什么把头发放下后这套突然更松。
+    服装行业最该狠狠干的一条路——把 OOTD 从"展示搭配"升级成"展示生活适配"。
+    E3：用"显瘦/高级/氛围感"这种空词顶替真正的体感和场景。
+    E4：满屏 SKU 字幕、像报菜名。
+    服装行业最大的未开发空间，不是继续卷"搭配公式"，而是把穿搭拍成：路线、功能、身份、关系、时间痕迹。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation + 09_call_mapping
+    可反推"OOTD 用真实路线+功能字幕替代镜前转圈+空词 / 与 product_review C3-1 重心边界 / E3/E4 红线"。
+    Gate 3：跨品牌通用——任意服装品牌都可调用此玩法。
+    Gate 4：可被 content_generation 调用，按"路线建议+功能点清单"生成分镜。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 OOTD 玩法格式，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-ootd-route-fitness-not-display, rule_type: content_play_card_anchor, applicable_when: "OOTD C3 突破档 / 服装有真实生活功能可拍 / 1 人 1 手机真实路线", success_scenario: "真实路线+4 个生活功能字幕（挡风/收袖/走动/松弛）→ 观众接住生活+情绪双功能", flip_scenario: "空词字幕 → E3 红线 / 加 SKU 报菜名 → E4 红线 / 摆拍多机位 → 镜前转圈变体", alternative_boundary: "商品评测重心 → product_review C3-1 / 个人情绪流 → personal_vlog / 礼服无功能 → C3-2 身份协商或 C3-6 情绪衣橱"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-ootd-route-fitness-not-display, source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md, source_anchor: §C3-1 + §E3/E4 + §D, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-outfit_of_the_day-ootd2, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"outfit_of_the_day","play_card":"C3-1","angle":"life_fit"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-ootd-route-fitness-not-display, runtime_method: content_generation, input_types: ContentType+RouteAndFunctionPointCatalog, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

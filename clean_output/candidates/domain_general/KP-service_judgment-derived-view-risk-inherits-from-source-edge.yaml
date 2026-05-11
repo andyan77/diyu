@@ -1,0 +1,93 @@
+pack_id: KP-service_judgment-derived-view-risk-inherits-from-source-edge
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  派生视图（Persona × ContentType × Platform/Channel）的风险位（risk）必须 100% 继承自真源边
+  (:Persona)-[:COMPATIBLE_WITH]->(:ContentType) 的 risk 属性，平台 tier 不能改写、不能稀释、不能升级该风险——
+  即使平台是 P0_native 强支持档，只要真源边 risk = high，派生视图 risk 仍是 high；
+  反之即使平台是 deferred，真源边 risk = low，派生 risk 也是 low（只是展示档变"不建议"）。
+  业务含义：风险来自"人设 × 内容类型"的角色错位，平台无法挽救；想降风险只能改真源边 risk，不能换平台。
+
+scenario:
+  who:
+    primary_role: 派生视图引擎 / 内容运营 / Prompt 风险提示模块
+    target_audience: Skill 能力发现 / 预发布检查 / 渠道分发引擎
+  when:
+    trigger: 任意 (Persona, ContentType, Platform/Channel) 三元组进入派生计算并需要给出风险位时
+    context: Q4 派生视图风险继承规则；与 8 行支持档公式正交但常被混淆
+  what:
+    action_type: derived_view_risk_propagation
+    decision_or_action: |
+      派生引擎计算时只查真源边 risk，把它原样写入派生视图 risk 字段；
+      不允许任何"高 tier 平台 → risk 自动降一档"或"低 tier 平台 → risk 自动升一档"的隐式调整。
+  result:
+    success_pattern: |
+      product_professional × humor_content × 抖音(P0_native) 派生 risk = high（真源 §4.3 risk=high）
+      → Prompt 前置提示"角色错位风险高"；不会因为抖音是 P0 强档就把警告吞掉。
+      styling_advisor × outfit_of_the_day × 微信群(deferred) 派生 risk = low（真源 §4.2 risk=low）
+      → 展示档"不建议"是因为系统未支持，而非内容有风险，待 Q3 升级 tier 后立即解锁。
+    flip_pattern: |
+      派生引擎按 tier 加权"折算"风险 → 高 tier 平台把人设错位高风险吞掉 → 内容直发 →
+      "专业商品人设说脱口秀"在抖音热推，品牌真实性塌陷。
+  underlying_mechanism: |
+      支持档（support）和风险档（risk）是两个正交维度：
+      - support 解决"现在能不能用 / 要不要补配置"——平台 tier 可以参与组合
+      - risk 解决"用了之后会不会翻车"——只由人设 × 内容的角色匹配度决定，与平台无关
+      把两者混算等于让"渠道强弱"决定"内容风险"，这违反真源/派生纪律。
+  boundary:
+    applicable_when: 任何按 8 行公式得出展示档之后，需要同时输出 risk 字段的派生场景
+    not_applicable_when: |
+      平台自身的合规风险（如平台审核不过）→ 由平台层独立标注，不与人设×内容 risk 混算；
+      品牌级特殊禁忌（如某品牌不允许某词）→ 走 brand_<name> 层独立校验，不在 domain_general 派生公式内。
+  alternative_path:
+    - 想给特定平台加风险加成 → 在 PlatformTone 实体上独立加 platform_risk 字段，与人设×内容 risk 并列输出，不合并
+    - 想降低某条真源边 risk → 改真源边本身（走关系维护提案），不绕道用平台稀释
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md
+  source_anchor: §6.1 派生公式第 4 步 + §6.3 示例 2（product_professional × humor_content × 抖音）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    6.1 派生公式（冻结建议）第 4 步：最终展示档的风险位继承真源层的 risk。
+    6.3 示例 2：风险来自人设 × 内容组合，平台无法挽救 ——
+    product_professional × humor_content = support: custom, risk: high；
+    抖音 = tier: P0_native；派生结果：即使平台 tier=P0_native，因为 support=custom → 品牌级 / 特殊场景；
+    风险继承为 high。业务解释：问题不在平台，而在"专业人设 × 幽默表达"的角色错位风险。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（含正反 4 档示例）。
+    Gate 2：从 06_rule（derived_view_risk_propagation 含 flip=按tier折算风险）+ 03_semantic（risk 与 support 正交）+ 09_call_mapping 可反推
+    "风险只来自真源边 / 平台 tier 不参与风险计算 / support 与 risk 是两个正交维度"三条核心语义。
+    Gate 3：派生视图风险传播的通用纪律，跨任意平台与人设组合通用。
+    Gate 4：可被 platform_adaptation 与 content_generation 前置风险提示直接消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 派生视图风险传播规则，与品牌调性无关，是通用 Schema 派生纪律
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-service_judgment-derived-view-risk-inherits-from-source-edge-risk_propagation, owner_field: derived_view_risk, definition: "派生视图风险位 = 真源边 risk 原值；平台 tier 不参与风险计算；support 与 risk 是两个正交维度"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-service_judgment-derived-view-risk-inherits-from-source-edge, rule_type: derived_view_risk_propagation, applicable_when: "派生引擎计算 (Persona,ContentType,Platform/Channel) 三元组的风险位时", success_scenario: "risk 100% 来自真源边 风险信息全链路保真 不被平台档位稀释", flip_scenario: "按 tier 折算风险→高 tier 平台把人设错位高风险吞掉→品牌真实性塌陷", alternative_boundary: "平台合规风险独立挂 PlatformTone.platform_risk；想降 risk 改真源边不走平台稀释"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-derived-view-risk-inherits-from-source-edge, source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md, source_anchor: §6.1 第4步 + §6.3 示例2, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-platform_adaptation-KP-service_judgment-derived-view-risk-inherits-from-source-edge, runtime_method: platform_adaptation, input_types: [Persona, ContentType, PlatformTone, PrivateOutletChannel], output_types: [CallMapping]}

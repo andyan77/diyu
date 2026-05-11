@@ -1,0 +1,89 @@
+pack_id: KP-training_unit-role-profile-required-skills-binding
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  MerchandisingSkill（陈列搭配技能）不应升为独立 core_object_type，
+  而应作为 RoleProfile 的能力清单字段（required_skills）落档；
+  TrainingMaterial 通过现有 supports_training 关系挂回 RoleProfile
+  以表达"训练目标"。这样保持 18 项对象白名单稳定，
+  同时支持"店长该掌握什么 / 导购要训练什么 / 新人缺哪类能力"的真实查询入口。
+
+scenario:
+  who:
+    primary_role: 知识工程负责人 / Persona-RoleProfile 体系建模者
+    target_audience: 全岗位
+  when:
+    trigger: 素材出现"店员要掌握 X 技能"或 MerchandisingSkill 这类技能实体表达时
+    context: schema 元规则裁决 / GAP-001 收口
+  what:
+    action_type: object_layer_binding
+    decision_or_action: |
+      错误动作：把 MerchandisingSkill 升为第 19 项 core_object_type，
+        独立建表、独立 ID、独立生命周期。
+      正确动作：在 RoleProfile 上加 required_skills 字段（data_type=enum），
+        技能取值进 04_value_set；TrainingMaterial 通过 supports_training
+        关系挂 RoleProfile，表达"训练目标"。
+  result:
+    success_pattern: |
+      18 项对象白名单不破；技能查询通过 RoleProfile.required_skills 实现；
+      培训→技能链路通过 TrainingMaterial --supports_training--> RoleProfile 走通。
+    flip_pattern: |
+      若把"技能"升对象，后续 SalesSkill / ContentSkill / AestheticSkill
+      连锁要求升对象，对象池失稳；查询入口被迫绕路（先查 Skill 再 JOIN Role）。
+  underlying_mechanism: |
+    服装零售里"陈列搭配技能"不是独立资产，业务意义全部依附于
+    "谁该会 / 何时用 / 如何训练"——真实查询入口在岗位侧而非技能侧。
+  boundary:
+    applicable_when: 技能依附岗位才有意义的场景（陈列 / 搭配 / 接客 / 库存救场技能均适用）
+    not_applicable_when: 技能本身具备独立市场价值的领域（如 SaaS HR 系统的 Skill 节点）
+  alternative_path:
+    - TrainingMaterial 也可在自身 properties_json 写 training_target 引用 required_skills 取值
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/陈列方法包.md & Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 联动口径段 + 主落点冻结段
+  source_type: cross_source_consensus
+  inference_level: structural_induction
+  evidence_quote: |
+    DisplayGuide（陈列指南）与 StylingRule（搭配规则）、TrainingMaterial（培训材料）
+    同属 MerchandisingSkill（陈列搭配技能），本包必须按这条联动口径执行。
+    MerchandisingSkill（陈列搭配技能）已明确消费 Product（商品）、StylingRule（搭配规则）、
+    TrainingMaterial（培训材料）这三类对象。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 3 pass：本规则跨任意服装零售品牌成立——任何品牌的 RoleProfile
+    都可以挂 required_skills；不依赖笛语专属。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale_keep: "domain_general · MerchandisingSkill 落 RoleProfile.required_skills 的 schema 元规则裁决（GAP-001 收口）"
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field:
+    - {field_id: FD-RoleProfile-required_skills, owner_type: RoleProfile, field_name: required_skills, data_type: enum, value_set_id: VS-RoleProfile-required_skills, semantic_id: ""}
+  semantic: []
+  value_set:
+    - {value_set_id: VS-RoleProfile-required_skills, value: 主陈列动线判断, label: 主陈列动线判断, ordinal: 1}
+    - {value_set_id: VS-RoleProfile-required_skills, value: 断码救场组合, label: 断码救场组合, ordinal: 2}
+    - {value_set_id: VS-RoleProfile-required_skills, value: 季节叙事陈列, label: 季节叙事陈列, ordinal: 3}
+    - {value_set_id: VS-RoleProfile-required_skills, value: 顾虑解除接客, label: 顾虑解除接客, ordinal: 4}
+    - {value_set_id: VS-RoleProfile-required_skills, value: 面料工艺辨识, label: 面料工艺辨识, ordinal: 5}
+    - {value_set_id: VS-RoleProfile-required_skills, value: 替代款引导, label: 替代款引导, ordinal: 6}
+  relation: []
+  rule:
+    - {rule_id: RL-KP-training_unit-role-profile-required-skills-binding, rule_type: object_layer_binding, applicable_when: "素材出现技能实体表达时", success_scenario: "RoleProfile.required_skills 落档、18 项白名单不破", flip_scenario: "MerchandisingSkill 升对象导致对象池失稳", alternative_boundary: "TrainingMaterial 也可在 properties_json 写 training_target"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-role-profile-required-skills-binding, source_md: "Q7Q12-搭配陈列业务包/陈列方法包.md & Q7Q12-搭配陈列业务包/面料工艺品质判断包.md", source_anchor: "联动口径段 + 主落点冻结段", evidence_quote: "MerchandisingSkill（陈列搭配技能）已明确消费 Product（商品）、StylingRule（搭配规则）、TrainingMaterial（培训材料）这三类对象", source_type: cross_source_consensus, inference_level: structural_induction}
+  lifecycle: []
+  call_mapping: []

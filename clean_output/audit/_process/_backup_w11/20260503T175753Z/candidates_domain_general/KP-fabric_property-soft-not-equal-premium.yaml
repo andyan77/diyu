@@ -1,0 +1,85 @@
+pack_id: KP-fabric_property-soft-not-equal-premium
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  "软"只说明触感，不说明轮廓成立——
+  软垂类面料必须同步判断贴肉、挂长、暴露体表痕迹三类风险，不能把"软"等同于"高级"。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional
+    target_audience: 试穿后说"好软""手感太好了"或导购把"软"当高级卖点的场景
+  when:
+    trigger: 顾客或导购把"软"作为推荐核心理由
+    context: 软垂面料（粘胶 / 莫代尔 / 天丝 / 软真丝 / 软棉）裙装 / 衬衫 / 阔腿裤
+  what:
+    action_type: misjudgment_correction_soft_eq_premium
+    decision_or_action: |
+      把"软"重新定位为单一触感属性，不构成轮廓 / 高级判断；
+      推荐前必须同步评估贴肉 / 挂长 / 暴露体表痕迹三类风险；
+      高级判断改用面料表情 + 缝制 + 收口 + 光泽控制综合表达。
+  result:
+    success_pattern: |
+      顾客接受"软是触感、不是高级"，按风险三项做选择；无"显胖"或暴露感投诉。
+    flip_pattern: |
+      把"软"等同"高级"卖给在意贴肉 / 挂长的顾客 → 上身后暴露体表 / 看着挂长 → 退换或差评。
+  underlying_mechanism: |
+      "软"是手感维度（弯曲刚度低）；"高级"是综合维度（面料 + 工艺 + 视觉 + 体面）；
+      软垂面料因悬垂系数高同时带来贴肉与挂长。
+  boundary:
+    applicable_when: 软垂类面料任意品类；店员或顾客把"软"等同"高级"的场景
+    not_applicable_when: |
+      明确做"软糯亲肤短季节"卖点的款（不喊高级，软是核心点）；
+      毛绒类（软是合理一手感卖点）。
+  alternative_path:
+    - 如果顾客真要"高级感" → 转向重磅缎 / 西装料 / 廓形面料并讲面料表情
+    - 如果顾客就喜欢软触感 → 接受贴肉 / 挂长后选适合的款
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 六、首批高频误判 · 误判 1：把"软"当成"高级"
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    正式纠偏：软只说明触感，不说明轮廓成立。软垂类面料要同步判断贴肉、挂长、暴露体表痕迹风险。
+    落盘对象：StylingRule（搭配规则）、TrainingMaterial（培训材料）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"软≠高级 + 三类风险 + 高级综合表达"。
+    Gate 3：通用接客误判判断。
+    Gate 4：可被 store_training / outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用面料认知误判，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-soft-not-equal-premium-soft_is_touch_only, owner_field: hand_feel, definition: "软是触感属性，不构成高级或轮廓判断"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-soft-not-equal-premium-risk_position, value: body_cling, label: 贴肉}
+    - {value_set_id: VS-KP-fabric_property-soft-not-equal-premium-risk_position, value: hang_stretch, label: 挂长}
+    - {value_set_id: VS-KP-fabric_property-soft-not-equal-premium-risk_position, value: body_mark_visible, label: 暴露体表痕迹}
+  rule:
+    - {rule_id: RL-KP-fabric_property-soft-not-equal-premium, rule_type: misjudgment_correction, applicable_when: "店员或顾客把软作为高级判断核心 且 软垂面料", success_scenario: "纠偏为触感+前置三类风险 → 顾客理性选择无投诉", flip_scenario: "把软=高级卖给在意贴肉/挂长顾客 → 暴露体表 → 退换/差评", alternative_boundary: "真要高级感→重磅缎/廓形面料；爱软触感→接受贴肉挂长选适合款"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-soft-not-equal-premium, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 六、误判 1, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-fabric_property-soft-not-equal-premium, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-soft-not-equal-premium, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}

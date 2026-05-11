@@ -1,0 +1,95 @@
+pack_id: KP-fabric_property-denim-twill-mirror-not-truth
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  牛仔 / 斜纹重棉类的成交判断不能只看镜前——它镜前立得住、轮廓清晰，
+  但久坐 / 蹲起 / 闷热 / 掉色 / 回缩才是穿后真翻车点；
+  必须前置腰腹压迫、膝盖鼓包、裆部紧、深色掉色、未充分预洗时的回缩与扭斜五类风险。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional（商品专业者）
+    target_audience: 询问牛仔裤 / 工装裤 / 短外套 / 休闲通勤的顾客（特别是只看镜前显瘦显精神的）
+  when:
+    trigger: 顾客在镜前一站说"显瘦显精神"或导购把"硬挺有型"当唯一推荐理由
+    context: 春秋通勤 / 工装休闲陈列；顾客有久坐 / 蹲起 / 长时间穿着习惯
+  what:
+    action_type: fabric_recommendation_with_motion_check
+    decision_or_action: |
+      推荐前先问久坐 / 通勤时长 / 是否经常蹲起 / 浅色搭配；
+      把卖点改写为支撑感 + 轮廓清晰，而不是单纯"显瘦"；
+      同步前置腰腹压迫 / 膝盖鼓包 / 裆部紧 / 深色掉色 / 未预洗回缩五类风险；
+      未充分预洗款显式提示首次洗后尺寸变化和扭斜可能。
+  result:
+    success_pattern: |
+      顾客接受"硬挺=有型但要看穿着情境"，按需选弹力或预洗款；
+      深色款顾客提前知掉色风险，搭配浅色不踩坑，无售后纠纷。
+    flip_pattern: |
+      只卖"显瘦有精神" → 顾客上班久坐发现勒腰、闷热或膝盖鼓包 → 退换；
+      未提示深色掉色 → 顾客把白色 T 恤染色 → 差评；
+      未提示回缩 → 顾客洗后短一截、裆位扭歪 → 认定品控差。
+  underlying_mechanism: |
+      斜纹组织 + 高密度 + 重克重 → 支撑感强但弹性有限；
+      靛蓝染料对棉纤维只是表面附着，摩擦 / 汗液会脱色；
+      未经充分预洗的牛仔，棉纤维吸湿膨胀回缩可达 5-10%，斜纹结构还会引入扭斜。
+  boundary:
+    applicable_when: 牛仔 / 斜纹重棉 / 工装重织物；裤装 / 工装 / 短外套 / 休闲通勤
+    not_applicable_when: |
+      高弹力混纺牛仔（含氨纶 ≥ 2%）+ 经过充分预洗与定型；
+      明确做硬廓型陈列、不强调久坐穿着的设计款。
+  alternative_path:
+    - 如果顾客久坐 + 怕勒 → 转向高弹力牛仔或弹力斜纹
+    - 如果顾客怕掉色 → 推荐已水洗 / 退浆款，或浅色款
+    - 如果顾客怕回缩 → 推荐 Sanforized 预缩款 / 大一码
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 四、首批 FabricKnowledge 正式冻结清单 · 6. 牛仔 / 斜纹重棉类
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这类最典型的特点是镜前立得住、陈列也有型，但真正的成交判断不该只看镜前。
+    最容易误导的是"显瘦有精神"就直接推，忽略久坐、蹲起、闷热、掉色和回缩。
+    正式风险提示冻结为：腰腹压迫、膝盖鼓包、裆部紧、深色掉色、未经充分预洗时存在回缩和扭斜风险。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"镜前≠真相 + 五类风险 + 穿着情境前置判断"三层语义。
+    Gate 3：通用斜纹重棉判断。
+    Gate 4：可被 outfit_recommendation / store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用斜纹结构与靛蓝染色物理特性，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-denim-twill-mirror-not-truth-mirror_not_truth, owner_field: risk_alerts, definition: "牛仔 / 斜纹重棉镜前轮廓不等于真实穿着体验，成交判断必须包含动作场景"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-denim-twill-mirror-not-truth-risk_position, value: waist_compression, label: 腰腹压迫}
+    - {value_set_id: VS-KP-fabric_property-denim-twill-mirror-not-truth-risk_position, value: knee_bulge, label: 膝盖鼓包}
+    - {value_set_id: VS-KP-fabric_property-denim-twill-mirror-not-truth-risk_position, value: crotch_tight, label: 裆部紧}
+    - {value_set_id: VS-KP-fabric_property-denim-twill-mirror-not-truth-risk_position, value: dark_color_bleed, label: 深色掉色}
+    - {value_set_id: VS-KP-fabric_property-denim-twill-mirror-not-truth-risk_position, value: shrink_skew, label: 回缩与扭斜}
+  rule:
+    - {rule_id: RL-KP-fabric_property-denim-twill-mirror-not-truth, rule_type: fabric_recommendation_disclosure, applicable_when: "面料=牛仔/斜纹重棉 且 顾客有久坐/蹲起/浅色搭配场景", success_scenario: "前置五类风险+按场景选款 → 顾客接受支撑感与穿着代价无纠纷", flip_scenario: "只卖显瘦有精神 → 久坐勒腰/掉色/回缩 → 退换/差评", alternative_boundary: "久坐怕勒→高弹力混纺；怕掉色→水洗退浆款；怕回缩→Sanforized预缩或大一码"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-denim-twill-mirror-not-truth, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 四、6. 牛仔 / 斜纹重棉类, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-denim-twill-mirror-not-truth, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-store_training-KP-fabric_property-denim-twill-mirror-not-truth, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

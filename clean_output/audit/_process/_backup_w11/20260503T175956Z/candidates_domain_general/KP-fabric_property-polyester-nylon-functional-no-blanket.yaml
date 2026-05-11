@@ -1,0 +1,97 @@
+pack_id: KP-fabric_property-polyester-nylon-functional-no-blanket
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  涤纶 / 锦纶 / 功能化纤类不能用"化纤"一刀切——真正的分水岭在纱线、织法、后整理、用途；
+  它的优点是稳定 / 轻 / 易打理 / 功能表达明显，但门店不许只讲"好打理"，
+  必须前置静电、热感、发亮、摩擦位先老、表面起毛、里外层手感落差大六类风险。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional（商品专业者）
+    target_audience: 询问旅行 / 防风外套 / 运动休闲 / 形态稳定单品的顾客；以及对"化纤=低级"有先入偏见的顾客
+  when:
+    trigger: 顾客问"是不是化纤""会不会闷"或导购把"好打理"当唯一卖点
+    context: 旅行 / 户外 / 运动休闲 / 通勤稳定形态款陈列；夏季高温环境
+  what:
+    action_type: fabric_recommendation_no_blanket_term
+    decision_or_action: |
+      不许用"化纤"一刀切——按纱线 / 织法 / 后整理 / 用途分别回答；
+      把卖点改写为稳定 + 轻 + 易打理 + 功能（防风 / 速干 / 抗皱）；
+      同步前置静电 / 热感 / 发亮 / 摩擦位先老 / 表面起毛 / 里外层手感落差六类风险；
+      夏季顾客显式提示热感与闷感。
+  result:
+    success_pattern: |
+      顾客接受"化纤分场景"的认知，按旅行 / 防风 / 运动场景选款，体验匹配预期；
+      静电 / 发亮发生时不视为品质问题。
+    flip_pattern: |
+      只讲"好打理" → 顾客夏天发现闷热或穿一段时间发亮 → 退换或差评；
+      用"化纤"一刀切贬低 → 错失功能化纤合适场景，导购话术失信。
+  underlying_mechanism: |
+      涤纶 / 锦纶为合成纤维，分子链稳定 → 形态稳定 + 易打理；
+      但低吸湿 → 汗后闷热静电；摩擦下表面起毛或熔融发亮；
+      三层贴合 / 复合面料里外层手感差异天然存在；
+      功能（防风 / 速干 / 抗皱）由后整理与织法决定，不是"涤纶"两字能概括。
+  boundary:
+    applicable_when: 涤纶 / 锦纶 / 功能化纤主成分；旅行 / 防风外套 / 运动休闲 / 形态稳定单品
+    not_applicable_when: |
+      明确做"化纤主力日常贴身穿着"且顾客对热闷敏感；
+      涤纶仿真丝缎面（应进真丝 / 缎面口径）。
+  alternative_path:
+    - 如果顾客怕闷 → 推荐含天然纤维或带吸湿排汗整理的功能化纤
+    - 如果顾客怕发亮 → 推荐带哑光后整理或编织肌理款
+    - 如果顾客怕静电 → 推荐含一定天然纤维或抗静电整理款
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 四、首批 FabricKnowledge 正式冻结清单 · 8. 涤纶 / 锦纶 / 功能化纤类
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这类不能用"化纤"一刀切。它真正的分水岭在纱线、织法、后整理和用途。
+    最容易误导的是只讲"好打理"，不讲闷、静电、摩擦发亮、面料噪音。
+    正式风险提示冻结为：静电、热感、发亮、摩擦位先老、表面起毛、里外层手感落差大。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"反一刀切 + 四维分水岭 + 六类风险"三层语义。
+    Gate 3：通用合成纤维判断。
+    Gate 4：可被 outfit_recommendation / store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用合成纤维特性，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-polyester-nylon-functional-no-blanket-no_blanket_term, owner_field: risk_alerts, definition: "涤纶 / 锦纶 / 功能化纤不许用化纤一刀切，要按纱线/织法/后整理/用途分别判断"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-polyester-nylon-functional-no-blanket-risk_position, value: static_cling, label: 静电}
+    - {value_set_id: VS-KP-fabric_property-polyester-nylon-functional-no-blanket-risk_position, value: thermal_stuffy, label: 热感闷}
+    - {value_set_id: VS-KP-fabric_property-polyester-nylon-functional-no-blanket-risk_position, value: surface_shine, label: 发亮}
+    - {value_set_id: VS-KP-fabric_property-polyester-nylon-functional-no-blanket-risk_position, value: friction_aging, label: 摩擦位先老}
+    - {value_set_id: VS-KP-fabric_property-polyester-nylon-functional-no-blanket-risk_position, value: surface_fuzzing, label: 表面起毛}
+    - {value_set_id: VS-KP-fabric_property-polyester-nylon-functional-no-blanket-risk_position, value: layer_handfeel_gap, label: 里外层手感落差大}
+  rule:
+    - {rule_id: RL-KP-fabric_property-polyester-nylon-functional-no-blanket, rule_type: fabric_recommendation_disclosure, applicable_when: "面料=涤纶/锦纶/功能化纤 且 顾客问化纤或好打理", success_scenario: "按四维分水岭+前置六类风险 → 顾客按场景选款无纠纷", flip_scenario: "只讲好打理或一刀切贬低化纤 → 闷热/发亮投诉或话术失信", alternative_boundary: "怕闷→含天然纤维或吸湿排汗整理；怕发亮→哑光后整理；怕静电→抗静电整理款"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-polyester-nylon-functional-no-blanket, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 四、8. 涤纶 / 锦纶 / 功能化纤类, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-polyester-nylon-functional-no-blanket, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-store_training-KP-fabric_property-polyester-nylon-functional-no-blanket, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

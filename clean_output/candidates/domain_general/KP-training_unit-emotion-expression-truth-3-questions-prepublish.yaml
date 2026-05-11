@@ -1,0 +1,88 @@
+pack_id: KP-training_unit-emotion-expression-truth-3-questions-prepublish
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  emotion_expression（情绪表达）每张 C2/C3 玩法卡发布前必须答对"真实感三问"自检——
+  ① 画面锚点：内容里的画面 / 声音 / 地点 / 时间是当下真实发生的吗？（不是摆拍 / 不是素材库 / 不是模板生成）
+  ② 情感锚点：情绪是此刻真实的，还是"构思出来的情绪剧本"？
+  ③ 外部锚点：有没有外部可验证的点（真实日期 / 地点 / 他人在场 / 天气 / 物件磨损痕迹）？
+  三问任一答"不"即不应作为 emotion_expression 发布——可以降级到 humor_content / lifestyle_expression / daily_fragment。
+  执行时机硬定为**发布前**而非生成前——避免降低创作效率，让 AI 生成结束后再做最后一道校验。
+  此三问保留在情绪敏感 CT 内部，**不强制扩散**到 product_copy_general / training_material（这两类灵魂是"准确"非"情绪真实"）。
+
+scenario:
+  who:
+    primary_role: 情绪类内容创作者 / AI 生成校验器
+    target_audience: emotion_expression 的 C2/C3 玩法卡（9 张全部带此字段）
+  when:
+    trigger: AI 生成结束 / 内容剪辑完成 → 发布前最后一道校验
+    context: emotion_expression 是 Q2 翻车风险最高 CT；β 层是双层真实性防御的正面锚定（α 是负面禁用清单）
+  what:
+    action_type: truth_3_questions_prepublish_validation
+    decision_or_action: 三问逐项答 → 任一项答"不"即拒绝发布或降级到非情绪类 CT
+  result:
+    success_pattern: 真实情境（具体时间 / 具体地点 / 具体物件 / 真实关系）保留进发布；观众接住"被看见"
+    flip_pattern: 三问答"不"仍发布 → 内容滑向"构思出来的情绪剧本"或艺术向 lifestyle_expression，emotion_expression 资产被污染
+  underlying_mechanism: |
+      真实感三问是"正面锚定"——告诉创作者"做对的要同时满足 3 个锚点"，
+      与 α 9 清单（负面禁用）配合形成 emotion_expression 的双层真实性防御。
+      执行时机定在发布前不是生成前，是用户基于"创作效率 vs 校验严格度"的明确裁决。
+  boundary:
+    applicable_when: emotion_expression 的 C2 进阶 / C3 突破性玩法卡发布前
+    not_applicable_when: product_copy_general / training_material（用户裁决不强制扩散）；C1 主流玩法卡（已强默认禁用，无需再做三问）
+  alternative_path:
+    - 三问任一答"不"且情境无法补真实锚点 → 降级到 humor_content（自我调侃）/ lifestyle_expression（生活方式）/ daily_fragment（碎片）
+    - 三问答"不"但创作者坚持发布 → 不归类为 emotion_expression，从 emotion_expression 资产矩阵中剔除
+
+evidence:
+  source_md: Q2-内容类型种子/emotion_expression-交付物-v0.1.md
+  source_anchor: §⚠️ 双层真实性防御系统 β 真实感三问自检 + §G G2 / G5 裁决
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    β 层——「真实感三问自检」作为 C2/C3 每张玩法卡的必答项：告诉生产者"做对的要同时满足 3 个锚点"——正面锚定
+    三问任一答'不' → 这条不应该作为 emotion_expression 发布。可以降级到 humor_content / lifestyle_expression / daily_fragment
+    G2 仅在情绪敏感 CT 使用（不强制扩散）：β 真实感三问自检保留在本 CT 内部 / 不强制扩散到 product_copy_general 与 training_material
+    G5 发布前 (Pre-Publish)：β 真实感三问自检在发布前作为最后一道校验 / 不放在生成前作为生成前置（避免降低创作效率）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（三问校验）+ 03_semantic（三锚点定义）+ 08_lifecycle（生成→校验→发布或降级）可反推核心语义。
+    Gate 3：任意品牌情绪类内容生产都需此正面锚定校验。
+    Gate 4：可被 content_generation 在发布前校验消费——任一锚点答"不"则拒绝或降级。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 情绪类内容生产元规则，不含具体笛语调性内容
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-emotion-expression-truth-3-questions-prepublish-anchor, owner_field: truth_3_questions, definition: "真实感三问 = 画面锚点（真实场景）+ 情感锚点（此刻真实）+ 外部锚点（可验证日期/地点/物件）；三问任一答'不'即不应发布为 emotion_expression"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-emotion-expression-truth-3-questions-prepublish-anchor, value: visual_anchor, label: 画面锚点, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-truth-3-questions-prepublish-anchor, value: emotional_anchor, label: 情感锚点, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-truth-3-questions-prepublish-anchor, value: external_anchor, label: 外部锚点, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-training_unit-emotion-expression-truth-3-questions-prepublish, rule_type: pre_publish_truth_validation, applicable_when: "emotion_expression C2/C3 玩法卡发布前最后一道校验", success_scenario: "三锚点齐全发布观众接住被看见", flip_scenario: "任一锚点答不仍发布 → 滑向构思情绪剧本资产被污染", alternative_boundary: "答不且无法补真实锚点 → 降级到 humor_content/lifestyle_expression/daily_fragment 或剔除"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-emotion-expression-truth-3-questions-prepublish, source_md: Q2-内容类型种子/emotion_expression-交付物-v0.1.md, source_anchor: §双层真实性防御 β + §G G2/G5, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-emo02, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"emotion_expression","applies_to":["emotion_expression"],"not_applicable":["product_copy_general","training_material"],"polarity":"emotion_sensitive_ct_only"}'}
+  lifecycle:
+    - {lifecycle_id: LC-emotion_expression-prepublish, owner_type: ContentType, state: generated, transition_to: published_or_downgraded, condition: "三锚点全 pass → published；任一 fail → downgraded 或剔除"}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-emotion-expression-truth-3-questions-prepublish, runtime_method: content_generation, input_types: '["GeneratedContent","ContentType"]', output_types: '["ValidationResult","DowngradeSuggestion"]', governing_rules_json: '["RL-KP-training_unit-emotion-expression-truth-3-questions-prepublish"]'}

@@ -1,0 +1,118 @@
+pack_id: KP-inventory_rescue-state-catalog-six-states
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  门店库存状态正式冻结为 6 类——size_complete / size_broken / color_broken /
+  single_size_tail / single_item_only / alternate_not_same_sku；每类都必须给出
+  「推荐许可 / 陈列许可 / 替代深度 / 话术模式（rescue/redirect/give_up）」四件套，
+  下游推荐与陈列必须按状态查表，不能用一个"有货/无货"开关代替。
+
+scenario:
+  who:
+    primary_role: 门店导购 / 店长 / 商品总监
+    target_audience: 真源库存系统 + 推荐 / 陈列 / 培训三条下游链路
+  when:
+    trigger: 任一商品的库存事实进入推荐 / 陈列 / 接客判断之前
+    context: 商品级库存粒度需要从"有货/无货"升级为"什么状态的有货/无货"
+  what:
+    action_type: inventory_state_classification
+    decision_or_action: |
+      1. 把每个 SKU 的当前事实落到 6 类之一，不允许多归或漏归。
+      2. 按状态查 4 件套：
+         - size_complete   → 推:正常推荐 / 陈:可主陈列 / 替:无需 / 话:normal_sell
+         - size_broken     → 推:看品类版型敏感度 / 陈:不宜全客群主推 / 替:同款异色优先 / 话:救场或转向
+         - color_broken    → 推:可继续 / 陈:不可暗示全色可选 / 替:同款异色优先 / 话:救场为主
+         - single_size_tail→ 推:精准推荐 / 陈:尾货位机会位 / 替:命中码直接成交未命中转向 / 话:救场或转向
+         - single_item_only→ 推:卖单品价值 / 陈:从成套位降到单品亮点位 / 替:兼容补套或转单品 / 话:救场或转向
+         - alternate_not_same_sku → 推:必须明示是替代解法 / 陈:可主题陈列不可假装原款 / 替:按场景廓形价带分高中低 / 话:转向为主
+      3. 三态判断（give_up_mode）触发条件按状态预置——
+         size_broken 触发：高 fit_sensitivity 品类 + 顾客锚定该尺码 + 无同逻辑替代；
+         color_broken 触发：婚礼/团购/亲子/送礼/统一着装等颜色强锚定场景；
+         single_size_tail 触发：顾客不在该尺码区间还硬说服；
+         single_item_only 触发：顾客买的就是"省心一套搞定"但补不齐；
+         alternate_not_same_sku 触发：导购把替代款说成"差不多就是这个"或顾客原需求已变味。
+  result:
+    success_pattern: |
+      下游每条推荐 / 陈列 / 接客判断都能从状态码直接推出动作；
+      门店不再用一句"有货可推"覆盖断码、断色、单码尾货等不同情况；
+      顾客在不同状态下得到不同口径，信任不流失。
+    flip_pattern: |
+      把"有货"当一个布尔值用，断码款被推成主推、单码尾货被推给非命中码顾客、
+      只剩单品被卖成"完整一套"——画面成立但成交路径断裂或顾客试穿后流失。
+  underlying_mechanism: |
+      库存的真实业务粒度不是"有/无"，而是"这件能不能继续按原方案卖、按什么口径卖、什么时候要停"；
+      6 类状态是"卖法 × 替代深度 × 放弃条件"的最小公约数，缺一类下游就会出现盲区。
+  boundary:
+    applicable_when: 任意 SKU × 门店组合的库存事实进入推荐 / 陈列 / 接客判断时
+    not_applicable_when: |
+      纯后台库存清算 / 纯财务盘点 — 不涉及前线动作；
+      非服装零售（鞋包尺码逻辑不同）— 状态枚举需要重新定义。
+  alternative_path:
+    - 6 状态无法覆盖（如预售 / 调货中）→ 走真源 last_sync 过期路径硬拦截
+    - 同一 SKU 同时落 2 类（如断码 + 断色）→ 取更严的那一类作为主状态
+    - 状态从 size_complete 退化为其他 → 立即推送下游下撤主陈列
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/库存与替代包.md
+  source_anchor: 三、库存状态清单 inventory_state_catalog（S1-S6） + 十四、首批派生清单 A
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    inventory_state_catalog（库存状态清单）
+    S1 size_complete（尺码齐全）/ S2 size_broken（断码）/ S3 color_broken（断色）/
+    S4 single_size_tail（单码尾货）/ S5 single_item_only（只有单品，凑不成套）/
+    S6 alternate_not_same_sku（有替代款但不是同款）
+    每条都给出：定义 / 推荐 / 陈列 / 替代深度 / 话术模式 / 直接放弃。
+    本包正式派生 3 张清单：A. inventory_state_catalog（库存状态清单）首批 6 条。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全；状态枚举 + 4 件套 + 放弃触发条件全部具体。
+    Gate 2：从 9 表 value_set + relation + rule 可反推回 6 状态及各自的 4 件套。
+    Gate 3：通用门店库存纪律，跨女装品牌可直接复用。
+    Gate 4：可被 inventory_rescue / outfit_recommendation / display_guidance 三路 runtime 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+    库存状态清单属于门店纪律 / 库存替代通用范畴；与具体品牌调性 / 创始人画像无关；
+    任何女装零售品牌都可以直接拿去用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+  field:
+    - {field_id: FD-InventoryState-rescue_disposition, owner_type: InventoryState, field_name: rescue_disposition, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-inventory_rescue-state-catalog-six-states-state_label, owner_field: state_label, definition: "门店库存状态 6 类标签：size_complete / size_broken / color_broken / single_size_tail / single_item_only / alternate_not_same_sku"}
+    - {semantic_id: SM-KP-inventory_rescue-state-catalog-six-states-rescue_mode, owner_field: rescue_disposition, definition: "三态决策模式：rescue_mode 救场 / redirect_mode 转向 / give_up_mode 放弃"}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-state_label, value: size_complete, label: 尺码齐全, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-state_label, value: size_broken, label: 断码, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-state_label, value: color_broken, label: 断色, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-state_label, value: single_size_tail, label: 单码尾货, ordinal: 4}
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-state_label, value: single_item_only, label: 只有单品凑不成套, ordinal: 5}
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-state_label, value: alternate_not_same_sku, label: 有替代款但不是同款, ordinal: 6}
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-rescue_mode, value: rescue_mode, label: 救场模式, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-rescue_mode, value: redirect_mode, label: 转向模式, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-state-catalog-six-states-rescue_mode, value: give_up_mode, label: 放弃模式, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-state-catalog-six-states, rule_type: inventory_state_classification, applicable_when: "任一 SKU 进入推荐/陈列/接客判断前", success_scenario: "6 状态查表得到具体推荐/陈列/替代/话术 4 件套门店动作精准", flip_scenario: "把有货当布尔值用断码当主推顾客试穿后流失", alternative_boundary: "同时落 2 类→取更严；6 状态无法覆盖→走 last_sync 过期硬拦截"}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-state-catalog-six-states, source_md: Q7Q12-搭配陈列业务包/库存与替代包.md, source_anchor: "三、inventory_state_catalog S1-S6 + 十四、A", source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-requires_inventory_state-InventoryState-cat01, source_type: StylingRule, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"states_cardinality":6,"per_state_quad":["recommend","display","substitute","rescue_mode"]}'}
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-cat01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"states":["size_complete","size_broken","color_broken","single_size_tail","single_item_only","alternate_not_same_sku"]}'}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-state-catalog-six-states, runtime_method: inventory_rescue, input_types: [InventoryState, Product], output_types: [SubstitutionPlan, RescueScript]}
+    - {mapping_id: CM-display_guidance-KP-inventory_rescue-state-catalog-six-states, runtime_method: display_guidance, input_types: [DisplayGuide, InventoryState], output_types: [DisplayPlan]}

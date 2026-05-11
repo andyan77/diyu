@@ -1,0 +1,84 @@
+pack_id: KP-product_attribute-content-type-north-star-knowledge-sharing
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `knowledge_sharing`（知识分享 / 干货科普）的北极星是"顿悟 + 信任"——
+  观众看完不只是"我听懂了"，而是"我终于被一个真实懂的人讲明白了，并把你归类为可信、
+  讲得清楚、愿意讲真话的人"。所有 KS 玩法是否成立按这条反推：
+  "镜头前站桩讲 3 点 / PPT 化口播大字报 / 黄金三秒钩子耸动科普"判主流默认禁用，
+  因为它们只生产"结论"不生产"理解路径"，且没有"为什么是你来讲"——AI 最容易批量复刻这一档。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: KS 内容创作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 knowledge_sharing 玩法卡，或对一条 KS 内容做"是否符合 ContentType 北极星"判断时
+    context: 知识分享是个人创作类 ContentType；知识本身是硬约束，AI 同质化最严重的赛道之一
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"被一个真实懂的人讲明白 + 为什么是你来讲 + 现场证据"作为 KS 玩法是否成立的最终判定
+  result:
+    success_pattern: |-
+      玩法卡能呈现"先讲人生再讲知识 / 知识长在手上 / 桌面实验 / 从一个错误开始（事故在发言）/
+      一句知识只靠动作讲清 / 材质听诊器 / silent review / TED setup-punchline-callback"等
+      "现场证据 + 为什么是你来讲"叙事 → 进 C2/C3
+    flip_pattern: |-
+      玩法落到站桩讲 3 点 / PPT 大字报口播 / "99% 的人不知道"耸动钩子 / 8 个知识点全塞 →
+      ❌ 北极星映射 → 主流默认禁用档（信息正确但 AI 味最重）
+  underlying_mechanism: |
+      短视频里知识同质化最严重——"3 个技巧"模板被 AI 一键复制。
+      只有"现场证据（实验/错误/动作/声音）+ 为什么是你来讲（人生/经验来历）"两条同时成立，
+      观众才会把信任从"信息"升级到"讲信息的人"。
+  boundary:
+    applicable_when: 单 ContentType 内容创作判型 / KS 玩法库扩张时的卡片新增门禁
+    not_applicable_when: 与 training_material 边界（v0.2 G4 已延后边界矩阵处理）
+  alternative_path:
+    - 服装 KS 三大独占角度：声学面料知识（C3-5 听诊器）/ 错误教学（C3-1 事故在发言）/ 动作证明型知识（C3-2 一句知识只靠动作）
+
+evidence:
+  source_md: Q2-内容类型种子/knowledge_sharing-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流默认禁用 3 张 + §E 红线 7 条 + §B9 隐喻 + §D 三个未被开发角度
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完不只是"我听懂了"，而是"我终于被一个真实懂的人讲明白了，
+    并且把你归类为可信、讲得清楚、愿意讲真话的人"。
+    compass：算法在奖励"有灵魂的内容"而非"有套路的内容"；知识分享最核心的区别是有没有"为什么是你来讲"。
+    B9：知识不是"老师在讲"而是"事故在发言"；知识长在手上（身体掌握 ≠ 嘴上念）。
+    E1：3 个技巧教会你…… 但没有任何现场证据。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 同 founder_ip 北极星 pack 的四闸结构
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论——任意品牌做 KS 都需此北极星
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-knowledge-sharing-ks_north_star, owner_field: north_star, definition: "knowledge_sharing 北极星：顿悟+信任 / 被真实懂的人讲明白 / 现场证据+为什么是你——主流禁用 3 类（站桩 3 点 / PPT 大字报 / 耸动钩子）的判型锚点"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-knowledge-sharing, rule_type: content_type_north_star_anchor, applicable_when: "新增 KS 玩法卡或审核一条 KS 内容时", success_scenario: "玩法有现场证据+为什么是你（人生 / 桌面实验 / 错误倒叙 / 听诊器 / 动作证明）→ C2/C3", flip_scenario: "站桩 3 点 / PPT 大字报 / 耸动钩子 / 8 知识点全塞 → 主流默认禁用", alternative_boundary: "与 training_material 边界延后边界矩阵"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-knowledge-sharing, source_md: Q2-内容类型种子/knowledge_sharing-交付物-v0.1.md, source_anchor: §A + §C1 + §E + §B9 + §D, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-knowledge_sharing-ks1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"knowledge_sharing"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-knowledge-sharing, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

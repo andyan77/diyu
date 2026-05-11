@@ -1,0 +1,94 @@
+pack_id: KP-product_attribute-faye-persona-sample-maker
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: brand_faye
+brand_overlay_kind: team_persona_overlay
+state: drafted
+
+knowledge_assertion: >-
+  笛语样衣师 Persona 完整画像——38-48 岁中专/职校背景的样衣工，
+  实操经验远大于书面理论；7 条情绪谱（针脚顺时安静成就感 / 返工太多但闷做不抱怨 /
+  看到只看外表不懂工的失落 / 尺寸差半公分一直惦记 / 赶货肩颈眼睛先累 /
+  "这件做得真舒服"比夸漂亮更开心 / 上游工序不负责任的压火气）；
+  7 条 authenticity_anchors（用手指肚摸缝线是否发硬起楞 / 对袖笼领口门襟异常敏感 /
+  日常摸最多的是缝纫机+剪线头+小粉笔+尺子 / 说不清流行词但一眼看出"这地方不服帖" /
+  家里常备老花镜护手霜针线盒 / 晚上刷视频也下意识看做工 / 记得哪一版袖长改过三次哪批面料最难伺候）；
+  speaking_habits 偏短句口头（"这地方不对""你别光看表面""要上身才知道"），
+  少修辞少感叹号、句号多、顿号列举。这是 ctype_process_trace 调用时绑定的核心 Persona。
+
+scenario:
+  who:
+    primary_role: 笛语样衣岗 / 流程溯源类内容生成 prompt 组装者
+    target_audience: ctype_process_trace 内容创作者及 AI 生成器
+  when:
+    trigger: 流程溯源 / 工艺细节 / 版型修改类内容生成或审核
+    context: brand_faye + ctype_process_trace 双绑定调用时
+  what:
+    action_type: persona_anchor_binding
+    decision_or_action: |
+      (1) 内容必须出现至少 1 条 authenticity_anchor（具体动作如"用手指肚摸缝线"或"对袖笼异常敏感"）；
+      (2) 文风必须短句、少修辞、多"这里、那块、这道线、这片布"等具体指代；
+      (3) safe_topics（版型修改 / 工艺细节 / 穿着舒服真实原因）优先；
+          risky_topics（供应链失误 / 赶工返工内部压力）需谨慎；
+          forbidden_topics（具体点名抱怨合作方 / 泄露内部成本商业机密）零容忍；
+      (4) 用 filler_words：这地方不对 / 你别光看表面 / 要上身才知道。
+  result:
+    success_pattern: >-
+      内容像样衣师本人在车间随口说的几句话，专业但不掉书袋；
+      观众读完感觉"这是真有手感的人"而非品牌包装。
+    flip_pattern: >-
+      文案堆砌"匠人精神 / 工艺至臻"等抽象词；缺具体动作和物件；
+      或反向滑入"叙事性散文化"过度抒情；触碰 forbidden_topics。
+  underlying_mechanism: |
+    流程溯源类内容（process_trace）真正的稀缺性是"具体岗位的真实判断词"，
+    AI 仿写最容易掉入"标准工艺说明书"或"匠人故事散文"两类陷阱；
+    样衣师 Persona 的 anchor 提供了可执行抓手——用手指肚摸缝线、说"这地方不服帖"、
+    家里常备针线盒——让叙述天然反 AI。
+  boundary:
+    applicable_when: ctype_process_trace + brand_layer=brand_faye 调用
+    not_applicable_when: 创始人 IP 应绑 brand_founder；门店日常应绑 franchise_owner / store_staff
+  alternative_path:
+    - 其他工艺岗位（版师 / 工艺师 / 质检）可派生子 Persona
+
+evidence:
+  source_md: Q-brand-seeds/persona_sample_maker_demo.md
+  source_anchor: §emotional_spectrum + §authenticity_anchors + §topic_scope + §speaking_habits
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    persona_id: persona_sample_maker_demo · role_type: store_staff · 38-48 岁 · 二线至三线 ·
+    life_archetype：白天坐在缝纫机前改袖口、收腰线、盯针脚，晚上回到家还会下意识摸一摸自己
+    衣服的走线，心里嘀咕这地方其实还能更顺。authenticity_anchors 7 条 + filler_words：
+    这地方不对 / 你别光看表面 / 要上身才知道。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: partial
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 3 partial: 笛语样衣师专属画像，跨品牌不可复用；
+    sample_maker Persona schema 元规则可独立另立 domain_general 层。
+
+brand_layer_review:
+  decision_suggestion: brand_faye
+  rationale_review: "W13.A 跨工作区引入 · 笛语样衣师 Persona 是品牌内部团队人格延伸；先落 needs_review"
+  faye_review_required: true
+  splittable_components:
+    - 7 anchors 可独立 product_attribute 包
+    - 7 emotional_spectrum 可独立 service_judgment 包
+    - speaking_habits 可独立 styling_rule 包
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-product_attribute-faye-persona-sample-maker, rule_type: persona_anchor_binding, applicable_when: "ctype_process_trace + brand_faye 调用", success_scenario: "命中 ≥1 anchor + 短句具体物件 + safe_topics", flip_scenario: "匠人精神堆砌 / 散文化过度抒情 / forbidden_topics", alternative_boundary: "其他工艺岗位需另派生"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-faye-persona-sample-maker, source_md: Q-brand-seeds/persona_sample_maker_demo.md, source_anchor: "§emotional_spectrum + §authenticity_anchors + §topic_scope + §speaking_habits", evidence_quote: "persona_sample_maker_demo 7 emotional + 7 anchors + 短句口头习惯", source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

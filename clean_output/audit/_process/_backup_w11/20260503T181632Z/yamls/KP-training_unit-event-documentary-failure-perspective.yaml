@@ -1,0 +1,81 @@
+pack_id: KP-training_unit-event-documentary-failure-perspective
+granularity_layer: L2
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  event_documentary（事件纪实）允许且推崇"失败视角"作为 C3 突破性玩法之一——拍无人问津的展位 / 首日零订单的焦虑 /
+  布展翻车的瞬间 / 大促备货后卖不动的仓库。这违反主流"事件内容必拍光鲜场面"的套路，但能接住"这家品牌真的在扛过"
+  的信任。服装行业是少数"敢展示失败就能赢信任"的行业之一——空展位 / 卖不动的尺码 / 退货堆积 / 布展翻车都极具
+  可视性。失败视角与 founder_ip 的反向透明、role_work_vlog 的岗位失误博物馆共同构成"企业叙事类失败叙事三件套"。
+
+scenario:
+  who:
+    primary_role: 品牌主理人 / 加盟商 / 单店店主
+    target_audience: 展会 / 开业 / 大促等事件纪实场景
+  when:
+    trigger: 事件发生失败、低谷或翻车瞬间
+    context: 服装行业事件纪实正处爆发期；观众对"虚假成功"免疫力升高
+  what:
+    action_type: failure_perspective_event_documentary
+    decision_or_action: 拍真实失败现场（空展位 / 焦虑 / 翻车 / 卖不动），不靠后期粉饰，结尾不强行反转
+  result:
+    success_pattern: 真实困难比虚假成功更有共鸣 / 观众接住"这家品牌真的在扛过" / 信任沉淀（高于"圆满落幕"叙事）
+    flip_pattern: 用"圆满落幕 / 感谢到场"模板包装 → 事件被识别为打卡签到流水账 / 观众被流带走而非被故事带走 / 信任不沉淀
+  underlying_mechanism: |
+      事件纪实的北极星是"事件的情绪曲线 > 事件的流程展示"，失败视角是"情绪曲线"中最稀缺的那一段。
+      服装行业失败瞬间天然可视化——展位 / 货架 / 仓库 / 试衣间都是失败的物理见证者。
+      这条玩法的关键不是"敢承认失败"，而是"承认失败后保留真实困难，不强行收束在反转或鸡汤里"。
+  boundary:
+    applicable_when: event_documentary 的 C3 突破性档位；展会 / 开业 / 大促 / 上新 / 联名等真实事件
+    not_applicable_when: 事件实际上没有失败而强行编造 / 失败被包装成营销噱头（违反 §E 红线）；事件涉及第三方利益方（合规风险）需先处置
+  alternative_path:
+    - 事件确无失败 → 选 C3-3 后台手忙脚乱（前后台反差）或 C3-2 散场叙事，不强凑失败视角
+    - 失败但不便公开（员工过失 / 第三方原因）→ 转为 C3-1 开场前一分钟无人声（紧张感叙事）
+
+evidence:
+  source_md: Q2-内容类型种子/event_documentary-交付物-v0.1.md
+  source_anchor: §C 玩法卡 #C3-7 失败视角事件记录 + §D 三个未被开发的角度 第 3 条
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    不拍展会的光鲜场面，而拍无人问津的展位 / 首日零订单的焦虑 / 布展翻车的瞬间 / 大促备货后卖不动的仓库
+    真实困难比虚假成功更有共鸣——观众接住的是"这家品牌真的在扛过"
+    服装行业是少数"敢展示失败就能赢信任"的行业之一
+    与 founder_ip C2-2 反向透明、role_work_vlog C3-2 岗位失误博物馆 共同构成"企业叙事类的失败叙事三件套"
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（失败视角是 event_documentary 突破性档位）+ 05_relation（与 founder_ip / role_work_vlog 失败叙事三件套关系）可反推核心语义。
+    Gate 3：任意品牌的事件纪实都可使用失败视角（特别是服装行业可视化优势明显）。
+    Gate 4：可被 content_generation 在事件后内容生成时调用——根据真实事件状态选择是否走失败视角。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论纪律，不含具体笛语品牌调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-event-documentary-failure-perspective-policy, owner_field: failure_perspective_allowed, definition: "event_documentary 允许并推崇失败视角作为 C3 突破性玩法；与 founder_ip 反向透明 + role_work_vlog 岗位失误博物馆构成企业叙事类失败叙事三件套"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-event-documentary-failure-perspective, rule_type: failure_perspective_breakthrough_play, applicable_when: "event_documentary C3 档；事件存在真实失败/低谷瞬间", success_scenario: "真实困难展示观众接住扛过的信任沉淀", flip_scenario: "圆满落幕模板包装 → 流水账观众被流带走信任不沉淀", alternative_boundary: "无失败强凑 → 违 §E 红线；涉第三方 → 转 C3-1 紧张感叙事"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-event-documentary-failure-perspective, source_md: Q2-内容类型种子/event_documentary-交付物-v0.1.md, source_anchor: §C C3-7 + §D 第 3 条, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-evd01, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"event_documentary","trio":["event_documentary","founder_ip","role_work_vlog"],"trio_name":"enterprise_failure_narrative_trio"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-event-documentary-failure-perspective, runtime_method: content_generation, input_types: '["EventState","ContentType"]', output_types: '["PlayCardSelection"]', governing_rules_json: '["RL-KP-training_unit-event-documentary-failure-perspective"]'}

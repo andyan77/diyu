@@ -1,0 +1,76 @@
+pack_id: KP-service_judgment-frontline-cover-public-and-private
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  凡是首批与导购（styling_advisor）/ 门店经营（store_operator）强相关的内容线，
+  其派生视图必须同时覆盖公域分发位（PlatformTone）与私域出口位（PrivateOutletChannel），
+  不允许只做公域；这是冷启动唯一的硬约束规则，违反则该内容线视为"覆盖不全"，不得放行。
+
+scenario:
+  who:
+    primary_role: 内容运营 / 派生视图引擎
+    target_audience: 内容生产链路 / 渠道分发引擎
+  when:
+    trigger: 任意 styling_advisor 或 store_operator 主导的内容线进入派生视图计算
+    context: 冷启动 P0 唯一硬规则
+  what:
+    action_type: frontline_channel_coverage_enforcement
+    decision_or_action: 派生视图必须同时输出公域命中清单 + 私域命中清单，缺一则该内容线被标"覆盖不全"
+  result:
+    success_pattern: |
+      导购的"试衣间一句话推荐"既出公域种草版（小红书 / 抖音），又出私域出口版（朋友圈 / 微信群），
+      门店店长的经营观察既走视频号公域，也走微信社群私域；私域转化路径不会被漏掉。
+    flip_pattern: |
+      导购内容线只做公域种草，私域不出 → 试衣间内容生成出来发不到导购自己的朋友圈，
+      最贴近成交的渠道反而最缺内容，门店转化掉队。
+  underlying_mechanism: |
+      导购与店长是离顾客最近的角色，他们的内容必须落到离顾客最近的渠道（私域出口位），
+      只覆盖公域意味着把"最贴身的人"的内容推到"最远的渠道"，违背冷启动设计意图。
+  boundary:
+    applicable_when: styling_advisor / store_operator 主导的内容线
+    not_applicable_when: product_professional 主导的纯品牌叙事内容线（公域为主即可）
+  alternative_path:
+    - 私域出口位还没接通 → 派生视图标"覆盖不全 - 私域待接入"，不放行该内容线
+    - 内容确实不适合私域（如长视频纪录片）→ 走人工豁免，记录豁免原因，不默认放行
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md
+  source_anchor: 5.4 强规则（冷启动唯一硬约束）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    凡首批与导购 / 门店经营强相关的内容线，其派生视图必须同时覆盖公域分发位与私域出口位，不得只做公域 — 已冻结
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（frontline_channel_coverage_enforcement 含 applicable_when=styling_advisor/store_operator + flip=私域漏失）+ 09_call_mapping（platform_adaptation 输出公域+私域双清单）可反推该硬规则核心语义。
+    Gate 3：通用一线角色覆盖纪律。
+    Gate 4：可被 platform_adaptation 与 content_generation 调用前的覆盖性校验消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用一线角色渠道覆盖纪律
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-service_judgment-frontline-cover-public-and-private, rule_type: frontline_channel_coverage_enforcement, applicable_when: "styling_advisor/store_operator 主导的内容线进派生视图时", success_scenario: "公域+私域同时命中输出双清单门店转化路径完整", flip_scenario: "只做公域不做私域→最贴近成交的渠道缺内容门店转化掉队", alternative_boundary: "私域未接通→标覆盖不全；不适合私域→人工豁免记录原因"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-frontline-cover-public-and-private, source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md, source_anchor: 5.4, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-platform_adaptation-KP-service_judgment-frontline-cover-public-and-private, runtime_method: platform_adaptation, input_types: [Persona, ContentType], output_types: [PlatformTone, PrivateOutletChannel]}

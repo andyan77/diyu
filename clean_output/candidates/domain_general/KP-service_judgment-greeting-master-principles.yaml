@@ -1,0 +1,73 @@
+pack_id: KP-service_judgment-greeting-master-principles
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  门店接客的总原则正式冻结为四条：先判任务再推货 / 先问顾虑再给第一套 / 第一套是开门第二套才是成交第三套是兜底 / 断码能不能救先看场景不先看嘴；
+  这四条决定接客的判断顺序，颠倒任何一条 → 整段接客的因果链断裂，再多 SKU 也救不回来。
+
+scenario:
+  who:
+    primary_role: 门店导购（全岗位）
+    target_audience: 进店所有客流
+  when:
+    trigger: 顾客进店或开始触达货架
+    context: 任何接客场景的开端；这四条总原则约束 10 类细分场景的统一动作顺序
+  what:
+    action_type: greeting_decision_order
+    decision_or_action: |
+      原则 1：先判任务（她进来要做什么），再推货。
+      原则 2：先问顾虑（她在防什么），再给第一套。
+      原则 3：第一套是开门，第二套才是成交，第三套是兜底——三套有三个不同目标，不能用同一逻辑推。
+      原则 4：断码能不能救，先看场景属性（应急/显瘦/体感属于不该救的高风险场景），不先看顾客嘴上松不松。
+  result:
+    success_pattern: 四原则按顺序走完，10 类细分场景都能命中正确判断起点
+    flip_pattern: 颠倒顺序（先推货再判任务/先给套再问顾虑/三套同一逻辑/嘴上松就硬救），整段接客失败
+  underlying_mechanism: |
+      接客是一条决策链，前置判断错 → 后续动作必然错；
+      四条总原则是这条链的四个关键节点，缺任一就会落入"看似在服务、实则在赌运气"。
+  boundary:
+    applicable_when: 任何门店接客
+    not_applicable_when: 纯线上接单/客服路径（缺试穿与即时反问条件）
+  alternative_path:
+    - 顾客拒绝沟通 → 仍按原则 1 静默判断任务后再决定是否开口
+    - 客流爆满 → 砍原则 3 的第三套，但前两条不能砍
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 一、2）接客总原则正式冻结
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    2）接客总原则正式冻结
+    先判任务，再推货。
+    先问顾虑，再给第一套。
+    第一套是开门，第二套才是成交，第三套是兜底。
+    断码能不能救，先看场景，不先看嘴。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；为 10 类细分场景的总框架，是 store_training 的根规则。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用接客判断顺序，不含品牌专属。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-greeting-master-principles}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-greeting-master-principles}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-greeting-master-principles}

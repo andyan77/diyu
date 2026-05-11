@@ -1,0 +1,92 @@
+pack_id: KP-inventory_rescue-display-priority-five-axes
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  陈列层的库存替代优先级正式冻结为 5 级——story_theme_match → color_story_match
+  → silhouette_layer_match → sellable_depth → price_band_match；
+  陈列先保画面逻辑（主题 / 色叙事 / 层次）再保卖货深度，与接客层"先能穿再像"
+  的优先级正交，不能用同一套顺序套两层。
+
+scenario:
+  who:
+    primary_role: 店长 / 老手陈列负责人 / 陈列调度系统
+    target_audience: 主题陈列 / 色块陈列 / 模特位 / 成套位的替代品挑选场景
+  when:
+    trigger: 原陈列方案的某件商品断码 / 断货 / 撤位需要替换
+    context: 替代后陈列单元的画面逻辑必须仍然成立
+  what:
+    action_type: display_substitution_priority_ranking
+    decision_or_action: |
+      按顺序逐级筛：
+        Lv1 story_theme_match（主题是否仍成立）：替代后整组叙事是否完整
+        Lv2 color_story_match（色群叙事是否仍成立）：色阶 / 温度 / 系列分组不破
+        Lv3 silhouette_layer_match（层次是否还成立）：宽收 / 长短层次完整
+        Lv4 sellable_depth（可售深度够不够）：避免用单码尾货顶主陈列位
+        Lv5 price_band_match（价带是否协调）：避免高端位被入门款破调
+      高级未通过淘汰直接出局；不许只看深度不看主题（库存好但故事散），
+      也不许只看主题不看深度（故事好但卖不出）。
+  result:
+    success_pattern: 替代后陈列画面与卖货深度同时成立，连带浏览与转化稳定
+    flip_pattern: 只追主题不看深度→好看但单码尾货顶主推；只追深度不看主题→陈列像仓库，顾客进店方向感丢
+  underlying_mechanism: |
+      陈列单元承诺的是"可被多数顾客购买的视觉路径"——
+      路径成立靠主题/色/层次三件套（前 3 级），但路径必须可兑现靠深度（Lv4）；
+      与接客层不同：接客是 1 对 1，wearability 是个体路径；陈列是 1 对多，story 是群体路径。
+  boundary:
+    applicable_when: 主题陈列 / 色块陈列 / 模特位 / 成套位的替代选品
+    not_applicable_when: |
+      接客层 1 对 1 替代（走 customer_priority）；
+      纯叠装 / 侧挂以承接选择为目标的单元（走 sellable_depth 优先）。
+  alternative_path:
+    - Lv1 都不过 → 整组主题重写而非硬替
+    - Lv4 sellable_depth 严重不足 → 把该陈列单元降级（成套位→单品亮点位）
+    - Lv5 价带破调 → 拆出独立小区位单独承接
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/库存与替代包.md
+  source_anchor: 五、5.2 陈列优先级
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    5.2 陈列优先级
+    story_theme_match（主题是否仍成立）→ color_story_match（色群叙事是否仍成立）
+    → silhouette_layer_match（层次是否还成立）→ sellable_depth（可售深度够不够）
+    → price_band_match（价带是否协调）
+    解释：陈列先保画面逻辑，再保卖货深度。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐；与接客 6 级、styling 4 级互补，三层各自独立顺序。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用陈列替代纪律。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-DisplayGuide, type_name: DisplayGuide, supertype: domain_object}
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-display-priority-five-axes-axis, value: story_theme_match, label: 主题是否仍成立, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-display-priority-five-axes-axis, value: color_story_match, label: 色群叙事是否仍成立, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-display-priority-five-axes-axis, value: silhouette_layer_match, label: 层次是否还成立, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-display-priority-five-axes-axis, value: sellable_depth, label: 可售深度够不够, ordinal: 4}
+    - {value_set_id: VS-KP-inventory_rescue-display-priority-five-axes-axis, value: price_band_match, label: 价带是否协调, ordinal: 5}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-display-priority-five-axes, rule_type: display_substitution_priority, applicable_when: "陈列原方案某件断货需要替换", success_scenario: "画面与深度同时成立连带浏览稳定", flip_scenario: "只追主题→单码顶主推；只追深度→陈列像仓库", alternative_boundary: "Lv1 都不过→整组主题重写；Lv4 严重不足→降级单元；Lv5 破调→独立小区位"}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-display-priority-five-axes, source_md: Q7Q12-搭配陈列业务包/库存与替代包.md, source_anchor: 五、5.2 陈列优先级, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-dprio01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"layer":"display_priority","order":["story_theme_match","color_story_match","silhouette_layer_match","sellable_depth","price_band_match"]}'}
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-inventory_rescue-display-priority-five-axes, runtime_method: display_guidance, input_types: [DisplayGuide, InventoryState], output_types: [DisplayPlan]}
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-display-priority-five-axes, runtime_method: inventory_rescue, input_types: [InventoryState, DisplayGuide], output_types: [SubstitutionPlan]}

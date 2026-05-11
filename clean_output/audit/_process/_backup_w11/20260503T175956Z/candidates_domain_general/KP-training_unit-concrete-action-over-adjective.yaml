@@ -1,0 +1,64 @@
+pack_id: KP-training_unit-concrete-action-over-adjective
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 服装内容（测评/文案/情绪表达/培训）必须把抽象形容词（高级/舒服/显瘦/百搭/松弛感）改写为具体动作或身体反馈（坐下时腰头会不会顶胃、抬手时肩线会不会拽、地铁手扶杆袖口会不会跑、坐一下午不偷偷扯腰头），写不出具体动作的卖点视为空话，不得入生成产物。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: product_review / product_copy_general / training_material / emotion_expression 内容生成
+  when:
+    trigger: 平台生成卖点 / 测评结论 / 文案 / 培训提示
+    context: 中文电商详情页与短视频形容词模板（FABE + 显瘦/百搭/高级感）已饱和；Shopify 的产品描述官方建议明确指出避免"excellent quality"这类空泛词；感官语言研究显示具体感官动词显著提升真实性与购买意愿
+  what:
+    action_type: language_rewrite_rule
+    decision_or_action: 在生成时把每一个形容词转换为"具体动作 + 具体身体部位 + 具体场景"三件套；写不出三件套的卖点判定为反空壳门禁失败，回退或拒绝生成
+  result:
+    success_pattern: 文案 / 测评由"显瘦"改为"坐一下午不偷偷扯腰头"、由"舒服"改为"抬手时肩线不拽"，观众在脑内完成"使用预演"，购买决策从审美投票转为身体投票
+    flip_pattern: 一连串"高级感/松弛感/氛围感/百搭"出口即写，观众识别为模板，且任意竞品可替换
+  underlying_mechanism: 服装是强触觉品类，触感/动作语言能在心理上模拟穿着体验（mental simulation）；具体语言比抽象语言更被解读为"作者真用过"，从而带来真实性溢价
+  boundary:
+    applicable_when: 服装 5 类通用 ContentType 的卖点 / 测评结论 / 培训点 / 情绪载体
+    not_applicable_when: 单纯尺码 / 价格 / 物流 / 政策类纯事实信息——这些不需要动作化
+  alternative_path:
+    - 抽象形容词 → 具体动作（坐 / 走 / 抬手 / 弯腰 / 出汗 / 逆光）
+    - 抽象形容词 → 具体场景时刻（早高峰扶杆 / 会议冷气 / 午餐溅汁 / 晚归丢椅背）
+    - 抽象形容词 → 触感比喻（"像穿松三年的旧 T 恤那种软"）
+
+evidence:
+  source_md: Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md
+  source_anchor: 三份 md 的"具体场景替代泛泛夸赞""感官动词写作""体感测评""触感型文案"
+  source_type: cross_source_consensus
+  inference_level: low
+  evidence_quote: |
+    通用类.md：不是写"舒服"，而是写"坐一下午不会一直偷偷扯腰头"；不是写"适合秋冬"，而是写"早晚温差大的那两小时，它最有用"。Shopify 强调要写清楚顾客会在什么场景使用产品，避免"excellent quality"这类空泛表述。
+    通用类compass.md：Journal of Consumer Research 研究指出在带货语境中使用感官语言会提升互动与购买意愿，其机制与"更真实/更像真的用过"相关。
+    deep-research-report.md：The "holy trinity" of cliché: 显瘦, 百搭, 高级感. Template sentence structures are shared across WeChat 公众号 and training courses, creating industry-wide homogeneity.
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 同时是生成层硬规则与培训物料反空壳门禁
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容生产语言规则，剥离品牌后任意品牌可继承；属 SKILL §6.1.1"培训规则 / Schema 元规则"通用范畴
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType, TrainingMaterial]
+  field: []
+  semantic: [SM-concrete-action-over-adjective]
+  value_set: [VS-abstract-adjective-blacklist, VS-concrete-action-rewrite-template]
+  relation: []
+  rule: [RL-concrete-action-over-adjective]
+  evidence: [EV-concrete-action-over-adjective]
+  lifecycle: []
+  call_mapping: [CM-content_generation-concrete-action-over-adjective]

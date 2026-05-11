@@ -1,0 +1,81 @@
+pack_id: KP-product_attribute-storyboard-30s-dual-decoding
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  玩法卡的"30 秒分镜参考"字段统一不拆表，但解码方式按 ContentType.output_format 分叉：视频型 ContentType
+  默认读法是四段视频分镜（0-5s / 5-10s / 10-22s / 22-30s 的画面+声音+动作序列）；文案型 ContentType 例外读法
+  是文案执行四段骨架（钩子标题 / 正文节奏 / 视觉分层 / CTA 或留白）。新增文案型 ContentType 不需要建新字段
+  或拆表，直接套例外读法落盘并在跨 CT 真源表的"适用范围"列追加登记。
+
+scenario:
+  who:
+    primary_role: 内容方法论维护者 / Skill 层 Prompt 解码器作者
+    target_audience: AI 内容生成的 prompt 组装与字段消费
+  when:
+    trigger: AI 读取玩法卡的"30 秒分镜参考"字段时；新增 ContentType 类型时
+    context: 18 份 ContentType 中 17 份视频型 / 1 份文案型（product_copy_general）
+  what:
+    action_type: storyboard_field_dual_decoding
+    decision_or_action: 解码前先读 ContentType.output_format 路由：视频 → 视频四段分镜解析器；文案 → 文案四段骨架解析器；两套解析器共享字段名，逻辑在 Skill 层分叉
+  result:
+    success_pattern: 字段名跨 17+1 份 CT 一致，AI 生成时按 output_format 自动选解析器，不漏不错；新增文案型 CT 无需 schema 改动
+    flip_pattern: 为文案型 CT 单独建新字段或拆表 → 跨 CT 字段名漂移、Skill 层多套字段、字段升级时易遗漏；或文案型按视频分镜读 → 输出"0-5 秒：标题"这种荒谬产物
+  underlying_mechanism: |
+      字段壳统一 + 解码逻辑分叉是控制 schema 膨胀的标准做法——同名字段，不同 mode 不同解析器，胜过同义不同名字段。
+      C1 主流禁用卡是另一个例外——不论视频/文案一律占位符"（主流玩法不写分镜，避免被复用）"。
+  boundary:
+    applicable_when: 玩法卡"30 秒分镜参考"字段的所有读写
+    not_applicable_when: 玩法卡的其他字段（北极星 / 元素 / 钩子等）暂不涉及多义读法
+  alternative_path:
+    - 新增非视频非文案的第三种 mode（如"音频型 CT"）→ 在跨 CT 真源表追加第 3 行例外读法 + Skill 层加第 3 个解析器
+    - C1 占位符规则在视频/文案均生效，不分叉
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: §J.3 字段语义映射标准
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    视频型 CT 读法（默认）：0-5 秒 / 5-10 秒 / 10-22 秒 / 22-30 秒 四段分镜内容（画面 / 声音 / 动作序列）
+    文案型 CT 读法（例外）：文案执行骨架四段式 —— ① 钩子标题 / ② 正文节奏 / ③ 视觉分层 / ④ CTA 或留白
+    实现层（Skill 层 / AI prompt 组装）解码提示：读字段前按 ContentType.production_mode + ContentType.output_format（视频 / 文案）分支；视频型走分镜解析器；文案型走文案骨架解析器；两套解析器共享字段名，解码逻辑在 Skill 层分叉
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field + 03_semantic（字段双义）+ 06_rule（按 output_format 分叉）可反推核心语义。
+    Gate 3：任意品牌内容平台凡有视频+文案混合 CT 都需要此规则。
+    Gate 4：直接被 content_generation 解码层消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: schema 元规则 / Skill 层解码标准；与笛语专属内容无关
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-output_format, owner_type: ContentType, field_name: output_format, data_type: string, value_set_id: VS-KP-product_attribute-storyboard-30s-dual-decoding-output_format}
+    - {field_id: FD-PlayCard-storyboard_30s, owner_type: ContentType, field_name: play_card_storyboard_30s, data_type: composite}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-storyboard-30s-dual-decoding-storyboard_30s, owner_field: play_card_storyboard_30s, definition: "30 秒分镜参考字段；视频型 CT 读为四段分镜（画面/声音/动作）；文案型 CT 读为四段文案骨架（钩子/正文/视觉/CTA）；解码按 output_format 分叉"}
+    - {semantic_id: SM-KP-product_attribute-storyboard-30s-dual-decoding-output_format, owner_field: output_format, definition: "ContentType 输出形态；当前两值 video / copy；新增形态走共享层升级"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-storyboard-30s-dual-decoding-output_format, value: video, label: "视频型（默认四段分镜读法）", ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-storyboard-30s-dual-decoding-output_format, value: copy, label: "文案型（四段文案骨架例外读法）", ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-product_attribute-storyboard-30s-dual-decoding, rule_type: storyboard_field_dual_decoding, applicable_when: "AI 读写玩法卡 30 秒分镜参考字段时", success_scenario: "按 output_format 自动选解析器跨 CT 字段名稳定", flip_scenario: "为文案型建新字段或文案按视频分镜读 → schema 漂移或荒谬产物", alternative_boundary: "C1 占位符不分叉；新增第三种 mode 走共享层升级"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-storyboard-30s-dual-decoding, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: §J.3 字段语义映射标准, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

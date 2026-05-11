@@ -1,0 +1,98 @@
+pack_id: KP-training_unit-customer-first-look-judgment
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客进店后的"第一眼判断"必须先识别她属于场景型 / 单品型 / 体感型 / 价格型四类之一，
+  再决定开口角度——一上来就报卖点、报价格、报面料几乎一定翻车，
+  因为顾客还没感觉到"你懂我"，导购的所有信息都落不进她的判断框。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 新人 / 入职 1-3 月的店员
+  when:
+    trigger: 顾客刚进店、停在某个区域看货、或主动走向单品时
+    context: 任意品类 / 任意时段 / 任意客流强度
+  what:
+    action_type: customer_first_look_classification
+    decision_or_action: |
+      错误动作：一上来就报卖点、报价格、报面料。
+      正确动作：先在 20 秒内观察并通过一句开放式问题（"今天是想解决什么场合"）
+        把顾客分入四类——场景型 / 单品型 / 体感型 / 价格型，再选定向开口路径。
+      为什么错：顾客还没感觉到"你懂我"，所有卖点都是噪音。
+      如何纠正：用本规则替代"一进门就讲卖点"的旧动作，先问场合，后切信息。
+      掌握检查：员工能在 20 秒内判断顾客属于哪一类，并说出判断依据
+        （顾客在哪个区域停、看的是单品还是整套、问的第一个问题是什么）。
+  result:
+    success_pattern: |
+      顾客感觉被理解，主动接住下一句问题；
+      接下来的推荐能命中她真正在意的维度，试穿质量明显提升。
+    flip_pattern: |
+      导购上来就背卖点，顾客回"再看看"或"我自己逛逛"；
+      整段接客陷入礼貌敷衍，门店损失这一单 + 这位顾客今天的耐心。
+  underlying_mechanism: |
+      顾客进店时已经在头脑里带着一个判断框（要解决什么场景 / 要找哪件衣服 /
+      担心什么体感 / 算多少钱）；导购的信息要进框才有效，
+      第一眼分类决定了之后所有信息能不能进框。
+  boundary:
+    applicable_when: 任何到店顾客 / 任何品类
+    not_applicable_when: |
+      老顾客且导购已熟知她偏好 → 跳过分类直接进入个性化推荐；
+      顾客已自带明确诉求（如"我想要昨天直播那条裙子"）→ 直接进入单品型路径。
+  alternative_path:
+    - 顾客拒绝回答场合问题 → 退回观察她停留的区域反推类型
+    - 顾客是结伴进店 → 先识别真买家，再做四类判断
+    - 多类特征同时存在 → 先按"她最在意的那一类"主导，其余作为辅助维度
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 五、首批高频接客场景 · C1 first_look_judgment
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    C1 first_look_judgment（第一眼判断顾客诉求）
+    正确动作：先看顾客是在找场景、找问题解法，还是找某件具体衣服
+    错误动作：一上来就报卖点、报价格、报面料
+    为什么错：顾客还没感觉到"你懂我"
+    怎么纠正：先问"今天是想解决什么场合"
+    学会判定：员工能在 20 秒内判断顾客属于"场景型/单品型/体感型/价格型"
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1 8 要素齐全；Gate 2 从 rule + value_set(customer_type) + relation 可反推
+    "20 秒分类四型 + 先问场合再切信息"；Gate 3 通用；Gate 4 store_training 可调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 不含笛语专属表达，是通用接客分类法。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field:
+    - {field_id: FD-CustomerScenario-customer_type, owner_type: CustomerScenario, field_name: customer_type, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-customer-first-look-judgment-customer_type, owner_field: customer_type, definition: "进店顾客四分类：场景型/单品型/体感型/价格型，决定开口路径"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-customer-first-look-judgment-customer_type, value: scenario_driven, label: 场景型, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-customer-first-look-judgment-customer_type, value: single_item_driven, label: 单品型, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-customer-first-look-judgment-customer_type, value: comfort_driven, label: 体感型, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-customer-first-look-judgment-customer_type, value: price_driven, label: 价格型, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-training_unit-customer-first-look-judgment, rule_type: customer_intake_classification, applicable_when: "顾客进店后导购第一次接触前 20 秒", success_scenario: "20 秒内分入 4 型并选定向开口，顾客被命中诉求愿意接话", flip_scenario: "上来报卖点/价格/面料，顾客回再看看，整段接客失效", alternative_boundary: "老顾客可跳过分类；明确单品型可直进单品路径"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-customer-first-look-judgment, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 五、C1 first_look_judgment, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm04, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["sales_associate"],"role_layer":"frontline"}'}
+    - {relation_id: RE-TrainingMaterial-fits_customer_scenario-CustomerScenario-tm04, source_type: TrainingMaterial, target_type: CustomerScenario, relation_kind: fits_customer_scenario, properties_json: '{"scenario":"first_look_intake"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-customer-first-look-judgment, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingScript"]}

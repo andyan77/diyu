@@ -1,0 +1,96 @@
+pack_id: KP-product_attribute-persona-shell-not-equal-role
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  通用 Persona 的语义定位是"对外说话身份壳"，不是"具体岗位本身"，也不是"讲专业术语的人"——
+  store_operator 不等于店长岗位、product_professional 不等于设计师岗位；
+  Persona 承接的是一组围绕业务主题的视角与口吻，岗位动作 / 术语 / 困境由挂接的 RoleProfile 提供。
+  在字典维护与 Prompt 组装时不许把 Persona 名当作岗位名使用，也不许把 Persona 字段值直接复用单一岗位的工作描述。
+
+scenario:
+  who:
+    primary_role: 知识工程 / Persona 字典维护者 / Prompt 模板维护
+    target_audience: 内容运营 / 岗位素材采集 / 字段填值
+  when:
+    trigger: 给 Persona 字段填值 / 写 Prompt 模板 / 收到"Persona = 岗位"的混用申请
+    context: 冷启动阶段；与"≤3 套 Persona"和"RoleProfile 不是说话身份壳"两条纪律并行
+  what:
+    action_type: persona_shell_vs_role_distinction
+    decision_or_action: |
+      错误一：把 store_operator 等同店长岗位，给字段填店长工作清单（缺仓库主管视角）。
+      错误二：让 product_professional 直接讲设计师术语，缺样衣工 / 设计总监 / 商品总监其它专业纹理。
+      正确：Persona 字段填"视角与口吻锚点"（如"从门店秩序看品牌生命力"），
+            岗位级动作 / 术语 / 困境通过挂接 RoleProfile 注入；
+            Prompt 组装时 Persona 选视角，RoleProfile 选岗位语境。
+  result:
+    success_pattern: |
+      同一 Persona 可被多 RoleProfile 共同支撑（如 product_professional 同时承接 designer / sample_worker /
+      design_director / merchandising_director 四岗），内容口吻一致而岗位纹理多样。
+    flip_pattern: |
+      Persona 退化为"店长号 / 设计师号"，单一岗位声音；其他岗位（如仓库主管 / 样衣工）失去承接面，
+      RoleProfile 价值被吃掉，多岗位企业事件无法多视角生成。
+  underlying_mechanism: |
+    Persona 是视角与口吻的"调用入口"；RoleProfile 是岗位真实感的"知识素材底座"。
+    二者解耦的好处：扩岗位不需新建 Persona、调口吻不需改 RoleProfile。
+    若混用，调用入口与素材底座耦合，扩展时整体重写。
+  boundary:
+    applicable_when: 通用 Persona 字段填值 / Prompt 模板设计 / 多岗位挂接同一 Persona
+    not_applicable_when: |
+      品牌唯一层 FounderProfile（本身就是"具体那个人"，不适用 shell-not-equal-role 的解耦）；
+      仅挂 1 个 RoleProfile 的过渡期 Persona（如 styling_advisor 当前仅挂 sales_associate）
+      仍要按身份壳填值，避免后续扩岗时返工。
+  alternative_path:
+    - role_type 字段单值 vs 多挂 RoleProfile 的 schema 争议 → 进 Pending（已记录在 KP-product_attribute-persona-six-field-shell）
+    - 字段需要岗位级具体动作 → 通过 RoleProfile 关系边引用，不直填进 Persona 字段
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md
+  source_anchor: 卡片 1 §1 / 卡片 2 §1 / 卡片 3 §1 + 卡片 1 §2.1 / 卡片 3 §2.1
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    store_operator（门店经营者）不是"店长岗位本身"，而是一个围绕门店经营与执行秩序的通用说话身份壳。
+    styling_advisor（穿搭顾问）不是"会卖货的人"，而是一个把商品语言翻译成顾客体感语言的通用说话身份壳。
+    product_professional（商品专业者）不是"讲专业术语的人"，而是一个把产品为什么成立、为什么不成立讲清楚的通用说话身份壳。
+    [role_type] 由于 store_operator 是通用 Persona 壳，不宜硬填成单一岗位；冷启动阶段由其挂接岗位共同支撑。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field(persona_definition_kind) + 04_value_set(speaking_shell vs single_role) + 06_rule(身份壳 ≠ 岗位)
+    + 05_relation(Persona-spoken_by_role-RoleProfile) 可反推"Persona 是身份壳 / 岗位走 RoleProfile / 字段填视角不填岗位动作"。
+    Gate 3：身份壳 vs 岗位的解耦原则跨品牌通用。
+    Gate 4：可被 Persona 字典校验与 Prompt 组装前置校验调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: Persona 语义定位的边界辨析，是 Schema 元规则的一部分，不含笛语专属内容
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+  field:
+    - {field_id: FD-Persona-persona_definition_kind, owner_type: Persona, field_name: persona_definition_kind, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-persona-shell-not-equal-role-shell, owner_field: persona_definition_kind, definition: "通用 Persona 是 speaking_shell（说话身份壳），不是 single_role（单一岗位）；岗位动作走挂接 RoleProfile"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-persona-shell-not-equal-role-kind, value: speaking_shell, label: 说话身份壳, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-persona-shell-not-equal-role-kind, value: single_role, label: 单一岗位（禁用）, ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-product_attribute-persona-shell-not-equal-role, rule_type: persona_shell_vs_role_distinction, applicable_when: "通用 Persona 字段填值或 Prompt 模板设计", success_scenario: "Persona 填视角口吻锚点，岗位动作通过 RoleProfile 注入，多岗位共同支撑同一 Persona", flip_scenario: "Persona 退化为单岗位声音，其他挂接岗位失去承接面，RoleProfile 价值被吃掉", alternative_boundary: "FounderProfile 不适用此解耦；过渡期单挂 RoleProfile 的 Persona 仍按壳填值"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-persona-shell-not-equal-role, source_md: Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md, source_anchor: 卡片 1/2/3 §1 + §2.1, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Persona-spoken_by_role-RoleProfile-shell_not_role, source_type: Persona, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"semantics":"persona_is_speaking_shell_roleprofile_provides_role_actions","cardinality":"1_persona_to_many_roleprofiles"}'}
+  lifecycle: []
+  call_mapping: []

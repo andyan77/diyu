@@ -1,0 +1,10 @@
+OT-Persona,Persona,domain_object,domain_general,KP-service_judgment-private-outlet-needs-sales-associate-base
+OT-RoleProfile,RoleProfile,domain_object,domain_general,KP-service_judgment-private-outlet-needs-sales-associate-base
+OT-PrivateOutletChannel,PrivateOutletChannel,domain_object,domain_general,KP-service_judgment-private-outlet-needs-sales-associate-base
+OT-Persona,Persona,domain_object,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+OT-RoleProfile,RoleProfile,domain_object,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+OT-Persona,Persona,domain_object,domain_general,KP-training_unit-founder-profile-soft-use-no-rename
+OT-Persona,Persona,domain_object,domain_general,KP-training_unit-persona-vs-roleprofile-layering
+OT-RoleProfile,RoleProfile,domain_object,domain_general,KP-training_unit-persona-vs-roleprofile-layering
+OT-Persona,Persona,domain_object,domain_general,KP-training_unit-roleprofile-not-speaking-shell
+OT-RoleProfile,RoleProfile,domain_object,domain_general,KP-training_unit-roleprofile-not-speaking-shell

@@ -1,0 +1,88 @@
+pack_id: KP-product_attribute-troop-facing-register-five-fields
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType 在"兵团向（受众是内部员工 / 学员 / 加盟商）"语境下，5 个字段的语义自动切换：北极星（north_star）、
+  服装行业钩子（apparel_hook）、实拍可行性（shooting_feasibility）、红线（red_lines）、AI 辅助边界（ai_boundary）——
+  这 5 个字段的字段名不变、字段壳不变，但读法切换为"对内员工训练"语义而非"对外消费者营销"语义。其余字段
+  （如 30 秒分镜参考、玩法档位等）解码逻辑不变。当一个 ContentType 的受众属性 = 兵团向 时，下游 Prompt 必须
+  按本切换口径解码这 5 字段，否则"训练 SOP"会被错读成"消费者钩子"。
+
+scenario:
+  who:
+    primary_role: ContentType 维护者 / Prompt 组装下游
+    target_audience: 内部培训类 ContentType（如 training_material）/ 未来加盟商 / 内部文化型 CT
+  when:
+    trigger: ContentType 受众属性标记为兵团向时；AI 解码 5 字段时
+    context: training_material 是首例兵团向 ContentType；裁决允许扩展到其他内部培训类 CT
+  what:
+    action_type: troop_facing_register_decoding
+    decision_or_action: 按受众属性自动选择 5 字段解码语义；字段名 / 字段壳 / 实际填写值仍写在各 CT 文件，不重复定义
+  result:
+    success_pattern: 一个兵团向 CT 的 5 字段被 AI 正确读为"训练目标 / 工作场景钩子 / 拍摄约束 / 培训红线 / AI 辅助员工的边界"，输出适合员工训练消费；新增内部 CT 时直接套用本口径不重新发明
+    flip_pattern: 不区分兵团向，把所有 CT 都按消费者向解码 → 培训 SOP 被改写成消费者钩子（"接客流程"被读成"吸睛标题"），员工拿到内容用不上；或反过来把消费者向 CT 错读为兵团向 → 把营销文案训成员工话术
+  underlying_mechanism: |
+      字段壳跨 CT 统一是为了减少 schema 漂移；语义按受众分叉是为了让同一字段在不同语境下被正确消费。
+      与 §J.3 storyboard 双解码同源——共享字段名 + Skill 层逻辑分叉 是控制 schema 膨胀的标准做法。
+  boundary:
+    applicable_when: ContentType 受众 = 兵团向时的 5 字段解码（north_star / apparel_hook / shooting_feasibility / red_lines / ai_boundary）
+    not_applicable_when: ContentType 受众 = 消费者向时按默认语义解码；本切换不涉及其他字段
+  alternative_path:
+    - 出现"对内 + 对外混合受众"的 ContentType → 拆为两个 CT 分别走不同口径，不允许单 CT 内部混读
+    - 新增第三种受众属性（如 B2B 客户向）→ 走共享层升级流程追加第 3 套切换口径
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: §H.5 兵团向口径
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    类型：ContentType 受众切换口径 (audience register switching protocol)
+    5 字段映射：北极星 (north_star) / 服装行业钩子 (apparel_hook) / 实拍可行性 (shooting_feasibility) / 红线 (red_lines) / AI 辅助边界 (ai_boundary) —— 这 5 个字段在"兵团向"语境下读法与"消费者向"不同
+    作用：当 ContentType 受众是"内部员工 / 学员 / 加盟商"而非"消费者"时，5 字段语义自动切换
+    可扩展性裁决：用户 2026-04-14 裁决：可扩展到其他内部培训类 CT —— 未来若有 internal_culture / franchise_onboarding 等内部向 ContentType，可直接套用本口径
+    维护原则：5 字段语义切换规则在本节登记 / 实际 5 字段值仍写在各 CT 文件
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field（受众属性 + 5 字段）+ 03_semantic（按受众分叉）+ 06_rule（解码切换）可反推"字段名稳 / 语义分叉 / 仅 5 字段切换"。
+    Gate 3：任意品牌内容平台凡有内部培训类 CT 都需此切换。
+    Gate 4：直接被 content_generation 解码层消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 受众切换 schema 元规则；与笛语专属内容无关
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-audience_register, owner_type: ContentType, field_name: audience_register, data_type: string, value_set_id: VS-KP-product_attribute-troop-facing-register-five-fields-audience_register}
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+    - {field_id: FD-ContentType-apparel_hook, owner_type: ContentType, field_name: apparel_hook, data_type: string}
+    - {field_id: FD-ContentType-shooting_feasibility, owner_type: ContentType, field_name: shooting_feasibility, data_type: string}
+    - {field_id: FD-ContentType-red_lines, owner_type: ContentType, field_name: red_lines, data_type: list_of_string}
+    - {field_id: FD-ContentType-ai_boundary, owner_type: ContentType, field_name: ai_boundary, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-troop-facing-register-five-fields-switch, owner_field: audience_register, definition: "ContentType 受众属性；当前两值 consumer_facing / troop_facing；troop_facing 时 north_star / apparel_hook / shooting_feasibility / red_lines / ai_boundary 5 字段语义自动切为对内员工训练读法"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-troop-facing-register-five-fields-audience_register, value: consumer_facing, label: "消费者向（默认读法）", ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-troop-facing-register-five-fields-audience_register, value: troop_facing, label: "兵团向（5 字段切对内训练读法）", ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-product_attribute-troop-facing-register-five-fields, rule_type: troop_facing_register_decoding, applicable_when: "ContentType.audience_register = troop_facing 时 5 字段解码", success_scenario: "5 字段读为对内训练语义新增内部 CT 直接套用", flip_scenario: "不分受众默认消费者向 → 培训 SOP 被读成消费者钩子员工拿到的内容用不上", alternative_boundary: "混合受众拆两 CT；新增第三种受众走共享层升级"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-troop-facing-register-five-fields, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: §H.5 兵团向口径, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

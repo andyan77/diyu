@@ -1,0 +1,87 @@
+pack_id: KP-product_attribute-shared-6-decision-dims
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  每个 Category 母类必须至少挂 6 个共用核心决策属性（color / material / fit / length / season / occasion），
+  并按母类需要叠加 1-3 个专属维度（如 tops_base 加 neckline / sleeve_length / layer_role）；
+  共用 6 维度未填齐的 Category 视为"决策不全"，不允许进入首轮搭配 / 陈列 / 培训系统消费。
+
+scenario:
+  who:
+    primary_role: Attribute 字典维护者 / 商品总监
+    target_audience: 所有消费 Attribute 的下游模块（推荐、陈列、培训）
+  when:
+    trigger: 新建或维护某个 Category 母类的属性挂载
+    context: 冷启动 P0；属性字典是 attribute dictionary 层硬纪律
+  what:
+    action_type: attribute_dimension_enforcement
+    decision_or_action: 强制每个 Category 至少挂 6 共用维度 + 母类专属维度
+  result:
+    success_pattern: 跨 Category 的搭配/陈列/培训查询能命中同一组核心维度，跨模块对话不卡词
+    flip_pattern: 某 Category 漏挂共用维度（如 tops_base 没标 season）→ 推荐与陈列在该 Category 失效
+  underlying_mechanism: |
+      共用 6 维度是模块间通用语；缺一个维度 = 跨模块对齐成本陡增。
+      母类专属维度是局部精度补充，不能替代共用维度。
+  boundary:
+    applicable_when: Category 体系建设与维护
+    not_applicable_when: 仅展示用字段（fabric_story / care_instruction 等不在此规则）
+  alternative_path:
+    - 母类无法挂某共用维度 → 进 skeleton_gap_register 说明原因，不静默跳过
+    - 出现新共用维度需求 → 走 Attribute 字典升级流程，不允许某 Category 单独加
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md
+  source_anchor: 6.2 每个母类的关键决策属性
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    冷启动统一要求：每个母类至少挂 6 个共用核心维度
+    color / material / fit / length / season / occasion
+    这是本轮硬冻结口径。
+    （后续 10 个母类各列出共用 6 维度 + 1-3 个母类专属维度）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 9 表（Attribute 对象 + 6 共用 value_set + 母类专属字段 + 强制规则）可反推"6 共用必填 + 母类专属补充 + 缺维度即决策不全"三条核心语义。
+    Gate 3：通用零售底座纪律。
+    Gate 4：可被 outfit_recommendation / display_guidance 任意调用前的字段校验消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用属性维护纪律，不含笛语专属
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Attribute, type_name: Attribute, supertype: domain_object}
+  field:
+    - {field_id: FD-Attribute-attribute_id, owner_type: Attribute, field_name: attribute_id, data_type: string}
+    - {field_id: FD-Attribute-attribute_name, owner_type: Attribute, field_name: attribute_name, data_type: string}
+    - {field_id: FD-Attribute-decision_level, owner_type: Attribute, field_name: decision_level, data_type: enum}
+    - {field_id: FD-Attribute-used_in_modules, owner_type: Attribute, field_name: used_in_modules, data_type: list_of_string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-shared-6-decision-dims-shared_core, owner_field: attribute_name, definition: "共用核心决策维度：跨 Category 必填的 6 个 Attribute（color / material / fit / length / season / occasion）"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-shared-6-decision-dims-shared_core, value: color, label: 颜色, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-shared-6-decision-dims-shared_core, value: material, label: 材质, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-shared-6-decision-dims-shared_core, value: fit, label: 版型, ordinal: 3}
+    - {value_set_id: VS-KP-product_attribute-shared-6-decision-dims-shared_core, value: length, label: 长度, ordinal: 4}
+    - {value_set_id: VS-KP-product_attribute-shared-6-decision-dims-shared_core, value: season, label: 季节, ordinal: 5}
+    - {value_set_id: VS-KP-product_attribute-shared-6-decision-dims-shared_core, value: occasion, label: 场合, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-product_attribute-shared-6-decision-dims, rule_type: attribute_dimension_enforcement, applicable_when: "Category 建设或维护时", success_scenario: "6 共用维度齐全跨模块查询不卡词", flip_scenario: "某 Category 漏挂共用维度→推荐与陈列在该 Category 失效", alternative_boundary: "无法挂→进 skeleton_gap_register；新维度→走字典升级"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-shared-6-decision-dims, source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md, source_anchor: 6.2, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Attribute-has_attribute-Category-shared01, source_type: Category, target_type: Attribute, relation_kind: has_attribute, properties_json: '{"required":["color","material","fit","length","season","occasion"],"polarity":"all_categories"}'}
+  lifecycle: []
+  call_mapping: []

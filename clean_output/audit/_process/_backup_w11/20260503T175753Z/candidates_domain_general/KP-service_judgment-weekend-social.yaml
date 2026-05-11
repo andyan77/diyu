@@ -1,0 +1,71 @@
+pack_id: KP-service_judgment-weekend-social
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"周末出去吃饭、逛街、拍照，想穿得有点感觉"时，导购第一动作是先问见谁（朋友/对象/家人）+ 想要松弛/精致/显气色哪一种状态，
+  再决定推什么；周末社交客买的是状态感不是实用，断码只能"同气质转"，绝不能从松弛硬转商务。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: weekend_social（周末社交型）顾客
+  when:
+    trigger: 顾客原话"周末出去吃饭/逛街/拍照，想穿得有点感觉"
+    context: 周五至周日接客高峰；顾客带社交目的而非任务目的
+  what:
+    action_type: vibe_first_then_garment
+    decision_or_action: |
+      第一步：问见谁（朋友/对象/家人）。
+      第二步：问想要松弛感、精致感还是显气色。
+      第三步：先陈列后开口——把同气质成套位指给她看，再开口介绍。
+      第四步：第二套、第三套是关键，要叠"状态感"而不是"还能怎么穿"。
+  result:
+    success_pattern: 顾客在成套位前停留并主动问，整套或主件带走，回头率高
+    flip_pattern: 把周末客按通勤客推（强调耐穿百搭），顾客觉得"和我场景没关系"，礼貌走人
+  underlying_mechanism: |
+      周末社交客的购买动机是"被看见的状态"，不是"被使用的次数"；
+      用通勤逻辑解释会消解状态价值，气质硬转更直接破坏信任。
+  boundary:
+    applicable_when: 周末/节前接客；带社交目的的客流
+    not_applicable_when: 顾客明确"周末也是上班"或"只是顺路逛逛" → 转通勤或随便看路径
+  alternative_path:
+    - 库存断码 → 同气质换款（松弛仍是松弛，精致仍是精致）
+    - 顾客犹豫第二套 → 增加"拍照效果""场合预演"话术，不增 SKU 数
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、3. weekend_social + 三、4）先陈列后开口
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："周末出去吃饭、逛街、拍照，想穿得有点感觉。"
+    店员第一反应：先问是见朋友、见对象、见家人，想要松弛、精致还是显气色。
+    最容易卡住：第二套、第三套。因为顾客买的不是实用，是状态感。
+    库存不理想怎么转向：可救，但只能同气质转。不能从松弛感硬转商务感。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 display_guidance（先陈列后开口）联动。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用周末接客逻辑，不含品牌专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-weekend-social}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-weekend-social}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-weekend-social}
+    - {mapping_id: CM-display_guidance-KP-service_judgment-weekend-social}

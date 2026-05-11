@@ -1,0 +1,72 @@
+pack_id: KP-service_judgment-shape-correction
+granularity_layer: L3
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"我胯大/肩宽/腿粗，给我找个修一点的"时，导购第一动作是先定位她最在意的身体部位，再确认能接受的松量、长度、腰线、露肤点；
+  这类客买的是安全感不是衣服——关键版型/长度/落肩不对，话术再好都不能救，断码必须直接转向不能硬推。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: shape_correction（显瘦修身型）顾客
+  when:
+    trigger: 顾客原话"我胯大/肩宽/腿粗/腰短，给我找个修一点的"
+    context: 试衣前自我披露身体顾虑；多见于熟客或自我意识强的新客
+  what:
+    action_type: body_anchor_then_fit_lock
+    decision_or_action: |
+      第一步：定位她最在意的部位（胯/肩/腿/腰）。
+      第二步：确认 4 个可接受参数——松量、长度、腰线、露肤点。
+      第三步：先按参数筛款，第一套必须命中关键参数；第二、三套是显瘦细节迭代。
+      第四步：关键版型/长度/落肩断码 → 直接告知本店当前救不了，不许换色硬推。
+  result:
+    success_pattern: 顾客在镜子前主动转身、放松，接受第二/三套微调；建立长期信任
+    flip_pattern: 用"不会显胖"等空话搪塞，关键参数没对上，顾客脱掉就走且不再回头
+  underlying_mechanism: |
+      显瘦客的购买决策中"被照顾感"权重 > "时髦度"；
+      关键参数（落肩/腰线/裙长）是身体安全感的物理锚点，错位无法用话术补救。
+  boundary:
+    applicable_when: 顾客主动披露身体顾虑的接客
+    not_applicable_when: 顾客自带身材自信、追求廓形/oversize 风格 → 走 weekend_social 或 new_item 路径
+  alternative_path:
+    - 关键参数库存断 → 转告"这版我们当前救不了"，预留下次到货
+    - 顾客顾虑模糊（说"全身都不太满意"） → 用 1 件试穿建立基线再细化
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、4. shape_correction + 三、3）断码不救
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："我胯大/肩宽/腿粗，你给我找个修一点的。"
+    店员第一反应：先定位她最在意的身体部位，再确认她能接受的松量、长度、腰线和露肤点。
+    最容易卡住：第二套、第三套最容易翻车。因为她不是在买衣服，是在买安全感。
+    库存不理想怎么转向：原则上不硬救。关键版型、关键长度、关键落肩不对，话术再好都不能救。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与"必须先问再推"+"断码不救"两类总裁决联动。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用显瘦接客逻辑，跨女装零售门店复用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-shape-correction}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-shape-correction}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-shape-correction}
+    - {mapping_id: CM-outfit_recommendation-KP-service_judgment-shape-correction}

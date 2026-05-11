@@ -1,0 +1,26 @@
+=== 硬门 8 · brand_layer CHECK 约束反例 demo ===
+
+DDL applied:
+CREATE TABLE t (
+    brand_layer TEXT NOT NULL,
+    CHECK (brand_layer = 'domain_general'
+           OR brand_layer = 'needs_review'
+           OR (brand_layer GLOB 'brand_[a-z]*'
+               AND brand_layer NOT GLOB '*[^a-z_]*'
+               AND length(brand_layer) > 6))
+);
+
+--- 反例（应全部 fail）---
+  ✅ 'brand_' 拒绝 (空尾巴：长度 6，不满足 length>6)
+  ✅ 'brand_X' 拒绝 (大写字母 X，不满足 GLOB 'brand_[a-z]*')
+  ✅ 'brand_with-dash' 拒绝 (横线 -，被 NOT GLOB '*[^a-z_]*' 排除)
+  ✅ 'brand_中文' 拒绝 (非 ASCII，被 NOT GLOB '*[^a-z_]*' 排除)
+
+--- 正例（应全部 ok）---
+  ✅ 'domain_general' 接受 (通用层)
+  ✅ 'needs_review' 接受 (待审)
+  ✅ 'brand_xyz' 接受 (品牌 xyz)
+  ✅ 'brand_a_b' 接受 (下划线连缀)
+
+反例 4/4 · 正例 4/4
+exit=0

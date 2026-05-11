@@ -1,0 +1,85 @@
+pack_id: KP-product_attribute-content-type-north-star-personal-vlog
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `personal_vlog`（个人 Vlog）的北极星是"我陪这个人过了一小段真实生活，
+  对他产生真实好感与信任，愿意继续跟着他"——观众接住的是"你这个人"而不是"通用漂亮"。
+  这条北极星把 personal_vlog 与 daily_fragment 的硬区分锁定为"一天的连续感 vs 不连续瞬间集合"，
+  并把"算法奖励有灵魂的内容而非有套路的内容"作为反 AI 模板化的核心判型——
+  **personal_vlog 的招牌不是流水账，是真实波动 + 微脆弱 + 留白**。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / personal_vlog 内容生产 prompt 组装者
+    target_audience: personal_vlog 创作者 / AI 内容审核
+  when:
+    trigger: 新增 personal_vlog 玩法卡或审核一条 vlog 内容是否成立时
+    context: 7 份个人创作类 ContentType 之首，与 daily_fragment 共用大量元素但叙事结构相反
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"陪过一小段真实生活 / 真实好感 / 连续感"作为 vlog 玩法成立判定
+  result:
+    success_pattern: |-
+      玩法呈现"真实波动 / 微脆弱独白 / 留白时刻 / 反高潮 / 同地点不同时刻"
+      等连续感与人物质地 → 进 C2/C3 档
+    flip_pattern: |-
+      流水账打卡 / 通用漂亮模板 / 强配乐+滤镜替代真实质感 → 主流禁用；
+      没有"一天的连续感"且只剩瞬间集合 → 应归 daily_fragment 而非 personal_vlog
+  underlying_mechanism: |
+      personal_vlog 的灵魂是"陪伴感"——观众消费的是"陪你活了 60 秒的体感"，
+      所以连续性与真实波动是必要条件；通用漂亮和算法套路反而稀释陪伴感。
+  boundary:
+    applicable_when: personal_vlog 玩法库扩张 / 单条 vlog 审核 / 与 daily_fragment 边界判定
+    not_applicable_when: 内容核心是"门店空间运营节奏" → store_daily；核心是"老板这个人" → founder_ip
+  alternative_path:
+    - 不露脸不等于 daily_fragment——personal_vlog 也允许不露脸（B3 物件痕迹），区分点是"连续感"而非"是否露脸"
+
+evidence:
+  source_md: Q2-内容类型种子/personal_vlog-交付物-v0.1.md
+  source_anchor: §A 北极星 + §B5 情绪元素 + 与 daily_fragment 边界（daily_fragment 文件 §与试点版差异）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完不是"我知道你今天干了什么"，而是"我陪这个人过了一小段真实生活，
+    对他产生真实好感与信任，愿意继续跟着他"。
+    compass_artifact：算法在奖励"有灵魂的内容"而非"有套路的内容"；
+    观众接收的应该是"你这个人"，不是"通用漂亮"。
+    daily_fragment 差异点：personal_vlog 有"一天的连续感"，daily_fragment 是"不连续的瞬间集合"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"陪伴感 / 连续性 vs 不连续性 / 反通用漂亮 / 与 store_daily-founder_ip 边界"四条核心语义。
+    Gate 3：跨品牌通用——任意品牌人格化内容（创始人/导购/员工）做 personal_vlog 都需此锚点。
+    Gate 4：可被 content_generation 调用做 vlog 玩法选型 / 与 daily_fragment 路由判定。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论；陪伴感与连续性跨品牌通用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-personal-vlog-pv_north_star, owner_field: north_star, definition: "personal_vlog 北极星：陪伴感 + 连续性 + 真实波动；与 daily_fragment 边界 = 连续 vs 不连续"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-personal-vlog, rule_type: content_type_north_star_anchor, applicable_when: "新增 personal_vlog 玩法卡或审核 vlog 内容时", success_scenario: "玩法有连续感+真实波动+微脆弱 → 进 C2/C3", flip_scenario: "流水账+通用漂亮模板 → 主流禁用；无连续感 → 应归 daily_fragment", alternative_boundary: "不露脸不等于 daily_fragment——区分点是连续性"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-personal-vlog, source_md: Q2-内容类型种子/personal_vlog-交付物-v0.1.md, source_anchor: §A + §B5 + 与 daily_fragment 差异, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-personal_vlog-pv1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"personal_vlog"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-personal-vlog, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

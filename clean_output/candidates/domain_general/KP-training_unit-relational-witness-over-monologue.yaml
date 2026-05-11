@@ -1,0 +1,72 @@
+pack_id: KP-training_unit-relational-witness-over-monologue
+granularity_layer: L3
+
+runtime_asset:
+  runtime_asset_id: RA-training_unit-relational-witness-over-monologue
+  asset_type: action_template
+  title: "关系见证替代独白"
+  summary: "用人与人之间的反应和见证动作承载表达，替代单人长篇独白。"
+  source_pointer: "candidates/.../KP-training_unit-relational-witness-over-monologue.yaml#runtime_asset"
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 服装情绪 / 测评 / 门店日常类内容应优先用"关系介入或第三方见证"（妈妈审评、同事递水杯、店员替顾客翻领、伴侣搭外套）取代"自我独白对镜怼脸"——观众更信"家里人会怎么说"和真实关系动作，而不是自我宣讲。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: product_review / store_daily / emotion_expression
+  when:
+    trigger: 生成主角型 / 情绪型短视频脚本
+    context: 单人对镜独白（金句+伤感 BGM / 哭诉式情绪外放 / 一连串"姐妹冲"）已饱和；mom's official review、双人吐槽、关系映照在中外平台都被验证为有效分支
+  what:
+    action_type: structure_choice_rule
+    decision_or_action: 优先采用双人 / 多人 / 关系视角脚本：让第二个真实关系人介入做"不中听但有用"反应；门店见证关系（一对母女在同件外套上停手、店员替顾客整理裤脚、有人犹豫 20 秒后买单）；用关系动作而非独白搭载情绪
+  result:
+    success_pattern: 单条内容因为关系真实动作（妈妈帮翻后领、同事摘工牌、伴侣披外套）形成"被看见"的体验，观众投射性高，转发收藏率高
+    flip_pattern: 主角对镜怼脸自我独白 + 大字金句，观众识别为模板情绪表演，疲劳率高
+  underlying_mechanism: 单人独白是"自我宣讲"，关系介入是"社会判断"——后者更接近真实购买与生活场景；服装作为关系介质（替选 / 帮看 / 共同犹豫 / 翻领披衣）天然带温度
+  boundary:
+    applicable_when: 测评 / 情绪表达 / 门店日常；尤其需要建立信任 / 真实感的内容
+    not_applicable_when: 主理人 IP / 创始人独白类核心人设视频（founder_ip 类有自己的独白逻辑，不在本规则约束内）
+  alternative_path:
+    - 双人同框 / 画外音吐槽
+    - 关系映照（家人/同事/伴侣的小动作）
+    - 门店作为关系见证者（不拍脸只拍关系碎片）
+
+evidence:
+  source_md: Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md
+  source_anchor: 三份 md 的"关系型测评让第二个人来拆穿你""门店视角的关系短片""情绪不是悲伤是被关系轻轻扶了一下""mom's official review"
+  source_type: cross_source_consensus
+  inference_level: low
+  evidence_quote: |
+    通用类.md：单人测评容易像自说自话；第二个真实关系人的介入，会把"审美判断"变成"社会判断"。POV: my mom's official review of this haul 这类玩法之所以有效，是因为观众更信"家里人会怎么说"。
+    通用类.md：今天来店里的人都不露脸，只留下"关系碎片"：一对母女的两只手在同一件外套上停了一下；店员蹲下帮顾客整理裤脚……门店像一个观察者。
+    通用类.md：情绪不是悲伤，是被关系轻轻扶了一下；妈妈把外套搭到你椅背上、同事把你忘在店里的水杯递过来。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 内容结构层规则，跨 ContentType 复用
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用情绪与真实感建构规则，与品牌无关
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType]
+  field: []
+  semantic: [SM-relational-witness-over-monologue]
+  value_set: [VS-relational-content-structures]
+  relation: []
+  rule: [RL-relational-witness-over-monologue]
+  evidence: [EV-relational-witness-over-monologue]
+  lifecycle: []
+  call_mapping: [CM-content_generation-relational-witness]

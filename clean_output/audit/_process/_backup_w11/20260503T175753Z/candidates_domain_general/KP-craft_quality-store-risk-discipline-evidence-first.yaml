@@ -1,0 +1,113 @@
+pack_id: KP-craft_quality-store-risk-discipline-evidence-first
+schema_version: candidate_v1
+pack_type: craft_quality
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  门店统一风险口径必须建立在"看证据、不看感觉"上——
+  能不能机洗看洗护标 / 会不会缩看预缩水洗定型 / 会不会皱看纤维织法整理 /
+  会不会透看颜色厚度织法光线 / 会不会起球看摩擦场景 / 会不会勾丝看表面与场景 /
+  会不会显廉价看面料表情 + 缝制 + 收口 + 光泽控制 / 会不会翻车看顾客穿着习惯与容忍度。
+
+scenario:
+  who:
+    primary_role: 门店导购 / store_manager（店长）/ training_lead
+    target_audience: 全体一线店员；尤其用"摸起来稳""挂起来平""看起来不掉色"等感觉判断的店员
+  when:
+    trigger: 顾客发问任何"会不会缩 / 起球 / 透 / 勾丝 / 翻车"类问题；店员准备凭手感经验回答
+    context: 任何面料 / 工艺推荐场景；陈列点 / 试衣间 / 品宣口径
+  what:
+    action_type: store_unified_risk_voice
+    decision_or_action: |
+      把八类风险问题的回答口径统一锁定为"看证据"——
+      机洗看洗护标 / 缩水看预缩水洗定型 / 起皱看纤维织法整理 / 透看颜色厚度织法光线 /
+      起球看摩擦场景 / 勾丝看表面精细度与使用场景 / 显廉价看面料表情+缝制+收口+光泽控制 /
+      翻车看顾客穿着习惯和容忍度；
+      店员凡是基于感觉判断的回答都视为不合规话术。
+  result:
+    success_pattern: |
+      店员回答风险问题时统一引用"证据维度"，话术稳定一致；
+      顾客感受到专业可靠，售后纠纷率下降，跨门店口径无冲突。
+    flip_pattern: |
+      凭"摸起来稳""挂着不皱""不会掉色吧"等感觉回答 → 实际洗后翻车 → 退换或差评；
+      不同店员回答同一问题口径不同 → 顾客失信。
+  underlying_mechanism: |
+      手感判断是单时间点静态信息；面料表现是材料属性 × 时间 × 使用场景的累积函数；
+      只有"洗护标 / 预缩水洗定型 / 织法整理 / 摩擦场景 / 顾客习惯"这些证据维度
+      才能预测多时间点累积表现。
+  boundary:
+    applicable_when: 所有门店面料 / 工艺风险口径；任何 8 类风险问题（缩 / 起球 / 褪色沾色 / 透 / 勾丝 / 静电 / 摩擦发亮 / 机洗烘干）
+    not_applicable_when: |
+      明确做"短时穿着 / 一次性派对 / 拍摄道具"语境；
+      非门店现场的销售类型（如直播带货另有口径）。
+  alternative_path:
+    - 如果没有明确证据 → 改用"建议先单洗 + 大一码 + 同色洗"等代偿话术
+    - 如果顾客坚持要直答 → 给出基于证据的概率描述而非保证
+    - 如果证据相互矛盾 → 优先取洗护标 / 厂方明示 > 店员经验
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 七、必须提前说清的风险提示，正式冻结为门店统一口径
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    能不能机洗，看洗护标，不看感觉。
+    会不会缩水，看预缩 / 水洗 / 定型，不看"摸起来稳不稳"。
+    会不会起皱，看纤维、织法、整理，不看它挂着时平不平。
+    会不会透，看颜色、厚度、织法、光线，不看静态陈列。
+    会不会起球，看摩擦场景，不只看材质名。
+    会不会勾丝，看表面精细度和使用场景，不只看价格。
+    会不会显廉价，看面料表情、缝制、收口、光泽控制，不看营销词。
+    会不会翻车，看顾客穿着习惯和容忍度，不看镜前第一眼。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"统一证据口径 + 八类风险对应证据维度 + 反感觉判断"。
+    Gate 3：跨门店通用统一口径。
+    Gate 4：可被 store_training / outfit_recommendation / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用门店统一口径方法论，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CraftKnowledge, type_name: CraftKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-craft_quality-store-risk-discipline-evidence-first-evidence_first, owner_field: craft_feature, definition: "门店统一风险口径建立在看证据不看感觉上，每类风险都对应特定证据维度"}
+  value_set:
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-risk_kind, value: machine_wash, label: 能不能机洗}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-risk_kind, value: shrink, label: 会不会缩水}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-risk_kind, value: wrinkle, label: 会不会起皱}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-risk_kind, value: see_through, label: 会不会透}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-risk_kind, value: pilling, label: 会不会起球}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-risk_kind, value: snag, label: 会不会勾丝}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-risk_kind, value: cheap_look, label: 会不会显廉价}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-risk_kind, value: post_purchase_fail, label: 会不会翻车}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-evidence_dim, value: care_claim, label: 洗护标}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-evidence_dim, value: preshrink_wash_set, label: 预缩水洗定型}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-evidence_dim, value: fiber_weave_finishing, label: 纤维织法整理}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-evidence_dim, value: color_thickness_weave_light, label: 颜色厚度织法光线}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-evidence_dim, value: friction_scenario, label: 摩擦场景}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-evidence_dim, value: surface_finesse_use_scenario, label: 表面精细度与使用场景}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-evidence_dim, value: fabric_expression_stitching_finishing_gloss, label: 面料表情+缝制+收口+光泽控制}
+    - {value_set_id: VS-KP-craft_quality-store-risk-discipline-evidence-first-evidence_dim, value: customer_habit_tolerance, label: 顾客穿着习惯与容忍度}
+  rule:
+    - {rule_id: RL-KP-craft_quality-store-risk-discipline-evidence-first, rule_type: store_unified_voice, applicable_when: "店员回答任何 8 类风险问题", success_scenario: "按风险种类引用对应证据维度回答 → 跨门店口径稳定 顾客信任", flip_scenario: "凭手感/感觉/挂着平判断 → 洗后翻车 → 退换/差评", alternative_boundary: "无证据→用代偿话术；坚持直答→基于证据的概率描述；证据冲突→洗护标>店员经验"}
+  evidence:
+    - {evidence_id: EV-KP-craft_quality-store-risk-discipline-evidence-first, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 七、门店统一口径, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-craft_quality-store-risk-discipline-evidence-first, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-craft_quality-store-risk-discipline-evidence-first, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-content_generation-KP-craft_quality-store-risk-discipline-evidence-first, runtime_method: content_generation, input_types: [Product, CraftKnowledge], output_types: [ProductCopy]}

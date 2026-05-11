@@ -1,0 +1,84 @@
+pack_id: KP-product_attribute-content-type-north-star-talent-showcase
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `talent_showcase`（才艺展示）的北极星是"观众看完不只是觉得'你很厉害'，而是
+  '你的能力有个性、有温度、能留下你这个人'——感到能力可信、可持续，并愿意把你当作'值得追随的人'"。
+  这条北极星把才艺展示从"技术炫耀 / 简历式拼盘"反向定义为"世界观构建 + 关系外溢"——
+  所有 talent_showcase 玩法卡是否成立必须按此反推：只剩成品 / 卡点炫技 / 简历式合集，全部判主流默认禁用。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: talent_showcase 内容创作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 talent_showcase 玩法卡，或对一条才艺内容做"是否符合 ContentType 北极星"判断时
+    context: 18 份 ContentType 交付物各有独立北极星，是单 CT 内容生产的判型锚点
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"能力有温度 / 留下你这个人 / 值得追随"作为玩法是否成立的最终判定
+  result:
+    success_pattern: |-
+      玩法卡能反映"过程笨拙 / 救场服务 / 微技能累积 / 传递给他人 / 反预期场景下的能力外溢"
+      → 通过北极星映射 → 进 C2 进阶或 C3 突破档
+    flip_pattern: |-
+      玩法卡只剩正面站桩展示完成品 / 卡点混剪炫技 / 高光合集
+      → 北极星映射 ❌ → 主流默认禁用档（看完只记得你会，不记得你是谁）
+  underlying_mechanism: |
+      才艺最终的吸引力不在结果而在"控制力 + 关系"。观众接住的是"这个人真的练过 / 这个人愿意把能力外溢给别人"，
+      而不是"这个人很有天赋"。简历式高光摧毁稀缺性；过程与服务化建立可信度。
+  boundary:
+    applicable_when: 单 ContentType 内容创作判型 / talent_showcase 玩法库扩张时的卡片新增门禁
+    not_applicable_when: knowledge_sharing（教消费者）/ role_work_vlog（岗位日常展示）——同动作不同 CT 归属
+  alternative_path:
+    - 与 knowledge_sharing 边界：修补 / 改造若以"教别人方法"为重心 → knowledge_sharing；若以"展示我会做"为重心 → talent_showcase（用户已裁决延后到边界矩阵任务）
+
+evidence:
+  source_md: Q2-内容类型种子/talent_showcase-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流默认禁用 2 张卡 + §E 红线 6 条
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完不只是"你很厉害"，而是"你的能力有个性、有温度、能留下你这个人"——
+    感到能力可信、可持续，并愿意把你当作"值得追随的人"。
+    compass：从"技术炫耀"到"世界观构建"。
+    E3：把才艺拍成炫耀，观众只会敬而远之。
+    E4：只给炫技不给人格——观众很快滑走。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。Gate 2：从 06_rule + 02_field（ContentType.north_star）+ 05_relation 可反推
+    "talent_showcase 北极星 = 能力有温度可追随 / 主流两类禁用 / 与 knowledge_sharing 边界"。
+    Gate 3：跨品牌 ContentType 内容创作通用判型。Gate 4：可被 content_generation 调用作为 talent_showcase 玩法选型门禁。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论——任意品牌的 talent_showcase 内容都需此锚点，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-talent-showcase-ts_north_star, owner_field: north_star, definition: "talent_showcase ContentType 的北极星：能力有温度 / 留下你这个人 / 值得追随——主流禁用两类（正面站桩展示完成品 / 卡点混剪炫技）的判型锚点"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-talent-showcase, rule_type: content_type_north_star_anchor, applicable_when: "新增 talent_showcase 玩法卡或审核一条才艺内容时", success_scenario: "玩法呈现过程笨拙/救场/微技能/传递/反预期场景 → 进 C2/C3", flip_scenario: "只剩成品展示 / 卡点炫技 / 高光合集 → 主流默认禁用", alternative_boundary: "与 knowledge_sharing 按叙事重心二选一"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-talent-showcase, source_md: Q2-内容类型种子/talent_showcase-交付物-v0.1.md, source_anchor: §A + §C1 + §E, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-talent_showcase-ts1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"talent_showcase"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-talent-showcase, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

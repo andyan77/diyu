@@ -1,0 +1,110 @@
+pack_id: KP-training_unit-role-binding-frontline-priority
+granularity_layer: L3
+
+runtime_asset:
+  runtime_asset_id: RA-training_unit-role-binding-frontline-priority
+  asset_type: role_split
+  title: "前线岗位优先分工"
+  summary: "首批培训优先绑定店长导购仓库主管三类前线岗位，避免资源喂给次级岗位。"
+  source_pointer: "candidates/.../KP-training_unit-role-binding-frontline-priority.yaml#runtime_asset"
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  首批培训单元必须挂接到"会接、会摆、会救场"的前线 3 个核心岗位——
+  store_manager（门店店长）/ sales_associate（导购）/ warehouse_supervisor（仓库主管），
+  而不是优先发给 merchandising_director / designer / sample_worker 等次级岗位；
+  顺序倒过来 = 培训资源喂给最不缺培训的人，前线该会的还是不会。
+
+scenario:
+  who:
+    primary_role: 培训组织者 / HR
+    target_audience: 全岗位
+  when:
+    trigger: 编排首批培训对象 / 决定培训资源分配 / 评估为什么前线没改善
+    context: 冷启动 / 新店 / 大批新人入职 / 季度培训规划
+  what:
+    action_type: training_role_binding
+    decision_or_action: |
+      错误动作：把培训资源优先发给总部岗位（商品总监 / 设计师 / 样衣工），
+        前线只发简化版或不发。
+      正确动作：每个 TrainingMaterial 在 RoleProfile 关系上首位绑定核心 3 岗，
+        次级岗位作为 secondary，明确顺序 store_manager > sales_associate > warehouse_supervisor。
+      为什么错：服装零售的胜负在前线，前线是培训最该投入的对象；
+        总部岗位有 PPT 但没有顾客接触面，培训作用边际低。
+      如何纠正：用本规则审计已上线培训单元，前线没绑定的立刻改型。
+      掌握检查：每个 TrainingMaterial 的 spoken_by_role 关系都至少含核心 3 岗中的 2 个，
+        且 role_layer 标签为 frontline。
+  result:
+    success_pattern: |
+      培训资源精准落到前线 3 岗，门店执行率提升；
+      次级岗位通过观察前线已有改善后再进入。
+    flip_pattern: |
+      培训以总部为先，前线被边缘化，门店执行始终拉不起来；
+      "总部都培训过了为什么门店还是这样" → 资源错配的典型症状。
+  underlying_mechanism: |
+      培训对成交的杠杆 = 岗位的客户接触强度 × 错误发生频率；
+      前线 3 岗在两个维度都最高，是培训 ROI 最高的岗位。
+  boundary:
+    applicable_when: 冷启动 / 首批培训对象编排 / 培训资源分配复盘
+    not_applicable_when: |
+      纯设计与开发类知识（面料工艺前置） → 优先 designer / sample_worker；
+      合规与流程性培训 → 全岗位均覆盖，不走前线优先。
+  alternative_path:
+    - 仓库主管暂未到岗 → 由店长兼任接收，待仓主上岗后转交
+    - 单店人手紧张 → 优先 sales_associate，store_manager 自学
+    - 培训资源足 → 同步给次级岗位作为参考，但不替代前线优先
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 十三、首批岗位挂接 · role_profile_binding
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    核心岗位：store_manager（门店店长）/ sales_associate（门店店员 / 导购）/
+    warehouse_supervisor（仓库主管）。
+    次级岗位：merchandising_director（商品总监）/ designer（设计师）/ sample_worker（样衣工）。
+    理由很直接：首批训练最需要的人，不是总部 PPT 人，而是前线会接、会摆、会救场的人。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1 8 要素齐全。Gate 2 rule + value_set(role_core/role_secondary) + relation 可反推
+    "前线 3 岗优先 + 次级 3 岗后置"。Gate 3 通用。Gate 4 store_training 可调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用前线优先培训分配原则。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+  field:
+    - {field_id: FD-RoleProfile-role_layer, owner_type: RoleProfile, field_name: role_layer, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-role-binding-frontline-priority-role_layer, owner_field: role_layer, definition: "岗位分层：frontline 前线 / headquarters 总部，决定培训优先级"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-role-binding-frontline-priority-role_core, value: store_manager, label: 门店店长, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-role-binding-frontline-priority-role_core, value: sales_associate, label: 门店店员/导购, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-role-binding-frontline-priority-role_core, value: warehouse_supervisor, label: 仓库主管, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-role-binding-frontline-priority-role_secondary, value: merchandising_director, label: 商品总监, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-role-binding-frontline-priority-role_secondary, value: designer, label: 设计师, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-role-binding-frontline-priority-role_secondary, value: sample_worker, label: 样衣工, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-training_unit-role-binding-frontline-priority, rule_type: training_role_binding_priority, applicable_when: "首批培训对象编排或培训资源分配复盘", success_scenario: "前线 3 岗优先绑定 TrainingMaterial，门店执行率提升", flip_scenario: "总部岗位优先，前线边缘化，门店执行长期拉不起来", alternative_boundary: "纯设计开发知识优先 designer/sample_worker；合规流程类全岗位覆盖"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-role-binding-frontline-priority, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 十三、role_profile_binding, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm12-core, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["store_manager","sales_associate","warehouse_supervisor"],"role_layer":"frontline","priority":"primary"}'}
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm12-sec, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["merchandising_director","designer","sample_worker"],"role_layer":"headquarters","priority":"secondary"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-role-binding-frontline-priority, runtime_method: store_training, input_types: ["TrainingMaterial","RoleProfile"], output_types: ["TrainingDispatchPlan"]}

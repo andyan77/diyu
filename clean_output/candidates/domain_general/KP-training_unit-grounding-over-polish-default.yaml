@@ -1,0 +1,80 @@
+pack_id: KP-training_unit-grounding-over-polish-default
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  AI 内容生成的默认审美方向必须是"grounding（贴地真实）压倒 polished（精致光滑）"——AI 不应该生成
+  "看起来很 AI"的内容；宁可少给用户选项，也不给模板化套路。具体执行：默认禁用 C1 主流玩法（精致流水账 /
+  金句宣言 / 通用治愈 BGM 拼贴），优先 C3 突破性玩法（允许失焦 / 留白 / 狼狈）；AI 生成时不堆砌通用 BGM、
+  统一滤镜、模板化转场。
+
+scenario:
+  who:
+    primary_role: AI 内容生成调度器 / 平台审美策略层
+    target_audience: 所有内容创作者 / 所有 ContentType 产出
+  when:
+    trigger: AI 选玩法 / 选元素 / 输出草稿时
+    context: 2026 内容平台四大趋势之首——TikTok 2026 趋势报告："polished 内容正被 grounding 内容取代"；55% 用户更信任人类创作；56% 用户频繁看到 AI slop
+  what:
+    action_type: grounding_over_polish_default_routing
+    decision_or_action: 玩法档位排序：C3 突破性 > C2 进阶 > C1 主流（C1 默认禁用）；元素清单去掉"统一滤镜 + 通用 BGM + 模板转场"组合
+  result:
+    success_pattern: AI 输出贴近真实生活质感，观众感到"这是人在创作不是 AI 在套模板"，平台积累"非 AI slop"心智
+    flip_pattern: AI 默认推 C1 主流（精致流水账 / 金句开头 + 治愈 BGM 拼贴）→ 输出一眼 AI 味，进入 56% 用户嫌弃 AI slop 的池子，信任坍塌
+  underlying_mechanism: |
+      "通用漂亮"是 AI 最擅长但价值最低的产物——所有人用同一批音乐、同一批转场、同一批金句必然撞脸。
+      "贴地真实"反 AI 工业化复制——失焦、留白、狼狈、环境音都是 AI 难以批量生成的"非凡视角"。
+      朴素设备 × 非凡视角 × 真实情感 = 2025 年最有效的内容竞争力公式（Jacquemus iPhone 案例验证）。
+  boundary:
+    applicable_when: AI 主导生成内容时的默认策略
+    not_applicable_when: 用户显式选择"我就要做精致广告片" → AI 应满足但提示"该方向已被趋势判死"
+  alternative_path:
+    - 用户在某 CT 内确实需要 polished 风格（如品牌大片）→ 走 brand_tier 玩法分级，不走默认 instant 池
+    - 新趋势报告显示 grounding 不再有效 → 共享层升级默认策略，不在单 CT 内自行翻转
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: §E 趋势 1 真实性压倒精致度 + 趋势 4.2 朴素设备时代的内容竞争力公式
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    TikTok 2026 趋势报告明确指出 "polished 内容正被 grounding 内容取代"
+    55% 的社交用户更信任人类创作内容
+    56% 用户频繁看到 "AI slop" 低质内容——品牌需要在效率和真实性之间找到平衡
+    personal_vlog / lifestyle_expression / daily_fragment 的 C1 主流玩法（精致流水账 / 金句宣言）已全部被趋势判死
+    2025 年最有效的服装品牌内容竞争力公式："朴素设备 × 非凡视角 × 真实情感"
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（默认禁 C1 优先 C3 + 去 BGM/滤镜/转场组合）+ 09_call_mapping 可反推"贴地真实 > 精致光滑"。
+    Gate 3：任意品牌 AI 内容平台都需此默认策略，无品牌特异。
+    Gate 4：直接被 content_generation 玩法档位选择层消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-grounding-over-polish-default-policy, owner_field: ai_default_aesthetic_policy, definition: "AI 默认审美策略 = grounding 压倒 polished；玩法档位 C3>C2>C1（C1 默认禁用）；元素层禁用通用 BGM + 统一滤镜 + 模板转场组合"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-grounding-over-polish-default, rule_type: grounding_over_polish_default_routing, applicable_when: "AI 主导生成内容时的玩法选择与元素组合", success_scenario: "输出贴近真实质感，观众感到人创作非 AI 套模板", flip_scenario: "默认推 C1 → 一眼 AI 味进入 56% AI slop 嫌弃池信任崩塌", alternative_boundary: "用户显式选 polished 时走 brand_tier 分级；趋势变化走共享层升级"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-grounding-over-polish-default, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: §E 趋势 1 + 趋势 4.2, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-grounding-over-polish-default, runtime_method: content_generation, input_types: "user_intent + content_type", output_types: "ranked_play_card_list"}

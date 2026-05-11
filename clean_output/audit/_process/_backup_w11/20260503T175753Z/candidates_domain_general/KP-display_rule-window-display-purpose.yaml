@@ -1,0 +1,83 @@
+pack_id: KP-display_rule-window-display-purpose
+schema_version: candidate_v1
+pack_type: display_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  window_display（橱窗位）的业务目标是"拦人 / 定调 / 拉进店"——拦不住路人的橱窗就是失败品；
+  必须建立在 new_arrival_complete / core_push_deep_stock / full_look_ready 三类齐套或可补的库存状态上，
+  且只能由店长 / 老手负责换窗节奏，新人只学单主题、单焦点。
+
+scenario:
+  who:
+    primary_role: 店长 / 老手陈列负责人
+    target_audience: 路过门店的潜在顾客
+  when:
+    trigger: 上新 / 季节切换 / 节庆活动 / 主推变更
+    context: 门店外立面橱窗位
+  what:
+    action_type: window_display_setup
+    decision_or_action: 选系列主推款 / 外套 / 连衣裙 / 套装 / 节日活动主款；单主题单焦点；同步过库存校验
+  result:
+    success_pattern: 路人能看懂今天主推什么、能想象自己穿在哪里，进店率提升
+    flip_pattern: 店外好看但店内拿不齐 / 一窗塞太多 / 道具比货重 / 季节与店内货不一致 → 拍照很好但卖不动
+  underlying_mechanism: |
+      橱窗位是门店的第一接触点；它承诺的是"店内有可被消费的内容"。
+      塞太多 = 没主推，道具压货 = 不可消费，季节不对 = 不真实。
+  boundary:
+    applicable_when: 任何带橱窗的零售门店
+    not_applicable_when: 纯快闪 / 装置艺术展（不承担销售目标的橱窗例外）
+  alternative_path:
+    - 库存稀薄无法成套 → 退回单焦点单品 + 主题道具
+    - 季节切换中 → 双焦点过渡（旧主推 + 新主推预告），但仍需店内可消费
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/陈列方法包.md
+  source_anchor: 二、1. window_display + 三、1）拦人 + 四、库存校验联动
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    业务目标：拦人、定调、拉进店。
+    适合库存状态：new_arrival_complete / core_push_deep_stock / full_look_ready。
+    最容易犯的错：店外好看、店内拿不齐；一窗塞太多；道具比货重；季节和店内货不一致。
+    培训层级：新人只学单主题、单焦点；店长 / 老手才负责橱窗节奏和换窗。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；可被 display_guidance / store_training 双路调用；跨女装零售门店通用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用橱窗陈列纪律，不含笛语品牌专属表达
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-DisplayGuide, type_name: DisplayGuide, supertype: domain_object}
+  field:
+    - {field_id: FD-DisplayGuide-display_unit, owner_type: DisplayGuide, field_name: display_unit, data_type: enum}
+    - {field_id: FD-DisplayGuide-training_tier, owner_type: DisplayGuide, field_name: training_tier, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-display_rule-window-display-purpose-purpose, owner_field: display_unit, definition: "window_display 业务目标三件套：拦人/定调/拉进店"}
+  value_set:
+    - {value_set_id: VS-KP-display_rule-window-display-purpose-allowed_inventory, value: new_arrival_complete, label: 新品齐码, ordinal: 1}
+    - {value_set_id: VS-KP-display_rule-window-display-purpose-allowed_inventory, value: core_push_deep_stock, label: 主推深库存, ordinal: 2}
+    - {value_set_id: VS-KP-display_rule-window-display-purpose-allowed_inventory, value: full_look_ready, label: 成套齐套, ordinal: 3}
+    - {value_set_id: VS-KP-display_rule-window-display-purpose-training_tier, value: senior_only, label: 仅店长老手, ordinal: 1}
+    - {value_set_id: VS-KP-display_rule-window-display-purpose-training_tier, value: novice_partial, label: 新人单主题单焦点, ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-display_rule-window-display-purpose, rule_type: window_display_setup, applicable_when: 上新/季节切换/节庆活动/主推变更, success_scenario: 路人看懂主推+进店率提升, flip_scenario: 店外好看店内拿不齐/塞太多/道具压货/季节错位, alternative_boundary: 库存稀薄→单焦点+主题道具；季节切换→双焦点过渡}
+  evidence:
+    - {evidence_id: EV-KP-display_rule-window-display-purpose}
+  relation:
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-window01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"allow","values":["new_arrival_complete","core_push_deep_stock","full_look_ready"]}'}
+    - {relation_id: RE-DisplayGuide-supports_training-TrainingMaterial-window01, source_type: DisplayGuide, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"tier_split":{"senior":"换窗节奏","novice":"单主题单焦点"}}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-display_rule-window-display-purpose}
+    - {mapping_id: CM-store_training-KP-display_rule-window-display-purpose}

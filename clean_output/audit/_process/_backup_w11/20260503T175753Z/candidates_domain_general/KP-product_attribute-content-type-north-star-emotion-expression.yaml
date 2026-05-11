@@ -1,0 +1,92 @@
+pack_id: KP-product_attribute-content-type-north-star-emotion-expression
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `emotion_expression`（情绪表达）的北极星不是"这句话真会写"，
+  而是"这感觉你居然也知道"——不是一个结论被砸下来，而是一个没说出口的感受被轻轻接住。
+  观众接住"我被看见了"后，愿意把自己的情绪放出来（点赞 / 评论 / 转发 / 收藏），
+  对这个人 / 品牌产生更深层的情感连接。这条北极星把情绪表达从"金句喷射 / 戏剧化崩溃"
+  反向定义为"克制的真实瞬间被看见"——所有 emotion_expression 玩法卡是否成立必须按此反推：
+  怼脸独白 + 伤感 BGM / 鸡汤卡片体 / 哭腔讲故事，全部判主流强默认禁用（与 founder_ip 同级）。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: emotion_expression 内容创作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 emotion_expression 玩法卡，或对一条情绪类内容做"是否符合 ContentType 北极星"判断时
+    context: emotion_expression 是 18 份 ContentType 中翻车率最高的——观众对情绪内容的 AI 免疫力远高于其他类型
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"这感觉你居然也知道 / 没说出口的感受被轻轻接住"作为玩法是否成立的最终判定
+  result:
+    success_pattern: |-
+      玩法卡能体现"克制的具体瞬间 / 物件作为情绪载体 / 关系映照 / 叙事沉浸 / 真实感三问可过"
+      → 通过北极星映射 → 进 C2 进阶或 C3 突破档
+    flip_pattern: |-
+      玩法卡退化为"怼脸独白 + 伤感 BGM / 成年人崩溃瞬间" / "鸡汤卡片体 / 纯文字图片" /
+      "哭腔讲故事 / 戏剧化崩溃表演" → 北极星映射 ❌ → 主流强默认禁用档（与 founder_ip 同级）
+  underlying_mechanism: |
+      情绪共鸣 ≠ 情绪表演。被击中的观众接住的是"压着没说的部分"，戏剧化崩溃反而让观众
+      产生道德负担（共鸣反降）。鸡汤金句靠 Barnum effect（巴纳姆效应）让所有人都觉得"在说自己"，
+      但失去辨识度——AI 一秒就能批量复制。emotion_expression 的稀缺性来自"具体某一刻 + 真实物件 +
+      可验证锚点"，是 AI 腔最难伪造的层。
+  boundary:
+    applicable_when: emotion_expression 玩法库扩张 / 含情绪内容的 ContentType 审核（lifestyle_expression / personal_vlog / founder_ip 也部分适用）
+    not_applicable_when: 工具类 / 信息类 / 教程类 ContentType（knowledge_sharing / training_material 等）
+  alternative_path:
+    - 与 daily_fragment 边界：daily_fragment 是"生活密度"低 / emotion_expression 是"情绪密度"高
+    - 与 humor_content 边界：humor 用笑消解情绪 / emotion 用克制接住情绪——两者方向相反
+
+evidence:
+  source_md: Q2-内容类型种子/emotion_expression-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流强默认禁用 3 张卡 + §B5 情绪元素避坑清单
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完后，心里不是"这句话真会写"，而是"这感觉你居然也知道"——
+    不是一个结论被砸下来，而是一个没说出口的感受被轻轻接住。我被看见了，
+    我愿意把自己的情绪也放出来（点赞 / 评论 / 转发 / 收藏），我对这个人 / 这个品牌产生了更深层的情感连接。
+    通用类compass：情绪资产（Emotional assets）—— 情绪共鸣内容矩阵是品牌留存与溢价的底层设计。
+    C1-2 备注：Barnum effect（巴纳姆效应）——"模糊的情绪陈述让所有人都觉得是在说自己"是典型 AI 批量生产陷阱。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 02_field（ContentType.north_star + ContentType.failure_immunity_level）+ 05_relation 可反推
+    "emotion_expression 北极星 = 没说出口的感受被接住 / 主流三类强禁用 / AI 免疫力最低 / 与 daily_fragment+humor 的边界"。
+    Gate 3：跨品牌通用——任何品牌的情绪内容都需此锚点。
+    Gate 4：可被 content_generation 调用作为 emotion_expression 玩法选型门禁 + 真实感三问预发布检查。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论——任意品牌的 emotion_expression 都需此锚点；不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+    - {field_id: FD-ContentType-failure_immunity_level, owner_type: ContentType, field_name: failure_immunity_level, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-emotion-expression-ee_north_star, owner_field: north_star, definition: "emotion_expression ContentType 的北极星：这感觉你居然也知道 / 没说出口的感受被轻轻接住——主流三类强禁用（怼脸独白+伤感BGM / 鸡汤卡片体 / 哭腔崩溃表演）的判型锚点"}
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-emotion-expression-immunity, owner_field: failure_immunity_level, definition: "ContentType 的 AI 免疫力等级：emotion_expression / founder_ip 为 weakest（强默认禁用 C1 + 真实感三问预发布）"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-emotion-expression, rule_type: content_type_north_star_anchor, applicable_when: "新增 emotion_expression 玩法卡或审核情绪内容时", success_scenario: "克制具体瞬间+物件载体+关系映照+真实感三问可过 → 进 C2/C3", flip_scenario: "怼脸独白+伤感BGM / 鸡汤卡片 / 哭腔崩溃 → 主流强默认禁用", alternative_boundary: "与 daily_fragment 在情绪密度上分层 / 与 humor_content 在方向上互逆"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-emotion-expression, source_md: Q2-内容类型种子/emotion_expression-交付物-v0.1.md, source_anchor: §A + §C1 + §B5, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-emotion_expression-ee1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"emotion_expression","ai_immunity_level":"weakest"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-emotion-expression, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

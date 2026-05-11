@@ -1,0 +1,89 @@
+pack_id: KP-product_attribute-content-type-north-star-product-review
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `product_review`（产品测评）的北极星是"我已经在脑子里提前穿过一次、犹豫过一次、相信过一次"——
+  观众看完后不是"知道这件衣服的参数"，而是**风险已经看清、信任已经建立、购买决策的心理阻力已经被消解**。
+  这条北极星把测评从"夸/不夸 / 显瘦显腿长 / 形容词三连"反向定义为
+  "**风险解除 + 体感证据 + 顾虑同盟**"——所有 product_review 玩法卡是否成立必须按此反推：
+  转圈念优缺点 / 7 秒换装快剪 / 开箱即结论 三大主流模板全部判主流默认禁用。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: product_review 内容创作者（加盟商 / 主理人 / 店员）/ AI 内容生成审核
+  when:
+    trigger: 新增一张 product_review 玩法卡，或对一条测评内容做"是否符合 ContentType 北极星"判断时
+    context: 18 份 ContentType 交付物各有独立北极星，是单 CT 内容生产的判型锚点；product_review 同时挂第一层引流和第二层接客
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"提前穿过 / 提前犹豫过 / 提前相信过 / 心理阻力被消解"作为 product_review 玩法是否成立的最终判定
+  result:
+    success_pattern: |-
+      玩法卡能呈现"体感测试 / 顾虑解除 / 反种草 / 一天体感 / 触感法庭"
+      等"风险已被看清"叙事 → 通过北极星映射 → 进 C2 进阶或 C3 突破档
+    flip_pattern: |-
+      玩法卡只剩转圈念优缺点 / 形容词三连 / 7 秒换装快剪 / 开箱即结论 / 对照表测评
+      → 北极星映射 ❌ → 主流默认禁用档（这些是 MCN 机构化生产的同质模板，AI 最易复刻）
+  underlying_mechanism: |
+      "测评不是审美判断而是身体经验" —— 服装是被身体检验的商品，
+      观众真正卡住的是"会不会踩雷"（透 / 勒 / 皱 / 闷 / 短 / 显壮 / 难搭）而不是"美不美"。
+      只有把"风险已被看清"展示出来，观众才会从"被种草"升级到"被安慰 / 被同盟"。
+  boundary:
+    applicable_when: 单 ContentType 内容创作判型 / product_review 玩法库扩张时的卡片新增门禁 / 引流与接客双场景
+    not_applicable_when: 不是 product_review 而是 outfit_of_the_day（叙事重心是"今天这一套"穿搭日记，不是"这件值不值得买"）
+  alternative_path:
+    - 同一试穿镜头在 outfit_of_the_day 与 product_review 之间归属判定：叙事重心是个人穿搭选择 → OOTD；叙事重心是商品可信度证据 → product_review
+    - product_review 的玩法本体跨"引流/接客/两者通用"三场景共享，差异是执行情境而非北极星
+
+evidence:
+  source_md: Q2-内容类型种子/product_review-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流默认禁用三张卡 + §双角色「适用场景」标签机制
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完后，不是"知道这件衣服有什么参数"，而是
+    "我已经在脑子里提前穿过一次、犹豫过一次、相信过一次"——
+    风险已经看清、信任已经建立、购买决策的心理阻力已经被消解。
+    通用类deep-research-report.md：我已经把风险看清了 / 值不值 / 怎么买最不踩坑 / 我也愿意相信这个人。
+    C1 全档默认禁用：转圈念优缺点 / 7 秒换装快剪 / 开箱即结论。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（who/when/what/success/flip/mechanism/boundary/alt）。
+    Gate 2：从 06_rule（北极星反推规则）+ 02_field（ContentType.north_star）+ 05_relation 可反推
+      "product_review 北极星 = 提前穿过/犹豫过/相信过 / 主流三种禁用 / 与 OOTD 边界"三条核心语义。
+    Gate 3：跨品牌 ContentType 内容创作通用判型——任何品牌做产品测评都需此锚点。
+    Gate 4：可被 content_generation 调用作为 product_review 玩法选型 / 玩法卡成立性校验的入口。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论——任意品牌的 product_review 内容都需此北极星，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-product-review-pr_north_star, owner_field: north_star, definition: "product_review ContentType 的北极星：提前穿过/犹豫过/相信过——风险解除 + 体感证据 + 顾虑同盟；主流禁用三类（转圈念优缺点 / 7 秒换装 / 开箱即结论）的判型锚点"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-product-review, rule_type: content_type_north_star_anchor, applicable_when: "新增 product_review 玩法卡或审核一条测评内容时", success_scenario: "玩法呈现体感测试 / 顾虑解除 / 反种草 / 一天体感 / 触感法庭 → 进 C2/C3", flip_scenario: "只剩转圈念优缺点 / 形容词三连 / 7 秒换装 / 开箱即结论 / 对照表 → 主流默认禁用", alternative_boundary: "同试穿镜头在 OOTD vs product_review 间按叙事重心二选一"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-product-review, source_md: Q2-内容类型种子/product_review-交付物-v0.1.md, source_anchor: §A 北极星 + §C1 + §双角色标签机制, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-product_review-pr1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_review"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-product-review, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

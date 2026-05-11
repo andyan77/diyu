@@ -1,0 +1,96 @@
+pack_id: KP-product_attribute-compatibility-matrix-two-layer-truth-source
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  Persona × ContentType × Platform 兼容矩阵采用"**一层真源 + 一层派生视图**"硬分层：
+  唯一真源边是 `(:Persona)-[:COMPATIBLE_WITH {support, risk, reason}]->(:ContentType)`；
+  平台维度**不新建** `ContentType × Platform` 或 `Persona × Platform` 任何方向的关系边，
+  完全承接已有的 `(:System)-[:SUPPORTS_PLATFORM {tier}]->(:PlatformTone | :PrivateOutletChannel)`；
+  `Persona × ContentType × Platform/Channel` 三维组合是**派生视图**，运行时由两个真源临时计算得出，
+  **不写入图谱、不持久化**。任何"把 CT × Platform 也做成真源边"的方案直接判否。
+
+scenario:
+  who:
+    primary_role: 兼容矩阵 schema 设计者 / 图谱建模者 / 能力发现菜单实现者
+    target_audience: 跨品牌的 Persona-ContentType-Platform 兼容矩阵建设
+  when:
+    trigger: 新品牌冷启动需要落地"谁 × 做什么内容 × 发到哪里"判型时；或矩阵需要扩展新维度时
+    context: Persona 数量 N、ContentType 数量 M、Platform 数量 K，三维真源会膨胀为 N×M×K 条边，维护成本与一致性风险指数级上升
+  what:
+    action_type: matrix_truth_source_layering
+    decision_or_action: |
+      只允许 Persona × ContentType 一条真源边 + 派生视图组合公式；
+      平台维度只引用 SUPPORTS_PLATFORM.tier；禁止新建 CT×Platform / Persona×Platform 关系边
+  result:
+    success_pattern: |-
+      真源边数 = N(Persona) × M(ContentType)；新增平台只动 Q3 真源；新增人设/CT 只动 Q4 真源；
+      两份真源各自独立演进，派生视图随时一致
+    flip_pattern: |-
+      把 CT × Platform 也建成真源边 → 边数 N×M×K（如 3×18×10=540）；
+      运营改一个平台 tier 要同步改 540 条派生边；
+      两份真源不一致时派生视图漂移；冷启动期被锁死扩展路径
+  underlying_mechanism: |
+      矩阵真源的最小化分层原则：**真源只承载语义不可派生的部分，可由其它真源组合算出的维度一律降级为派生视图**。
+      Persona × CT 的兼容性是不可派生的业务断言（必须人工裁决），
+      Platform 适配度由系统层 tier 已经表达，两者交叉项是组合函数而非新事实。
+  boundary:
+    applicable_when: 任意品牌的 Persona × ContentType × Platform 兼容矩阵 schema 设计；冷启动期最小真源选型
+    not_applicable_when: 当未来某个 CT 在某个 Platform 出现"必须人工裁决的特殊例外"时，可升级该单元为真源边——但走例外加边路径，不推翻分层
+  alternative_path:
+    - 若未来需要品牌级平台覆盖 → 在 SUPPORTS_PLATFORM 上扩展 brand_layer 属性，仍不新建 CT×Platform 边
+    - 若需要更细的派生展示档 → 改派生公式（§6.2 组合表），不动真源 schema
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md
+  source_anchor: §1.1 真源分层原则 + §1.2 为什么这样分层 + §9.1 真源分层
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    一层真源 + 一层派生视图。
+    真源层：(:Persona)-[:COMPATIBLE_WITH {support, risk, reason}]->(:ContentType)。
+    平台维度：承接 Q3 (:System)-[:SUPPORTS_PLATFORM {tier}]->(:PlatformTone / :PrivateOutletChannel)，
+    不新建 ContentType × Platform 或 Persona × Platform 关系边。
+    派生视图层：Persona × ContentType × Platform/Channel，由真源层 + Q3 真源临时组合计算，不写入图谱。
+    把 ContentType × Platform 直接做成真源关系边有 4 个问题：维护成本高（18 × 10 = 180 条边）、
+    容易不一致、难以增量扩展、违反渐进纪律。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（who/when/what/success/flip/mechanism/boundary/alt）。
+    Gate 2：从 06_rule（真源分层硬约束规则）+ 05_relation（COMPATIBLE_WITH 唯一真源边声明）+
+      02_field（COMPATIBLE_WITH 三属性壳）可反推"Persona×CT 是真源 / Platform 不新建边 / 三维组合是派生视图"三条核心语义。
+    Gate 3：跨品牌兼容矩阵建模通用元规则——任意品牌都需要这条分层纪律避免边数爆炸。
+    Gate 4：可被 schema_design / capability_discovery / prompt_pre_check 三类调用消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 矩阵 schema 元规则 / 真源分层方法论——任意品牌都需此分层判定，不含任何笛语专属取值
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-PlatformTone, type_name: PlatformTone, supertype: domain_object}
+    - {type_id: OT-PrivateOutletChannel, type_name: PrivateOutletChannel, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-compatibility-matrix-two-layer-truth-source-layering, owner_field: COMPATIBLE_WITH.truth_source_layer, definition: "兼容矩阵真源分层：Persona×CT 是唯一新增真源边；Platform 维度承接系统层 SUPPORTS_PLATFORM 不新建边；三维组合是派生视图不写入图谱"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-compatibility-matrix-two-layer-truth-source, rule_type: matrix_truth_source_layering, applicable_when: "兼容矩阵 schema 设计或扩展时", success_scenario: "Persona×CT 一层真源 + Platform tier 一层真源 + 派生视图组合 → 边数 N×M，新增维度不膨胀", flip_scenario: "把 CT×Platform 也做成真源边 → 边数 N×M×K 膨胀，两份真源易漂移，扩展路径被锁", alternative_boundary: "未来出现 CT×Platform 特殊例外时按例外加单边升级，不推翻分层"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-compatibility-matrix-two-layer-truth-source, source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md, source_anchor: §1.1 + §1.2 + §9.1, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Persona-compatible_with_content_type-ContentType-truth-source-shell, source_type: Persona, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"is_truth_source":true,"edge_signature":"COMPATIBLE_WITH {support,risk,reason}"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-schema_design-KP-product_attribute-compatibility-matrix-two-layer-truth-source, runtime_method: schema_design, input_types: "Persona,ContentType,PlatformTone,PrivateOutletChannel", output_types: MatrixTruthSourceLayeringDecision}

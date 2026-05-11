@@ -1,0 +1,86 @@
+pack_id: KP-styling_rule-menswear-belt-shoe
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  男装正式穿着（suit/dress 场景）里腰带与鞋的颜色、皮质感、正式度要尽量一致；
+  纯休闲、球鞋工装、无腰带场景可放松，进入正式着装则重新生效。
+
+scenario:
+  who:
+    primary_role: 男装导购 / 店长
+    target_audience: 男装西装 / 商务 / 婚礼 / 面试顾客
+  when:
+    trigger: 男装正式搭配 / 男装人台陈列 / 鞋包腰带连带销售
+    context: 男装腰带与鞋的颜色、皮质、正式度匹配
+  what:
+    action_type: belt_shoe_alignment
+    decision_or_action: |
+      黑鞋黑带、棕鞋棕带、光泽与正式度相近；
+      鞋没货时优先找同色同正式度鞋，不是先换整套西装；
+      男装人台必须鞋、腰带、包一起配完整。
+  result:
+    success_pattern: 男装正式套装上下件 + 配饰一致，顾客觉得"专业到位"，整套带走。
+    flip_pattern: 黑皮鞋配浅棕编织带，或正装鞋配明显牛仔休闲带，顾客掉头。
+  underlying_mechanism: |
+      公开男装风格指南把"鞋与腰带匹配"列为正式穿搭基本功；
+      正式着装中视觉一致性高度依赖配饰系统。
+  boundary:
+    applicable_when: 男装西装 / 商务 / 婚礼 / 面试 / formal dressing
+    not_applicable_when: 纯休闲 / 球鞋工装 / 无腰带场景（反转：放松规则）
+  alternative_path:
+    - 鞋没货 → 优先找同色同正式度鞋（不要先换整套西装）
+    - 进入休闲场景 → 反转放行
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 11 menswear_belt_shoe_rule + 6.2 hard_rule + 6.4 反转五
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    男装正式穿着里，腰带与鞋的颜色、皮质感、正式度要尽量一致。
+    works_in：黑鞋黑带、棕鞋棕带、光泽与正式度相近。
+    fails_in：黑皮鞋配浅棕编织带；正装鞋配明显牛仔休闲带。
+    鞋没货，优先找同色同正式度鞋；不是先换整套西装。
+    男装人台必须鞋、腰带、包一起配完整。
+    会反转的规则五：在休闲、球鞋、工装、无腰带场景可放松；只要进入 formal dressing，这条重新生效。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；填补仓库明确缺的男装规则。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 公开男装风格指南通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-menswear-belt-shoe-belt_shoe_match, owner_field: rule_name, definition: "男装鞋腰带同色法：suit/dress 场景下腰带与鞋的颜色/皮质/正式度同级"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-menswear-belt-shoe-pairs, value: black_shoe_black_belt, label: 黑鞋黑带, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-menswear-belt-shoe-pairs, value: brown_shoe_brown_belt, label: 棕鞋棕带, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-menswear-belt-shoe-applicable_occasions, value: suit, label: 西装场合, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-menswear-belt-shoe-applicable_occasions, value: business, label: 商务, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-menswear-belt-shoe-applicable_occasions, value: wedding, label: 婚礼, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-menswear-belt-shoe-applicable_occasions, value: interview, label: 面试, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-styling_rule-menswear-belt-shoe, rule_type: hard_rule, applicable_when: "男装西装/商务/婚礼/面试 formal dressing 场景", success_scenario: "鞋腰带颜色皮质正式度一致顾客觉得专业", flip_scenario: "黑鞋浅棕编织带或正装鞋休闲带顾客掉头", alternative_boundary: "鞋断货优先同色同正式度替代不换整套西装；纯休闲/球鞋/工装/无腰带场景反转放行"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-menswear-belt-shoe, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 11 + 6.2 + 6.4 反转五, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-mens01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"hard_rule","gender":"menswear","focus":"belt_shoe_match"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-mens02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"男装人台必须鞋、腰带、包一起配完整"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-menswear-belt-shoe, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-menswear-belt-shoe, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

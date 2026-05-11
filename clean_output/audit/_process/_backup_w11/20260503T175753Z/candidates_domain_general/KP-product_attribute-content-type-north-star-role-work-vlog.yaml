@@ -1,0 +1,86 @@
+pack_id: KP-product_attribute-content-type-north-star-role-work-vlog
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `role_work_vlog`（岗位工作 Vlog）的北极星是"对这个岗位产生尊重 / 体感信任，
+  原来一件衣服背后站着的是一群有手感和判断的人"——观众接住的是"岗位的智力和手感"，
+  不是"这个人的人格"。这条北极星把 role_work_vlog 与 founder_ip 的硬边界锁定为
+  "第一叙事重心是岗位 vs 人"——观众记住"版师/主理人这个岗位怎么改版" → role_work_vlog；
+  记住"这个老板真会犹豫真会扛" → founder_ip。并把红线指向"反可爱员工人设 / 反我很忙的表演感 /
+  反流水账"——岗位价值靠判断与手感显形，不靠流水账。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / role_work_vlog 内容生产 prompt 组装者
+    target_audience: role_work_vlog 创作者（导购/版师/陈列/仓库/熨烫等岗位）/ 内容审核
+  when:
+    trigger: 新增 role_work_vlog 玩法卡或审核一条岗位 vlog 是否成立时
+    context: 6 份企业叙事类 ContentType 第二份；与 founder_ip 的归属判断由"叙事重心"决定
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"岗位的智力和手感 / 体感信任"作为 role_work_vlog 玩法成立判定
+  result:
+    success_pattern: |-
+      玩法呈现"手部特写 / 岗位接力 / 内心字幕（外部沉默心里那句）/ 失误证物 / 短句判断语"
+      等岗位智力外化 → 进 C2/C3 档
+    flip_pattern: |-
+      可爱员工人设撒娇卖萌 / 我很忙的表演感 / 培训话术口播 / 流水账日报
+      → 主流默认禁用 + 红线
+  underlying_mechanism: |
+      岗位 Vlog 的核心是"判断显形"——比如"为什么我在第 10 秒就知道这位顾客不能先推爆款"——
+      观众通过"手 + 短句判断 + 失误证物"接住岗位的专业，而不是接住员工的人格魅力。
+  boundary:
+    applicable_when: role_work_vlog 玩法库扩张 / 单条岗位 vlog 审核 / 与 founder_ip 边界判定
+    not_applicable_when: 叙事重心是"老板这个人的判断与代价" → founder_ip；重心是"门店空间" → store_daily
+  alternative_path:
+    - 老板兼岗位时归属：按叙事重心而非岗位身份——观众记住的若是"这个人" → founder_ip
+
+evidence:
+  source_md: Q2-内容类型种子/role_work_vlog-交付物-v0.1.md
+  source_anchor: §A 北极星 + 与 founder_ip 的边界 + §B5 情绪元素（反可爱员工人设）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完不只是"知道这个岗位在干嘛"，而是对这个岗位产生尊重、
+    对品牌产生体感信任，甚至开始觉得"原来一件衣服背后站着的是一群有手感和判断的人"。
+    与 founder_ip 边界：观众记住的是"这个老板真会犹豫、真会扛" → founder_ip；
+    观众记住的是"版师/主理人这个岗位到底怎么改版" → role_work_vlog。
+    对 role_work_vlog 的含义：观众要接住的是"岗位的智力和手感"，不是"这个人的人格"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"岗位智力手感 / 体感信任 / 与 founder_ip 边界 / 反可爱员工人设"四条核心语义。
+    Gate 3：跨品牌通用——任意品牌岗位内容都需此判型。
+    Gate 4：可被 content_generation 调用做岗位 vlog 玩法选型 / 与 founder_ip 路由判定。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论；岗位智力 vs 人格的边界跨品牌通用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-role-work-vlog-rwv_north_star, owner_field: north_star, definition: "role_work_vlog 北极星：岗位的智力和手感 / 体感信任；与 founder_ip 边界 = 重心是岗位 vs 人"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-role-work-vlog, rule_type: content_type_north_star_anchor, applicable_when: "新增 role_work_vlog 玩法卡或审核岗位 vlog 时", success_scenario: "玩法呈现手部+短句判断+失误证物+岗位接力 → 进 C2/C3", flip_scenario: "可爱员工人设/培训话术/流水账 → 主流禁用", alternative_boundary: "老板兼岗位按叙事重心二选一"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-role-work-vlog, source_md: Q2-内容类型种子/role_work_vlog-交付物-v0.1.md, source_anchor: §A + 与 founder_ip 边界 + §B5, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-role_work_vlog-rwv1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"role_work_vlog"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-role-work-vlog, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

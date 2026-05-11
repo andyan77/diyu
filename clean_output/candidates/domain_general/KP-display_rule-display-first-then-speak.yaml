@@ -1,0 +1,77 @@
+pack_id: KP-display_rule-display-first-then-speak
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: display_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  适合"先陈列后开口"的接客场景正式冻结为 4 类——ready_made_full_set / new_item_cannot_style / weekend_social / 看中门口模特或成套位再开口的顾客；
+  这 4 类的共同点是"顾客需要先看到完整画面才能形成购买理由"，导购上来开口反而打断她的视觉判断流。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 4 类适合视觉先于话术的客
+  when:
+    trigger: 顾客进店后停在模特位、成套位或新款陈列前
+    context: 门口模特位/橱窗前/成套挂场
+  what:
+    action_type: visual_first_then_verbal
+    decision_or_action: |
+      第一步：识别她停留在哪个陈列单元（模特/成套位/新款挂场）。
+      第二步：保持沉默或最小招呼（"随便看"），让她完成第一轮视觉判断。
+      第三步：等她主动指/碰/转身询问时再开口；开口必须直接接她的视觉点（"这件配的就是模特上那条裤子"）。
+      第四步：避免上来就报价或追问需求。
+  result:
+    success_pattern: 顾客完成视觉判断后主动询问；导购话术直接落在她已经认可的视觉点上，转化高
+    flip_pattern: 顾客刚停下就被开口打断，视觉判断流断裂，礼貌走开
+  underlying_mechanism: |
+      这 4 类客的购买决策起点是"完整画面"而非"商品参数"；
+      过早开口 = 用语言覆盖视觉 = 把"她在自我说服"打断成"她在被推销"。
+  boundary:
+    applicable_when: 4 类指定场景；门口/成套位/新款陈列前
+    not_applicable_when: 必须先问再推的 6 类场景（urgent / shape / comfort / budget / functional / repeat）
+  alternative_path:
+    - 顾客停留超过 90 秒未主动开口 → 用一句"模特那身用的就是这件"切入，不要追问需求
+    - 模特位陈列效果与单品差异大 → 提前说明，避免试穿落差
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 三、4）适合先陈列后开口的场景正式冻结
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    4）适合先陈列后开口的场景，正式冻结为 4 类
+    ready_made_full_set（现成成套型）
+    new_item_cannot_style（新款不会搭型）
+    weekend_social（周末社交型）
+    看中门口模特 / 成套位再开口的顾客
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；陈列与接客联动；与"必须先问再推"互为反向边界。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用陈列接客衔接规则。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-DisplayGuide, type_name: DisplayGuide, supertype: domain_object}
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-display_rule-display-first-then-speak}
+  value_set:
+    - {value_set_id: VS-KP-display_rule-display-first-then-speak-display_first_scenarios}
+  relation:
+    - {relation_id: RE-DisplayGuide-fits_customer_scenario-CustomerScenario-disp01}
+  evidence:
+    - {evidence_id: EV-KP-display_rule-display-first-then-speak}
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-display_rule-display-first-then-speak}

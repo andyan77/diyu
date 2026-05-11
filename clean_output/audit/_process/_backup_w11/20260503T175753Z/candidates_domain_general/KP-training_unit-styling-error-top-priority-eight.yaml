@@ -1,0 +1,99 @@
+pack_id: KP-training_unit-styling-error-top-priority-eight
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  10 类新人搭配错误 + 10 类陈列错误中，只有 8 类是"直接影响成交"的最高优先级——
+  比例失衡 / 忽略身型 / 场景错配 / 只卖单品不讲整套 / 陈列主角过多 / 挂装密度失控 /
+  陈列与库存深度不匹配 / 替代款假装同款；
+  这 8 类不练熟，门店的成交曲线不会变；其他 12 类放在第二批，错配优先级会让门店首批培训空转。
+
+scenario:
+  who:
+    primary_role: 培训组织者 / 店长
+    target_audience: 新人 + 已在岗但未受首批培训的导购
+  when:
+    trigger: 编排首批纠错训练单元 / 评估员工首批培训完成度
+    context: 冷启动门店 / 新店开业 / 大批新人入职
+  what:
+    action_type: top_priority_eight_error_focus
+    decision_or_action: |
+      错误动作：把 20 类错误平均铺开做培训。
+      正确动作：把首批训练资源 100% 集中在这 8 类直接影响成交的错误上，
+        一类配一个 do_dont_contrast 单元 + 一个 error_replay 案例；
+        其余 12 类放第二批（节奏 / 风格标签 / 配饰位置 / 颜色冲突 / 灯光落差等）。
+      为什么错：员工注意力是稀缺资源，平均铺 = 没有重点 = 成交不变。
+      如何纠正：用"直接影响成交：是 / 间接 / 否"标签筛选首批清单，只留"是"。
+      掌握检查：员工现场被抽查时，能识别这 8 类中至少 6 类的错误案例并说出最小修正动作。
+  result:
+    success_pattern: |
+      门店成交在首批培训完成后 4-8 周可观察到改善；
+      8 类错误的复发率显著下降，store_manager 可在抽查中确认。
+    flip_pattern: |
+      首批铺 20 类，员工记不全也用不出，8 类高优先级错误继续发生；
+      培训完成度看起来高，门店实际数据无变化。
+  underlying_mechanism: |
+      培训资源稀缺 + 员工注意力有限；
+      "直接影响成交"是把"教什么"对齐"门店要什么"的最强对齐器，其他维度都是次级排序。
+  boundary:
+    applicable_when: 冷启动 / 大批新人入职 / 首批纠错训练编排
+    not_applicable_when: |
+      已稳定运营门店的高级培训（员工已掌握 8 类错误）→ 改为按本店当月异常事件驱动；
+      合规与安全相关培训 → 不参与此优先级裁剪。
+  alternative_path:
+    - 门店人手严重不足 → 先做这 8 类中的 Top3（比例失衡 / 忽略身型 / 替代款假装同款）
+    - 培训时长有限 → 用 do_dont_contrast 双图替代完整情境演练
+    - 错误复发集中在某 1 类 → 用 error_replay 直接复盘当事案例
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 六、新人最常犯的 10 类搭配错误 · 七、陈列最常犯的 10 类错误 · 九、priority_error_group
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    第一优先级，只抓会直接影响成交的 8 类：
+    wrong_proportion_balance（比例失衡）/ ignoring_body_shape（忽略身型）/
+    wrong_scene_matching（场景错配）/ selling_single_piece_without_full_logic（只卖单品不讲整套逻辑）/
+    too_many_main_items（陈列主角过多）/ wrong_hanging_density（挂装密度失控）/
+    inventory_depth_mismatch（陈列与库存深度不匹配）/ fake_same_item_substitution（替代款假装同款）。
+    这 8 类先练熟，门店成交会最先变化。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1 8 要素齐全；Gate 2 rule + value_set(top8) 可反推 8 类清单 + 直接影响成交筛选；
+    Gate 3 通用；Gate 4 store_training 可直接调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用错误优先级清单，不含笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set:
+    - {value_set_id: VS-KP-training_unit-styling-error-top-priority-eight-error_class, value: wrong_proportion_balance, label: 比例失衡, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-styling-error-top-priority-eight-error_class, value: ignoring_body_shape, label: 忽略身型, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-styling-error-top-priority-eight-error_class, value: wrong_scene_matching, label: 场景错配, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-styling-error-top-priority-eight-error_class, value: selling_single_piece_without_full_logic, label: 只卖单品不讲整套逻辑, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-styling-error-top-priority-eight-error_class, value: too_many_main_items, label: 陈列主角过多, ordinal: 5}
+    - {value_set_id: VS-KP-training_unit-styling-error-top-priority-eight-error_class, value: wrong_hanging_density, label: 挂装密度失控, ordinal: 6}
+    - {value_set_id: VS-KP-training_unit-styling-error-top-priority-eight-error_class, value: inventory_depth_mismatch, label: 陈列与库存深度不匹配, ordinal: 7}
+    - {value_set_id: VS-KP-training_unit-styling-error-top-priority-eight-error_class, value: fake_same_item_substitution, label: 替代款假装同款, ordinal: 8}
+  rule:
+    - {rule_id: RL-KP-training_unit-styling-error-top-priority-eight, rule_type: error_priority_focus, applicable_when: "冷启动或大批新人入职首批纠错训练编排", success_scenario: "首批培训资源100%聚焦8类Top错误，门店成交在4-8周内可观测改善", flip_scenario: "20类平均铺开，员工记不全用不出，8类高优先级错误继续发生", alternative_boundary: "稳定门店改为月度异常事件驱动；合规安全不参与此裁剪"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-styling-error-top-priority-eight, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 六/七/九, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm08, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["sales_associate","store_manager"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-styling-error-top-priority-eight, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingPriorityList"]}

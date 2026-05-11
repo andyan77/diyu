@@ -1,0 +1,11 @@
+FD-Persona-persona_id,Persona,persona_id,string,,,domain_general,KP-product_attribute-persona-three-shell-coverage
+FD-Persona-display_name,Persona,display_name,string,,,domain_general,KP-product_attribute-persona-three-shell-coverage
+FD-Persona-cold_start_positioning,Persona,cold_start_positioning,string,,,domain_general,KP-product_attribute-persona-three-shell-coverage
+FD-Persona-persona_definition_kind,Persona,persona_definition_kind,enum,,,domain_general,KP-product_attribute-persona-shell-not-equal-role
+FD-Persona-anti_pattern_check_state,Persona,anti_pattern_check_state,enum,,,domain_general,KP-training_unit-persona-anti-pattern-checklist
+FD-TrainingMaterial-collection_priority,TrainingMaterial,collection_priority,enum_ordered,,,domain_general,KP-training_unit-collect-real-action-before-script
+FD-Evidence-evidence_shape,Evidence,evidence_shape,enum,,,domain_general,KP-training_unit-evidence-shape-four-types
+FD-TrainingMaterial-failure_quota,TrainingMaterial,failure_quota,ratio,,,domain_general,KP-training_unit-collect-failure-not-only-success
+FD-RoleProfile-material_completeness,RoleProfile,material_completeness,enum,,,domain_general,KP-training_unit-role-material-five-kinds-minimum
+FD-RoleProfile-hard_evidence_count,RoleProfile,hard_evidence_count,int,,,domain_general,KP-training_unit-role-material-five-kinds-minimum
+FD-RoleProfile-cold_start_priority_phase,RoleProfile,cold_start_priority_phase,enum,,,domain_general,KP-training_unit-cold-start-role-priority-frontline

@@ -1,0 +1,91 @@
+pack_id: KP-fabric_property-pure-cotton-not-zero-risk
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  "纯棉"不等于"零风险"——纯棉也会透 / 卷 / 缩 / 变形，针织棉更要看领口、下摆和洗后稳定性；
+  门店不许把"纯棉"作为零风险背书使用。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional
+    target_audience: 默认"纯棉=安全无风险"的顾客；导购把"纯棉"当万能背书的接客场景
+  when:
+    trigger: 顾客拿起棉款问材质或导购用"纯棉"作为唯一推荐理由
+    context: 棉 T 恤 / 棉打底 / 棉衬衫 / 棉针织等家常通勤款
+  what:
+    action_type: misjudgment_correction_cotton_eq_zero_risk
+    decision_or_action: |
+      把"纯棉"重新定位为成分维度，不构成风险背书；
+      推荐前主动告知透 / 卷 / 缩 / 变形四类共性风险；
+      针织棉显式追加领口松 / 下摆卷 / 洗后稳定性三项；
+      建立"纯棉≠零风险，看版型 + 织法 + 整理"的统一口径。
+  result:
+    success_pattern: |
+      顾客接受"纯棉也要看版型织法整理"，按四类风险做选择；无"纯棉就该零风险"投诉。
+    flip_pattern: |
+      用"纯棉"做万能背书 → 顾客买回家发现透 / 卷 / 缩 / 变形 → 退换或差评；
+      把领口松归为"穿久了正常" → 信任受损。
+  underlying_mechanism: |
+      棉纤维亲水 → 吸湿膨胀 → 缩水 + 软化变形；
+      薄棉密度低 → 浅色透；针织结构线圈不稳 → 领口下摆变形；
+      "纯棉"只说成分，不说密度 / 织法 / 整理。
+  boundary:
+    applicable_when: 任何纯棉款；店员或顾客把"纯棉"等同零风险的场景
+    not_applicable_when: |
+      经过 Sanforized + 全防缩 + 高密织造 + 树脂定型且明示的款；
+      明确做"季节性低价款"已框定预期。
+  alternative_path:
+    - 如果顾客要"零风险" → 推荐高稳定棉混合化纤或预缩防变形棉款
+    - 如果是针织棉款 → 显式追加领口下摆与洗后稳定性提示
+    - 如果是薄棉浅色 → 同步推荐内搭
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 六、首批高频误判 · 误判 5：把"纯棉"当成"零风险"
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    正式纠偏：纯棉也会透、会卷、会缩、会变形；针织棉更要看领口、下摆和洗后稳定性。
+    落盘对象：FabricKnowledge（面料知识）、TrainingMaterial（培训材料）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"纯棉≠零风险 + 四类共性风险 + 针织棉额外三项"。
+    Gate 3：通用棉认知误判。
+    Gate 4：可被 store_training / outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用棉认知误判，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-pure-cotton-not-zero-risk-cotton_not_blanket_safe, owner_field: risk_alerts, definition: "纯棉只是成分维度，不构成零风险背书，需看版型/织法/整理"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-pure-cotton-not-zero-risk-risk_position, value: see_through, label: 透}
+    - {value_set_id: VS-KP-fabric_property-pure-cotton-not-zero-risk-risk_position, value: edge_curl, label: 卷}
+    - {value_set_id: VS-KP-fabric_property-pure-cotton-not-zero-risk-risk_position, value: shrink, label: 缩}
+    - {value_set_id: VS-KP-fabric_property-pure-cotton-not-zero-risk-risk_position, value: deform, label: 变形}
+  rule:
+    - {rule_id: RL-KP-fabric_property-pure-cotton-not-zero-risk, rule_type: misjudgment_correction, applicable_when: "店员或顾客把纯棉等同零风险", success_scenario: "纠偏成成分维度+四类共性风险+针织额外三项 → 顾客理性选择无投诉", flip_scenario: "用纯棉做万能背书 → 顾客发现透/卷/缩/变形 → 退换/差评", alternative_boundary: "要零风险→高稳定棉混合化纤；针织棉→显式提领口下摆稳定性；薄浅色→推内搭"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-pure-cotton-not-zero-risk, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 六、误判 5, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-fabric_property-pure-cotton-not-zero-risk, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-pure-cotton-not-zero-risk, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}

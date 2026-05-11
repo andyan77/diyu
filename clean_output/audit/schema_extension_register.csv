@@ -1,0 +1,2 @@
+extension_id,extension_type,proposed_value,target_schema_section,rationale,decision,decided_by,decided_at,note
+EXT-001,unprocessable_classification,external_reference_material,prompt §13 8-class enum,本仓在执行中遇到综述类外部研究稿（compass_artifact / 深度研究 / GPT5.4 等），agent 临时新增第 9 类。本扩展未走注册制，被 W7 review 标 schema_drift,rejected,reviewer_W7_2026-05-03,2026-05-03,"4 行已重分类到 out_of_scope；validate_register_enum.py 收紧为严格 prompt 8 类；今后任何超 prompt 受控枚举的扩展须先在本表登记 → decision=approved 后才允许使用"

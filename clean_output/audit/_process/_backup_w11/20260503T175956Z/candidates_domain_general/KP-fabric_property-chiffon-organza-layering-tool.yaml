@@ -1,0 +1,96 @@
+pack_id: KP-fabric_property-chiffon-organza-layering-tool
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  雪纺 / 欧根纱 / 轻透材的正确定位是"层次工具"而非"显瘦遮肉的主面料安全款"；
+  雪纺偏软垂、欧根纱偏支撑带空气感，但共同必须前置透感、静电、勾丝、挂纱、缝口起皱五类风险，
+  并显式劝退"单穿主力"用法。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional（商品专业者）
+    target_audience: 想用雪纺 / 欧根纱"显瘦遮肉单穿"的顾客；做礼服 / 罩层 / 叠穿氛围搭配的顾客
+  when:
+    trigger: 顾客拿起雪纺 / 欧根纱单品说"挺薄挺仙能不能单穿"或导购把它当主面料推
+    context: 春夏礼服 / 罩层 / 叠穿氛围陈列；强光 / 静电环境
+  what:
+    action_type: fabric_position_layering_only
+    decision_or_action: |
+      把雪纺 / 欧根纱定位为"层次工具"——叠穿 / 礼服 / 罩层 / 氛围；
+      区分雪纺软垂 vs 欧根纱支撑带空气感的视觉差异；
+      同步前置透感 / 静电 / 勾丝 / 挂纱 / 缝口起皱五类风险；
+      想单穿显瘦的顾客明确转向高密厚款或加内搭。
+  result:
+    success_pattern: |
+      顾客接受"层次工具"定位，配内搭或叠穿后氛围成立；
+      勾丝 / 静电出现时不视为品质问题。
+    flip_pattern: |
+      把雪纺 / 欧根纱卖为"显瘦遮肉"单穿主力 → 顾客上身透出底裤 / 体表 / 内衣 → 退换或差评；
+      未提示勾丝 / 挂纱 → 顾客一次出门刮坏认定品质问题。
+  underlying_mechanism: |
+      雪纺与欧根纱均为低密度细纱织物，纤维细 + 密度低 → 透光透色 + 易勾丝；
+      合成纤维静电累积；轻薄织物缝纫时压脚 / 送布力差异大易导致 seam puckering；
+      欧根纱的硬挺来自表面整理浆 / 涤纶高捻，洗后会软化。
+  boundary:
+    applicable_when: 雪纺 / 欧根纱 / 类似轻透材；用作罩层 / 礼服 / 叠穿 / 氛围
+    not_applicable_when: |
+      高密厚款雪纺乔其 + 衬里齐全的款式（接近主面料安全款）；
+      纯展示用陈列道具。
+  alternative_path:
+    - 如果顾客要"轻盈但能单穿" → 转向带衬里的乔其或厚款雪纺裙
+    - 如果顾客怕静电 → 推荐含一定天然纤维或带抗静电整理的款
+    - 如果顾客怕勾丝 → 推荐欧根纱（密度高于雪纺）或表面带肌理款
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 四、首批 FabricKnowledge 正式冻结清单 · 7. 雪纺 / 欧根纱 / 轻透材
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这类更适合做层次工具，不适合默认按"主面料安全款"去卖。
+    最容易误导的是把它当成"显瘦遮肉"单穿主力。
+    正式风险提示冻结为：透感、静电、勾丝、挂纱、缝口起皱；
+    精细轻薄材质本身就更容易出现 seam puckering 问题。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"层次工具定位 + 五类风险 + 反单穿规则"三层语义。
+    Gate 3：通用轻透材判断。
+    Gate 4：可被 outfit_recommendation / display_guidance / store_training 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用轻透材物理特性，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-chiffon-organza-layering-tool-layering_only, owner_field: risk_alerts, definition: "雪纺 / 欧根纱定位为层次工具，不是显瘦遮肉的主面料安全款"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-chiffon-organza-layering-tool-risk_position, value: see_through, label: 透感}
+    - {value_set_id: VS-KP-fabric_property-chiffon-organza-layering-tool-risk_position, value: static_cling, label: 静电}
+    - {value_set_id: VS-KP-fabric_property-chiffon-organza-layering-tool-risk_position, value: snag, label: 勾丝}
+    - {value_set_id: VS-KP-fabric_property-chiffon-organza-layering-tool-risk_position, value: yarn_pull, label: 挂纱}
+    - {value_set_id: VS-KP-fabric_property-chiffon-organza-layering-tool-risk_position, value: seam_puckering, label: 缝口起皱}
+  rule:
+    - {rule_id: RL-KP-fabric_property-chiffon-organza-layering-tool, rule_type: fabric_recommendation_disclosure, applicable_when: "面料=雪纺/欧根纱/轻透材 且 顾客想单穿显瘦", success_scenario: "定位为层次工具+前置五类风险 → 顾客叠穿氛围成立无纠纷", flip_scenario: "卖为单穿主力 → 透出体表/内衣 → 退换/差评", alternative_boundary: "要单穿→带衬里乔其或厚款；怕静电→含天然纤维或抗静电整理；怕勾丝→欧根纱或带肌理款"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-chiffon-organza-layering-tool, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 四、7. 雪纺 / 欧根纱 / 轻透材, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-chiffon-organza-layering-tool, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-display_guidance-KP-fabric_property-chiffon-organza-layering-tool, runtime_method: display_guidance, input_types: [DisplayGuide, Product], output_types: [DisplayLayout]}

@@ -1,0 +1,99 @@
+pack_id: KP-training_unit-color-hesitation-disambiguation
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  当顾客对颜色犹豫时，导购必须先识别她真正担心的是
+  "难搭 / 显黑 / 不耐脏 / 不够正式"中的哪一个，再给应对——
+  颜色顾虑背后常常不是颜色，而是场景；
+  只回一句"这个颜色很显白"几乎一定打不中她真正的担心点，并连带否掉这件衣服。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 一线导购 / 新人
+  when:
+    trigger: 顾客拿起或试穿后说"这颜色我能驾驭吗 / 会不会显黑 / 容易脏吗 / 太亮了吧"
+    context: 任意品类，浅色 / 高饱和 / 跳色单品高频触发
+  what:
+    action_type: color_hesitation_disambiguation
+    decision_or_action: |
+      错误动作：只说"这个颜色很显白""这个颜色很百搭"。
+      正确动作：用一个反问把顾虑拆到 4 类之一——
+        难搭 → 给近色群 + 至少 2 个搭配示例；
+        显黑 → 谈光线 + 妆容 + 颈部对比，不硬讲色卡；
+        不耐脏 → 谈使用场景 / 洗护门槛 / 颜色叠加策略；
+        不够正式（或太正式）→ 切换到合适场景的替代色。
+      为什么错：颜色问题表面是颜色，背后多半是场景安全感问题；
+        给"显白"这种万能词只会显得在敷衍。
+      如何纠正：班前会用 do_dont_contrast 演练一组"颜色顾虑→四类拆解"。
+      掌握检查：员工面对颜色顾虑能在 3 句话内说出顾客是哪一类
+        （审美问题 vs 场景安全感问题），并给出对应应对。
+  result:
+    success_pattern: |
+      顾客感觉自己被听懂，转入有效讨论；
+      推进到下一套搭配或对当前颜色形成判断（接受或转向）。
+    flip_pattern: |
+      导购回"显白""百搭"，顾客笑笑放下衣服；
+      颜色话题没打开，整段接客失去这个突破点。
+  underlying_mechanism: |
+      颜色顾虑是高度个人化的场景投射：
+      "我穿这个回家会不会被同事笑 / 会不会显得太亮 / 老公会不会觉得不像我"——
+      这些其实都是场景与自我形象问题，必须先回到场景维度回应。
+  boundary:
+    applicable_when: 任何颜色类犹豫（含跳色 / 浅色 / 深色 / 中性色）
+    not_applicable_when: |
+      顾客已明确表达单一类别（如"我就是怕脏不想买浅色"）→ 直接按对应路径回应；
+      纯审美偏好（"我就是不喜欢这个色"）→ 不要硬拆，立即转替代色。
+  alternative_path:
+    - 顾客有 2 个颜色顾虑混合 → 优先解决场景安全感（最难恢复）
+    - 顾客无法说清楚 → 用穿着场景反推（"你打算什么场合穿"）
+    - 单品颜色确实在该顾虑上不利 → 诚实承认并切换近色替代
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 五、首批高频接客场景 · C5 color_hesitation_handling
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    C5 color_hesitation_handling（颜色犹豫处理）
+    正确动作：先判断顾客是在怕难搭、怕显黑、怕不耐脏，还是怕不够正式
+    错误动作：只说"这个颜色很显白"
+    为什么错：颜色问题背后常常不是颜色，而是场景
+    怎么纠正：先拆顾虑，再给近色群或替代场景
+    学会判定：员工能区分"颜色审美问题"和"场景安全感问题"
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: rule + value_set(concern_class) 可反推 4 类顾虑 + 审美 vs 场景安全感二分。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用颜色顾虑应对法。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set:
+    - {value_set_id: VS-KP-training_unit-color-hesitation-disambiguation-concern_class, value: hard_to_match, label: 难搭, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-color-hesitation-disambiguation-concern_class, value: makes_skin_dark, label: 显黑, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-color-hesitation-disambiguation-concern_class, value: not_dirt_friendly, label: 不耐脏, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-color-hesitation-disambiguation-concern_class, value: not_formal_enough, label: 不够正式或太正式, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-training_unit-color-hesitation-disambiguation, rule_type: color_concern_disambiguation, applicable_when: "顾客对颜色发问或在镜前犹豫颜色", success_scenario: "拆到 4 类顾虑之一并定向回应，颜色话题被打开推进到下一步", flip_scenario: "只回显白百搭，顾客敷衍放下衣服，本款及颜色突破点失效", alternative_boundary: "纯审美偏好直接转替代色；明确单一顾虑直接走对应路径"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-color-hesitation-disambiguation, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 五、C5 color_hesitation_handling, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm13, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["sales_associate"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-color-hesitation-disambiguation, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingScript"]}

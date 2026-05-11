@@ -1,0 +1,107 @@
+pack_id: KP-styling_rule-daily-fragment-sensory-sort-not-time
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: medium
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "把一天按软吵静这些体感排序而不是按时间排序"
+  steps:
+    - "先拍今天最软的触感"
+    - "再拍今天最吵的声音"
+    - "最后落到终于安静的一秒"
+  anti_pattern: "按早中晚流水账排列导致体感记忆变弱"
+  duration: medium
+  audience: "对触感声音和生活气味敏感的观众"
+  source_pack_id: KP-styling_rule-daily-fragment-sensory-sort-not-time
+
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  daily_fragment 内容里，"碎片按体感排（不按时间）"是一条把碎片组织从
+  "时间顺序"反掉成"感官分类"的玩法——从"今天最软的东西"开始（袖口 / 蒸汽 / 头发 / 傍晚光），
+  接"今天最吵的东西"（拉链 / 地铁 / 店门 / 手机震动），最后落到"今天终于安静的那一秒"。
+  观众接住的是**体感**，而不是行程。布料本来就有触感和声音，
+  非常适合做体感排序——这是服装行业 daily_fragment 的"感官分类"独占机会。
+  本卡是 daily_fragment 北极星"碎片之间必须有隐形线索"中"感官线索"的具体实现，
+  与 C3-1 时间线索 / C3-4 声音线索 / C3-8 双重时间线 形成"线索类型"四维分工。
+
+scenario:
+  who:
+    primary_role: daily_fragment 内容创作者 / 服装品牌内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=daily_fragment 选感官线索卡时）
+  when:
+    trigger: 单日想做碎片但不想用时间顺序 / 想突出"体感"而非"事件"
+    context: daily_fragment 易翻车点是"九宫格 Plog / 配热门歌的拼盘"——本卡用感官分类反破"无内在顺序"
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 30 秒分三段：最软（4 镜近景） + 最吵（4 镜声音） + 最安静（1 个长镜头），字幕只标"最软/最吵/最安静"
+  result:
+    success_pattern: |-
+      0-8 字幕"今天最软"+袖口→蒸汽→头发→傍晚光 → 8-18 字幕"今天最吵"+拉链→地铁→店门→手机震动 →
+      18-25 字幕"今天最安静"+你放下手机坐下 → 25-30 定格 3 秒空镜 → 观众接住的是体感不是行程
+    flip_pattern: |-
+      把感官分类做成"商品分类"（柔软系列 / 利落系列 / 静谧系列）→ 退化为产品广告
+      或加事件解释（"今天最软是因为我下午在熨衣服"）→ 滑向 personal_vlog
+  underlying_mechanism: |
+      daily_fragment 真正的隐形线索除了"时间"还可以是"感官"。"软/吵/静"是身体直接接收的信息维度，
+      绕过"叙事/解释"直接接住情绪。布料的触感（柔软）和声音（衣物摩擦/拉链）是服装独占的感官素材——
+      这是其他零售品类没有的"感官分类"内容富矿。
+  boundary:
+    applicable_when: 1 人 1 手机 / 单日 4 小时 / 主要考验剪辑思路 / 预算 0
+    not_applicable_when: 想用时间组织碎片 → C3-1 / C3-5 / 想用声音单维度 → C3-4 六声一日 / 想加事件解释 → personal_vlog
+  alternative_path:
+    - 与 C3-4 "六声一日"配合：本卡"软/吵/静"含听觉但非全声音，C3-4 全声音；可两个都做但单条只选一个线索
+    - 与 OOTD C3-5 "城市声学穿搭"互补：本卡是 daily_fragment 感官分类，OOTD C3-5 是用城市声音决定穿什么
+
+evidence:
+  source_md: Q2-内容类型种子/daily_fragment-交付物-v0.1.md
+  source_anchor: §C3-3 碎片按体感排（不按时间）+ 服装钩子
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-3：从"今天最软的东西"开始：袖口、蒸汽、头发、傍晚光；
+    然后是"今天最吵的东西"：拉链、地铁、店门、手机震动；最后是"今天终于安静的那一秒"。
+    观众接住的是体感，而不是行程。
+    服装钩子：布料本来就有触感和声音，非常适合做体感排序。
+    打破"碎片内容一定是时间顺序"的套路。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation + 09_call_mapping
+    可反推"DF 用感官分类（软/吵/静）替代时间顺序 / 与 C3-1/C3-4 线索类型分工 / 服装感官独占性"。
+    Gate 3：跨品牌通用。
+    Gate 4：可被 content_generation 调用，按"感官分类清单+排序"生成分镜。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 daily_fragment 玩法格式，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-daily-fragment-sensory-sort-not-time, rule_type: content_play_card_anchor, applicable_when: "daily_fragment 单日 4 小时 / 想突出体感而非事件", success_scenario: "三段感官分类（最软/最吵/最安静）+ 字幕极简 → 观众接住体感不是行程", flip_scenario: "做成商品分类 → 产品广告 / 加事件解释 → 滑向 personal_vlog", alternative_boundary: "时间线索 → C3-1 / 声音单维度 → C3-4 / 决定穿什么 → OOTD C3-5"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-daily-fragment-sensory-sort-not-time, source_md: Q2-内容类型种子/daily_fragment-交付物-v0.1.md, source_anchor: §C3-3, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-daily_fragment-df4, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"daily_fragment","play_card":"C3-3","cue_type":"sensory"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-daily-fragment-sensory-sort-not-time, runtime_method: content_generation, input_types: ContentType+SensoryClassCatalog, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

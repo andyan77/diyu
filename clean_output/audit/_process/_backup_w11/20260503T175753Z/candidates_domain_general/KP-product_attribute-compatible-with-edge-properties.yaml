@@ -1,0 +1,84 @@
+pack_id: KP-product_attribute-compatible-with-edge-properties
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  Persona × ContentType 兼容矩阵的唯一关系真源是
+  (:Persona)-[:COMPATIBLE_WITH {support, risk, reason}]->(:ContentType)；
+  其中 support 取值固定 4 档（now / enhanced / custom / unsupported），risk 取值固定 3 档（low / medium / high），
+  reason 是自由文本但必须能解释 support 与 risk 的具体依据；任何调档都必须改动这三个属性中的至少一个。
+
+scenario:
+  who:
+    primary_role: 知识工程 / 内容运营
+    target_audience: 派生视图引擎 / Skill 能力发现 / Prompt 风险提示
+  when:
+    trigger: 创建或调整 Persona × ContentType 兼容关系
+    context: Q4 唯一新建关系真源；冷启动 P0
+  what:
+    action_type: relation_edge_property_specification
+    decision_or_action: 严格按 {support, risk, reason} 三属性写入 COMPATIBLE_WITH 边
+  result:
+    success_pattern: 派生视图引擎按 support 4 档 + Q3 tier 组合即可算出"默认可用/补充配置后可用/品牌级/不建议"展示档，无歧义
+    flip_pattern: 边只写 support 不写 reason → 后期想调档不知道当初为什么这么定，调一次断一次链路
+  underlying_mechanism: |
+      属性结构是关系的"决策化记账"。support 解决"能不能"，risk 解决"风险多大"，reason 解决"为什么"。
+      三者缺一即记账不全，后续调档只能凭印象。
+  boundary:
+    applicable_when: Persona × ContentType 关系建模与维护
+    not_applicable_when: ContentType × Platform / Persona × Platform（Q4 明确不新建此类关系边）
+  alternative_path:
+    - support 想新增第 5 档 → 走关系边升级提案，不私自加值
+    - risk 想细化为数值 → 在 properties_json 中扩展子字段，不破坏 3 档结构
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md
+  source_anchor: 八、当前"已冻结/候选/待补"总表 · 字段口径
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    字段口径 | support = now | enhanced | custom | unsupported / risk = low | medium | high / reason = string
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 04_value_set（support 4 / risk 3）+ 03_semantic（reason 定义）+ 05_relation（COMPATIBLE_WITH 边带 properties_json）+ 06_rule 可反推"三属性缺一不可、support/risk 取值锁死、reason 必须解释"三条核心语义。
+    Gate 3：关系边属性化的通用建模方法，可移植到其他真源关系。
+    Gate 4：可被 content_generation 前置兼容性校验消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 关系边属性结构通用规范
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-compatible-with-edge-properties-support, owner_field: support, definition: "support 4 档：now 已支持 / enhanced 增强后支持 / custom 品牌级或特殊场景 / unsupported 不建议"}
+    - {semantic_id: SM-KP-product_attribute-compatible-with-edge-properties-risk, owner_field: risk, definition: "risk 3 档：low / medium / high，描述该兼容关系的潜在风险等级"}
+    - {semantic_id: SM-KP-product_attribute-compatible-with-edge-properties-reason, owner_field: reason, definition: "reason 自由文本，必须解释 support 与 risk 的具体依据"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-compatible-with-edge-properties-support, value: now, label: 已支持, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-compatible-with-edge-properties-support, value: enhanced, label: 增强后支持, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-compatible-with-edge-properties-support, value: custom, label: 品牌级或特殊场景, ordinal: 3}
+    - {value_set_id: VS-KP-product_attribute-compatible-with-edge-properties-support, value: unsupported, label: 不建议, ordinal: 4}
+    - {value_set_id: VS-KP-product_attribute-compatible-with-edge-properties-risk, value: low, label: 低风险, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-compatible-with-edge-properties-risk, value: medium, label: 中风险, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-compatible-with-edge-properties-risk, value: high, label: 高风险, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-product_attribute-compatible-with-edge-properties, rule_type: relation_edge_property_specification, applicable_when: "Persona × ContentType 兼容边创建或调档时", success_scenario: "三属性齐全派生引擎可无歧义计算展示档", flip_scenario: "缺 reason→后期调档断链", alternative_boundary: "新档→走升级提案；细化→扩 properties_json 子字段"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-compatible-with-edge-properties, source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md, source_anchor: 八 · 字段口径, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Persona-compatible_with_content_type-ContentType-tcb11a, source_type: Persona, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"required_props":["support","risk","reason"],"support_enum":["now","enhanced","custom","unsupported"],"risk_enum":["low","medium","high"]}'}
+  lifecycle: []
+  call_mapping: []

@@ -1,0 +1,85 @@
+pack_id: KP-styling_rule-single-problem-priority
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  接客时一次先解决顾客一个核心顾虑，不同时解决五个问题——成交不是"卖点堆满"而是"顾虑被减掉"；
+  替代时也优先守住顾客最在意的那一个点。
+
+scenario:
+  who:
+    primary_role: 全部导购
+    target_audience: 全部顾客（所有门店）
+  when:
+    trigger: 接客对话开场 / 试穿后顾客提出第一个顾虑 / 顾客犹豫不决
+    context: 导购卖点表达顺序选择
+  what:
+    action_type: single_concern_focus
+    decision_or_action: |
+      顾客说显胖就先解决显胖；说难搭就先解决难搭；
+      原款缺货时替代必须优先守住顾客最在意的那一个点。
+  result:
+    success_pattern: 顾客单点顾虑被精准解决后愿意成交，连带可在第二轮接续。
+    flip_pattern: 上来就说"显高显瘦显气质显贵显年轻"，顾客信息过载、决策瘫痪、不下单。
+  underlying_mechanism: |
+      门店成交是减法不是加法；
+      多顾虑同时解决会被顾客理解为"哪个都没解决"，反而降低信任。
+  boundary:
+    applicable_when: 全部导购 / 全部门店 / 全部接客场景
+    not_applicable_when: 无（用 source 原文："无"）
+  alternative_path:
+    - 原款缺货 → 替代必须优先守住顾客最在意的那一个点
+    - 顾客无明确顾虑 → 用陈列分组（显高/显瘦/通勤/贵价救场）引导顾客先选一个
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 12 single_problem_solving_rule + 6.2 hard_rule
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    接客时一次先解决顾客一个核心顾虑，不同时解决五个问题。
+    真正成交不是"卖点堆满"，而是"顾虑被减掉"。
+    suitable_for：全部导购、全部门店。
+    not_suitable_for：无。
+    works_in：顾客说显胖，就先解决显胖；说难搭，就先解决难搭。
+    fails_in：上来就说"显高显瘦显气质显贵显年轻"。
+    原款缺货时，替代必须优先守住顾客最在意的那一个点。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；接客通用规则；可被培训情境题直接调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 接客通用规则。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-single-problem-priority-single_concern, owner_field: rule_name, definition: "单一问题优先法：先解决顾客一个核心顾虑，替代时也守住该顾虑"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-single-problem-priority-concern_types, value: look_thin, label: 显瘦, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-single-problem-priority-concern_types, value: look_tall, label: 显高, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-single-problem-priority-concern_types, value: easy_to_match, label: 好搭配, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-single-problem-priority-concern_types, value: rescue_premium, label: 贵价救场, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-styling_rule-single-problem-priority, rule_type: hard_rule, applicable_when: "全部导购/全部门店/全部接客场景", success_scenario: "单点顾虑精准解决顾客成交", flip_scenario: "卖点堆满顾客决策瘫痪不下单", alternative_boundary: "原款缺货替代必须优先守住顾客最在意的那一个点"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-single-problem-priority, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 12 + 6.2, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-fits_customer_scenario-CustomerScenario-spri01, source_type: StylingRule, target_type: CustomerScenario, relation_kind: fits_customer_scenario, properties_json: '{"focus":"single_concern_priority"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-spri02, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"最适合做情境题"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-spri03, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"显高组/显瘦组/通勤组/贵价救场组分墙"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-styling_rule-single-problem-priority, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-single-problem-priority, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-display_guidance-KP-styling_rule-single-problem-priority, runtime_method: display_guidance, input_types: [DisplayGuide], output_types: [DisplayPlan]}

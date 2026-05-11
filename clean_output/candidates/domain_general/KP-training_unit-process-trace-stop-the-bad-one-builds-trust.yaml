@@ -1,0 +1,100 @@
+pack_id: KP-training_unit-process-trace-stop-the-bad-one-builds-trust
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: medium
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "用淘汰一件坏衣服证明品牌没有骗顾客"
+  steps:
+    - "拍看似正常的衣服被摊开"
+    - "指出一毫米偏差或洗后风险"
+    - "放入返工筐说明不能卖"
+  anti_pattern: "只展示好工艺而不展示品牌愿意挡掉什么"
+  duration: short
+  audience: "对品质信任有要求的顾客"
+  source_pack_id: KP-training_unit-process-trace-stop-the-bad-one-builds-trust
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  process_trace（工艺溯源）的北极星不是"工艺多厉害"而是"我愿意相信你没有骗我"——突破性档的核心翻面是
+  "认真不是把好的拿出来炫，而是把'不够好的'挡在外面"。镜头从一件看似正常的衣服开始，员工不说大道理，
+  只是摊开 + 指出"这里一毫米偏了 / 那里平整度不够 / 这里洗后状态不稳定，所以不能过"，最后衣服被放进
+  返工筐 + 字幕"所以它不能卖给你"。**用淘汰建立信任**比"严格把控"四字空泛口号有效一个量级。这与 C3-1
+  "只拍手不拍脸"、C3-2"一刀之前的静止"、C3-5"夜班 12 分钟"共同构成 process_trace 的"反公开秀场化"叙事方向。
+
+scenario:
+  who:
+    primary_role: 工艺溯源内容创作者 / 品牌质检团队
+    target_audience: process_trace 突破性档；目标观众有透明度焦虑且对"看似公开实则空泛"免疫
+  when:
+    trigger: 想表达品控但避免"参观路线 / 严格把控"等空泛话术
+    context: 透明度倡议要求"可追溯 / 可披露"；服装行业工艺溯源正处爆发期
+  what:
+    action_type: stop_the_bad_one_builds_trust
+    decision_or_action: 拍被拦下的那件衣服 + 手指指出具体瑕疵 + 低声解释 + 放进返工筐 + 一句反鼓吹字幕
+  result:
+    success_pattern: 观众接住"我愿意相信你没有骗我"/ 品牌的边界感 / 用淘汰建立信任比口号有效
+    flip_pattern: 用"严格把控 / 大型工厂全景 / 字幕诗朗诵"包装（C1-1）→ 在透明焦虑行业里"看似公开实则空泛"反而难说服
+  underlying_mechanism: |
+      工艺溯源的根本张力是"展示动作 vs 验证选择"——前者像参观路线，后者像可核验的推理。
+      "被拦下来的那一件"是最难伪装的镜头——具体瑕疵 + 具体判断 + 不可逆动作（放进返工筐），观众无法被"演"。
+      与 C3-1 手部叙事 / C3-2 不可逆动作前静止 / C3-5 夜班安静共享同一底层机制：把"流程"翻成"判断"。
+  boundary:
+    applicable_when: process_trace 突破性档；品牌愿意展示真实质检过程
+    not_applicable_when: 品牌为代工 / 无自主质检（无被拦下的那一件可拍）；车间敏感区域涉及第三方利益（合规风险）
+  alternative_path:
+    - 无可拍质检过程 → 改用 C3-1 "只拍手不拍脸"（手部叙事不依赖质检场景）
+    - 有质检但不便公开瑕疵细节 → 改用 C3-2 "一刀之前的静止"（用不可逆动作前的呼吸感建立可信）
+
+evidence:
+  source_md: Q2-内容类型种子/process_trace-交付物-v0.1.md
+  source_anchor: §A 北极星"我愿意相信你没有骗我" + §C 玩法卡 #C3-3 被拦下来的那一件 + §C C1-1 "严格把控"反例
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    "我愿意相信你没有骗我"
+    大多数品牌只愿意拍"合格品"，但真正能建立信任的，是拍那件被拦下来的衣服
+    认真不是把好的拿出来炫，而是把"不够好的"挡在外面——接住品牌的边界感
+    最致命的是那句"严格把控"太空——在透明焦虑的行业里，"看似公开、实则空泛"的展示难以说服
+    打破工艺内容永远只展示"漂亮流程"的套路，用淘汰建立信任
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（被拦下叙事玩法）+ 03_semantic（用淘汰建立信任 ≠ 严格把控空话）+ 05_relation（与 C3-1/C3-2/C3-5 共同构成反公开秀场化叙事方向）可反推核心语义。
+    Gate 3：任意品牌的工艺溯源都可使用此玩法（含服装 / 食品 / 工艺品行业）。
+    Gate 4：可被 content_generation 在 process_trace 玩法选择时消费——按品牌质检透明度过滤是否适用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论纪律；不含具体笛语品牌调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-process-trace-stop-the-bad-one-builds-trust-meaning, owner_field: process_trace_trust_path, definition: "process_trace 信任建立路径 = 用淘汰建立信任（拍被拦下的那一件）/ 不是用严格把控空话；北极星 = 我愿意相信你没有骗我"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-process-trace-stop-the-bad-one-builds-trust, rule_type: stop_the_bad_one_builds_trust, applicable_when: "process_trace 突破性档品牌有自主质检过程", success_scenario: "拍被拦下的衣服 + 具体瑕疵 + 返工筐观众接住边界感", flip_scenario: "严格把控 + 大型工厂全景 + 字幕诗朗诵 → 透明焦虑行业看似公开实则空泛难说服", alternative_boundary: "无质检 → 改用只拍手不拍脸；不便公开瑕疵 → 改用一刀之前的静止"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-process-trace-stop-the-bad-one-builds-trust, source_md: Q2-内容类型种子/process_trace-交付物-v0.1.md, source_anchor: §A + §C C3-3 + §C C1-1 反例, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-prc01, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"process_trace","narrative_family":["only_hands","stillness_before_cut","quiet_night_shift","stop_the_bad_one"],"family_name":"anti_public_showcase_process_trace"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-process-trace-stop-the-bad-one-builds-trust, runtime_method: content_generation, input_types: '["ContentType","BrandQCTransparency"]', output_types: '["PlayCardSelection"]', governing_rules_json: '["RL-KP-training_unit-process-trace-stop-the-bad-one-builds-trust"]'}

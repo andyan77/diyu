@@ -1,0 +1,63 @@
+pack_id: KP-product_attribute-content-type-three-tier-maturity
+granularity_layer: L2
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 每一个 ContentType 必须维护"已被用烂玩法 / 进阶玩法 / 突破性玩法"三档成熟度（playbook_tier）字段，平台生成时显式标注当前生成属于哪一档；缺失三档划分的 ContentType 视为内容资产不完整，禁止用于生成调用。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: ContentType schema 字段治理
+  when:
+    trigger: 注册 / 更新任意 ContentType 内容资产
+    context: 三份通用类素材统一以"主流玩法（已被用烂）/ 进阶玩法（少数高手在用）/ 突破性玩法（还没人这么干）"三档结构组织——这是跨 ContentType 共通的成熟度框架
+  what:
+    action_type: schema_meta_rule
+    decision_or_action: 在 ContentType 对象上挂一个 `playbook_tier` 字段，取值集 = {`overused_mainstream`, `advanced_minority`, `breakthrough_proposal`}；每个 ContentType 至少备齐三档各 1 条玩法样例；生成请求若未指定 tier 则默认走 advanced 或 breakthrough
+  result:
+    success_pattern: 平台对每类内容都能识别出"哪条是模板饱和"与"哪条是突破方向"，避免误把饱和模板当作可调用素材
+    flip_pattern: 仅维护一档（多半是已饱和的主流玩法）→ 生成结果与市场一致同质化，AI 反向放大模板饱和
+  underlying_mechanism: 内容生态成熟度服从"模板饱和-高手分化-突破方向"三段曲线；不区分档位就无法管理"该跳出什么、该靠近什么"
+  boundary:
+    applicable_when: 5 类通用 ContentType + Q2 18 类交付物层 ContentType
+    not_applicable_when: 一次性活动 / 短期热点话题 ContentType（不构成可复用三档玩法的暂不强制）
+  alternative_path:
+    - tier 命名采用中文对照：已饱和 / 进阶 / 突破
+    - 在 9 表 value_set 中冻结三档，禁止新增第四档
+
+evidence:
+  source_md: Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md
+  source_anchor: 三份 md 的章节结构本身（每个 ContentType 都按"主流玩法-进阶玩法-突破性玩法"三段组织）
+  source_type: structural_pattern
+  inference_level: low
+  evidence_quote: |
+    通用类.md（5 个 ContentType 全部）：主流玩法（已被用烂）/ 进阶玩法（少数高手在用）/ 突破性玩法（还没人这么干，但可能成立）三段式标题。
+    通用类compass.md：主流玩法（已被用烂）/ 进阶玩法（少数高手在用）/ 突破性玩法（原创设想，可成立）。
+    deep-research-report.md：from template-saturated mainstream (已被用烂) to documented advanced techniques (进阶) to executable breakthrough proposals (突破性).
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: ContentType schema 元规则，跨任意品牌使用
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 通用 schema 元规则；属 SKILL §6.1.1"Schema 元规则"通用范畴
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType]
+  field: [FD-ContentType-playbook_tier]
+  semantic: [SM-content-type-three-tier-maturity]
+  value_set: [VS-playbook-tier]
+  relation: []
+  rule: [RL-content-type-three-tier-maturity]
+  evidence: [EV-content-type-three-tier-maturity]
+  lifecycle: []
+  call_mapping: []

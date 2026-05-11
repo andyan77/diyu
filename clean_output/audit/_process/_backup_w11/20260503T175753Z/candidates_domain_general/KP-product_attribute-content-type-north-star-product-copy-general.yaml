@@ -1,0 +1,83 @@
+pack_id: KP-product_attribute-content-type-north-star-product-copy-general
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `product_copy_general`（通用产品文案 / 详情页 / 海报 / 私聊话术）的北极星是
+  "在脑子里提前穿过一次、犹豫过一次、相信过一次"——文字与视觉一起把读者带进**具体的身体感受
+  和使用时刻**，让 ta 愿意把商品加入自己的生活。本 ContentType 是 18 份里**唯一的文字型 CT**
+  （非视频），玩法卡 10 字段中的"30 秒分镜参考"按 α 改良版语义扩展读作"文案执行骨架四段式"
+  （钩子标题 / 正文节奏 / 视觉分层 / CTA 或留白）。所有 product_copy_general 玩法是否成立按这条反推：
+  形容词三连（高级/百搭/显瘦）/ 口号先行 / FABE 模板 / 痛点-方案-限时优惠链 / 小说体详情页
+  全部判主流默认禁用——这是 AI 大语言模型最擅长批量生产的赛道，禁用是本 CT 的生命线。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: product_copy_general 文案作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 product_copy_general 玩法卡，或对一条产品文案做"是否符合 ContentType 北极星"判断
+    context: product_copy_general 双角色（第一层引流引擎 + 第二层接客转化）；输出形态是文字+局部配图+排版而非视频
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"替代试衣间 / 在脑子里完成一次试穿"作为 PCG 玩法是否成立的最终判定，且 AI 模板化文案（形容词三连/口号/FABE/小说体/促销链）一律 C1 禁用
+  result:
+    success_pattern: 玩法卡能呈现"具体场景替代泛泛夸赞 / 反销售判断同盟 / 触感型 + 触觉暗示画面 / 时刻文案 / 双栏文案 / 反对意见清单 / 舞台指令四行剧本 / 留白美学海报"等"具体身体感受 + 多种声音原型"叙事 → 进 C2/C3
+    flip_pattern: 玩法落到形容词三连 / slogan 大字报 / 详情页小说体 / FABE 四段 / 痛点-方案-优惠链 → AI 一键生成的批量赛道，红线触发拒绝输出
+  underlying_mechanism: |
+      product_copy_general 是整个 batch 3 里 AI 辅助度最高的（因为文案本就是结构化生成任务），
+      也是 AI slop 危险最高的——必须用"5 种声音原型 + 触觉暗示 + 具体时刻 + 反对意见清单"
+      把生成约束在"对人说话"而非"对人广播"。"AI 工具正在放大模板问题——以规模生产'高端大气上档次'通用文案"。
+  boundary:
+    applicable_when: 单 ContentType 内容创作判型 / PCG 玩法库扩张时的卡片新增门禁 / 文字型 CT 的字段语义扩展
+    not_applicable_when: 视频型 ContentType（前 13 份和 batch 3 前 3 份不走 α 改良版字段语义扩展）
+  alternative_path:
+    - 与 knowledge_sharing 边界：KS 重心是"教观众"（穿搭/面料知识）；PCG 重心是"卖这件商品"
+    - 与 product_review 边界：product_review 是视频测评；PCG 是文字+局部配图
+
+evidence:
+  source_md: Q2-内容类型种子/product_copy_general-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流禁用 3 张 + §E 红线 8 条 + α 改良版字段语义扩展专章 + §F 核心判断
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完后，不是"知道这件衣服的参数"，而是
+    "在脑子里提前穿过一次、犹豫过一次、相信过一次"——文字和视觉一起把 ta 带进了一个
+    具体的身体感受和使用时刻，ta 愿意把它加入自己的生活。
+    特殊形态标记：本 CT 是文案型 ContentType，不是视频型——玩法卡的「30 秒分镜参考」字段按 α 改良版语义扩展，读作「文案执行骨架」。
+    compass §3：AI 工具正在放大模板问题——以规模生产"高端大气上档次"通用文案——。
+    F 核心判断：禁止生成命中 §E 任一条的文案——这是用负面清单约束 AI 的典型用法。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 同 KS 北极星 pack 的四闸结构
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论——任意品牌做 product_copy_general 都需此北极星与 α 改良版字段语义扩展
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+    - {field_id: FD-ContentType-output_form, owner_type: ContentType, field_name: output_form, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-product-copy-general-pcg_north_star, owner_field: north_star, definition: "product_copy_general 北极星：在脑子里提前穿过一次/犹豫过一次/相信过一次——文字型 CT，30 秒分镜按 α 改良版读作文案执行骨架四段式；C1 禁用形容词三连/口号/FABE/小说体/促销链"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-product-copy-general, rule_type: content_type_north_star_anchor, applicable_when: "新增 PCG 玩法卡或审核一条产品文案时", success_scenario: "玩法呈现具体场景/触感比喻/时刻文案/反销售/双栏/反对意见/舞台指令/留白海报 → C2/C3", flip_scenario: "形容词三连/口号/FABE/小说体/促销链 → C1 默认禁用 + AI 命中红线拒绝输出", alternative_boundary: "与 KS 按教观众 vs 卖商品；与 product_review 按视频 vs 文字"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-product-copy-general, source_md: Q2-内容类型种子/product_copy_general-交付物-v0.1.md, source_anchor: §A + §C1 + §E + α 改良版专章, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-product_copy_general-pcg1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_copy_general","output_form":"text"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-product-copy-general, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

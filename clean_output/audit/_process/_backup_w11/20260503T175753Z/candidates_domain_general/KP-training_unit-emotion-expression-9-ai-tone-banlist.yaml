@@ -1,0 +1,91 @@
+pack_id: KP-training_unit-emotion-expression-9-ai-tone-banlist
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  emotion_expression（情绪表达）这一类内容生产时必须先做"9 种 AI 腔禁用清单"负面匹配——
+  生成结果命中以下任一模式必须**重写**而非微调：① 泛用抚慰型（"允许自己慢一点 / 你已经很棒了"）；
+  ② 凌晨三点诗意型（"凌晨三点的城市 / 月光打在窗边 / 像极了爱情"）；③ 成年人崩溃型（"成年人崩溃就在一瞬间"）；
+  ④ 反问灌输型（"为什么你总是 XX / 难道你不配 XX"）；⑤ 排比鸡汤型（"你可以不完美 / 你可以不优秀 …… 但你不能 XX"）；
+  ⑥ 隐喻过载型（"人生就像一杯茶 / 苦尽甘来"）；⑦ 空洞励志型（"坚持下去 / 风雨过后就是彩虹"）；
+  ⑧ AI 配音腔（合成女声 + 刻意悲伤 + 尾音拖长）；⑨ 滤镜+BGM 包装型（黑白滤镜+悲怆钢琴+慢动作+眼眶湿润特写）。
+  这是硬约束（一票否决），不是建议规避。情绪类内容一旦命中即彻底失效——观众反感度远高于其他 ContentType 翻车。
+
+scenario:
+  who:
+    primary_role: 内容生产 AI / 情绪类内容人工创作者
+    target_audience: emotion_expression 及其他情绪敏感 ContentType（humor_content / lifestyle_expression / daily_fragment / personal_vlog / founder_ip / behind_the_scenes）
+  when:
+    trigger: 生成或撰写情绪类内容前的负面匹配；发布前最后一道校验
+    context: emotion_expression 是 Q2 中 AI 翻车风险最高的 CT；α 9 清单已升共享层 §H.1 跨 CT 复用
+  what:
+    action_type: ai_tone_banlist_negative_match
+    decision_or_action: 生成结果先匹配 9 模式 → 命中任一即拒绝 / 要求重写；不允许微调"绕开"
+  result:
+    success_pattern: AI 腔被拦截在发布前 / 情绪内容保留具体画面、具体地点、具体物件锚点 / 观众不被"一秒识别为 AI 模板"
+    flip_pattern: 命中清单未拦截 → 观众当场划走 + 反感度积累 + 账号情绪资产长期受损
+  underlying_mechanism: |
+      情绪共鸣靠"被看见"，AI 腔模板靠"对所有人都适用"（Barnum effect）—— 后者是前者的反面。
+      9 模式覆盖 AI 大语言模型 + 合成语音 + 视听包装三层最易被识别的 AI 腔路径，匹配命中率最高的负面清单。
+  boundary:
+    applicable_when: 任何情绪敏感 CT 的内容生成与发布前校验
+    not_applicable_when: 非情绪类的产品文案 / 培训材料（这两类的灵魂是"准确"而非"情绪真实"，不强制扩散此清单）
+  alternative_path:
+    - 命中模式但表达必要 → 拆解为具体情境（具体时间 / 具体地点 / 具体物件）后重写，不许在原模板上改字
+    - 仅命中 1 项且程度轻 → 仍要求重写，不许"风险评分"放行
+
+evidence:
+  source_md: Q2-内容类型种子/emotion_expression-交付物-v0.1.md
+  source_anchor: §E-α 9 种 AI 腔禁用清单 + §G G1（升共享层裁决）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    使用方式：AI 在生成 emotion_expression 时，先做负面匹配——如果生成结果命中下面任一模式，必须重写而非微调
+    本清单不是"建议避免"，而是 AI 生成 emotion_expression 时必须执行的硬约束——命中任一项则拒绝生成，要求重构
+    G1 升共享层（横切 M6 无损并入）：已升级为共享层 §H.1 α-Layer 9 AI-Tone Banned List 跨 CT 负面样板库 / 优先级最高的"一票否决"层
+    跨 CT 复用清单：humor_content / lifestyle_expression / daily_fragment / personal_vlog / founder_ip / behind_the_scenes
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（一票否决匹配规则）+ 04_value_set（9 模式枚举）+ 03_semantic（负面样板库定义）可反推"哪些模式被禁用 + 命中即重写 + 跨 6 CT 复用"。
+    Gate 3：任意品牌的情绪类内容生产都需要 AI 腔负面清单作为发布前校验。
+    Gate 4：可被 content_generation 在发布前校验消费——命中即拒绝。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容生产元规则（负面匹配清单），不含具体笛语调性内容；α 清单内容是 AI 腔模板的负面样板库，不是品牌专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-emotion-expression-9-ai-tone-banlist-policy, owner_field: ai_tone_negative_match, definition: "α 层 9 种 AI 腔负面样板库：情绪敏感 CT 生成发布前的一票否决清单；命中任一项必须重写不许微调"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_1_generic_soothing, label: 泛用抚慰型, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_2_3am_poetic, label: 凌晨三点诗意型, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_3_adult_breakdown, label: 成年人崩溃型, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_4_rhetorical_question, label: 反问灌输型, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_5_parallelism_chicken_soup, label: 排比鸡汤型, ordinal: 5}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_6_metaphor_overload, label: 隐喻过载型, ordinal: 6}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_7_empty_motivation, label: 空洞励志型, ordinal: 7}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_8_ai_voiceover, label: AI 配音腔, ordinal: 8}
+    - {value_set_id: VS-KP-training_unit-emotion-expression-9-ai-tone-banlist-9pattern, value: pattern_9_filter_bgm_packaging, label: 滤镜+BGM 包装型, ordinal: 9}
+  rule:
+    - {rule_id: RL-KP-training_unit-emotion-expression-9-ai-tone-banlist, rule_type: ai_tone_banlist_one_strike, applicable_when: "情绪敏感 CT 内容生成或发布前校验", success_scenario: "命中即重写 AI 腔被拦截画面/地点/物件锚点齐全", flip_scenario: "微调绕开 → 观众当场划走情绪资产长期受损", alternative_boundary: "命中但必须表达 → 拆解为具体情境重写不许在原模板改字"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-emotion-expression-9-ai-tone-banlist, source_md: Q2-内容类型种子/emotion_expression-交付物-v0.1.md, source_anchor: §E-α 9 种 AI 腔禁用清单 + §G G1, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-emo01, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"emotion_expression","applies_to":["emotion_expression","humor_content","lifestyle_expression","daily_fragment","personal_vlog","founder_ip","behind_the_scenes"],"polarity":"shared_layer_H1"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-emotion-expression-9-ai-tone-banlist, runtime_method: content_generation, input_types: '["GeneratedContent","ContentType"]', output_types: '["ValidationResult"]', governing_rules_json: '["RL-KP-training_unit-emotion-expression-9-ai-tone-banlist"]'}

@@ -1,0 +1,103 @@
+pack_id: KP-inventory_rescue-shallow-vs-deep-sensing
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  库存感知必须区分两层——shallow_inventory_sensing 只知道有货/数量/同步时间，
+  能力上限是"过滤"；deep_inventory_sensing 还知道断哪个码哪个色 / 核心成交码 /
+  fit_sensitivity / 主陈列资格 / 救场转向选择 / 培训触发 / 替代信任风险，
+  能力是"前线判断"；推荐 / 陈列 / 接客如果只挂在浅感知上，必然把过滤当判断，
+  断码款照样上主推，替代款照样硬推。
+
+scenario:
+  who:
+    primary_role: 商品总监 / 系统架构 / 培训负责人
+    target_audience: 库存事实如何驱动门店动作的能力分层设计
+  when:
+    trigger: 设计或评估库存信号 → 门店动作的链路时
+    context: 真源已具备 stock_qty / last_sync 但前线动作仍需更深判断
+  what:
+    action_type: inventory_sensing_capability_layering
+    decision_or_action: |
+      明确两层边界：
+        浅感知职责：是否有货、大概数量、最近同步时间——用于"过滤掉绝对不能推的款"。
+        深感知职责：颜色断码、尺码断码、核心成交码识别、fit_sensitivity 评估、
+                  主陈列资格、rescue/redirect 判断、培训触发、替代信任风险——
+                  用于"指导前线具体动作"。
+      硬约束：
+        - 任何"该不该上主陈列"判断必须用深感知，不许用浅感知裸跑；
+        - 任何"该 rescue 还是 redirect"必须用深感知；
+        - 真源数据缺深字段时显式标 unknown_in_current_workspace，不许用浅感知值假冒深感知判断。
+  result:
+    success_pattern: 推荐/陈列/接客都基于深感知层，前线动作精准；浅感知保留为过滤兜底
+    flip_pattern: 系统只挂浅感知，断码款被推成主推、单码尾货上主陈列、应救场被错判 give_up
+  underlying_mechanism: |
+      库存的下游消费者不是"知道有没有"，而是"该用什么口径继续卖"——
+      浅感知是事实层，深感知是判断层；让下游直接消费事实层=把判断责任甩给前线人；
+      浅感知只能拒绝（过滤），深感知才能指导（动作）。
+  boundary:
+    applicable_when: 库存事实进入推荐 / 陈列 / 接客 / 培训四条下游链路时
+    not_applicable_when: |
+      纯库存盘点 / 财务核算（只需浅感知）；
+      首日冷启动尚无深感知数据 → 显式降级到"按品类默认 fit_sensitivity 兜底"，不假冒。
+  alternative_path:
+    - 深感知字段缺失（如 core_size_missing 未上线）→ 走默认保守判断：高 fit_sensitivity 品类一律不主推断码
+    - 浅感知数据延迟（last_sync 过期）→ 直接 hard_block H2，不进入深感知判断
+    - 深感知冲突（系统说断码但导购说还有）→ 以现场盘点为准，并触发真源同步
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/库存与替代包.md
+  source_anchor: 七、库存浅感知与深感知边界 inventory_sensing_boundary
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    7.1 shallow_inventory_sensing：有货/无货 / 大概数量 / 最近同步时间。
+    能力上限：只能做"过滤"，做不了"前线动作指导"。
+    7.2 deep_inventory_sensing：哪个颜色断 / 哪个尺码断 / 核心成交码 / fit_sensitivity /
+    还能不能做主陈列 / rescue 还是 redirect / 是否触发培训 / 替代路径会不会伤信任。
+    能力目标：从"库存过滤器"升级为"前线判断器"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐；为系统/能力分层规则；与库存状态清单是上下游关系。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 schema 元规则——库存感知能力分层。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+  field:
+    - {field_id: FD-InventoryState-sensing_layer, owner_type: InventoryState, field_name: sensing_layer, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-inventory_rescue-shallow-vs-deep-sensing-layers, owner_field: sensing_layer, definition: "库存感知能力两层：shallow（事实/过滤）vs deep（判断/动作指导）；下游动作必须挂深层"}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-layer, value: shallow_inventory_sensing, label: 浅感知-过滤层, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-layer, value: deep_inventory_sensing, label: 深感知-判断层, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-shallow_caps, value: in_stock_flag, label: 有货无货, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-shallow_caps, value: rough_quantity, label: 大概数量, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-shallow_caps, value: last_sync, label: 最近同步时间, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-deep_caps, value: color_size_break_detail, label: 颜色尺码断点细节, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-deep_caps, value: core_size_recognition, label: 核心成交码识别, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-deep_caps, value: fit_sensitivity_eval, label: 版型敏感度评估, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-deep_caps, value: hero_display_eligibility, label: 主陈列资格, ordinal: 4}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-deep_caps, value: rescue_redirect_decision, label: 救场转向决策, ordinal: 5}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-deep_caps, value: training_trigger, label: 培训触发, ordinal: 6}
+    - {value_set_id: VS-KP-inventory_rescue-shallow-vs-deep-sensing-deep_caps, value: substitution_trust_risk, label: 替代信任风险, ordinal: 7}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-shallow-vs-deep-sensing, rule_type: inventory_sensing_layering, applicable_when: "库存事实进入推荐/陈列/接客/培训四链路", success_scenario: "下游动作挂深感知前线动作精准浅感知保留过滤兜底", flip_scenario: "下游裸跑浅感知断码上主推单码上主陈列救场误判 give_up", alternative_boundary: "深字段缺失→默认保守兜底；last_sync 过期→直接 hard_block；系统/现场冲突→现场为准并触发同步"}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-shallow-vs-deep-sensing, source_md: Q7Q12-搭配陈列业务包/库存与替代包.md, source_anchor: 七、inventory_sensing_boundary, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-requires_inventory_state-InventoryState-sense01, source_type: StylingRule, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"required_layer":"deep_inventory_sensing","fallback":"conservative_when_unknown"}'}
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-sense01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"required_layer":"deep_inventory_sensing","forbid":"shallow_only_for_hero_display"}'}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-shallow-vs-deep-sensing, runtime_method: inventory_rescue, input_types: [InventoryState], output_types: [SensingLayerCheck]}

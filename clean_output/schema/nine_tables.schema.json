@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "9 Tables Row Schemas · canonical (v2-rev3-r1)",
+  "description": "每张表对应一个 schema；CSV 行可逐行映射为 JSON 对象后用对应 schema 校验。所有 required 字段强制 minLength=1（禁空字符串）；对象/关系类型严格 ⊆ skeleton 白名单；JSON 字段标记 contentMediaType=application/json 由校验脚本跑 json.loads()。",
+  "definitions": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "json_string": {
+      "type": "string",
+      "minLength": 1,
+      "contentMediaType": "application/json"
+    },
+    "json_string_nullable": {
+      "type": ["string", "null"],
+      "contentMediaType": "application/json"
+    },
+    "brand_layer": {
+      "type": "string",
+      "pattern": "^(domain_general|brand_[a-z_]+|needs_review)$"
+    },
+    "object_type_enum": {
+      "type": "string",
+      "enum": [
+        "Product",
+        "Category",
+        "Attribute",
+        "Collection",
+        "FabricKnowledge",
+        "CraftKnowledge",
+        "StylingRule",
+        "DisplayGuide",
+        "TrainingMaterial",
+        "RoleProfile",
+        "Persona",
+        "ContentType",
+        "PlatformTone",
+        "PrivateOutletChannel",
+        "InventoryState",
+        "CustomerScenario",
+        "CallMapping",
+        "Evidence"
+      ]
+    },
+    "relation_kind_enum": {
+      "type": "string",
+      "enum": [
+        "has_attribute",
+        "belongs_to_category",
+        "uses_fabric_knowledge",
+        "uses_craft_knowledge",
+        "governed_by_rule",
+        "supports_training",
+        "supports_display",
+        "supports_styling",
+        "requires_inventory_state",
+        "fits_customer_scenario",
+        "spoken_by_role",
+        "compatible_with_content_type",
+        "mapped_to_runtime",
+        "supported_by_evidence"
+      ]
+    },
+    "evidence_source_type_enum": {
+      "description": "07_evidence.source_type · v2-rev3-r1 实测真值",
+      "type": "string",
+      "enum": [
+        "direct_quote",
+        "cross_source_consensus",
+        "explicit_business_decision",
+        "explicit_business_rule",
+        "explicit_play_card",
+        "explicit_role_skill_lock",
+        "structural_pattern"
+      ]
+    },
+    "evidence_inference_level_enum": {
+      "description": "07_evidence.inference_level · v2-rev3-r1 实测真值",
+      "type": "string",
+      "enum": [
+        "direct_quote",
+        "low",
+        "structural_induction"
+      ]
+    }
+  },
+  "tables": {
+    "01_object_type": {
+      "type": "object",
+      "required": ["type_id", "type_name", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "type_id":        {"$ref": "#/definitions/non_empty_string"},
+        "type_name":      {"$ref": "#/definitions/object_type_enum"},
+        "supertype":      {"type": ["string", "null"]},
+        "brand_layer":    {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id": {"$ref": "#/definitions/non_empty_string"}
+      }
+    },
+    "02_field": {
+      "type": "object",
+      "required": ["field_id", "owner_type", "field_name", "data_type", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "field_id":       {"$ref": "#/definitions/non_empty_string"},
+        "owner_type":     {"$ref": "#/definitions/object_type_enum"},
+        "field_name":     {"$ref": "#/definitions/non_empty_string"},
+        "data_type":      {"$ref": "#/definitions/non_empty_string"},
+        "value_set_id":   {"type": ["string", "null"]},
+        "semantic_id":    {"type": ["string", "null"]},
+        "brand_layer":    {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id": {"$ref": "#/definitions/non_empty_string"}
+      }
+    },
+    "03_semantic": {
+      "type": "object",
+      "required": ["semantic_id", "owner_field_id", "definition", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "semantic_id":    {"$ref": "#/definitions/non_empty_string"},
+        "owner_field_id":    {"$ref": "#/definitions/non_empty_string"},
+        "definition":     {"$ref": "#/definitions/non_empty_string"},
+        "examples_json":  {"$ref": "#/definitions/json_string_nullable"},
+        "brand_layer":    {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id": {"$ref": "#/definitions/non_empty_string"}
+      }
+    },
+    "04_value_set": {
+      "type": "object",
+      "required": ["value_set_id", "value", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "value_set_id":   {"$ref": "#/definitions/non_empty_string"},
+        "value":          {"$ref": "#/definitions/non_empty_string"},
+        "label":          {"type": ["string", "null"]},
+        "ordinal":        {"type": ["integer", "string", "null"]},
+        "brand_layer":    {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id": {"$ref": "#/definitions/non_empty_string"}
+      }
+    },
+    "05_relation": {
+      "type": "object",
+      "required": ["relation_id", "source_type", "target_type", "relation_kind", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "relation_id":     {"$ref": "#/definitions/non_empty_string"},
+        "source_type":     {"$ref": "#/definitions/object_type_enum"},
+        "target_type":     {"$ref": "#/definitions/object_type_enum"},
+        "relation_kind":   {"$ref": "#/definitions/relation_kind_enum"},
+        "properties_json": {"$ref": "#/definitions/json_string_nullable"},
+        "brand_layer":     {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id":  {"$ref": "#/definitions/non_empty_string"}
+      }
+    },
+    "06_rule": {
+      "type": "object",
+      "required": ["rule_id", "rule_type", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "rule_id":              {"$ref": "#/definitions/non_empty_string"},
+        "rule_type":            {"$ref": "#/definitions/non_empty_string"},
+        "applicable_when":      {"type": ["string", "null"]},
+        "success_scenario":     {"type": ["string", "null"]},
+        "flip_scenario":        {"type": ["string", "null"]},
+        "alternative_boundary": {"type": ["string", "null"]},
+        "brand_layer":          {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id":       {"$ref": "#/definitions/non_empty_string"}
+      }
+    },
+    "07_evidence": {
+      "type": "object",
+      "required": ["evidence_id", "source_md", "source_anchor", "evidence_quote", "source_type", "inference_level", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id":     {"$ref": "#/definitions/non_empty_string"},
+        "source_md":       {"$ref": "#/definitions/non_empty_string"},
+        "source_anchor":   {"$ref": "#/definitions/non_empty_string"},
+        "evidence_quote":  {"$ref": "#/definitions/non_empty_string"},
+        "source_type":     {"$ref": "#/definitions/evidence_source_type_enum"},
+        "inference_level": {"$ref": "#/definitions/evidence_inference_level_enum"},
+        "brand_layer":     {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id":  {"$ref": "#/definitions/non_empty_string"}
+      }
+    },
+    "08_lifecycle": {
+      "type": "object",
+      "required": ["lifecycle_id", "owner_type", "state", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "lifecycle_id":   {"$ref": "#/definitions/non_empty_string"},
+        "owner_type":     {"$ref": "#/definitions/object_type_enum"},
+        "state":          {"$ref": "#/definitions/non_empty_string"},
+        "transition_to":  {"type": ["string", "null"]},
+        "condition":      {"type": ["string", "null"]},
+        "brand_layer":    {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id": {"$ref": "#/definitions/non_empty_string"}
+      }
+    },
+    "09_call_mapping": {
+      "type": "object",
+      "required": ["mapping_id", "runtime_method", "brand_layer", "source_pack_id"],
+      "additionalProperties": false,
+      "properties": {
+        "mapping_id":           {"$ref": "#/definitions/non_empty_string"},
+        "runtime_method":       {"$ref": "#/definitions/non_empty_string"},
+        "input_types":          {"type": ["string", "null"]},
+        "output_types":         {"type": ["string", "null"]},
+        "governing_rules_json": {"$ref": "#/definitions/json_string_nullable"},
+        "brand_layer":          {"$ref": "#/definitions/brand_layer"},
+        "source_pack_id":       {"$ref": "#/definitions/non_empty_string"}
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+pack_id: KP-training_unit-ootd-anti-hard-ad-discipline
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  outfit_of_the_day 内容生产纪律：OOTD 是 18 类 ContentType 中**商业化风险最高**、
+  **最容易滑向硬广 / 种草**的 CT，必须用三条强红线反向把守——
+  (1) 禁止满屏 SKU 字幕像报菜名（E4）；
+  (2) 禁止强口播购买指令（"必入 / 闭眼入 / 冲就完了" E6）；
+  (3) 禁止"显瘦 / 高级 / 氛围感"等空词替代真实体感和场景（E3）。
+  违反任一条 → 直接判主流默认禁用档（C1-1 镜前转圈+SKU 清单 / C1-3 卡点变装的具体翻车形态）。
+  这条纪律不是"风格建议"而是**OOTD 调用门禁**——
+  AI 生成 OOTD 玩法时必须主动抑制 SKU 字幕 / 购买指令 / 空词三类倾向，
+  否则即使套用 C2/C3 进阶卡也会因为这三条之一退化为 C1。
+
+scenario:
+  who:
+    primary_role: outfit_of_the_day 内容创作者 / AI 内容生成调度 / 品牌内容审核
+    target_audience: 服装品牌 / 加盟商 / 主理人做 OOTD 内容时
+  when:
+    trigger: 写一条 OOTD 内容前的字幕 / 口播 / 形容词检查
+    context: OOTD 是商业化风险最高的 CT；商业化失败会同时破坏品牌长期资产和当条转化
+  what:
+    action_type: ootd_anti_hard_ad_discipline
+    decision_or_action: 字幕剔除 SKU 清单 + 口播剔除购买指令 + 形容词剔除三大空词；保留具体动作字幕（如"挡得住风/收得起来/走得动"）
+  result:
+    success_pattern: 字幕只标功能或问题（"挡得住风"/"为什么换了三次"）+ 口播只描述动作和理由（"今天我不换了，就穿它一天"）+ 形容词替换为可验证细节（"坐 20 分钟不顶"）→ OOTD 进入 C2/C3 档
+    flip_pattern: 字幕标"#连衣裙#约会#显瘦S码￥xxx" / 口播"姐妹们冲" / 形容词"氛围感拉满" → 命中 E3/E4/E6 → C1 默认禁用，浪费 C3 玩法卡的成立机会
+  underlying_mechanism: |
+      OOTD 与服装行业最直接相关——也最容易被加盟商 / MCN 复刻为硬广。
+      硬广模板的本质是"用形容词和 SKU 替代真实穿着证据"——
+      这与 OOTD 北极星"想象自己穿上以后的状态"的方向**完全相反**。
+      三条红线是把"商业化滑坡"在内容生产源头堵死的最低成本检查项。
+  boundary:
+    applicable_when: 所有 OOTD 内容生产 / 进阶档以上玩法（C2/C3）的字幕和口播检查
+    not_applicable_when: 主流 C1 档已默认禁用，无须再加红线（已被全档屏蔽）；接客现场顾客试穿（顾客自己看实物，无需自述）
+  alternative_path:
+    - 想说"这件值不值得买" → 改用 product_review CT（叙事重心是商品证据，含反滤镜宣言四项约束）
+    - 想标 SKU/价格 → 改用 product_copy_general（商品文案 CT），不要在 OOTD 里塞
+
+evidence:
+  source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md
+  source_anchor: §E3 + §E4 + §E6 红线 + §与试点版差异点（OOTD 商业化风险最高） + 北极星
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    E3：用"显瘦/高级/氛围感"这种空词顶替真正的体感和场景。
+    E4：满屏 SKU 字幕、像报菜名。
+    E6：把 OOTD 拍成赤裸硬广（强口播购买指令）。
+    与试点版差异：商业化风险最高—OOTD 是最容易滑向"硬广 / 种草"的 ContentType，
+    需要最强的红线约束。
+    北极星：观众接住的不是 SKU，而是审美与品牌的长期记忆。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过；OOTD 调用门禁纪律。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 OOTD 内容生产纪律，任意品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-ootd-anti-hard-ad-discipline-three-bans, owner_field: ootd_baseline, definition: "OOTD 三禁纪律：禁 SKU 字幕清单（E4）/ 禁强口播购买指令（E6）/ 禁'显瘦高级氛围感'空词（E3）—— 调用门禁，违反任一条直接判 C1 默认禁用"}
+  rule:
+    - {rule_id: RL-KP-training_unit-ootd-anti-hard-ad-discipline, rule_type: ootd_anti_hard_ad_discipline, applicable_when: "OOTD 进阶档以上字幕/口播/形容词检查", success_scenario: "功能或问题字幕+动作和理由口播+可验证细节形容词 → C2/C3 进阶档成立", flip_scenario: "SKU 清单字幕/姐妹冲口播/氛围感空词 → 命中 E3/E4/E6 → C1 默认禁用", alternative_boundary: "评测重心 → product_review / 标 SKU → product_copy_general"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-ootd-anti-hard-ad-discipline, source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md, source_anchor: §E3 + §E4 + §E6 + 与试点版差异 + 北极星, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-compatible_with_content_type-outfit_of_the_day-ootd5, source_type: TrainingMaterial, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"outfit_of_the_day","baseline":"anti_hard_ad_three_bans"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-ootd-anti-hard-ad-discipline, runtime_method: content_generation, input_types: "ContentType=outfit_of_the_day", output_types: "AntiHardAdGate"}

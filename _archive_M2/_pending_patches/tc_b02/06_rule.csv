@@ -1,0 +1,14 @@
+RL-KP-styling_rule-proportion-split-37,hard_rule,通勤客/大众客群/显高显利落需求,3:7 或 4:6 视觉切分成立腿线连续显高,5:5 等分切割+卡胯+裙长停最粗处+鞋口叠刀显矮显钝,低腰复古/Y2K 风格反转放行；高腰下装断码优先换同长度高腰不能用低腰等效替代,domain_general,KP-styling_rule-proportion-split-37
+RL-KP-styling_rule-silhouette-balance,hard_rule,通勤/大众/初次试穿/整组挂场,宽收对比成立穿上顺眼,上下同膨顾客觉得自己变壮,替代先守廓形角色再守颜色；高个偏瘦/oversize 街头风可反转,domain_general,KP-styling_rule-silhouette-balance
+RL-KP-styling_rule-waistline-anchor,hard_rule,显高/显瘦/显精神诉求 + 梨形/H型/小个子/产后/通勤,腰线明确顾客觉得精神,长上衣全盖+低腰+无收束顾客觉得垮,高腰断码用腰带/短外套/层次制假腰线；不能用无腰线等效替代,domain_general,KP-styling_rule-waistline-anchor
+RL-KP-styling_rule-one-focus,hard_rule,第一次种草/连带销售/安全成交盘,单一主角+其余降噪顾客一眼锁定,亮片+花+金属+大耳环顾客不下单,舞台/时装表达不在此限；主角断货替代保留主角功能,domain_general,KP-styling_rule-one-focus
+RL-KP-styling_rule-color-echo,hard_rule,整套搭配/挂场分组/全部客群,至少两处颜色呼应整体显完整,孤立亮色其他断开画面散,同温度同明度替代；冷暖乱跳禁止；冲突感造型可放行,domain_general,KP-styling_rule-color-echo
+RL-KP-styling_rule-neutral-plus-accent,soft_rule,通勤/怕出错/初次成交/安全盘/新导购首推,中性色打底+一处提气复制率高,全灰全米无材质层次显性冷淡,节庆/潮流年轻客群可高饱和反转；提气断货优先换配饰,domain_general,KP-styling_rule-neutral-plus-accent
+RL-KP-styling_rule-structure-drape,soft_rule,想提升质感/客单较高门店/贵价商品搭配,材质对冲成立顾客觉得显贵,全软塌或全硬挺显廉价或老气,替代先守材质角色再守颜色；纯运动场景不适用,domain_general,KP-styling_rule-structure-drape
+RL-KP-styling_rule-premium-item-neutralization,soft_rule,难卖主推款/设计感强商品/日常零售推荐,贵气+基础休闲降压顾客觉得能穿出门,贵气叠贵气视觉压迫顾客掉头,中和单品保留哑光/基础/低压力特征；婚礼/晚宴/典礼反转放行,domain_general,KP-styling_rule-premium-item-neutralization
+RL-KP-styling_rule-face-brightness,soft_rule,成熟客/黄调肤色/熬夜脸/第一次试色,近脸提亮顾客气色好,近脸发灰发黄整体比例再对也显老,上装缺货优先替换近脸提亮件；强妆造场景不适用,domain_general,KP-styling_rule-face-brightness
+RL-KP-styling_rule-formality-consistency,hard_rule,面试/会议/通勤/婚礼/商务男装,上下件正式度同级顾客觉得得体,套装配休闲鞋/礼服感配破洞牛仔顾客说不出但退,断码只能换同级正式度；混搭风可放行,domain_general,KP-styling_rule-formality-consistency
+RL-KP-styling_rule-menswear-belt-shoe,hard_rule,男装西装/商务/婚礼/面试 formal dressing 场景,鞋腰带颜色皮质正式度一致顾客觉得专业,黑鞋浅棕编织带或正装鞋休闲带顾客掉头,鞋断货优先同色同正式度替代不换整套西装；纯休闲/球鞋/工装/无腰带场景反转放行,domain_general,KP-styling_rule-menswear-belt-shoe
+RL-KP-styling_rule-single-problem-priority,hard_rule,全部导购/全部门店/全部接客场景,单点顾虑精准解决顾客成交,卖点堆满顾客决策瘫痪不下单,原款缺货替代必须优先守住顾客最在意的那一个点,domain_general,KP-styling_rule-single-problem-priority
+RL-KP-styling_rule-substitution-priority-ladder,hard_rule,主件断码/库存救场/陈列替换,按四级顺序守功能替代后顾客接受,只长得像功能不一样顾客试穿后掉头,任一前三级掉级判定不能替代→进入库存救场或转向；不找长得像的找功能一样的,domain_general,KP-styling_rule-substitution-priority-ladder
+RL-KP-styling_rule-looks-good-but-unsellable,hard_rule,门店推荐定稿/主推墙上墙/培训反例对照,通过 7 类反例筛选门店转化稳定,命中任一反例仍上推荐或上墙顾客不停留不下单,命中后回到对应正向规则修正：silhouette_balance/proportion_split/premium_item_neutralization/formality_consistency 或改造为问题解决墙,domain_general,KP-styling_rule-looks-good-but-unsellable

@@ -1,0 +1,96 @@
+pack_id: KP-craft_quality-fusing-lamination-silhouette-gate
+schema_version: candidate_v1
+pack_type: craft_quality
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  粘合衬 / 贴合 / 复合是"轮廓成立工艺"——领口 / 门襟 / 驳头 / 裤头 / 袖山一旦衬用错或贴合不稳，
+  陈列时还能撑、穿几次就翻边 / 起泡 / 脱层；
+  凡是要用"挺、立、利落、骨架感"做卖点的单品，必须先过这组判断。
+
+scenario:
+  who:
+    primary_role: 门店导购 / merchandising_director / sample_worker
+    target_audience: 询问 / 推荐西装 / 衬衫 / 大衣 / 修身 / 立领等讲轮廓的款；商品 / 培训准备喊"挺立利落骨架"的人
+  when:
+    trigger: 准备用"挺、立、利落、骨架感"做卖点；或顾客上身后短期内出现翻边 / 起泡 / 脱层
+    context: 西装 / 衬衫 / 大衣 / 立领 / 驳头 / 修身廓型款
+  what:
+    action_type: craft_quality_check_before_silhouette_claim
+    decision_or_action: |
+      把"挺立利落骨架"卖点的资格门槛锁定为粘合衬 / 贴合 / 复合到位；
+      推荐前确认领口 / 门襟 / 驳头 / 裤头 / 袖山的衬与贴合是否稳；
+      不确定的款不许喊轮廓卖点；改为讲面料或版型；
+      已出现翻边 / 起泡 / 脱层的款下线或换品。
+  result:
+    success_pattern: |
+      凡说"挺立利落"的款都经得起穿几次后的复检；顾客无翻边 / 起泡投诉；
+      售前判断把不合格款拦截在推荐之外。
+    flip_pattern: |
+      为成交喊"挺立利落"但衬未到位 → 几次穿着后翻边 / 起泡 / 脱层 → 退换或差评；
+      把翻边归为"自然变化"糊弄 → 信任受损。
+  underlying_mechanism: |
+      粘合衬通过热压胶将衬布与面料复合，胶层厚度 / 温度 / 压力 / 时间任一不当 → 短期看着挺，
+      但服用后受拉伸 / 摩擦 / 洗涤 → 胶层失效 → 起泡脱层；
+      贴合 / 复合面料同理。
+  boundary:
+    applicable_when: 西装 / 衬衫 / 大衣 / 立领 / 驳头 / 修身款；任何"挺立利落骨架"卖点
+    not_applicable_when: |
+      面料本身有支撑感不依赖衬的款（如重磅斜纹）；
+      明确做软廓型 / 解构款（不喊挺立卖点）。
+  alternative_path:
+    - 如果衬到位不可确认 → 改卖面料 / 版型 / 设计感
+    - 如果已出现翻边起泡 → 直接换款或换码
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 五、首批 CraftKnowledge 正式冻结清单 · 3. 粘合衬 / 贴合 / 复合
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    这组正式定义为"轮廓成立工艺"。
+    领口、门襟、驳头、裤头、袖山，一旦衬用错或贴合不稳，陈列时还能撑，穿几次就可能翻边、起泡、脱层。
+    凡是要用"挺、立、利落、骨架感"做卖点的单品，都要先过这组判断。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"轮廓工艺定义 + 卖点资格门槛 + 失败信号"。
+    Gate 3：通用粘合衬工艺判断。
+    Gate 4：可被 store_training / display_guidance / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用粘合衬工艺，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CraftKnowledge, type_name: CraftKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-craft_quality-fusing-lamination-silhouette-gate-silhouette_gate, owner_field: craft_feature, definition: "粘合衬/贴合/复合是轮廓成立工艺，是挺立利落骨架卖点的资格门槛"}
+  value_set:
+    - {value_set_id: VS-KP-craft_quality-fusing-lamination-silhouette-gate-failure_signal, value: edge_curl, label: 翻边}
+    - {value_set_id: VS-KP-craft_quality-fusing-lamination-silhouette-gate-failure_signal, value: bubble, label: 起泡}
+    - {value_set_id: VS-KP-craft_quality-fusing-lamination-silhouette-gate-failure_signal, value: delamination, label: 脱层}
+    - {value_set_id: VS-KP-craft_quality-fusing-lamination-silhouette-gate-position, value: collar, label: 领口}
+    - {value_set_id: VS-KP-craft_quality-fusing-lamination-silhouette-gate-position, value: placket, label: 门襟}
+    - {value_set_id: VS-KP-craft_quality-fusing-lamination-silhouette-gate-position, value: lapel, label: 驳头}
+    - {value_set_id: VS-KP-craft_quality-fusing-lamination-silhouette-gate-position, value: waistband, label: 裤头}
+    - {value_set_id: VS-KP-craft_quality-fusing-lamination-silhouette-gate-position, value: sleeve_cap, label: 袖山}
+  rule:
+    - {rule_id: RL-KP-craft_quality-fusing-lamination-silhouette-gate, rule_type: craft_promise_gate, applicable_when: "推荐讲轮廓款 且 准备喊挺立利落骨架卖点", success_scenario: "衬与贴合到位 → 穿几次后无翻边起泡 → 卖点成立", flip_scenario: "衬未到位仍喊挺立 → 翻边起泡脱层 → 退换/差评", alternative_boundary: "无法确认衬到位→改卖面料/版型/设计感；已起泡→换款换码"}
+  evidence:
+    - {evidence_id: EV-KP-craft_quality-fusing-lamination-silhouette-gate, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 五、3. 粘合衬 / 贴合 / 复合, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-craft_quality-fusing-lamination-silhouette-gate, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-display_guidance-KP-craft_quality-fusing-lamination-silhouette-gate, runtime_method: display_guidance, input_types: [DisplayGuide, Product], output_types: [DisplayLayout]}

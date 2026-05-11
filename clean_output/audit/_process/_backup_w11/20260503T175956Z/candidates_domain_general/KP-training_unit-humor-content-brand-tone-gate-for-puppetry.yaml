@@ -1,0 +1,89 @@
+pack_id: KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  humor_content（幽默内容）的"衣架木偶戏 / 服装拟人化"玩法（C3-5）必须先过品牌调性闸门——
+  适合调性：活泼 / 街头 / 年轻 / 童趣（Activate / Street / Young / Playful）；
+  不适合调性：极简 / 高端定制 / 冷感（Minimal / Haute-Couture / Cold）。
+  AI 生成时按品牌 Persona 调性自动判断是否调用本卡。这是 humor_content 与品牌调性强耦合的玩法卡之一——
+  品牌"自嘲方向"对所有品牌开放（不分级），但"服装拟人化"这种具体表演形式必须做调性匹配，否则会与严肃品牌
+  调性硬冲突。这条规则的判定路径是：玩法卡是否带"🎨 品牌调性提示"行 → 有则执行调性匹配 / 无则默认全调性开放。
+
+scenario:
+  who:
+    primary_role: 内容生产 AI / 品牌方内容编辑
+    target_audience: humor_content 突破性档玩法 + 品牌 Persona 已有调性参数
+  when:
+    trigger: AI 准备调用 C3-5 衣架木偶戏或同类拟人化玩法时
+    context: humor_content 自嘲方向不分级（G3 裁决）但具体玩法需调性闸门（G2 裁决 B 选项）
+  what:
+    action_type: brand_tone_gate_for_play_card
+    decision_or_action: 检查玩法卡是否带"🎨 品牌调性提示"行 → 有则按品牌 Persona 调性匹配 / 不匹配则改用其他玩法
+  result:
+    success_pattern: 拟人化玩法用在活泼街头年轻品牌 / 严肃高端品牌不被错配 / 品牌记忆点强且不破坏调性
+    flip_pattern: 高端冷感品牌强用衣架木偶戏 → 调性硬冲突 / 观众感知品牌方"装亲民"反弹 / 品牌资产受损
+  underlying_mechanism: |
+      humor_content 的方向（自嘲 / 不完美 / 狼狈）对所有品牌开放，但具体"形式"对调性敏感——
+      拟人化、咆哮式、儿童剧形式与"严肃 / 高端 / 冷感"硬冲突，与"活泼 / 街头 / 年轻"天然兼容。
+      调性闸门是玩法卡级而非 CT 级——同一 CT 内不同玩法卡的调性兼容度可能截然不同。
+  boundary:
+    applicable_when: humor_content 中带"🎨 品牌调性提示"的玩法卡（目前 C3-5 衣架木偶戏；未来其他拟人化玩法）
+    not_applicable_when: 不带调性提示的玩法卡（默认全调性开放）；非 humor_content 的其他 CT
+  alternative_path:
+    - 品牌调性不匹配 C3-5 → 改用 C3-1 "一本正经拍小事灾难"（庄重感 vs 荒唐事件落差，全调性兼容）
+    - 品牌调性介于活泼与冷感之间（偏中性）→ 走人工裁决而非 AI 自动调用
+
+evidence:
+  source_md: Q2-内容类型种子/humor_content-交付物-v0.1.md
+  source_anchor: §C 玩法卡 #C3-5 衣架木偶戏 🎨 品牌调性提示行 + §G G2 / G3 裁决
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    🎨 品牌调性提示 (v0.2 G2 用户裁决补)：适合调性：活泼 / 街头 / 年轻 / 童趣（Activate / Street / Young / Playful）；不适合调性：极简 / 高端定制 / 冷感（Minimal / Haute-Couture / Cold）—— AI 生成时按品牌 Persona 调性自动判断是否调用本卡
+    G2 B. 保留 + 加品牌调性提示：已在 C3-5 卡片下方追加"🎨 品牌调性提示"行 / AI 生成时按品牌 Persona 自动判断
+    G3 A. 不做品牌分级：自嘲方向对所有品牌开放 / 不在红线 §E 增加"高端品牌慎用"条款 / 由创作者自担风险
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（玩法卡级调性闸门）+ 04_value_set（适合 / 不适合调性枚举）+ 05_relation（玩法卡 ↔ 品牌 Persona 调性匹配）可反推核心语义。
+    Gate 3：任意品牌的内容生产都需此玩法卡级调性闸门以避免硬冲突。
+    Gate 4：可被 content_generation 在玩法卡调用前消费——按品牌 Persona 调性过滤。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 玩法卡级品牌调性闸门元规则；本规则覆盖所有品牌的调性匹配，不含具体笛语调性内容
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-humor-content-brand-tone-gate-policy, owner_field: brand_tone_gate, definition: "玩法卡级品牌调性闸门：玩法卡带'🎨 品牌调性提示'行则执行调性匹配；humor_content 自嘲方向不分级但具体拟人化形式对调性敏感"}
+  value_set:
+    - {value_set_id: VS-KP-humor-content-brand-tone-gate-suitable, value: activate, label: 活泼, ordinal: 1}
+    - {value_set_id: VS-KP-humor-content-brand-tone-gate-suitable, value: street, label: 街头, ordinal: 2}
+    - {value_set_id: VS-KP-humor-content-brand-tone-gate-suitable, value: young, label: 年轻, ordinal: 3}
+    - {value_set_id: VS-KP-humor-content-brand-tone-gate-suitable, value: playful, label: 童趣, ordinal: 4}
+    - {value_set_id: VS-KP-humor-content-brand-tone-gate-unsuitable, value: minimal, label: 极简, ordinal: 1}
+    - {value_set_id: VS-KP-humor-content-brand-tone-gate-unsuitable, value: haute_couture, label: 高端定制, ordinal: 2}
+    - {value_set_id: VS-KP-humor-content-brand-tone-gate-unsuitable, value: cold, label: 冷感, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-training_unit-humor-content-brand-tone-gate-for-puppetry, rule_type: play_card_brand_tone_gate, applicable_when: "humor_content 玩法卡带🎨 品牌调性提示行（如 C3-5 衣架木偶戏）", success_scenario: "调性匹配则调用 / 不匹配则改用其他玩法品牌资产不受损", flip_scenario: "强行调用导致调性硬冲突 → 观众感知装亲民反弹品牌资产受损", alternative_boundary: "中性调性 → 走人工裁决；不匹配 → 改用 C3-1 全调性兼容玩法"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-humor-content-brand-tone-gate-for-puppetry, source_md: Q2-内容类型种子/humor_content-交付物-v0.1.md, source_anchor: §C C3-5 🎨 品牌调性提示 + §G G2/G3, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-hum02, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"humor_content","gate_type":"play_card_level_brand_tone_gate","cross_ct_applicable":["humor_content"]}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-humor-content-brand-tone-gate-for-puppetry, runtime_method: content_generation, input_types: '["PlayCard","BrandPersonaTone"]', output_types: '["GateResult"]', governing_rules_json: '["RL-KP-training_unit-humor-content-brand-tone-gate-for-puppetry"]'}

@@ -1,0 +1,109 @@
+pack_id: KP-training_unit-microlearning-not-long-course
+granularity_layer: L3
+
+runtime_asset:
+  runtime_asset_id: RA-training_unit-microlearning-not-long-course
+  asset_type: role_split
+  title: "微学习训练分工"
+  summary: "把门店培训拆给微学习即时支持情境训练和复现检查，避免长课式完成假象。"
+  source_pointer: "candidates/.../KP-training_unit-microlearning-not-long-course.yaml#runtime_asset"
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  门店培训不能做成长课，必须以微学习 + 即时支持 + 情境训练 + 正误对照（Do/Don't）为主，
+  辅以提取练习与间隔复现；判定培训"完成"的唯一标志是员工能在现场复现，而不是"看过/听过"。
+
+scenario:
+  who:
+    primary_role: 培训组织者（店长 / 区域培训）
+    target_audience: 一线员工（导购 / 店员 / 新人）
+  when:
+    trigger: 设计任何门店培训单元 / 上新培训内容 / 复盘新人没掌握时
+    context: 服装零售门店冷启动与日常培训阶段
+  what:
+    action_type: training_format_selection
+    decision_or_action: |
+      错误动作：把规则做成 30-60 分钟长课、做成 PPT 灌输、做成"看过即学完"的 e-learning。
+      正确动作：拆成 5 分钟内可消费的 microlearning 片段，
+        嵌入班前会 / 试衣后 / 收银前等真实工作位（just-in-time），
+        以 scenario_based 演练 + Do/Don't 对照为骨架，
+        辅以 retrieval practice（提取练习）和 spacing（间隔复现）巩固记忆。
+      为什么错：长课记不住、不可调用；员工"看过"不等于"现场会用"。
+      如何纠正：把每个单元先想"这一条何时被员工调用"，反推训练形式。
+      掌握检查：员工在真实场景被触发时，能不看资料直接做出正确动作。
+  result:
+    success_pattern: |
+      新人下次遇到对应触发条件时自动跳出正确动作，不再需要查资料；
+      培训内容能被员工在 30 秒内复述并演示一次。
+    flip_pattern: |
+      员工说"上过这门课"，但现场仍犯原错误；
+      培训完成率高，门店实际执行率低，培训彻底空转。
+  underlying_mechanism: |
+      门店技能的胜负在几秒钟的判断点和手部空间动作，长课与抽象规范练不出来；
+      微学习 + 情境演练把"知道"变成"调用得到"，提取练习 + 间隔复现解决遗忘曲线。
+  boundary:
+    applicable_when: 任何门店一线动作 / 判断类培训
+    not_applicable_when: |
+      涉及合规/法律/财务等必须系统化讲清的内容 → 不能完全微化；
+      纯线上 SOP 文档（不依赖现场演练）→ 微学习仍可用，但提取练习方式需调整。
+  alternative_path:
+    - 时间紧 → 优先 do_dont_contrast（图/视频对照）格式，最低成本拉齐
+    - 大批新人入职 → 用 pre_shift_micro_coaching（班前会 40 秒）滚动覆盖
+    - 错误已多次发生 → 用 error_replay 直接复盘当事案例
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 二、训练原则 · 2.1 训练不是讲完，是可调用 · 2.5 培训完成的标志
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    真源已经明确，培训要做成 microlearning（微学习）、just-in-time support（即时支持）、
+    scenario-based（情境训练）、Do/Don't（正误对照），而不是长课。
+    外部学习科学也长期支持 retrieval practice（提取练习） + spacing（间隔复现），
+    比单次灌输更能留住记忆。
+    培训完成的标志不是"看过"，而是"现场能复现"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐全。Gate 2：从 rule + value_set(format) + call_mapping 可反推
+    "微学习而非长课""完成=现场复现"。Gate 3：跨女装零售普适。
+    Gate 4：可被 store_training 直接调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      纯方法论原则，不含笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  field:
+    - {field_id: FD-TrainingMaterial-format, owner_type: TrainingMaterial, field_name: format, data_type: enum}
+    - {field_id: FD-TrainingMaterial-mastery_check, owner_type: TrainingMaterial, field_name: mastery_check, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-microlearning-not-long-course-completion_definition, owner_field: mastery_check, definition: "培训完成 = 现场无提示可复现，而非看过/听过"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-microlearning-not-long-course-format, value: branching_scenario, label: 分支情境, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-microlearning-not-long-course-format, value: do_dont_contrast, label: 正误对照, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-microlearning-not-long-course-format, value: pre_shift_micro_coaching, label: 班前会微辅导, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-microlearning-not-long-course-format, value: error_replay, label: 错误复盘, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-microlearning-not-long-course-format, value: before_after_timelapse, label: 前后对比延时, ordinal: 5}
+  rule:
+    - {rule_id: RL-KP-training_unit-microlearning-not-long-course, rule_type: training_format_policy, applicable_when: "设计/采购/复用任何门店培训内容", success_scenario: "改用微学习+情境+Do/Don't+提取练习，员工现场能复现", flip_scenario: "做成长课/PPT灌输/看过即学完，培训完成率高但执行率低", alternative_boundary: "合规法律内容仍需系统化；纯线上文档需调整提取练习方式"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-microlearning-not-long-course, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 二、训练原则 2.1+2.5, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm01, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["sales_associate","store_manager"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-microlearning-not-long-course, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingScript"]}

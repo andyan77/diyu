@@ -1,0 +1,82 @@
+pack_id: KP-product_attribute-content-type-north-star-founder-ip
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `founder_ip`（创始人 IP / 老板个人品牌）的北极星是"判断 + 代价 + 信任预支"——
+  观众看完产生的不是"这老板在卖货"而是"这个人有判断、有代价、有性格，我愿意先信他、再信他的牌子"。
+  服装行业 founder_ip 的 C1 主流档（办公室对镜鸡汤口播 / 创业者一天流水账 / 成功故事拼贴 /
+  对镜穿搭 / 工厂巡视讲解）必须**强默认禁用**——比个人创作类更严格——因为服装定价敏感 +
+  消费者对精英成功学叙事天然警惕，C1 不仅无效还会反向伤害品牌（包装感→质疑定价与品质）。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: 任意品牌的 founder_ip 内容创作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 founder_ip 玩法卡，或对一条创始人内容做"是否符合 ContentType 北极星"判断时
+    context: 18 份 ContentType 交付物各有独立北极星；founder_ip 是企业叙事类 6 份的首位试点
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"判断 + 代价 + 信任预支 / 不像老板在卖货"作为 founder_ip 玩法是否成立的最终判定，且 C1 主流档强默认禁用
+  result:
+    success_pattern: 玩法卡能展示"具体决策瞬间 / 失败样衣 / 代价显形 / 判断证据链"（如 C2-1 决策日记 / C2-2 反向透明 / C3-1 旧样衣审判庭 / C3-4 桌面证物剧场 / C3-5 门口角色切换）→ 通过北极星 → 进 C2 进阶或 C3 突破档
+    flip_pattern: 玩法落到办公室对镜鸡汤口播 / 创业者一天流水账 / 成功故事拼贴 / 工厂巡视型 / 对镜穿搭型 → 观众识别为"营销话术 / 包装感 / 标准成功叙事免疫" → 反向质疑定价与品质
+  underlying_mechanism: |
+      "老板露脸不难，难的是不像老板在卖货"——服装行业观众对完美人设天然警惕，
+      因此 founder_ip 必须把表演性叙事拉回到"判断过程 + 代价显形 + 局限承认"。
+      C1 的危害度远高于个人创作类，因为定价信任一旦崩塌就直接落到品牌身上。
+  boundary:
+    applicable_when: 单 ContentType 内容创作判型 / founder_ip 玩法库扩张时的卡片新增门禁 / AI 生成 founder_ip 时档位选型
+    not_applicable_when: 不是 founder_ip 而是 role_work_vlog（叙事重心是岗位身份及其工作过程）；判定要点见与 role_work_vlog 边界规则
+  alternative_path:
+    - 同一动作（如老板蹲下捡扣子）在 founder_ip 与 role_work_vlog 之间的归属判定：第一叙事重心是"创始人这个人"→ founder_ip；重心是"岗位身份"→ role_work_vlog
+
+evidence:
+  source_md: Q2-内容类型种子/founder_ip-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流玩法强默认禁用 4 张 + §E 红线 9 条 + 与 personal_vlog 差异点表
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完后心里不是"这老板在卖货"，而是"这个人有判断、有代价、有性格，
+    我开始相信这家公司是由一个真实的人在做真实的事，我愿意把信任先预支给他、再预支给他的牌子"。
+    C1 主流玩法在服装行业 founder_ip 场景下危害尤其大——不仅无效，还会反向伤害品牌（定价敏感+精英感警惕）。
+    E1：把创始人拍成"上帝视角导师"——一开口就是行业大词、人生哲学、品牌使命，没有任何具体物件、具体代价。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field（ContentType.north_star）+ 06_rule（北极星反推 + C1 强默认禁用）+ 05_relation 可反推
+      "founder_ip 北极星 = 判断+代价+信任预支 / C1 强默认禁用 / 与 role_work_vlog 边界"三条核心语义。
+    Gate 3：跨品牌 ContentType 内容创作通用判型——任何品牌的 founder_ip 都需此锚点。
+    Gate 4：可被 content_generation 调用作为 founder_ip 玩法选型 / 玩法卡成立性校验入口。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-founder-ip-fi_north_star, owner_field: north_star, definition: "founder_ip ContentType 的北极星：判断+代价+信任预支 / 不像老板在卖货——服装行业 C1 强默认禁用（鸡汤口播/流水账/成功拼贴/工厂巡视/对镜穿搭）的判型锚点"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-founder-ip, rule_type: content_type_north_star_anchor, applicable_when: "新增 founder_ip 玩法卡或审核一条创始人内容时", success_scenario: "玩法呈现具体决策/失败样衣/代价显形/判断证据链 → 进 C2/C3", flip_scenario: "玩法落到鸡汤口播/流水账/成功拼贴/工厂巡视/对镜穿搭 → C1 强默认禁用", alternative_boundary: "与 role_work_vlog 按第一叙事重心二选一"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-founder-ip, source_md: Q2-内容类型种子/founder_ip-交付物-v0.1.md, source_anchor: §A 北极星 + §C1 + §E 红线 + 差异点对比, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-founder_ip-fi1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"founder_ip"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-founder-ip, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

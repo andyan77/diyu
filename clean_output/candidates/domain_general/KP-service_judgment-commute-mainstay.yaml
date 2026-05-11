@@ -1,0 +1,72 @@
+pack_id: KP-service_judgment-commute-mainstay
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"想找一套平时上班最常穿的"时，导购先问通勤方式/办公室温度/要不要开会/在意利落还是舒服，再推第一套；
+  通勤客最容易卡在第二套——觉得"都能穿但没理由买"，所以第二套必须给出"为什么是它而不是别的"的具体利用率理由。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: commute_mainstay（通勤主力型）顾客
+  when:
+    trigger: 顾客原话"我想找一套平时上班最常穿的"
+    context: 日常通勤接客；顾客对出错容忍度高，对"没理由买"容忍度低
+  what:
+    action_type: utility_anchored_set
+    decision_or_action: |
+      第一步：问 4 件事——通勤方式（开车/地铁）、办公室温度、是否开会、利落 vs 舒服。
+      第二步：第一套保功能（耐穿、好搭、不出错）。
+      第三步：第二套必须挂"利用率"理由（一周能穿几次/能搭几件已有），不要再叠"也能穿"。
+      第四步：断码可救——保功能即可，颜色细节灵活替。
+  result:
+    success_pattern: 第二套挂上利用率理由后顾客带走；后续成为复购锚点
+    flip_pattern: 第二套继续用"也挺百搭"话术，顾客回"先看看"，回头率低
+  underlying_mechanism: |
+      通勤客买的是"被使用次数"而非"被惊艳次数"；
+      第二套不挂利用率 = 用第一套的逻辑重复一次，缺乏成交触发。
+  boundary:
+    applicable_when: 一线/二线日常通勤客；办公室或商务场景
+    not_applicable_when: 创意行业/远程办公/纯居家工作客（应走 weekend_social 或 functional_gap_fill）
+  alternative_path:
+    - 顾客明确"今天就要带一件" → 跳过第二套利用率铺垫，直接锁第一套
+    - 库存断码 → 同功能位换色/换细节，禁换核心版型
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、2. commute_mainstay + 三、2）断码可救
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："我想找一套平时上班最常穿的。"
+    店员第一反应：先问通勤方式、办公室温度、要不要开会、平时更在意利落还是舒服。
+    最容易卡住：第二套。顾客容易觉得"都能穿，但没理由买"。
+    库存不理想怎么转向：可以救。核心保功能：耐穿、好搭、不出错。颜色和细节可以灵活替。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；可派生 store_training（do_dont_contrast）与 outfit_recommendation。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用通勤接客逻辑。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-commute-mainstay}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-commute-mainstay}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-commute-mainstay}
+    - {mapping_id: CM-outfit_recommendation-KP-service_judgment-commute-mainstay}

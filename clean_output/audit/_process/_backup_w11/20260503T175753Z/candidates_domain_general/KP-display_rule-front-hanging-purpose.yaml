@@ -1,0 +1,80 @@
+pack_id: KP-display_rule-front-hanging-purpose
+schema_version: candidate_v1
+pack_type: display_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  front_hanging_display（正挂位）的业务目标是"让顾客一眼看懂今天主推哪件、产生拿取动作"——
+  适合 new_arrival_complete / core_push_deep_stock / basic_replenishable 三类库存；
+  最大的反例是"一排都是重点"——必须有第一主款，否则色序再顺顾客看完也不知道先试哪件。新人首批训练重点。
+
+scenario:
+  who:
+    primary_role: 新人 / 老手陈列负责人
+    target_audience: 进店一眼扫过的顾客
+  when:
+    trigger: 上新 / 主推切换 / 日常陈列维护
+    context: 门店正面卖相强的挂杆位
+  what:
+    action_type: front_hanging_setup
+    decision_or_action: 选第一主款 + 配套副推；同色系排序；保证款式样色都有货
+  result:
+    success_pattern: 顾客一眼锁定第一主款产生拿取动作，主推转化率提升
+    flip_pattern: 一排都是重点 / 颜色风格长度乱 / 挂的是没货样子款 → 色序很顺但没有第一主款
+  underlying_mechanism: |
+      正挂是门店的"主推焦点位"；如果焦点不清，等于浪费了最有正面卖相的位置。
+      Do/Don't 对照与日常复盘是最适合的训练形式。
+  boundary:
+    applicable_when: 正面卖相强的上衣/衬衫/连衣裙/西装外套/图案针织
+    not_applicable_when: 折叠款（按 folded_display）；侧挂选择带（按 side_hanging_display）
+  alternative_path:
+    - 主推无货 → 临时下撤为侧挂选择带，不空挂样子款
+    - 多个候选主推冲突 → 选一个进正挂，其他放正挂相邻位作副推
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/陈列方法包.md
+  source_anchor: 二、3. front_hanging_display + 三、5）适合培训新人
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    业务目标：让顾客一眼看懂今天主推哪件，快速产生拿取动作。
+    最容易犯的错：一排都是重点；颜色、风格、长度乱；挂的是没货样子款。
+    什么叫"看着高级但卖不动"：色序很顺，但没有第一主款，顾客看完还是不知道先试哪件。
+    培训层级：首批重点给新人训练。最适合 Do/Don't 对照和日常复盘。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 attribute-driven-display 主轴规则一致（color/length/fit 等做次轴）。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用正挂陈列纪律
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-display_rule-front-hanging-purpose-purpose, owner_field: display_unit, definition: "front_hanging_display 业务目标：抓主款（一眼锁定第一主款）"}
+  value_set:
+    - {value_set_id: VS-KP-display_rule-front-hanging-purpose-allowed_inventory, value: new_arrival_complete, label: 新品齐码, ordinal: 1}
+    - {value_set_id: VS-KP-display_rule-front-hanging-purpose-allowed_inventory, value: core_push_deep_stock, label: 主推深库存, ordinal: 2}
+    - {value_set_id: VS-KP-display_rule-front-hanging-purpose-allowed_inventory, value: basic_replenishable, label: 基础可补, ordinal: 3}
+    - {value_set_id: VS-KP-display_rule-front-hanging-purpose-training_format, value: do_dont_contrast, label: Do/Don't 对照}
+    - {value_set_id: VS-KP-display_rule-front-hanging-purpose-training_format, value: daily_review, label: 日常复盘}
+  rule:
+    - {rule_id: RL-KP-display_rule-front-hanging-purpose, rule_type: front_hanging_setup, applicable_when: 上新/主推切换/日常陈列维护, success_scenario: 顾客一眼锁定第一主款主推转化率提升, flip_scenario: 一排都是重点/颜色风格长度乱/挂没货样子款, alternative_boundary: 主推无货→临时下撤；多候选冲突→选一个进正挂}
+  evidence:
+    - {evidence_id: EV-KP-display_rule-front-hanging-purpose}
+  relation:
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-front01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"allow","values":["new_arrival_complete","core_push_deep_stock","basic_replenishable"]}'}
+    - {relation_id: RE-DisplayGuide-supports_training-TrainingMaterial-front01, source_type: DisplayGuide, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"tier":"novice_priority","format":"do_dont_contrast|daily_review"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-display_rule-front-hanging-purpose}
+    - {mapping_id: CM-store_training-KP-display_rule-front-hanging-purpose}

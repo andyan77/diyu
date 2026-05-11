@@ -1,0 +1,89 @@
+pack_id: KP-fabric_property-heavy-not-equal-quality
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  "重"不等于"有质感"——重可能只是厚 / 闷 / 压身；
+  质感判断要看面料表面、回弹、结构、缝制和使用后的稳定性，不能只凭手掂感。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional
+    target_audience: 习惯用"掂手感重 = 质感好"判断的顾客；导购同样习惯的接客场景
+  when:
+    trigger: 顾客或导购拿在手里掂量后说"挺有质感的"
+    context: 大衣 / 西装 / 牛仔 / 厚针织 / 毛呢类秋冬款
+  what:
+    action_type: misjudgment_correction_heavy_eq_quality
+    decision_or_action: |
+      把"重"重新定位为重量维度，不直接构成质感；
+      用面料表面 + 回弹 + 结构 + 缝制 + 使用稳定性五维替代手掂判断；
+      夏季 / 通勤场景显式提示重款的闷与压身风险。
+  result:
+    success_pattern: |
+      顾客接受"重不等于质感"，按五维做判断；夏季 / 通勤场景顾客主动避开过重款无投诉。
+    flip_pattern: |
+      把"重"卖成"质感" → 顾客买回家发现穿着压肩 / 闷热 → 退换或差评；
+      把闷热归为顾客适应问题 → 信任受损。
+  underlying_mechanism: |
+      面料重量由克重决定 → 与厚度 / 密度相关 → 过重导致透气差 + 压身；
+      质感是综合体验：表面光泽 / 织纹 / 回弹 / 缝制 / 长期稳定性。
+  boundary:
+    applicable_when: 大衣 / 西装 / 重磅织物等讲分量的款；用"掂"做判断的场景
+    not_applicable_when: |
+      明确做"重磅工装 / 重磅卫衣"卖点（重就是核心特征）；
+      面料结构上重 = 优质（如重磅真丝）的特定情况。
+  alternative_path:
+    - 如果顾客在意质感 → 用五维标准（表面 / 回弹 / 结构 / 缝制 / 使用稳定）替代手掂
+    - 如果顾客怕压身 → 推荐相同结构但克重更轻的同类款
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 六、首批高频误判 · 误判 2：把"重"当成"有质感"
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    正式纠偏：重可能只是厚、闷、压身；质感要看表面、回弹、结构、缝制和使用后的稳定性。
+    落盘对象：Product（商品）、TrainingMaterial（培训材料）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"重≠质感 + 五维替代标准 + 闷/压身风险"。
+    Gate 3：通用面料判断误区。
+    Gate 4：可被 store_training / outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用面料认知误判，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-heavy-not-equal-quality-heavy_is_weight_only, owner_field: hand_feel, definition: "重是重量维度，不直接构成质感判断"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-heavy-not-equal-quality-quality_dim, value: surface_texture, label: 面料表面}
+    - {value_set_id: VS-KP-fabric_property-heavy-not-equal-quality-quality_dim, value: rebound, label: 回弹}
+    - {value_set_id: VS-KP-fabric_property-heavy-not-equal-quality-quality_dim, value: structure, label: 结构}
+    - {value_set_id: VS-KP-fabric_property-heavy-not-equal-quality-quality_dim, value: stitching, label: 缝制}
+    - {value_set_id: VS-KP-fabric_property-heavy-not-equal-quality-quality_dim, value: long_wear_stability, label: 使用后稳定性}
+  rule:
+    - {rule_id: RL-KP-fabric_property-heavy-not-equal-quality, rule_type: misjudgment_correction, applicable_when: "店员或顾客用掂手感重做质感判断", success_scenario: "用五维替代手掂 → 顾客避开过重压身款无投诉", flip_scenario: "把重=质感 → 顾客发现压肩/闷 → 退换/差评", alternative_boundary: "在意质感→五维替代；怕压身→相同结构更轻克重款"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-heavy-not-equal-quality, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 六、误判 2, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-fabric_property-heavy-not-equal-quality, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-heavy-not-equal-quality, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}

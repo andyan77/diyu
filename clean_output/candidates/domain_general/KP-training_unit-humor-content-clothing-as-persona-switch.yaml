@@ -1,0 +1,98 @@
+pack_id: KP-training_unit-humor-content-clothing-as-persona-switch
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: low
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "只靠一件衣服和站姿切换出三个不同自己"
+  steps:
+    - "固定机位拍第一个人格状态"
+    - "用外套背包鞋子快速切换"
+    - "用眼神和站姿完成笑点"
+  anti_pattern: "依赖台词和特效制造笑点忽略服装开关作用"
+  duration: short
+  audience: "喜欢身份反差幽默的年轻观众"
+  source_pack_id: KP-training_unit-humor-content-clothing-as-persona-switch
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  humor_content（幽默内容）中"服装作为人格开关"是服装行业独有钩子——固定机位 + 仅通过加减一件外套 / 背包 / 鞋子 /
+  眼神 / 站姿，在 2 秒内切换成"顾客面前的自己 / 群里发消息时的自己 / 回家后瘫在椅子上的自己"三个完全不同的人。
+  没有特效，只要切点准。笑点来自身份落差而非台词，观众接住"我也有这三个自己"。这把幽默从台词笑升级为画面笑，
+  且服装在此不是美化道具，而是**人格开关**——其他行业没有这种"一件外套切换三种社会身份"的内容杠杆。
+
+scenario:
+  who:
+    primary_role: 创作者本人 / 服装行业从业者
+    target_audience: humor_content 突破性档；目标观众是认同"我有多重社会身份"的年轻群体
+  when:
+    trigger: 想做"身份反差"幽默但不依赖台词梗
+    context: 服装行业 humor_content 最大未开发钩子之一；中文平台慢笑点 + 无声喜剧蓝海
+  what:
+    action_type: clothing_as_persona_switch
+    decision_or_action: 固定机位 + 一件外套 / 背包 / 鞋子加减 + 眼神站姿切换 → 2 秒内多身份切换
+  result:
+    success_pattern: 笑点来自身份落差 / 服装承担"人格开关"而非"美化"功能 / 一人分饰多角成本极低
+    flip_pattern: 把服装当反转道具（前后换装）→ 滑向 C1-2 "强行反转小剧场"廉价感 / 观众先看见套路才看见笑点
+  underlying_mechanism: |
+      服装天生自带"身份 stereotype"（正装 / 校服 / 工装 / 居家服），可被用作社会身份的最低成本切换器。
+      humor_content 的核心张力是"庄重感 vs 荒唐事件的落差"——服装的身份指向是"庄重"那一侧最现成的素材。
+      其他行业（食品 / 美妆 / 数码）没有这种身份切换密度，是服装行业的独占钩子。
+  boundary:
+    applicable_when: humor_content 突破性档；想做身份 / 社会角色幽默
+    not_applicable_when: 严肃品牌调性（极简 / 高端定制 / 冷感风）—— 与 C3-5 衣架木偶戏同样存在调性边界，需走品牌调性提示
+  alternative_path:
+    - 品牌调性偏冷感 / 高端 → 改用 C2-1 "幽默做认知翻面"（comedy + education）减弱身份切换戏剧性
+    - 创作者不愿一人分饰多角 → 改用 C3-3 "评论区演成第二人格"（左右分屏吐槽自己）
+
+evidence:
+  source_md: Q2-内容类型种子/humor_content-交付物-v0.1.md
+  source_anchor: §C 玩法卡 #C3-2 一件外套切换三个社会身份 + §D 三个未被开发的角度 第 2 条
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    镜头固定，你站在门口，只通过加减一件外套、背包、鞋子、眼神和站姿，在 2 秒内切换成三个完全不同的人
+    没有复杂特效，只要切点够准。笑点来自身份落差，而不是台词
+    服装在这里不是美化，而是人格开关——服装行业做这种内容天生占优
+    "服装作为人格开关"（C3-2）——一件外套切换三种社会身份，服装行业独占优势
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（人格开关玩法定义）+ 03_semantic（服装 = 人格开关而非美化道具）+ 05_relation（服装行业独占钩子）可反推核心语义。
+    Gate 3：服装行业任意品牌都可使用此玩法（含调性边界提示）。
+    Gate 4：可被 content_generation 在 humor_content 玩法选择时消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论 + 服装行业独占钩子规则；含品牌调性边界提示但提示本身是元规则非具体笛语调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-humor-content-clothing-as-persona-switch-meaning, owner_field: clothing_role_in_humor, definition: "humor_content 中服装的角色 = 人格开关（社会身份切换器）而非美化道具；服装行业独占钩子"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-humor-content-clothing-as-persona-switch, rule_type: clothing_as_persona_switch, applicable_when: "humor_content 突破性档想做身份反差幽默", success_scenario: "笑点来自身份落差服装承担人格开关功能成本极低", flip_scenario: "服装当反转道具前后换装 → 滑向廉价反转套路观众先看见套路", alternative_boundary: "冷感/高端调性 → 改用认知翻面减弱戏剧性；不愿分饰多角 → 改用评论区第二人格"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-humor-content-clothing-as-persona-switch, source_md: Q2-内容类型种子/humor_content-交付物-v0.1.md, source_anchor: §C C3-2 + §D 第 2 条, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-hum01, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"humor_content","industry_specific":"apparel","clothing_role":"persona_switch"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-humor-content-clothing-as-persona-switch, runtime_method: content_generation, input_types: '["ContentType","BrandTone"]', output_types: '["PlayCardSelection"]', governing_rules_json: '["RL-KP-training_unit-humor-content-clothing-as-persona-switch"]'}

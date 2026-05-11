@@ -1,0 +1,93 @@
+pack_id: KP-craft_quality-preshrink-wash-set-after-sale-front
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: craft_quality
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  预缩 / 水洗 / 定型是"售后前置工艺"——它直接决定洗后会不会缩、歪、扭、变短，
+  决定裤线、裙摆、袖长会不会洗一次就走样；
+  门店说"耐穿、稳定、好打理"之前必须先确认这三件事是否成立，否则就是空头支票。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional / merchandising_director（商品总监）
+    target_audience: 期望"耐穿稳定好打理"的顾客；商品 / 培训准备承诺洗护稳定性的人
+  when:
+    trigger: 导购准备说"耐穿稳定""好打理""不会缩""一直平整"
+    context: 棉 / 麻 / 牛仔 / 羊毛等遇水易变形的面料推荐场景
+  what:
+    action_type: craft_quality_check_before_promise
+    decision_or_action: |
+      推荐前先确认这件衣服是否经过预缩 + 水洗 + 定型整理；
+      没有信息 → 不许承诺"洗一次也不会变"；
+      有信息且整理到位 → 才可使用"耐穿、稳定、好打理"卖点；
+      未做或不充分 → 改为提示"建议手洗 / 冷水 / 大一码"等代偿动作。
+  result:
+    success_pattern: |
+      凡说"耐穿稳定"必有工艺背书；顾客洗后符合预期，无走样投诉；
+      未做整理的款诚实告知风险，顾客也愿意买单。
+    flip_pattern: |
+      为成交直接说"不会缩 / 不会变" → 顾客洗一次袖长 / 裙摆 / 裤线明显变化 → 退换或差评；
+      把"洗护标"问询当问题客户处理 → 售后矛盾被埋。
+  underlying_mechanism: |
+      shrinkage（缩水）受面料结构 / 湿处理 / 整理 / 成衣制造共同影响；
+      预缩工艺让纤维提前完成主要缩水；水洗 / 定型让形状记忆稳定；
+      没有这些工艺，遇水后纤维 + 缝口 + 辅料系统性收缩 + 扭斜。
+  boundary:
+    applicable_when: 棉 / 麻 / 牛仔 / 羊毛 / 粘胶等湿胀显著的面料；任何"洗后稳定"承诺前
+    not_applicable_when: |
+      明确做艺术 / 限时一次性穿着的款；
+      纯化纤热定型已锁形状的款（重点改为耐久后整理判断）。
+  alternative_path:
+    - 如果整理信息不可得 → 改用"建议手洗冷水 + 大一码 / 同色洗"代偿
+    - 如果顾客一律机洗 → 推荐有 Sanforized / 全防缩整理且明示的款
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 五、首批 CraftKnowledge 正式冻结清单 · 1. 预缩 / 水洗 / 定型
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这组正式定义为"售后前置工艺"。
+    它直接决定一件衣服洗后会不会缩、歪、扭、变短，决定裤线、裙摆、袖长会不会洗一次就走样。
+    门店说这件"耐穿、稳定、好打理"之前，必须先判断预缩、水洗和定型是否成立。
+    CottonWorks 明确指出 shrinkage 受面料结构、湿处理、整理以及成衣制造过程共同影响。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"售后前置工艺定义 + 卖点门槛 + 代偿路径"。
+    Gate 3：通用棉 / 麻 / 牛仔系列工艺判断。
+    Gate 4：可被 outfit_recommendation / store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用工艺定义 + CottonWorks 国际口径，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CraftKnowledge, type_name: CraftKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-craft_quality-preshrink-wash-set-after-sale-front-after_sale_front, owner_field: craft_feature, definition: "预缩/水洗/定型是售后前置工艺，是耐穿稳定卖点的资格门槛"}
+  value_set:
+    - {value_set_id: VS-KP-craft_quality-preshrink-wash-set-after-sale-front-failure_signal, value: shrink_after_first_wash, label: 首次洗后缩水}
+    - {value_set_id: VS-KP-craft_quality-preshrink-wash-set-after-sale-front-failure_signal, value: skew_distort, label: 扭斜变形}
+    - {value_set_id: VS-KP-craft_quality-preshrink-wash-set-after-sale-front-failure_signal, value: hem_seam_walk, label: 裙摆裤线走样}
+  rule:
+    - {rule_id: RL-KP-craft_quality-preshrink-wash-set-after-sale-front, rule_type: craft_promise_gate, applicable_when: "推荐遇水易变形面料 且 准备说耐穿稳定好打理", success_scenario: "工艺信息齐全且到位 → 可用稳定卖点 → 顾客洗后无走样", flip_scenario: "无工艺信息但仍承诺不会缩 → 走样 → 退换/差评", alternative_boundary: "信息不可得→改代偿话术；要全机洗→Sanforized款"}
+  evidence:
+    - {evidence_id: EV-KP-craft_quality-preshrink-wash-set-after-sale-front, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 五、1. 预缩 / 水洗 / 定型, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-craft_quality-preshrink-wash-set-after-sale-front, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-content_generation-KP-craft_quality-preshrink-wash-set-after-sale-front, runtime_method: content_generation, input_types: [Product, CraftKnowledge], output_types: [ProductCopy]}

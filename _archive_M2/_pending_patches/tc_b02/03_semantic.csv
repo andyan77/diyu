@@ -1,0 +1,14 @@
+SM-KP-styling_rule-proportion-split-37-three_seven,rule_name,"三七比例法：上下视觉切分优先 3:7 或 4:6，腰线或长度让重心上移",[],domain_general,KP-styling_rule-proportion-split-37
+SM-KP-styling_rule-silhouette-balance-volume_focus,rule_name,"松紧对冲法：一身只留一个量感重点，上下廓形必须呈宽收对比",[],domain_general,KP-styling_rule-silhouette-balance
+SM-KP-styling_rule-waistline-anchor-anchor_concept,rule_name,"腰线锚点法：以腰线为身材比例视觉锚点，先解决锚点再调颜色与材质",[],domain_general,KP-styling_rule-waistline-anchor
+SM-KP-styling_rule-one-focus-focus_axes,rule_name,"一身一个主角法：四选一焦点轴=颜色/版型/材质/设计",[],domain_general,KP-styling_rule-one-focus
+SM-KP-styling_rule-color-echo-echo_concept,rule_name,"颜色呼应法：一身至少两处颜色锚点；挂场按色阶/温度/系列分组",[],domain_general,KP-styling_rule-color-echo
+SM-KP-styling_rule-neutral-plus-accent-base_plus_accent,rule_name,"中性色打底法：中性色主色+一处提气点；属软建议级别",[],domain_general,KP-styling_rule-neutral-plus-accent
+SM-KP-styling_rule-structure-drape-material_axes,rule_name,"挺垂对比法：挺/垂、厚/薄、糯/利落三组材质张力对冲",[],domain_general,KP-styling_rule-structure-drape
+SM-KP-styling_rule-premium-item-neutralization-neutralizer_role,rule_name,"贵气单品中和法：用哑光/基础/低压力单品降低奢华单品视觉压迫感",[],domain_general,KP-styling_rule-premium-item-neutralization
+SM-KP-styling_rule-face-brightness-near_face_layer,rule_name,"近脸提气法：以离脸最近那一层为优先级，先解决气色再解决时髦",[],domain_general,KP-styling_rule-face-brightness
+SM-KP-styling_rule-formality-consistency-formality_level,rule_name,"正式度统一法：一身上下件正式度同级，错位即翻车",[],domain_general,KP-styling_rule-formality-consistency
+SM-KP-styling_rule-menswear-belt-shoe-belt_shoe_match,rule_name,"男装鞋腰带同色法：suit/dress 场景下腰带与鞋的颜色/皮质/正式度同级",[],domain_general,KP-styling_rule-menswear-belt-shoe
+SM-KP-styling_rule-single-problem-priority-single_concern,rule_name,"单一问题优先法：先解决顾客一个核心顾虑，替代时也守住该顾虑",[],domain_general,KP-styling_rule-single-problem-priority
+SM-KP-styling_rule-substitution-priority-ladder-priority_axis,rule_name,"替代四级优先顺序：silhouette > formality_level > visual_weight > color_family",[],domain_general,KP-styling_rule-substitution-priority-ladder
+SM-KP-styling_rule-looks-good-but-unsellable-anti_patterns,rule_name,"看着成立实际不好卖：7 类反例库；门店推荐与陈列上墙前的反向自检清单",[],domain_general,KP-styling_rule-looks-good-but-unsellable

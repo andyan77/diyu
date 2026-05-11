@@ -1,0 +1,91 @@
+pack_id: KP-styling_rule-product-journey-vs-process-trace-boundary
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `product_journey`（产品历程）与 `process_trace`（工艺溯源）在服装行业容易混淆，
+  但叙事重心二选一不可混拍：**前者拍"设计决策的判断链"（为什么改了 5 次袖口 / 哪个版本被砍 / 哪条评论触发改版），
+  后者拍"生产工艺的可验证物理链"（为什么这条缝线值得 / 这块面料经 3 次水洗仍不缩水）。**
+  同一件衬衫拍同一个镜头，叙事重心落在"设计判断"就归 product_journey、落在"工艺验证"就归 process_trace；
+  混拍会让两类内容都变成"走进工厂的宣传片 + 灵感说明书"——双重翻车。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者 / 加盟商内容创作者
+    target_audience: 同时涉及"设计 + 工艺"题材的 AI 内容生成
+  when:
+    trigger: 一条素材同时含设计改版痕迹和工艺缝线证据，需判定归 product_journey 还是 process_trace 时
+    context: 两类 ContentType 都属企业叙事类、都拍幕后桌面、都用纸证据，肉眼极易混淆
+  what:
+    action_type: content_type_disambiguation
+    decision_or_action: 按"叙事重心 / 关键证据 / 时间维度 / 反套路"4 个维度二选一归类，不许同条内容同时挂两个 CT
+  result:
+    success_pattern: |-
+      "我们为什么把袖口改了 5 次" → product_journey（判断链 / 失败样衣 / 改版纸条 / 反"草图到成品爽片"）；
+      "这块纯棉如何经 3 次水洗仍不缩水" → process_trace（物理链 / 面料测试 / 缝线特写 / 反"走进工厂宣传片"）。
+    flip_pattern: |-
+      把"袖口改了 5 次 + 水洗 3 次不缩水"塞同一条 → 既不像设计判断也不像工艺验证，落入"灵感说明书 + 走进工厂"
+      的双重 C1 默认禁用陷阱。
+  underlying_mechanism: |
+      product_journey 的北极星是"被反复推敲过 / 差一点做成别的样子"——卖的是判断轨迹；
+      process_trace 的北极星是"我愿意相信你没有骗我"——卖的是物理可验证。
+      两类信任建立路径不同，混拍会稀释两者各自的信任建构。
+  boundary:
+    applicable_when: 同时涉及设计改版痕迹和工艺验证痕迹的素材归类决策
+    not_applicable_when: 素材纯只含设计判断或纯只含工艺验证（直接归类，无需走本判定）
+  alternative_path:
+    - 同一件衬衫如果两类内容都成立 → 拆成两条独立内容分别归 product_journey 和 process_trace，不合并
+    - 与 founder_ip 边界：founder_ip 拍创始人价值观，不是产品本身的判断或工艺
+
+evidence:
+  source_md: Q2-内容类型种子/product_journey-交付物-v0.1.md
+  source_anchor: §与 process_trace 的边界
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    product_journey（本文件）和 process_trace（工艺溯源）在服装行业容易混淆。边界如下：
+    - 叙事重心：设计决策的历程 vs 生产工艺的可验证
+    - 北极星：这件衣服不是突然出现在货架上的 vs 我愿意相信你没有骗我
+    - 时间：从灵感到上市的完整判断链 vs 从原料到成衣的物理变化链
+    - 关键证据：失败样衣 / 改版纸条 / 样衣对比 vs 面料测试 / 缝线特写 / 车间实况
+    - 最核心反套路：反"从草图到成品的爽片" vs 反"走进工厂的宣传片"
+    生活化例子：讲"我们为什么把袖口改了 5 次"→ product_journey；
+    讲"这块纯棉面料如何经过 3 次水洗仍不缩水"→ process_trace。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（who/when/what/success/flip/mechanism/boundary/alt）。
+    Gate 2：从 06_rule（边界规则）+ 05_relation（CT 间互斥关系）可反推
+      "判断链 vs 物理链 / 4 维度判定 / 拆条不合并"三条核心语义。
+    Gate 3：跨品牌通用——任何品牌做企业叙事类都需此 CT-pair 边界判定。
+    Gate 4：可被 content_generation 在素材归类阶段调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 边界判定元规则——任意品牌都需此 disambiguation，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-product-journey-vs-process-trace-boundary-disambig, owner_field: north_star, definition: "product_journey vs process_trace 边界判定：判断链 vs 物理链；按叙事重心/关键证据/时间维度/反套路 4 维度二选一不混拍"}
+  rule:
+    - {rule_id: RL-KP-styling_rule-product-journey-vs-process-trace-boundary, rule_type: content_type_disambiguation, applicable_when: "素材同时含设计改版与工艺验证痕迹时", success_scenario: "按 4 维度二选一归类 / 必要时拆条独立成两类内容", flip_scenario: "混拍 → 落入灵感说明书 + 走进工厂双重 C1 禁用", alternative_boundary: "纯单类素材直接归类无需走本规则；与 founder_ip 按价值观 vs 产品本身分流"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-product-journey-vs-process-trace-boundary, source_md: Q2-内容类型种子/product_journey-交付物-v0.1.md, source_anchor: §与 process_trace 的边界, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-pjvspt-1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"pair":"product_journey|process_trace","mode":"mutually_exclusive_per_piece"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-product-journey-vs-process-trace-boundary, runtime_method: content_generation, input_types: ContentMaterial, output_types: ContentTypeRouting}

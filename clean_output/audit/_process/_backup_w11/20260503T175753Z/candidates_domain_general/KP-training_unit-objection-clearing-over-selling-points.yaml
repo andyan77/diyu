@@ -1,0 +1,63 @@
+pack_id: KP-training_unit-objection-clearing-over-selling-points
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 服装高决策成本品类的内容（测评/详情页/培训）应优先组织"顾虑清单解除"而非"卖点堆砌"——观众真正卡住的是"会不会踩雷（怕透/怕勒/怕皱/怕显胯/怕扎/怕闷）"，把首屏与开头改成反对意见 + 实拍证据，比正向自夸更能缩短决策；写不出顾虑清单的内容判定为未对齐购买心智。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: product_review / product_copy_general / training_material（异议处理章节）
+  when:
+    trigger: 生成详情页首屏 / 测评开头 / 销售话术
+    context: 模板化卖点链（"快买 / 闭眼入 / 姐妹冲"）观众心理防御自动开启；deinfluencing 与拔草内容在中英文生态都成长为稳定分支；服装顾虑高度可枚举（透/勒/皱/闷/短/显壮/难搭/起球/缩水）
+  what:
+    action_type: content_structure_rule
+    decision_or_action: 在生成首屏 / 开头时强制要求至少包含 2-3 条"用户最常见的顾虑 + 实拍证据图或 6 秒短动图"，再展开正向理由；销售话术训练同步加入"先问顾虑再推"路径
+  result:
+    success_pattern: 内容由"快买"变"我帮你看你最怕的那几件事"；观众感到"你在替我思考"，信任建立后再产生转化
+    flip_pattern: 首屏全是 USP 自夸+折扣，用户跳出率高；导购把"显瘦/不会显胯"作为第一句回应，反而触发心理防御
+  underlying_mechanism: 服装购买的最大障碍不是审美而是踩雷恐惧；先解除顾虑再给方案，把成交路径从"被种草"改为"被安慰"；这同时是接客 SOP 的"先问再推"原则的内容版本
+  boundary:
+    applicable_when: 服装高决策品类内容；测评 / 详情页 / 异议处理 / 班前微教练
+    not_applicable_when: 纯促销日历类信息更新（限时折扣公告等）——此场景顾虑清单不必前置
+  alternative_path:
+    - 反向命令式开头（"你可能不需要第二件黑外套，除非……"）
+    - 反对意见清单 + 实拍证据（怕透/怕显胯/怕扎三件套配 6 秒动图）
+    - 拔草型测评（先讲不适合谁，再讲替代方案）
+
+evidence:
+  source_md: Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md
+  source_anchor: 三份 md 的"只拍犹豫不拍优点""把详情页第一页写成反对意见清单""反促销宣言""反种草测评""错误先发生再倒回去重来"
+  source_type: cross_source_consensus
+  inference_level: low
+  evidence_quote: |
+    通用类.md：把详情页第一页写成反对意见清单："怕白色太透。""怕直筒裤坐下卡胯。""怕针织上身两小时就热。" 每句下面是一个很小的实拍证据图或 6 秒短动图——不再由品牌定义卖点，而是由用户的担忧来组织页面。服装购买的最大障碍从来不是"用户看不懂审美"，而是"用户怕踩雷"。
+    通用类compass.md：用"不要买"开头：不适合谁、哪儿会翻车、你可能会后悔什么；最后才给替代买法。它把"信任"放在第一位：先把坏消息说干净。
+    deep-research-report.md：Reformation uses subject lines like "DRUNK ON A WEEKNIGHT" and "90% RECYCLED, 10% TERRIBLE." The innovation spectrum…anti-copy, negative space.
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 与接客 SOP 的"必须先问再推"原则一脉相承
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用内容生产纪律 + 通用接客顾虑解除路径，跨品牌成立
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType, TrainingMaterial, CustomerScenario]
+  field: []
+  semantic: [SM-objection-clearing-over-selling-points]
+  value_set: [VS-common-clothing-objections]
+  relation: []
+  rule: [RL-objection-clearing-over-selling-points]
+  evidence: [EV-objection-clearing-over-selling-points]
+  lifecycle: []
+  call_mapping: [CM-content_generation-objection-clearing, CM-store_training-objection-clearing]

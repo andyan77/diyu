@@ -1,0 +1,118 @@
+pack_id: KP-training_unit-cold-start-role-priority-frontline
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  冷启动阶段 RoleProfile 素材采集顺序固定为 P0 / P1 两轮：
+  P0 必须先做"前台接客转化 + 门店经营秩序 + 设计判断 + 工艺落地"四岗
+  （sales_associate / store_manager / designer / sample_worker），
+  这四岗一旦最小素材包到位，三套通用 Persona（styling_advisor / store_operator / product_professional）就不会空转；
+  P1 再补纵深决策与协同岗（warehouse_supervisor / design_director / merchandising_director）；
+  禁止以"决策岗更重要"或"高层先做"为由颠倒次序。
+
+scenario:
+  who:
+    primary_role: 知识工程负责人 / 内容运营负责人 / 项目排程
+    target_audience: 首批 7 个 RoleProfile 的素材采集排程
+  when:
+    trigger: 冷启动阶段决定从哪个岗位开始访谈 / 拍摄 / 整理
+    context: 服装零售人设系统冷启动资源有限，必须先把通用 Persona 跑起来
+  what:
+    action_type: cold_start_role_sequencing
+    decision_or_action: |
+      错误动作：先采访高层（设计总监 / 商品总监）以"先听战略再下沉"，
+        或者按个人熟悉度随便挑岗位先开始，导致前台 / 一线工艺岗素材长期缺位，
+        三套通用 Persona 拿不到真实底座。
+      正确动作：严格按 P0 / P1 两轮排程——
+        P0（先做）：sales_associate（前台接客转化）/ store_manager（门店经营秩序）/
+          designer（设计判断）/ sample_worker（工艺落地）；
+        P1（后补）：warehouse_supervisor / design_director / merchandising_director；
+        P0 四岗任意一岗未到 5/3 双门槛，整个冷启动不进入 P1。
+      为什么错：通用 Persona 的真实感来自"会接 / 会卖 / 会做 / 会摆"的一线颗粒，
+        高层素材偏决策与取舍，无法填一线 Persona 的 typical_scenarios 与 authenticity_anchors。
+      如何纠正：项目排程表显式按 P0 / P1 分阶段，资源池优先给 P0 四岗。
+      掌握检查：每条岗位素材入库时记录所属 P0 / P1 阶段，门控自动校验。
+  result:
+    success_pattern: |
+      P0 四岗最小素材包到位后，三套通用 Persona（styling_advisor / store_operator /
+      product_professional）的 authenticity_anchors / typical_scenarios 字段全部可填，
+      系统能进入种子数据导入；P1 三岗逐步补齐纵深视角。
+  flip_pattern: |
+      高层岗（design_director / merchandising_director）素材先到位，但 sales_associate
+      与 sample_worker 长期缺位，三套通用 Persona 无法填充真实感字段，
+      生成的人设输出全是战略口吻、缺一线动作，被一线识破为"老板在说话"。
+  underlying_mechanism: |
+      Persona 真实感的承重在于一线动作的颗粒度，决策岗的取舍逻辑可以替代但不能代替；
+      P0 四岗各自对应一种不可缺失的 Persona 真实底座：
+      sales_associate ← styling_advisor（接客 + 私域）/
+      store_manager ← store_operator（经营 + 带队）/
+      designer + sample_worker ← product_professional（设计判断 + 工艺落地）；
+      P1 三岗补的是纵深、决策、协同、复盘层价值，对启动跑通系统优先级略低。
+  boundary:
+    applicable_when: 冷启动阶段 7 岗 RoleProfile 素材采集排程
+    not_applicable_when: |
+      系统已稳定运行后的扩岗（如新增 visual_merchandiser / private_outlet_operator）
+      → 按业务实际优先级安排，不强套此 P0 / P1；
+      创始人画像（FounderProfile）→ 与 7 岗素材采集独立排程，不进入此优先级框架。
+  alternative_path:
+    - P0 某岗短期资源不到位 → 同岗内先收"5 类素材中最缺的两类"，禁止跳过该岗去做 P1
+    - 多个 P0 岗同时启动 → 优先保 sales_associate（最高频前台）
+    - 已有部分 P1 岗素材意外提前到手 → 入库但标记 P1，不打乱 P0 验收门禁
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md
+  source_anchor: 四、首批采集优先级建议 · 4.1 P0（第一轮必须先拿到）+ 4.2 P1（第二轮补齐）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    P0（第一轮必须先拿到）这 4 个岗位优先级最高：sales_associate / store_manager /
+    designer / sample_worker。因为它们分别对应：前台接客转化 / 门店经营秩序 /
+    设计判断 / 工艺落地。这 4 个岗位一旦有了最小素材包，三套通用 Persona 就都不会空转：
+    styling_advisor ← sales_associate / store_operator ← store_manager /
+    product_professional ← designer + sample_worker。
+    P1（第二轮补齐）：warehouse_supervisor / design_director / merchandising_director。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐全（含挂接关系与 alternative_path）。
+    Gate 2：从 rule + value_set(priority_phase) + relation(spoken_by_role) +
+      call_mapping 可反推"P0 四岗 + P1 三岗 + 不打乱次序 + 通用 Persona 挂接"。
+    Gate 3：方法论本身跨品牌通用；具体 7 岗清单虽具体但来自首批通用 RoleProfile 冻结，
+      不属于品牌专属。
+    Gate 4：可被 store_training 与冷启动排程流程直接调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      P0/P1 排程方法是通用冷启动元规则；具体 7 岗 RoleProfile 已在 Q4 通用层冻结，
+      并非笛语调性内容；任意品牌冷启动都可直接套用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  field:
+    - {field_id: FD-RoleProfile-cold_start_priority_phase, owner_type: RoleProfile, field_name: cold_start_priority_phase, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-cold-start-role-priority-frontline-priority_phase, owner_field: cold_start_priority_phase, definition: "冷启动素材采集两阶段：P0 四岗（前台/门店/设计/工艺）→ P1 三岗（纵深/决策/协同）"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-cold-start-role-priority-frontline-priority_phase, value: P0, label: P0 第一轮必须先拿到, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-cold-start-role-priority-frontline-priority_phase, value: P1, label: P1 第二轮补齐, ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-training_unit-cold-start-role-priority-frontline, rule_type: cold_start_sequencing_policy, applicable_when: "首批 7 岗 RoleProfile 冷启动素材采集排程", success_scenario: "P0 四岗 5/3 双门槛达标后再进 P1，三套 Persona 真实底座到位", flip_scenario: "高层岗先做导致一线缺位，Persona 真实感字段填不出，生成被识破", alternative_boundary: "扩岗与 FounderProfile 不套此排程；P0 短缺资源时同岗补缺不许跳岗"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-cold-start-role-priority-frontline, source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md, source_anchor: 四、4.1 + 4.2, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-RoleProfile-spoken_by_role-Persona-csrp1, source_type: RoleProfile, target_type: Persona, relation_kind: spoken_by_role, properties_json: '{"P0_mapping":{"sales_associate":"styling_advisor","store_manager":"store_operator","designer":"product_professional","sample_worker":"product_professional"},"P1_mapping":{"warehouse_supervisor":"store_operator","design_director":"product_professional","merchandising_director":"product_professional"}}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-cold-start-role-priority-frontline, runtime_method: store_training, input_types: ["RoleProfile","Persona"], output_types: ["ColdStartRoleSchedule"]}

@@ -1,0 +1,91 @@
+pack_id: KP-product_attribute-no-forced-merge
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  即便看起来像，也不许强行收敛的 4 组属性是：卡其（khaki）≠ 驼色（camel）；真丝（silk）≠ 醋酸（acetate）；
+  修身（slim_fit）≠ 合体（regular_fit）；短款（cropped）≠ 常规偏短（regular_short）；
+  强收会让颜色 / 面料 / 版型 / 长度推荐错位，并把售后纠纷提前埋进去——这是同义词收敛纪律的反向边界。
+
+scenario:
+  who:
+    primary_role: Attribute 字典维护者 / 培训内容编辑
+    target_audience: 同义词收敛规则的执行者
+  when:
+    trigger: 任何要把这 4 组属性合并的提案 / 系统操作
+    context: 与 KP-product_attribute-synonym-convergence 配套；后者是"该收敛"，本卡是"不许收敛"
+  what:
+    action_type: synonym_anti_merge
+    decision_or_action: 上述 4 组术语必须在 attribute 字典中保持独立 canonical_value，禁止合并 synonyms
+  result:
+    success_pattern: |
+      推荐时驼色大衣不会被错配到要卡其的客户；
+      卖丝绸的话术不会用在醋酸面料上；
+      "修身" / "合体"分别承接不同体型偏好，售后差评不被这一项触发。
+    flip_pattern: |
+      把卡其/驼色合并为"米褐色系"→ 顾客拿到颜色不匹配；
+      把真丝/醋酸合并为"光泽面料"→ 售后投诉缩水变形与价格不符；
+      把修身/合体合并为"贴身版"→ 推荐对象搞错，退货率上涨。
+  underlying_mechanism: |
+      同义词收敛是"消歧统一"，反向边界是"防混淆隔离"。
+      看似相像的术语若有不同业务含义，必须保留差异；术语统一不是把所有相似词拍扁。
+  boundary:
+    applicable_when: 这 4 组术语的字典维护与系统合并操作
+    not_applicable_when: 12 组明确归并清单（见 KP-product_attribute-synonym-convergence）
+  alternative_path:
+    - 用户搜索时混用 → 可在前端做模糊提示（"您要找的是 X 还是 Y？"），但后端存储不合并
+    - 出现新的"看似像但不能强收"案例 → 进字典升级提案，不私自加入
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md
+  source_anchor: 6.3 必须收敛的统一术语 · 明确不得强收的口径
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    明确不得强收的口径：
+    卡其（khaki）≠ 驼色（camel）
+    真丝（silk）≠ 醋酸（acetate）
+    修身（slim_fit）≠ 合体（regular_fit）
+    短款（cropped）≠ 常规偏短（regular_short）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 9 表（4 组反向边界 value_set + 反合并规则 + 两条边界 evidence）可反推"哪些术语不许合并 / 为什么不能合 / 售后风险"三条核心语义。
+    Gate 3：通用零售底座纪律。
+    Gate 4：可被字典升级流程 / 搜索消歧前端调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用色彩 / 面料 / 版型差异，不含笛语品牌专属
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-no-forced-merge-anti_merge, owner_field: canonical_value, definition: "反向边界：看似相像但业务含义不同的属性必须保持独立 canonical_value"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-no-forced-merge-color, value: khaki, label: 卡其}
+    - {value_set_id: VS-KP-product_attribute-no-forced-merge-color, value: camel, label: 驼色}
+    - {value_set_id: VS-KP-product_attribute-no-forced-merge-material, value: silk, label: 真丝}
+    - {value_set_id: VS-KP-product_attribute-no-forced-merge-material, value: acetate, label: 醋酸}
+    - {value_set_id: VS-KP-product_attribute-no-forced-merge-fit, value: slim_fit, label: 修身}
+    - {value_set_id: VS-KP-product_attribute-no-forced-merge-fit, value: regular_fit, label: 合体}
+    - {value_set_id: VS-KP-product_attribute-no-forced-merge-length, value: cropped, label: 短款}
+    - {value_set_id: VS-KP-product_attribute-no-forced-merge-length, value: regular_short, label: 常规偏短}
+  rule:
+    - {rule_id: RL-KP-product_attribute-no-forced-merge, rule_type: synonym_anti_merge, applicable_when: "4 组明确不得强收清单内的术语合并提案", success_scenario: "推荐/话术/售后三处保持术语精度", flip_scenario: "强收→颜色/面料/版型/长度推荐错位+售后纠纷", alternative_boundary: "前端可模糊提示但后端不合并"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-no-forced-merge, source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md, source_anchor: 6.3 明确不得强收, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

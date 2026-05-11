@@ -1,0 +1,108 @@
+# ============================================================
+# model_policy.yaml · 模型策略 / model policy
+# ============================================================
+# 任务卡 / task card: KS-POLICY-005
+# S 门 / S-gate: S12 model_policy_declared
+# 落盘日期 / created: 2026-05-12
+# ============================================================
+# 用户决策 / user decision (2026-05-12):
+#   - 主线 / primary: QWEN（通义千问 / Tongyi Qianwen · 阿里云百炼 / Aliyun Bailian）
+#   - 备选 / fallback: DEEPSEEK（深度求索 / DEEPSEEK）
+#   - 维度 / dimension: 1024
+#   - rerank（重排）: 启用 / enabled
+#   - llm_assist: qwen-plus（性价比型 / cost-effective）
+# ============================================================
+
+model_policy_version: "mp_20260512_001"
+
+# ============================================================
+# embedding / 向量化模型
+# ============================================================
+# 用途 / usage:
+#   - 离线 / offline: 生成 qdrant_chunks 向量（KS-VECTOR-001）
+#   - 运行时 / runtime: 生成 query embedding（KS-RETRIEVAL-006）
+embedding:
+  provider: dashscope                # 阿里云百炼 / Aliyun Bailian
+  model: text-embedding-v3           # QWEN 通义文本向量 v3
+  model_version: "v3"
+  dimension: 1024                    # 维度 / vector dimension
+  api_key_env: DASHSCOPE_API_KEY     # 从 env 读 / read from env
+  used_for:
+    - qdrant_chunk_embedding         # 离线 chunk 向量化
+    - query_embedding                # 运行时 query 向量化
+  rebuild_required_when_changed: true  # 任一字段变更 → 必须重建 Qdrant collection
+
+# ============================================================
+# rerank / 重排模型
+# ============================================================
+# 用途 / usage: 召回后排序，对 top-k 候选打分重排
+rerank:
+  enabled: true                      # 用户决策：启用
+  provider: dashscope
+  model: gte-rerank                  # QWEN 通用文本重排
+  model_version: "v1"
+  api_key_env: DASHSCOPE_API_KEY
+  top_k_before: 30                   # 重排前候选数 / candidates before rerank
+  top_k_after: 8                     # 重排后保留数 / kept after rerank
+  fallback_when_unavailable: vector_score_then_structured_priority
+  # 不可用时降级 / degrade strategy: 只用向量分数 + 结构化优先级，不扩大召回范围
+
+# ============================================================
+# llm_assist / LLM 辅助
+# ============================================================
+# 用途 / usage: 路由 / 质检 / 辅助判断，不做最终生成、不做治理裁决
+llm_assist:
+  enabled: true
+  primary:                           # 主线
+    provider: dashscope
+    model: qwen-plus                 # QWEN 性价比型 / cost-effective
+    model_version: "qwen-plus-latest"
+    api_key_env: DASHSCOPE_API_KEY
+  fallback:                          # 备选（主线不可用时）
+    provider: deepseek
+    model: deepseek-chat
+    model_version: "deepseek-chat-latest"
+    api_key_env: DEEPSEEK_API_KEY
+  # 允许做的任务 / allowed tasks
+  allowed_tasks:
+    - intent_classification          # 意图分类辅助
+    - content_type_routing           # 内容类型路由辅助
+    - quality_check                  # 质量自检
+    - semantic_guardrail_judge       # 语义 guardrail 辅助判断
+  # 禁止做的任务 / forbidden tasks（S13 hard boundary）
+  forbidden_tasks:
+    - tenant_scope_resolution        # 租户隔离不可由 LLM 决策
+    - brand_layer_override           # 品牌层不可由 LLM 覆盖
+    - fallback_policy_decision       # 降级策略不可由 LLM 决策
+    - merge_precedence_decision      # 合并优先级不可由 LLM 决策
+    - evidence_fabrication           # 不可编造证据
+    - final_generation               # 中间件内不做最终成稿
+
+# ============================================================
+# 最终内容生成 / final content generation
+# ============================================================
+# 注：本字段仅声明 Dify 节点应使用哪个模型；不在本中间件执行
+# Note: this declares which model Dify nodes should call; not executed in this middleware
+final_generation_recommended:
+  provider: dashscope
+  model: qwen-plus                   # 与 llm_assist primary 同源 / same-source
+  model_version: "qwen-plus-latest"
+  note: "Dify Chatflow LLM 节点配置；中间件只返回 context_bundle"
+
+# ============================================================
+# 变更触发动作 / change-triggered actions
+# ============================================================
+# 任一模型 / version 变更必须 bump model_policy_version；
+# embedding 变更必须触发 KS-DIFY-ECS-004 重建 Qdrant collection（新 collection 名含新 version）
+change_actions:
+  bump_policy_version_on:
+    - embedding.model
+    - embedding.model_version
+    - embedding.dimension
+    - rerank.model
+    - llm_assist.primary.model
+    - llm_assist.fallback.model
+  rebuild_qdrant_on:
+    - embedding.model
+    - embedding.model_version
+    - embedding.dimension

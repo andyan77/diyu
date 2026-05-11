@@ -1,0 +1,105 @@
+pack_id: KP-training_unit-sop-asmr-procedural-memory
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: low
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "无口播手部操作短片让员工用手记住流程"
+  steps:
+    - "固定拍一个完整标准动作"
+    - "只保留动作声和一两个字字幕"
+    - "用错误动作对照强化记忆"
+  anti_pattern: "培训视频讲太多理论导致现场动作仍然不会做"
+  duration: short
+  audience: "需要快速复现动作的门店员工"
+  source_pack_id: KP-training_unit-sop-asmr-procedural-memory
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  服装行业可视化 SOP（蒸烫 / 折叠 / 装袋 / 贴标 / 封口 / 挂装 / 量体）的培训物料，
+  应该拍成"无口播的手部操作短片"——全程只有动作声 + 关键步骤 1-2 字字幕（"对齐""放平""封口"）。
+  这把培训从"陈述性记忆（背流程）"切到"程序性记忆（手记得）"——员工在工作中遇到忘了的动作时
+  可以当场刷一条而不是去翻手册。打破"培训必须讲很多"的惯性，改成"让手记住"。
+
+scenario:
+  who:
+    primary_role: 店长 / 总部培训生产 / 兵团内容编剧
+    target_audience: 新员工入职包 / 老员工动作回看 / 加盟商
+  when:
+    trigger: 拍可视化 SOP 培训时（动作高度可视化 + 步骤明确 + 静默可执行）
+    context: 服装行业大量 SOP 是手部与空间动作，长视频 + 长口播会被认知负荷碾压
+  what:
+    action_type: store_training_play_card
+    decision_or_action: 拍 20-60 秒：俯拍操作台 + 慢动作手部演示 + 全程仅动作声 + 关键步骤 1-2 字字幕
+  result:
+    success_pattern: |-
+      员工在工作中遇到动作模糊时当场扫码刷一条 / 30 秒内完成动作回忆 + 复刻 / 错误率显著降低
+      / 拍摄成本极低（手机 + ≤200 元俯拍架 + 4 小时批量 5-8 条）
+    flip_pattern: |-
+      退化为"PPT 录屏 + 旁白讲解" / 加 BGM 加搞笑配音 / 长口播 + 满屏字 / 把 SOP 抽象成制度文本
+      → 程序性记忆通道关闭，员工记不住具体动作
+  underlying_mechanism: |
+      程序性记忆走的是"看 + 听动作声 + 模仿"通路；陈述性记忆走的是"听旁白 + 记字"。
+      培训长期失败的核心是用陈述性记忆通道传递程序性技能。SOP ASMR 切到程序性通道，
+      让员工在重看时直接激活动作记忆而不是检索文字记忆。同时极短时长（20-60 秒）匹配
+      微学习窗口，员工愿意"当场刷一条"。
+  boundary:
+    applicable_when: 服装行业可视化 SOP（蒸烫 / 折叠 / 装袋 / 贴标 / 封口 / 挂装 / 量体）/ 步骤明确 / 静默可执行
+    not_applicable_when: 接客判断 / 话术训练 / 含价值判断的非动作内容 → 走 C2-1 分支情境训练或 C3-1 错误先倒回
+  alternative_path:
+    - 也可与 C2-2 Do/Don't 对照配合——Do/Don't 给"对错对比"，本卡给"正确动作的肌肉记忆"
+
+evidence:
+  source_md: Q2-内容类型种子/training_material-交付物-v0.1.md
+  source_anchor: §C3 突破性玩法卡 #C3-4 "SOP ASMR / 让手记住而不是让脑记住" + §⚠️ 兵团向 3 原则
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-4：把"标准动作"拍成无口播的手部操作短片：蒸烫 / 折叠 / 装袋 / 贴标 / 封口。
+    全程只有环境音与动作声 / 画面只在关键步骤出现 1-2 个字（例如"对齐""放平""封口"）。
+    打破"培训必须讲很多"的惯性 / 改成"让手记住"。
+    学习机制：Procedural memory + Sensory learning（程序性记忆 + 感官学习）——
+    传统培训依赖陈述性记忆（背流程 / 背话术），本玩法切换到程序性记忆。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（SOP ASMR 格式 + 程序性记忆机制）+ 09_call_mapping（store_training）可反推
+    "可视化 SOP 用 无口播+动作声+关键 1-2 字字幕 / 与接客判断的边界 / 程序性 vs 陈述性记忆"。
+    Gate 3：跨品牌通用——任何服装品牌的可视化 SOP 都适用。
+    Gate 4：可被 store_training 调用，按 SOP 清单批量生成 ASMR 拍摄分镜。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装零售通用培训格式；不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-sop-asmr-procedural-memory, rule_type: store_training_play_card, applicable_when: "服装行业可视化 SOP（蒸烫/折叠/装袋/贴标/封口/挂装/量体）", success_scenario: "20-60 秒无口播+动作声+关键 1-2 字字幕 → 员工在工作时当场刷一条", flip_scenario: "PPT 录屏 / 长旁白 / 满屏字 → 程序性记忆通道关闭", alternative_boundary: "接客判断走分支情境或错误先倒回"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-sop-asmr-procedural-memory, source_md: Q2-内容类型种子/training_material-交付物-v0.1.md, source_anchor: §C3-4, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-compatible_with_content_type-training_material-sa1, source_type: TrainingMaterial, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"training_material","play_card":"C3-4","learning_mechanism":"procedural_memory+sensory_learning"}'}
+    - {relation_id: RE-TrainingMaterial-supports_training-RoleProfile-sa1, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: supports_training, properties_json: '{"role":"sales_associate+stockkeeper","seniority":"new_to_all"}'}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-sop-asmr-procedural-memory, runtime_method: store_training, input_types: VisualSOP, output_types: ASMRTrainingScript_20to60s}
+    - {mapping_id: CM-content_generation-KP-training_unit-sop-asmr-procedural-memory, runtime_method: content_generation, input_types: ContentType+SOP, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

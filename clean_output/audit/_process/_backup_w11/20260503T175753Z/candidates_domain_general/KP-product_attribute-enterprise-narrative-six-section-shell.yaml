@@ -1,0 +1,82 @@
+pack_id: KP-product_attribute-enterprise-narrative-six-section-shell
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  企业叙事类内容（founder_ip / role_work_vlog / event_documentary / product_journey / process_trace / behind_the_scenes 共 6 类）
+  的可机器消费模板必须包含 6 个固定字段壳——north_star（北极星 / 观众看完心里发生什么）/ mainstream_played_out（已被用烂的主流玩法）/
+  advanced_play（少数高手在用的进阶玩法）/ breakthrough_play（还没人这么干但可能成立的突破玩法）/ industry_vertical_lift（服装行业垂直加成）/
+  forbidden_plays（一定不行的玩法）/ production_difficulty（制作难度判断含 AI 辅助上限）。这是企业叙事类内容生产的 schema 元规则，
+  任意品牌都可直接套用，6 字段共同确定一条企业叙事内容是否"可被生产、可被审稿、可被反 AI 腔检验"。
+
+scenario:
+  who:
+    primary_role: 内容运营 / 企业叙事内容生产 agent
+    target_audience: 任何想做企业叙事内容的服装品牌
+  when:
+    trigger: 准备生产任意一条企业叙事类（6 类之一）内容前
+    context: 选题立项 / Brief 撰写 / 内容审稿 / AI 自动生成提示词构建
+  what:
+    action_type: schema_template_application
+    decision_or_action: |
+      第一步：确认本条内容属于 6 类企业叙事中哪一类，找到该类的"北极星"（观众看完心里发生什么）。
+      第二步：按 6 字段壳逐项写满——明示要避开哪几条主流烂玩法、要落到哪一档（进阶 / 突破）、行业垂直加成点、明确禁忌、制作难度与 AI 辅助上限。
+      第三步：任一字段写不出具体内容（不是泛话）→ 选题不成立，不生产。
+      第四步：6 字段全部写完后，按"是否落进 mainstream_played_out 共性"做反 AI 腔自检；落进就改稿或退回。
+  result:
+    success_pattern: 6 字段全部具体填满；选题在"进阶"或"突破"档位；明确避开主流烂玩法；制作难度与拍摄者条件匹配 → 内容立得住、可执行
+    flip_pattern: 字段缺位或被泛话填充（例如"输出有价值的内容"），落到主流烂玩法档位却不自知，结果是 AI 一眼能仿、观众一眼能跳
+  underlying_mechanism: |
+    企业叙事类内容的根本风险是"AI 也能写得很像" —— 主流烂玩法几乎全部是 AI 套话最擅长的形态（口播讲道理 / 流水账 / FAQ 问答 / 工厂走一遍）。
+    6 字段壳里 mainstream_played_out 是"AI 可仿区"白名单（要避开），advanced_play 与 breakthrough_play 是"AI 可仿区"的反面
+    （需要现场判断 / 物件证据 / 真实矛盾），这套字段壳的本质是把"反 AI 仿写"做成 schema 级强约束，而不是审稿时的口头提醒。
+  boundary:
+    applicable_when: 6 类企业叙事内容生产；任何品牌、任何门店级别均适用
+    not_applicable_when: 商品文案 / 搭配陈列 / 培训规则等非企业叙事类内容（这些有各自字段壳）
+  alternative_path:
+    - 字段无法填具体内容时 → 选题退回，不强行生产
+    - 制作难度与拍摄者条件不匹配 → 降档（突破 → 进阶）或换玩法
+
+evidence:
+  source_md: Q2-内容类型种子/企业叙事类GPT5.4.md
+  source_anchor: 全文 6 个一级章节（founder_ip / role_work_vlog / event_documentary / product_journey / process_trace / behind_the_scenes）共享的固定子章节结构
+  source_type: structural_pattern
+  inference_level: structural_induction
+  evidence_quote: |
+    每一类（如 founder_ip 第 1 节）都包含：
+    "**北极星：** ……" + "### 主流玩法（已被用烂）" + "### 进阶玩法（少数高手在用）" + "### 突破性玩法（还没人这么干，但可能成立）"
+    + "### 服装行业垂直加成" + "### 一定不行的玩法" + "### 制作难度判断"
+    6 个一级章节结构完全一致，证明这是企业叙事内容生产的固定字段壳。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与"反 AI 腔纪律"pack 配对使用；可作为 ContentType=enterprise_narrative 的字段壳投影到 02_field。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 企业叙事内容的通用 schema 元规则，任何品牌都可套用；不含具体笛语品牌主张或创始人故事原文。属 SKILL.md §6.1.1 第 8 类"Schema 元规则"。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star}
+    - {field_id: FD-ContentType-mainstream_played_out}
+    - {field_id: FD-ContentType-advanced_play}
+    - {field_id: FD-ContentType-breakthrough_play}
+    - {field_id: FD-ContentType-industry_vertical_lift}
+    - {field_id: FD-ContentType-forbidden_plays}
+    - {field_id: FD-ContentType-production_difficulty}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-enterprise-narrative-six-section-shell-six_field_shell}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-enterprise-narrative-six-section-shell-narrative_subtypes, examples: [founder_ip, role_work_vlog, event_documentary, product_journey, process_trace, behind_the_scenes]}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-enterprise-narrative-six-section-shell}

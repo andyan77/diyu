@@ -1,0 +1,4 @@
+SM-KP-training_unit-founder-profile-brand-unique-layer-layer,layer,Persona 分层：brand_unique 品牌唯一层 / generic 通用层；决定能否跨品牌复用,,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+SM-KP-training_unit-founder-profile-soft-use-no-rename-enablement,enablement_flag,FounderProfile 是否对该品牌启用：true=启用并对接 founder_ip / false=跳过不报错,,domain_general,KP-training_unit-founder-profile-soft-use-no-rename
+SM-KP-training_unit-persona-vs-roleprofile-layering-cap,persona_count_cap,冷启动阶段通用 Persona 数量上限：默认 3，超出需评审,,domain_general,KP-training_unit-persona-vs-roleprofile-layering
+SM-KP-training_unit-roleprofile-not-speaking-shell-function,role_function,RoleProfile 职能：knowledge_base 知识底座（默认）/ speaking_shell 说话身份壳（禁止）,,domain_general,KP-training_unit-roleprofile-not-speaking-shell

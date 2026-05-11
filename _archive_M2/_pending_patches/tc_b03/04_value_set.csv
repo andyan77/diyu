@@ -1,0 +1,25 @@
+VS-KP-display_rule-window-display-purpose-allowed_inventory,new_arrival_complete,新品齐码,1,domain_general,KP-display_rule-window-display-purpose
+VS-KP-display_rule-window-display-purpose-allowed_inventory,core_push_deep_stock,主推深库存,2,domain_general,KP-display_rule-window-display-purpose
+VS-KP-display_rule-window-display-purpose-allowed_inventory,full_look_ready,成套齐套,3,domain_general,KP-display_rule-window-display-purpose
+VS-KP-display_rule-window-display-purpose-training_tier,senior_only,仅店长老手,1,domain_general,KP-display_rule-window-display-purpose
+VS-KP-display_rule-window-display-purpose-training_tier,novice_partial,新人单主题单焦点,2,domain_general,KP-display_rule-window-display-purpose
+VS-KP-display_rule-mannequin-display-purpose-look_type,commute_set,通勤套装,,domain_general,KP-display_rule-mannequin-display-purpose
+VS-KP-display_rule-mannequin-display-purpose-look_type,weekend_look,周末 look,,domain_general,KP-display_rule-mannequin-display-purpose
+VS-KP-display_rule-mannequin-display-purpose-look_type,outer_inner_bottom,外套+内搭+下装,,domain_general,KP-display_rule-mannequin-display-purpose
+VS-KP-display_rule-front-hanging-purpose-allowed_inventory,new_arrival_complete,新品齐码,1,domain_general,KP-display_rule-front-hanging-purpose
+VS-KP-display_rule-front-hanging-purpose-allowed_inventory,core_push_deep_stock,主推深库存,2,domain_general,KP-display_rule-front-hanging-purpose
+VS-KP-display_rule-front-hanging-purpose-allowed_inventory,basic_replenishable,基础可补,3,domain_general,KP-display_rule-front-hanging-purpose
+VS-KP-display_rule-front-hanging-purpose-training_format,do_dont_contrast,Do/Don't 对照,,domain_general,KP-display_rule-front-hanging-purpose
+VS-KP-display_rule-front-hanging-purpose-training_format,daily_review,日常复盘,,domain_general,KP-display_rule-front-hanging-purpose
+VS-KP-display_rule-side-hanging-purpose-allowed_inventory,core_push_deep_stock,主推深库存,1,domain_general,KP-display_rule-side-hanging-purpose
+VS-KP-display_rule-side-hanging-purpose-allowed_inventory,basic_replenishable,基础可补,2,domain_general,KP-display_rule-side-hanging-purpose
+VS-KP-display_rule-side-hanging-purpose-error_pattern,warehouse_look,像仓库不像卖场,,domain_general,KP-display_rule-side-hanging-purpose
+VS-KP-display_rule-side-hanging-purpose-error_pattern,overfilled,挂得太满,,domain_general,KP-display_rule-side-hanging-purpose
+VS-KP-display_rule-side-hanging-purpose-error_pattern,disorder_size_color,尺码颜色顺序乱,,domain_general,KP-display_rule-side-hanging-purpose
+VS-KP-display_rule-side-hanging-purpose-error_pattern,season_mix,季节混挂,,domain_general,KP-display_rule-side-hanging-purpose
+VS-KP-display_rule-folded-display-purpose-allowed_inventory,core_push_deep_stock,主推深库存,1,domain_general,KP-display_rule-folded-display-purpose
+VS-KP-display_rule-folded-display-purpose-allowed_inventory,basic_replenishable,基础可补,2,domain_general,KP-display_rule-folded-display-purpose
+VS-KP-display_rule-folded-display-purpose-allowed_inventory,clearance_tail_stock_basic,清仓尾货中可重复基础款,3,domain_general,KP-display_rule-folded-display-purpose
+VS-KP-display_rule-folded-display-purpose-training_format,top_down_workbench,俯拍操作台,1,domain_general,KP-display_rule-folded-display-purpose
+VS-KP-display_rule-folded-display-purpose-training_format,do_dont_contrast,Do/Don't 对照,2,domain_general,KP-display_rule-folded-display-purpose
+VS-KP-display_rule-folded-display-purpose-training_format,before_after_timelapse,before/after 延时复盘,3,domain_general,KP-display_rule-folded-display-purpose

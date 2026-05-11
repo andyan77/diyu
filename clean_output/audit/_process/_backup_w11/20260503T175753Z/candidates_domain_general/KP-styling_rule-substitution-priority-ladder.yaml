@@ -1,0 +1,96 @@
+pack_id: KP-styling_rule-substitution-priority-ladder
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  断码/换色/换材质替代时按四级优先顺序——先守 silhouette（廓形），再守 formality_level（正式度），
+  再守 visual_weight（视觉重量），最后才是 color_family（色系家族）；不找"长得像"的，找"功能一样"的。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长 / 库存救场负责人
+    target_audience: 任何遇到主件断码、换色、换材质决策的接客与陈列岗
+  when:
+    trigger: 主件断码 / 顾客指定款无货 / 陈列主推单品断码
+    context: 替代方案选择
+  what:
+    action_type: substitution_priority_decision
+    decision_or_action: |
+      第一优先：守 silhouette（高腰直筒 → 高腰直筒；短外套 → 短外套）
+      第二优先：守 formality_level（商务通勤盘不能用家居/运动单品代替）
+      第三优先：守 visual_weight（厚薄/挺垂/毛感/光泽接近；贵价救场材质像不像比颜色像不像更关键）
+      第四优先：守 color_family（同温度同明度内微调；冷暖不能乱跳）
+  result:
+    success_pattern: 替代后顾客感觉"功能一样、可以接受"，连带成交不掉。
+    flip_pattern: |
+      只长得像、功能不一样——廓形变了、正式度掉了、近脸颜色把气色打脏、
+      材质从"贵感"换成"廉价反光"、量感从"修饰"变成"放大问题"，顾客试穿后掉头。
+  underlying_mechanism: |
+      顾客决策依赖的是"功能"（廓形/正式度/质感）而不是"外观相似度"；
+      替代守功能就是守住成交动机，按四级顺序就是把不可让步项排在前面。
+  boundary:
+    applicable_when: 主件断码 / 库存救场 / 陈列替换
+    not_applicable_when: 顾客明确接受"风格切换"且重新进入推荐流程时（不再走替代而走重新推荐）
+  alternative_path:
+    - 满足前三级但色系略偏 → 在同温度同明度内调，不上"长得像"
+    - 廓形/正式度/视觉重量任一掉级 → 判定"不能替代"，进入库存救场或转向
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.5 断码、换色、换材质时的替代边界（含"明确判定不能替代"五条 + 一句正式口径）
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    第一优先：守 silhouette（廓形）。
+    第二优先：守 formality_level（正式度）。
+    第三优先：守 visual_weight（视觉重量），尤其贵价单品救场时，材质像不像，往往比颜色像不像更关键。
+    第四优先：守 color_family（色系家族），可在同温度、同明度内微调；不能冷暖乱跳。
+    明确判定"不能替代"的情况：廓形变了 / 正式度掉了 / 近脸颜色把气色打脏了 /
+    材质从"贵感"换成"廉价反光"/ 量感从"修饰"变成"放大问题"。
+    断码替代，不找"长得像"的，找"功能一样"的。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    G1 八要素齐全。G2 可从 06_rule + 04_value_set（四级优先 + 五条不可替代）反推核心语义。
+    G3 跨女装品牌通用替代纪律。G4 可被 inventory_rescue + outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 替代纪律是基础库存救场通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-substitution-priority-ladder-priority_axis, owner_field: rule_name, definition: "替代四级优先顺序：silhouette > formality_level > visual_weight > color_family"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-priority_levels, value: silhouette, label: 一级守廓形, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-priority_levels, value: formality_level, label: 二级守正式度, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-priority_levels, value: visual_weight, label: 三级守视觉重量, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-priority_levels, value: color_family, label: 四级守色系家族, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-irreplaceable_signals, value: silhouette_changed, label: 廓形变了, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-irreplaceable_signals, value: formality_dropped, label: 正式度掉了, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-irreplaceable_signals, value: face_color_dirtied, label: 近脸颜色把气色打脏, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-irreplaceable_signals, value: cheap_reflective_material, label: 材质廉价反光, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-substitution-priority-ladder-irreplaceable_signals, value: volume_amplifies_problem, label: 量感放大问题, ordinal: 5}
+  rule:
+    - {rule_id: RL-KP-styling_rule-substitution-priority-ladder, rule_type: hard_rule, applicable_when: "主件断码/库存救场/陈列替换", success_scenario: "按四级顺序守功能替代后顾客接受", flip_scenario: "只长得像功能不一样顾客试穿后掉头", alternative_boundary: "任一前三级掉级判定不能替代→进入库存救场或转向；不找长得像的找功能一样的"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-substitution-priority-ladder, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.5, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-requires_inventory_state-InventoryState-subst01, source_type: StylingRule, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"focus":"substitution_priority_ladder"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-subst02, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"stock_out_substitution_drill"}'}
+    - {relation_id: RE-StylingRule-supports_styling-Product-subst03, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"focus":"substitute_function_over_appearance"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-styling_rule-substitution-priority-ladder, runtime_method: inventory_rescue, input_types: [Product, InventoryState], output_types: [SubstitutionPlan]}
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-substitution-priority-ladder, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-substitution-priority-ladder, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

@@ -1,0 +1,110 @@
+pack_id: KP-training_unit-evidence-shape-four-types
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  每条岗位知识素材必须标注证据形态（evidence_shape），且仅四类合法：
+  口述类（访谈 / 复盘 / 对话记录）、动作类（视频 / 照片 / 现场步骤记录）、
+  文档类（SOP / 工艺单 / 培训资料 / 表格 / 清单）、物证类（样衣 / 吊牌 / 货架 / 退货单 / 调货记录）；
+  没有证据形态、只剩转述总结的素材一律视作不可采信，必须打回补证。
+
+scenario:
+  who:
+    primary_role: 知识工程 / 内容运营素材整理人
+    target_audience: RoleProfile 素材库管理 + 后续人设生成可信度审计
+  when:
+    trigger: 一条岗位素材进入素材库 / 进入 RoleProfile 字段回填流程
+    context: 服装零售人设系统冷启动阶段，需为每条素材建立可追溯证据
+  what:
+    action_type: evidence_shape_tagging
+    decision_or_action: |
+      错误动作：素材只标"内容摘要 + 来源人姓名"，不标证据形态；或把"我朋友说店长一般这么干"
+        当成有效素材入库。
+      正确动作：每条素材必须打上四类标签之一——
+        口述（含访谈录音 / 复盘逐字稿 / 真实对话）/
+        动作（含视频 / 照片 / 现场步骤记录）/
+        文档（含 SOP / 工艺单 / 培训资料 / 表格 / 清单）/
+        物证（含样衣 / 吊牌 / 货架照片 / 退货单 / 调货单 / 纸条）；
+        缺失证据形态 → 打回补证或转入"待核验"，不入正式素材库。
+      为什么错：转述总结无法支撑后续 authenticity_anchors 的可信度，
+        会让人设生成被一线识破。
+      如何纠正：素材采集模板里 evidence_shape 字段设为必填，工具层做硬校验。
+      掌握检查：抽样 10 条素材，每条都能指向具体的口述 / 动作 / 文档 / 物证制品。
+  result:
+    success_pattern: |
+      素材库每条都可回到具体证据制品（录音 / 视频 / 文档 / 实物），
+      下游审计或质疑时可在 1 分钟内取证；人设生成的真实感被一线认可。
+    flip_pattern: |
+      素材表里全是"据某某说""一般来说""我们经常这么干"等转述总结，
+      被一线追问"哪次 / 哪份 / 哪件衣服"时无法对应到具体证据；
+      RoleProfile 真实性锚点被普遍打回。
+  underlying_mechanism: |
+      四类证据形态对应四种不可伪造的颗粒度：
+      口述保留语气与困境真实感，动作保留步骤与空间真实感，
+      文档保留制度与口径真实感，物证保留物理痕迹与因果真实感；
+      缺任何一类都会让某个维度的真实感消失，转述则四类都无法支撑。
+  boundary:
+    applicable_when: 任意 RoleProfile 素材库录入 / 岗位访谈成果归档 / 冷启动数据底座建设
+    not_applicable_when: |
+      纯方法论 / 元规则文档（如本规则本身）→ 不需要再嵌套证据形态；
+      创始人价值观主张（FounderProfile 唯一层）→ 主以口述 + 文档为主，
+      物证可空，但仍需明示证据形态。
+  alternative_path:
+    - 仅有口述 → 补 1 张现场照片或 1 份相关文档作交叉证据
+    - 仅有文档 → 补一段当事人口述确认"现实是否真的这么执行"
+    - 极敏感场景（如门店监控）→ 物证形态需打脱敏标记，不对外发布
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md
+  source_anchor: 二、2.4 素材必须带"证据形态"
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    每条素材至少要标清它属于哪种证据形态：
+    口述类：访谈、复盘、对话记录；
+    动作类：视频、照片、现场步骤记录；
+    文档类：SOP、工艺单、培训资料、表格、清单；
+    物证类：样衣、吊牌、货架、退货单、纸条、调货记录。
+    没有证据形态，只剩转述总结，可信度会大幅下降。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐全。Gate 2：从 rule + value_set(evidence_shape) + call_mapping
+    可反推"四类证据形态 + 缺失打回"。
+    Gate 3：跨品牌跨岗位普适。Gate 4：可被 store_training 与素材审计调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      证据形态分类是通用的素材管理元规则，任意品牌都直接可用，且不含笛语具体内容。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Evidence, type_name: Evidence, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  field:
+    - {field_id: FD-Evidence-evidence_shape, owner_type: Evidence, field_name: evidence_shape, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-evidence-shape-four-types-shape_taxonomy, owner_field: evidence_shape, definition: "证据形态四类：口述 / 动作 / 文档 / 物证；缺失视为不可采信"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-evidence-shape-four-types-shape, value: oral, label: 口述类（访谈/复盘/对话记录）, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-evidence-shape-four-types-shape, value: action, label: 动作类（视频/照片/现场步骤记录）, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-evidence-shape-four-types-shape, value: document, label: 文档类（SOP/工艺单/培训资料/表格/清单）, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-evidence-shape-four-types-shape, value: physical, label: 物证类（样衣/吊牌/货架/退货单/调货记录）, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-training_unit-evidence-shape-four-types, rule_type: evidence_tagging_policy, applicable_when: "任意岗位素材进入素材库 / RoleProfile 字段回填", success_scenario: "每条素材都打上四类标签之一并指向具体制品，审计可溯源", flip_scenario: "素材只剩转述总结，无证据形态标签，被一线追问无法溯源", alternative_boundary: "纯元规则文档与 FounderProfile 价值主张可放宽物证要求，但仍需明示形态"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-evidence-shape-four-types, source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md, source_anchor: 二、2.4, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-supported_by_evidence-Evidence-est1, source_type: TrainingMaterial, target_type: Evidence, relation_kind: supported_by_evidence, properties_json: '{"shape_required":true,"allowed_shapes":["oral","action","document","physical"]}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-evidence-shape-four-types, runtime_method: store_training, input_types: ["TrainingMaterial","Evidence"], output_types: ["EvidenceShapeAuditReport"]}

@@ -1,0 +1,72 @@
+pack_id: KP-training_unit-silence-as-pattern-interrupt
+granularity_layer: L3
+
+runtime_asset:
+  runtime_asset_id: RA-training_unit-silence-as-pattern-interrupt
+  asset_type: dialogue_template
+  title: "沉默打断惯性话术"
+  summary: "在高频推销或解释惯性中使用克制停顿，让顾客重新进入判断而不是被信息淹没。"
+  source_pointer: "candidates/.../KP-training_unit-silence-as-pattern-interrupt.yaml#runtime_asset"
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 在 BGM 与口播饱和的中文短视频生态里，沉默/留白（无口播、环境音、固定机位长停顿、白空间排版）本身就是模式打断（pattern interrupt），平台生成 5 类通用 ContentType 时必须把"无声叙事 / 极少字幕 / 留白排版"作为一等可选玩法，不得默认配 BGM 加金句。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: 服装零售内容生成所有 ContentType（测评 / 门店日常 / 文案 / 培训物料 / 情绪表达）
+  when:
+    trigger: 平台生成视频脚本 / 详情页 / 海报排版 / 培训片
+    context: 数据显示 85% 社媒视频在静音下被观看；沉默 vlogger 的浏览量与互动率显著高于口播；中文测评/穿搭/情绪表达类目里"对镜怼脸+伤感 BGM+大字金句"已饱和
+  what:
+    action_type: format_choice_rule
+    decision_or_action: 在配 BGM 与配口播之外，把"无口播+环境音""固定机位长停顿（3 秒以上不剪）""白空间海报+一句话""SOP ASMR""店铺无解说氛围纪实"列为可被调用的内容形态；当用户素材含触感/节奏/物证类元素时，优先建议沉默路径
+  result:
+    success_pattern: 生成内容靠衣架声/布料声/拉链声/环境音/留白排版建立信任与浸入，观众完成"自己脑补情绪"的过程，差异化锐利
+    flip_pattern: 默认套热门 BGM + 大字金句 + 快剪 7 秒卡点，产出在饱和模板中被淹没，观众滑过
+  underlying_mechanism: 在嘈杂市场里，沉默就是反差；沉默不要求观众接受被告知的结论，而是邀请观众自己投射；服装是强触感品类，沉默+物体声直接补偿"摸不到"
+  boundary:
+    applicable_when: 任意 5 类通用 ContentType；尤其触感测评、门店打包、SOP 演示、情绪表达
+    not_applicable_when: 必须明确传递事实信息且无视觉替代时（如尺码对照、价格、政策口径）——此时口播或字幕仍必要
+  alternative_path:
+    - 沉默+环境音
+    - 极少字幕（关键字 1-2 字）
+    - 白空间排版 + 一句短文案
+
+evidence:
+  source_md: Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md
+  source_anchor: 三份 md 的"无口播触感测评""门店无对白节奏片""SOP ASMR""沉默叙事""白空间海报"
+  source_type: cross_source_consensus
+  inference_level: low
+  evidence_quote: |
+    deep-research-report.md：Silence over soundtrack — ambient sound beats emotional music in creating genuine resonance. 85% of social media videos are watched without sound. Silent vloggers see up to 300% growth in views.
+    通用类compass.md：低语/无语段落+物体声之所以可能成立，是因为营销研究者也注意到 unboxing 里常有几乎不说话、只录开箱声的片段。
+    通用类.md：不讲话，不总结，不"安利"。只拍手捏布料、拉弹性、走路摩擦声…它把"测评"从语言搬到了感官。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 跨 ContentType 内容生产元规则；可挂 content_generation 调用
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用内容生产形态规则，与品牌调性无关；任何品牌都可消费
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType, TrainingMaterial]
+  field: []
+  semantic: [SM-silence-as-pattern-interrupt]
+  value_set: [VS-silent-format-options]
+  relation: []
+  rule: [RL-silence-as-pattern-interrupt]
+  evidence: [EV-silence-as-pattern-interrupt]
+  lifecycle: []
+  call_mapping: [CM-content_generation-silence-as-pattern-interrupt]

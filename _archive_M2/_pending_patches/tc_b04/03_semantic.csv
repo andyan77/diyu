@@ -1,0 +1,10 @@
+SM-KP-service_judgment-urgent-full-look-second_set_target,first_judgment,"应急客第二套的目标=像不像她自己（身份匹配）而非能不能去（任务交付）","[""第一套=能去"",""第二套=像她"",""第三套=兜底""]",domain_general,KP-service_judgment-urgent-full-look
+SM-KP-service_judgment-commute-mainstay-utility_reason,first_judgment,"通勤客第二套必须挂的具体购买理由=利用率（一周穿几次/能搭几件已有）","[""一周 3 次以上"",""能配现有 2 件以上""]",domain_general,KP-service_judgment-commute-mainstay
+SM-KP-service_judgment-weekend-social-vibe_axis,first_judgment,"周末社交客的状态感三轴：松弛/精致/显气色——不能跨气质替换","[""松弛"",""精致"",""显气色""]",domain_general,KP-service_judgment-weekend-social
+SM-KP-service_judgment-shape-correction-fit_lock_params,first_judgment,"显瘦客必须确认的 4 个可接受参数：松量/长度/腰线/露肤点","[""松量"",""长度"",""腰线"",""露肤点""]",domain_general,KP-service_judgment-shape-correction
+SM-KP-service_judgment-ready-made-full-set-motive_three,first_judgment,"现成成套客的 3 种动机：省心 / 速度 / 不会搭——三种推法不同","[""省心"",""速度"",""不会搭""]",domain_general,KP-service_judgment-ready-made-full-set
+SM-KP-service_judgment-functional-gap-fill-wardrobe_axes,first_judgment,"补位客必问 3 件事：家里主色/主版型/最常穿去哪","[""主色"",""主版型"",""最常穿场景""]",domain_general,KP-service_judgment-functional-gap-fill
+SM-KP-service_judgment-new-item-cannot-style-dual_path,first_judgment,"新款不会搭客必须给的两条路：保守穿法 + 出彩穿法","[""保守"",""出彩""]",domain_general,KP-service_judgment-new-item-cannot-style
+SM-KP-service_judgment-budget-controlled-budget_axis,first_judgment,"预算客必锁的 2 轴：一件主力 vs 两件组合 / 看单价 vs 看利用率","[""主力 vs 组合"",""单价 vs 利用率""]",domain_general,KP-service_judgment-budget-controlled
+SM-KP-service_judgment-repeat-purchase-replenish-satisfaction_axis,first_judgment,"复购客必问的 5 类满意轴：版型/长度/面料/颜色/场景","[""版型"",""长度"",""面料"",""颜色"",""场景""]",domain_general,KP-service_judgment-repeat-purchase-replenish
+SM-KP-service_judgment-greeting-master-principles-decision_order,first_judgment,"接客四原则的判断顺序：判任务→问顾虑→分三套→看场景再决定救场","[""判任务"",""问顾虑"",""分三套"",""看场景救场""]",domain_general,KP-service_judgment-greeting-master-principles

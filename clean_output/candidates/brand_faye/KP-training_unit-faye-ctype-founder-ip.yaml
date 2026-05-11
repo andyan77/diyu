@@ -1,0 +1,98 @@
+pack_id: KP-training_unit-faye-ctype-founder-ip
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: brand_faye
+brand_overlay_kind: content_type_overlay
+state: drafted
+
+knowledge_assertion: >-
+  笛语 ctype_founder_ip（创始人 IP 叙事内容）核心规格——
+  layer=enterprise_narrative · production_mode=human_first_llm_polish · review_level=compliance_review_required；
+  required_knowledge 三件套：BrandTone（锁定笛语语气）+ Persona(brand_founder)（绑定创始人视角）+
+  ComplianceRule（约束绝对化/功效化/价值观越界）；
+  output_structure 三段制：当下场景 110 字 → 判断与取舍 140 字 → 落回品牌价值 90 字（总长 180-500）；
+  3 个 typical_hooks（这件事如果不自己盯，我其实不放心 / 很多人只看到最后那件衣服，
+  看不到我为什么在这里犹豫了很久 / 我今天不想讲大道理，只想讲一个我最后没有妥协的细节）；
+  3 个 typical_ctas（先看为什么再决定信不信 / 愿意看真实过程就继续拍 / 不是让你立刻买）；
+  4 个 example_references（旧样衣审判庭 / 老板不看镜头的一天 / 桌面证物剧场 / 两代人穿同一件判断）；
+  ab_variants_hint：A 版决策现场 / B 版关系戏，禁止两版都写成创业感悟；
+  platform_targets：xiaohongshu + wechat_official_account。
+  这是笛语创始人 IP 内容的强制蓝图——任何 founder 内容生成必须先实例化本规格。
+
+scenario:
+  who:
+    primary_role: 笛语品牌内容主理人 / 创始人 IP 内容生成 AI agent
+    target_audience: 笛语团队内容运营 / 笛语 AI 生成器
+  when:
+    trigger: 创始人 IP 类内容（公众号 / 小红书 / 视频配文）规划或生产
+    context: 已绑定 brand_faye + 调用 ctype_founder_ip 时
+  what:
+    action_type: content_type_blueprint
+    decision_or_action: |
+      生产 founder_ip 内容时按 5 项强制：
+      (1) required_knowledge 三件套必须全部读取，缺任一即拒绝生产；
+      (2) output_structure 必须三段，每段字数偏离基线 ±20% 内；
+      (3) 至少使用 1 个 typical_hook 或同语气钩子（避免空泛开场）；
+      (4) ab_variants 禁止"两版都创业感悟"——A 决策现场 vs B 关系戏二选一；
+      (5) review_level=compliance_review_required，不得绕过合规审。
+  result:
+    success_pattern: >-
+      内容三段结构清晰、出现具体物件或当下场景（如"今天这件压箱底失败样衣"）、
+      落回 brand value 不滑入鸡汤、CTA 是邀请性而非强促销。
+    flip_pattern: >-
+      内容滑入"创业感悟流水账"或"成功学叙事"；缺当下场景；
+      用喊口号式 CTA（"快冲！""闭眼入！"）；同主题 A/B 都写成同种叙事腔。
+  underlying_mechanism: |
+    创始人 IP 在 2026 年抖音/小红书/视频号的核心稀缺性是"判断过程可见"，
+    所以 output_structure 必须强制"当下场景 → 判断取舍 → 品牌价值"三段——
+    跳过任一段就会变成空话或鸡汤；ab_variants 强制分流是为了避免内容同质化。
+  boundary:
+    applicable_when: brand_layer=brand_faye + ContentType=ctype_founder_ip
+    not_applicable_when: 其他 ContentType（store_daily / process_trace 等）需另查对应规格
+  alternative_path:
+    - founder_ip 也可走 long-form 公众号长文，但 output_structure 三段制不变，仅字数上调
+
+evidence:
+  source_md: Q-brand-seeds/ctype_founder_ip.md
+  source_anchor: §required_knowledge + §output_structure + §typical_hooks + §typical_ctas + §example_references + §ab_variants_hint
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    content_type_id: ctype_founder_ip · layer: enterprise_narrative · production_mode: human_first_llm_polish ·
+    output_structure 三段：当下场景 110 字 / 判断与取舍 140 字 / 落回品牌价值 90 字 · length_range 180-500 ·
+    typical_hooks：这件事如果不自己盯，我其实不放心 / 很多人只看到最后那件衣服，看不到我为什么在这里犹豫了很久 /
+    我今天不想讲大道理，只想讲一个我最后没有妥协的细节 ·
+    ab_variants_hint：A版偏'决策现场'，B版偏'关系戏'；同一主题禁止两版都写成创业感悟 ·
+    platform_targets：xiaohongshu + wechat_official_account。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: partial
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 3 partial: 本 pack 是笛语 ctype_founder_ip 专属规格，跨品牌不可直接复用；
+    但 output_structure 三段制本身可作为 domain_general 层的内容设计 schema 元规则。
+
+brand_layer_review:
+  decision_suggestion: brand_faye
+  rationale_review: "W13.A 跨工作区引入 · 笛语 ContentType 规格直接绑定品牌专属调性 + 创始人 Persona，属 brand_<name> 范畴；先落 needs_review"
+  faye_review_required: true
+  splittable_components:
+    - output_structure 三段制可独立 styling_rule 包（内容结构纪律）
+    - typical_hooks 3 条可独立 product_attribute 包（开场钩子语料）
+    - ab_variants_hint 可独立 service_judgment 包（同质化检测）
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-faye-ctype-founder-ip, rule_type: content_type_blueprint, applicable_when: "brand_faye + ctype_founder_ip 调用", success_scenario: "三段结构清晰 + 命中 hook + CTA 邀请性 + AB 分流", flip_scenario: "创业感悟流水账 / 缺当下场景 / 强促销 CTA / AB 同质化", alternative_boundary: "long-form 公众号文可上调字数但三段制不变"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-faye-ctype-founder-ip, source_md: Q-brand-seeds/ctype_founder_ip.md, source_anchor: "§required_knowledge + §output_structure + §typical_hooks + §example_references + §ab_variants_hint", evidence_quote: "ctype_founder_ip 三段制 + 3 hooks + 4 examples + AB 强制分流", source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

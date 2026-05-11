@@ -1,0 +1,102 @@
+pack_id: KP-inventory_rescue-three-sentence-discipline
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  门店库存接客的三句话纪律必须按顺序执行——先讲事实再讲神话、能救场就救场不能救
+  就转向、转向不了就放弃不拿信任换一单；并配套三个禁止——不把断码款当全员适推、
+  不把替代款说成原款、不为去库存让顾客承担不合适。三句话顺序颠倒或三禁触线
+  即视为接客失败，本单成交也算扣分。
+
+scenario:
+  who:
+    primary_role: 全部门店导购 / 店长
+    target_audience: 任何遇到库存缺口的接客现场
+  when:
+    trigger: 顾客明确表示喜欢/想买的款进入断码 / 断色 / 缺套 / 替代路径
+    context: 顾客原本对原款有期待，库存事实出现缺口
+  what:
+    action_type: rescue_three_sentence_protocol
+    decision_or_action: |
+      第 1 句（事实）：先告知库存事实，不先讲卖点神话——
+        "您看的这件 M 码刚好今天断了"，而非"这件特别好穿，特别百搭……"。
+      第 2 句（救场或转向）：基于事实给出 rescue 或 redirect ——
+        能救（落在 5 类可救场景且核心轴有库存）→ 提出软替代路径；
+        不能救（落在 3 类不救场景或硬拦截）→ 直接转向另一条解法。
+      第 3 句（放弃）：转向也失败 → 礼貌结束接客，不为单笔成交透支信任——
+        预留款 + 到货通知 / 调拨预约 / 礼貌送客。
+      三禁同步执行：
+        禁 1：不把断码款继续当"全员适推款"做主推；
+        禁 2：不把替代款说成原款（明示是替代）；
+        禁 3：不为了去库存让顾客替门店承担不合适。
+  result:
+    success_pattern: 顾客感到被尊重——这家店"事实在前、不糊弄、知道什么时候该停"，复购心智建立
+    flip_pattern: 先夸很久最后才说没码 / 把替代说成"差不多就是这个" / 硬把不合适的塞给顾客——当场成交可能成立，复购信任崩
+  underlying_mechanism: |
+      门店的长期成交=单笔成交 × 复购信任系数；
+      三句话纪律 + 三禁本质是保护"复购信任系数"不被单笔成交透支；
+      违反任一条=用未来的复购换今天的单笔=门店长期亏损。
+  boundary:
+    applicable_when: 任何接客场景遇到库存缺口
+    not_applicable_when: |
+      顾客自助选购无导购介入；
+      顾客主动放弃同款只问替代（已自决，不再走前置事实告知）。
+  alternative_path:
+    - 顾客明显赶时间不想听 → 三句话压缩为一句"M 码断了，这件最接近的是 X，您要不要先看"；不可省略事实告知
+    - 跨门店调拨可行 → 三句话扩展为"M 码本店断、隔壁店还有，要预留吗"
+    - 顾客已自带替代选项 → 跳过 sentence 2，直接确认 sentence 3 是否需要兜底
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/库存与替代包.md
+  source_anchor: 十三、首批门店执行纪律 13.1 三句话纪律 + 13.2 三个禁止
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    13.1 三句话纪律
+    第一句，先讲事实，不先讲神话。
+    第二句，能救场就救场，不能救场就转向。
+    第三句，转向不了就放弃，不拿信任换一单。
+    13.2 三个禁止
+    禁止把断码款继续当"全员适推款"
+    禁止把替代款说成原款
+    禁止为了去库存，让顾客替门店承担不合适
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐；三句话顺序+三禁条件具体。
+    Gate 2：从 9 表 rule + value_set + relation 可反推三句话顺序与三禁触发动作。
+    Gate 3：通用门店纪律。
+    Gate 4：可被 store_training（before_after_timelapse + do_dont_contrast）和 inventory_rescue 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 门店纪律通用层。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-three-sentence-discipline-sentence_order, value: fact_first_no_myth, label: 先讲事实不先讲神话, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-three-sentence-discipline-sentence_order, value: rescue_or_redirect, label: 能救就救不能救就转向, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-three-sentence-discipline-sentence_order, value: give_up_protect_trust, label: 转不了就放弃不换信任, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-three-sentence-discipline-three_forbid, value: no_broken_size_as_main_push, label: 不把断码当全员适推, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-three-sentence-discipline-three_forbid, value: no_substitute_as_original, label: 不把替代说成原款, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-three-sentence-discipline-three_forbid, value: no_burden_on_customer_for_destock, label: 不让顾客替门店承担不合适, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-three-sentence-discipline, rule_type: rescue_three_sentence_protocol, applicable_when: "接客遇到库存缺口", success_scenario: "三句话顺序+三禁全守复购信任建立", flip_scenario: "先夸后断/替代说成原款/硬塞不合适当单成交但复购崩", alternative_boundary: "顾客赶时间→压缩但不省事实；跨店调拨→扩展兜底；顾客自决→跳第二句"}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-three-sentence-discipline, source_md: Q7Q12-搭配陈列业务包/库存与替代包.md, source_anchor: 十三、13.1 + 13.2, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation:
+    - {relation_id: RE-CustomerScenario-supports_training-TrainingMaterial-3sent01, source_type: CustomerScenario, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"format":"do_dont_contrast|before_after_timelapse","scenario":"inventory_gap_rescue","sentence_count":3,"forbid_count":3}'}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-three-sentence-discipline, runtime_method: inventory_rescue, input_types: [InventoryState, CustomerScenario], output_types: [RescueScript]}
+    - {mapping_id: CM-store_training-KP-inventory_rescue-three-sentence-discipline, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

@@ -1,0 +1,5 @@
+type_id,type_name,supertype,brand_layer,source_pack_id
+OT-Persona,Persona,domain_object,domain_general,KP-product_attribute-persona-six-field-shell
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-compatible-with-edge-properties
+OT-PlatformTone,PlatformTone,domain_object,domain_general,KP-service_judgment-platform-derivation-not-source
+OT-PrivateOutletChannel,PrivateOutletChannel,domain_object,domain_general,KP-service_judgment-platform-derivation-not-source

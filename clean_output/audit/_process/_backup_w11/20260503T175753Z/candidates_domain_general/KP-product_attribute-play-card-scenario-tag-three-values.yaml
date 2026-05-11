@@ -1,0 +1,82 @@
+pack_id: KP-product_attribute-play-card-scenario-tag-three-values
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  玩法卡的 scenario（适用场景，β 标签）字段只允许三个取值：lead_generation（引流 / 第一层吸引尚未进店的消费者）、
+  customer_service（接客 / 第二层服务已进店或私域内的顾客）、both（两者通用）。AI 生成时按当前业务场景过滤
+  玩法——给品牌引流任务时不推 customer_service-only 的玩法；给一线接客赋能时不推 lead_generation-only 的
+  玩法。员工受众（兵团向）ContentType 全部退化为 customer_service，是合理退化不视为字段冗余。
+
+scenario:
+  who:
+    primary_role: 内容方法论维护者 / Prompt 组装层
+    target_audience: AI 内容生成调度器 / 业务场景路由
+  when:
+    trigger: 玩法卡落盘或按业务任务筛选玩法时
+    context: 18 份 ContentType 玩法卡的统一业务层归属
+  what:
+    action_type: play_card_scenario_tag_classification
+    decision_or_action: 按"目标受众是否已进店/进私域"判：未进店为目标 → lead_generation；已进店/私域顾客或员工为目标 → customer_service；两者通用 → both
+  result:
+    success_pattern: 引流任务命中的玩法都能拉新；接客任务命中的玩法都能服务现有顾客；员工培训型 ContentType 全标 customer_service 不混入 lead_generation 池
+    flip_pattern: 不分 scenario 全部混池 → 引流时推接客玩法（顾客都没进店推什么"试穿对比"）/ 接客时推引流玩法（已经进店还做钩子开场会让顾客觉得被当流量）
+  underlying_mechanism: |
+      lead_generation vs customer_service 是零售内容生产的两层漏斗——拉新和留存的玩法语法本质不同；
+      both 是少数兼容玩法（如纯沉默叙事既能成钩子也能服务进店顾客的氛围）。
+      员工受众场景（培训类）按"内部接客训练"语义归 customer_service。
+  boundary:
+    applicable_when: 任何 ContentType 的玩法卡业务层归属
+    not_applicable_when: 引擎卡（元工具）不带 scenario 标签——元工具与业务场景正交
+  alternative_path:
+    - 既能引流又能服务进店顾客的玩法 → 标 both，不强行二选一
+    - 出现新业务场景（如"复购召回"）需第 4 个取值 → 走"共享层升级流程"，不在单 CT 内发明取值
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: §H.2 β 适用场景标签
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    三种取值：lead_generation（引流 / 第一层吸引消费者）/ customer_service（接客 / 第二层服务进店顾客）/ both（两者通用）
+    作用：为每张玩法卡（C1/C2/C3）标注其"业务层归属"，AI 生成时按当前业务场景筛选玩法
+    退化案例：training_material 9 张 C2/C3 全标 customer_service —— 因受众是员工 / 这是合理退化 / 不视为字段冗余
+    维护原则：取值枚举只在本节定义 / 单 CT 不发明新取值 / 新增取值需走"共享层升级流程"
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field（PlayCard.scenario）+ 04_value_set（三取值）+ 06_rule（业务路由筛选）可反推三档语义与"员工合理退化"。
+    Gate 3：任意品牌零售内容平台都需要"引流 vs 接客"两层漏斗筛选。
+    Gate 4：直接被 content_generation 在业务场景路由前消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 玩法卡业务层归属 schema 元规则；与笛语专属内容无关
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-PlayCard-scenario, owner_type: ContentType, field_name: play_card_scenario, data_type: string, value_set_id: VS-KP-product_attribute-play-card-scenario-tag-three-values-scenario}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-play-card-scenario-tag-three-values-scenario, owner_field: play_card_scenario, definition: "玩法卡业务层归属；零售内容两层漏斗的 schema key；三取值不可扩"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-play-card-scenario-tag-three-values-scenario, value: lead_generation, label: "引流（吸引未进店消费者）", ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-play-card-scenario-tag-three-values-scenario, value: customer_service, label: "接客（服务已进店/私域顾客或员工）", ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-play-card-scenario-tag-three-values-scenario, value: both, label: "两者通用", ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-product_attribute-play-card-scenario-tag-three-values, rule_type: play_card_scenario_tag_classification, applicable_when: "玩法卡落盘或按业务任务筛选时", success_scenario: "引流任务命中拉新玩法接客任务命中留存玩法员工型全标 customer_service", flip_scenario: "不分 scenario 混池 → 引流推接客玩法或接客推引流玩法", alternative_boundary: "兼容玩法标 both；新增取值走共享层升级流程不许单 CT 发明"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-play-card-scenario-tag-three-values, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: §H.2 β 适用场景标签, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

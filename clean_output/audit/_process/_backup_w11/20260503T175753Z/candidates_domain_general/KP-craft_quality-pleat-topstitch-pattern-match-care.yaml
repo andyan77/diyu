@@ -1,0 +1,97 @@
+pack_id: KP-craft_quality-pleat-topstitch-pattern-match-care
+schema_version: candidate_v1
+pack_type: craft_quality
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  压褶 / 明线 / 对条对格 / 细节收口是"讲究感工艺"——它最直接决定陈列是否高级、近看是否用心；
+  顾客不一定说术语，但一定会据此把衣服归类成"讲究"还是"将就"；
+  凡是要卖"做工感、品质感、工艺感"的单品，必须先看百褶稳不稳、线迹直不直、
+  格纹对不对、滚边净不净。
+
+scenario:
+  who:
+    primary_role: 门店导购 / merchandising_director / 陈列岗
+    target_audience: 询问 / 推荐"做工感、品质感、工艺感"卖点的款；近看款顾客
+  when:
+    trigger: 准备使用"做工讲究 / 品质感 / 工艺感"作为主卖点；陈列高级款上架
+    context: 西装 / 衬衫 / 格纹 / 百褶裙 / 滚边外套等讲究款
+  what:
+    action_type: craft_quality_check_before_premium_claim
+    decision_or_action: |
+      把"做工感 / 品质感 / 工艺感"卖点的资格门槛锁定为四项细节同时过关：
+      百褶稳定 + 明线笔直均匀 + 条格在缝口对齐 + 滚边收口干净；
+      四项任一不过 → 不许喊"讲究"；可改为讲面料 / 设计；
+      陈列高级款必须先做四项细节复检。
+  result:
+    success_pattern: |
+      喊"讲究"的款经得起近看；陈列层级清晰；
+      顾客近距离观察后认为"用心"，提升信任。
+    flip_pattern: |
+      条格不对 / 明线歪 / 百褶塌 / 滚边粗糙仍喊"讲究" → 顾客近看后认为"将就" → 信任受损；
+      高级陈列位放上四项不过关的款 → 拉低整体品牌质感。
+  underlying_mechanism: |
+      压褶稳定来自定型温度 / 时间 + 纤维耐热性；
+      明线均匀来自针距 / 张力 / 送布同步；
+      对条对格来自裁剪精度 + 缝合对位；
+      滚边收口来自包边器 / 手工精度；
+      四项中任一缺位都会被近看放大成"将就"。
+  boundary:
+    applicable_when: 西装 / 衬衫 / 格纹 / 百褶 / 滚边等讲究款；任何"做工 / 品质 / 工艺感"卖点
+    not_applicable_when: |
+      明确做毛边 / 解构 / 故意不对称的设计款（区分于工艺缺陷）；
+      远观陈列道具款。
+  alternative_path:
+    - 如果四项有部分不过关 → 改卖面料 / 版型 / 设计语言
+    - 如果陈列高级位需要候补 → 选择四项全过关但款相对普通的替代款
+    - 如果近看不过关被顾客指出 → 坦诚承认而非反驳
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 五、首批 CraftKnowledge 正式冻结清单 · 6. 压褶 / 明线 / 对条对格 / 细节收口
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这组正式定义为"讲究感工艺"。
+    它最直接决定陈列是不是高级、近看是不是用心。
+    百褶稳不稳、线迹直不直、格纹对不对、滚边净不净，顾客不一定会说术语，但一定会据此把衣服归类成"讲究"还是"将就"。
+    凡是要卖"做工感、品质感、工艺感"的单品，这组必须先看。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"讲究感工艺定义 + 四项细节门槛 + 卖点资格"。
+    Gate 3：通用细节工艺判断。
+    Gate 4：可被 display_guidance / store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用细节工艺判断，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CraftKnowledge, type_name: CraftKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-craft_quality-pleat-topstitch-pattern-match-care-premium_gate, owner_field: craft_feature, definition: "压褶/明线/对条对格/细节收口是讲究感工艺，是做工感/品质感/工艺感卖点的资格门槛"}
+  value_set:
+    - {value_set_id: VS-KP-craft_quality-pleat-topstitch-pattern-match-care-quality_signal, value: pleat_stable, label: 百褶稳定}
+    - {value_set_id: VS-KP-craft_quality-pleat-topstitch-pattern-match-care-quality_signal, value: topstitch_straight, label: 明线笔直均匀}
+    - {value_set_id: VS-KP-craft_quality-pleat-topstitch-pattern-match-care-quality_signal, value: pattern_matched, label: 条格对齐}
+    - {value_set_id: VS-KP-craft_quality-pleat-topstitch-pattern-match-care-quality_signal, value: piping_clean, label: 滚边收口干净}
+  rule:
+    - {rule_id: RL-KP-craft_quality-pleat-topstitch-pattern-match-care, rule_type: craft_promise_gate, applicable_when: "推讲究款 且 准备喊做工感品质感工艺感卖点", success_scenario: "四项细节同时过关 → 近看用心 → 卖点+陈列高级层级成立", flip_scenario: "四项任一不过仍喊讲究 → 顾客近看判定将就 → 信任受损", alternative_boundary: "部分不过关→改卖面料/版型/设计；高级位需要候补→选四项全过关替代款"}
+  evidence:
+    - {evidence_id: EV-KP-craft_quality-pleat-topstitch-pattern-match-care, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 五、6. 压褶 / 明线 / 对条对格 / 细节收口, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-craft_quality-pleat-topstitch-pattern-match-care, runtime_method: display_guidance, input_types: [DisplayGuide, Product], output_types: [DisplayLayout]}
+    - {mapping_id: CM-store_training-KP-craft_quality-pleat-topstitch-pattern-match-care, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

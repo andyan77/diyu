@@ -1,0 +1,57 @@
+pack_id: ""
+schema_version: candidate_v1
+pack_type: ""
+brand_layer: ""
+state: drafted
+
+knowledge_assertion: ""
+
+scenario:
+  who:
+    primary_role: ""
+    target_audience: ""
+  when:
+    trigger: ""
+    context: ""
+  what:
+    action_type: ""
+    decision_or_action: ""
+  result:
+    success_pattern: ""
+    flip_pattern: ""
+  underlying_mechanism: ""
+  boundary:
+    applicable_when: ""
+    not_applicable_when: ""
+  alternative_path: []
+
+evidence:
+  source_md: ""
+  source_anchor: ""
+  source_type: ""
+  inference_level: ""
+  evidence_quote: ""
+
+gate_self_check:
+  gate_1_closed_scenario: ""
+  gate_2_reverse_infer: ""
+  gate_3_rule_generalizable: ""
+  gate_4_production_feasible: ""
+  notes: ""
+
+brand_layer_review:
+  decision_suggestion: ""
+  rationale: ""
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  relation: []
+  rule: []
+  evidence: []
+  lifecycle: []
+  call_mapping: []

@@ -1,0 +1,79 @@
+pack_id: KP-training_unit-product-review-anti-filter-pledge
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  product_review 内容生产纪律："反滤镜宣言"（原相机 / 自然光 / 不拉腿 / 不美颜）是
+  进阶测评的**信任地基**——四项自述一旦缺失，下面所有体感测评都失去可信度。
+  这条纪律推翻"测评应该拍得好看"的默认套路：饱和的服装测评赛道里，
+  当多位博主同时评同一商品时观众会归类为"协调推广"，因此反向声明"我不修图不美颜"
+  反而是 product_review 的**最低进入门槛**。穿搭测评账号反复强调"原相机/不拉腿"
+  恰恰说明"造假"已是行业默认怀疑。
+
+scenario:
+  who:
+    primary_role: product_review 内容创作者 / AI 内容生成调度
+    target_audience: 服装品牌 / 加盟商 / 主理人做产品测评内容时
+  when:
+    trigger: 写一条服装 product_review 内容前的开场结构选择
+    context: 短视频测评赛道高度饱和，"造假"已是默认怀疑（部分博主反复声明"原相机 / 不拉腿 / 不美颜"）
+  what:
+    action_type: product_review_anti_filter_pledge
+    decision_or_action: 测评开场或字幕带"反滤镜四项"自述（原相机 / 自然光 / 不拉腿 / 不美颜），所有体感测评在此基础上展开
+  result:
+    success_pattern: 反滤镜四项自述 + 后续体感测评（抬手/坐下/走路）+ 延迟结论（30-40 秒后才给判断）→ 在饱和赛道里建立稀缺信任资产
+    flip_pattern: 用滤镜美颜光修图拍试穿 + 上来就给"显瘦/显腿长/必入"结论 → 观众识别为"协调推广 / MCN 模板"，C1 默认禁用
+  underlying_mechanism: |
+      product_review 已被机构化生产到"形容词堆叠+参数播报"的批量赛道——
+      AI 最容易复刻的就是这一档。反滤镜宣言把测评从"审美包装"拉回"身体证据"，
+      是在饱和度极高的赛道里能让普通创作者获得信任的最低成本入场券。
+  boundary:
+    applicable_when: product_review 内容创作 / 进阶档以上玩法（C2 / C3）的开场基础约束
+    not_applicable_when: 主流 C1 档玩法（已默认禁用，无须再加反滤镜约束）；店内接客现场（顾客自己看实物，无需自述）
+  alternative_path:
+    - 创作者本身有专业摄影身份 → 可不强制四项但需用其他方式保证证据可验证（如开 EXIF / 同一镜头多角度）
+    - 涉及光线/色差敏感产品 → 用"逆光测试 / 自然光对比"代替"自然光"自述
+
+evidence:
+  source_md: Q2-内容类型种子/product_review-交付物-v0.1.md
+  source_anchor: §C2-1 体感测评+反滤镜宣言备注 + §C1-3 备注 + §B5 反向透明
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    C2-1 备注："反滤镜宣言"是进阶测评的信任地基——
+    原相机 / 自然光 / 不拉腿 / 不美颜四项自述一旦缺失，
+    下面的所有体感测评都失去可信度。
+    C1-3 备注：部分穿搭测评账号甚至在口播里反复强调"原相机 / 不拉腿 / 不美颜"——
+    恰恰说明"造假"已是行业默认怀疑，对照表式测评最容易触发这种怀疑。
+    C1-1 备注：Interface Fashion 报告——MCN 管理的测评博主造成严重内容同质化。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装 product_review 通用内容生产纪律 / 任意品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-product-review-anti-filter-pledge-pledge, owner_field: product_review_baseline, definition: "反滤镜宣言四项（原相机/自然光/不拉腿/不美颜）= product_review 进阶档信任地基；缺失则下游体感测评失效"}
+  rule:
+    - {rule_id: RL-KP-training_unit-product-review-anti-filter-pledge, rule_type: product_review_anti_filter_pledge, applicable_when: "做产品测评内容前的开场结构", success_scenario: "反滤镜四项+后续体感+延迟结论 → 饱和赛道稀缺信任资产", flip_scenario: "滤镜美颜+开场即结论 → C1 协调推广模板被默认禁用", alternative_boundary: "专业摄影身份用其他证据可验证；接客现场无需自述"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-product-review-anti-filter-pledge, source_md: Q2-内容类型种子/product_review-交付物-v0.1.md, source_anchor: §C2-1 + §C1-3 备注 + §B5, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-compatible_with_content_type-product_review-pr1, source_type: TrainingMaterial, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_review","baseline":"anti_filter_pledge"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-product-review-anti-filter-pledge, runtime_method: content_generation, input_types: "ContentType=product_review", output_types: "OpenStructureBaseline"}

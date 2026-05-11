@@ -1,0 +1,102 @@
+pack_id: KP-training_unit-fabric-touch-before-spec
+granularity_layer: L3
+
+runtime_asset:
+  runtime_asset_id: RA-training_unit-fabric-touch-before-spec
+  asset_type: action_template
+  title: "先摸后讲面料动作"
+  summary: "解释面料前先让顾客摸到袖口里层领口等关键点，再补充参数。"
+  source_pointer: "candidates/.../KP-training_unit-fabric-touch-before-spec.yaml#runtime_asset"
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  解释面料必须先让顾客摸到关键点（袖口 / 里层 / 领口）再说参数；
+  上来只讲"含 60% 棉 40% 涤"这种术语会失败，因为服装大量成交靠体感而不是参数，
+  没让她"上手"过的面料解释，几乎注定不会被相信。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 新人 / 一线导购
+  when:
+    trigger: 顾客拿起单品问面料 / 担心扎/热/透/勒/掉 / 在镜前犹豫面料体感
+    context: 任意品类，针织、亚麻、缎面、化纤等高体感分歧面料尤其常见
+  what:
+    action_type: fabric_explanation_touch_first
+    decision_or_action: |
+      错误动作：只讲参数（成分百分比 / 克重 / 缩水率）。
+      正确动作：先邀请顾客摸三个关键点——袖口、里层、领口；
+        感受过后再用一句话翻译成参数（"你刚才摸到的滑顺感来自 X"）；
+        最后才补充售后注意事项（如洗护、收纳）。
+      为什么错：服装的购买决策大量是身体决策，没体感的参数是空气；
+        且参数堆砌容易触发顾客戒备（"你在背产品手册"）。
+      如何纠正：班前会让员工互摸主推面料关键点，建立"摸→译→说参数"的肌肉记忆。
+      掌握检查：员工接待顾客时主动做"摸袖口/摸里层/摸领口"三动作之一，
+        而不是直接背参数。
+  result:
+    success_pattern: |
+      顾客把"亲手摸到的感觉"和参数对上，对面料形成可记住的印象；
+      后续介绍同面料的其他款不需要重复体感教育。
+    flip_pattern: |
+      导购上来背成分克重，顾客回"哦"或低头继续看手机；
+      面料话题没打开，后续推荐没有面料锚点，转化路径短一截。
+  underlying_mechanism: |
+      触觉记忆比口播信息留存率高且更具说服力；
+      "摸→译→参数"形成"具体感受 → 抽象描述"的认知链，参数才进得去。
+  boundary:
+    applicable_when: 任何含可触摸面料的品类
+    not_applicable_when: |
+      电商/直播场景（无法物理触摸）→ 改为高质量近景视频 + 比喻语言；
+      顾客本身就是面料专业人员（设计师 / 同行）→ 跳过触摸引导，直接进参数。
+  alternative_path:
+    - 顾客手不便（如抱孩子）→ 由导购在她可视范围内做触感演示并描述
+    - 主推款关键点不便触摸（如已搭配陈列）→ 取同款备件让她摸
+    - 顾客对面料术语完全陌生 → 用"凉/糯/挺/垂/糙"等口语词替代克重等术语
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 五、首批高频接客场景 · C4 fabric_touch_explanation
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    C4 fabric_touch_explanation（面料体感解释）
+    正确动作：让顾客摸关键点再解释
+    错误动作：只讲参数
+    为什么错：服装很多成交靠体感，不靠术语
+    怎么纠正：先触感，后参数
+    学会判定：员工会用"摸袖口/摸里层/摸领口"做演示
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 8 要素齐全；rule + value_set(touch_point) 可反推 3 个关键点。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用面料体感解释方法。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set:
+    - {value_set_id: VS-KP-training_unit-fabric-touch-before-spec-touch_point, value: cuff, label: 袖口, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-fabric-touch-before-spec-touch_point, value: lining, label: 里层, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-fabric-touch-before-spec-touch_point, value: collar, label: 领口, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-training_unit-fabric-touch-before-spec, rule_type: fabric_explanation_sequence, applicable_when: "顾客对面料发问或在镜前犹豫面料体感", success_scenario: "先邀请摸袖口/里层/领口，再用比喻翻译成参数，顾客形成具体记忆", flip_scenario: "上来背成分克重，顾客敷衍回应，面料话题打不开", alternative_boundary: "线上场景改为高质量视频+比喻；面料专业顾客可跳过触摸"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-fabric-touch-before-spec, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 五、C4 fabric_touch_explanation, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm07, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["sales_associate"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-fabric-touch-before-spec, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingScript"]}

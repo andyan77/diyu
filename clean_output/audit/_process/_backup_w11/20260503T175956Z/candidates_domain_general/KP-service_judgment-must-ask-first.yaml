@@ -1,0 +1,82 @@
+pack_id: KP-service_judgment-must-ask-first
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  必须"先问再推"的接客场景正式冻结为 6 类——urgent_full_look / shape_correction / comfort_sensitive / budget_controlled / functional_gap_fill / repeat_purchase_replenish；
+  这 6 类的共同点是"决策依赖一个具体的前置参数（场合/部位/敏感维度/预算轴/衣柜缺口/上次满意点）"，不问就推 = 在错的轴上烧时间，再多 SKU 也救不回来。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 6 类必须前置追问的客
+  when:
+    trigger: 顾客触发上述 6 类典型原话
+    context: 接客起点；尚未拿货或仅模糊指向
+  what:
+    action_type: precondition_question_first
+    decision_or_action: |
+      第一步：识别场景属于 6 类必须先问的哪一类。
+      第二步：按场景锁定必问参数——
+        - urgent：场合/对象/天气/时长/正式还是松
+        - shape_correction：最在意部位 + 4 个可接受参数
+        - comfort_sensitive：敏感维度（触感/温度/透度/弹性/静电/内搭）
+        - budget_controlled：主力 vs 组合 + 单价 vs 利用率
+        - functional_gap_fill：家里主色/主版型/最常穿去哪
+        - repeat_purchase：上次满意的是哪一轴
+      第三步：拿到参数后再开始第一套；缺参数时不要硬推。
+  result:
+    success_pattern: 前置参数齐 → 第一套精准 → 第二套有方向 → 成交概率显著提升
+    flip_pattern: 跳过追问直接推货，顾客觉得"和我没关系"，整段接客白烧
+  underlying_mechanism: |
+      这 6 类的购买决策都建立在 1-2 个前置参数上；
+      不问 = 在缺参数下做决策 = 后续每一步都在赌；
+      "随便推一套试试"是接客最大反模式。
+  boundary:
+    applicable_when: 6 类指定场景的接客起点
+    not_applicable_when: 4 类先陈列后开口的场景（视觉先于追问）
+  alternative_path:
+    - 顾客拒答 → 用同类客的 2-3 个常见参数选项让她挑（缩窄而非放弃）
+    - 顾客自带参数（如已说"我穿 M 码"） → 跳过对应追问，直接进推荐
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 三、5）必须先问再推的场景正式冻结
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    5）必须先问再推的场景，正式冻结为 6 类
+    urgent_full_look（应急一身型）
+    shape_correction（显瘦修身型）
+    comfort_sensitive（体感敏感型）
+    budget_controlled（预算控制型）
+    functional_gap_fill（功能补位型）
+    repeat_purchase_replenish（复购补货型）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与"先陈列后开口"互为反向边界，10 类场景全分流。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用前置追问清单。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-must-ask-first}
+  value_set:
+    - {value_set_id: VS-KP-service_judgment-must-ask-first-must_ask_scenarios}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-must-ask-first}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-must-ask-first}

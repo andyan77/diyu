@@ -1,0 +1,79 @@
+pack_id: KP-styling_rule-pcg-moment-over-category
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  product_copy_general 文案生产纪律：服装文案应按"时刻"卖而不是按"品类"卖——
+  首屏不写"亚麻衬衫 / 通勤百搭"，而写"下午 5:40，下楼拿外卖时你懒得换衣服"。
+  服装是最适合按"时刻"卖的品类（其他品类没有这种时刻-商品的天然绑定）。
+  这条纪律推翻"详情页首屏先给品类名再给卖点"的电商默认套路：
+  正确路径是"先给生活入口（时间戳+具体动作）再给产品解释"，配合"延迟揭示"结构。
+
+scenario:
+  who:
+    primary_role: PCG 文案作者 / AI 文案生成调度
+    target_audience: 服装品牌做详情页 / 海报 / 私聊话术时
+  when:
+    trigger: 写一条服装产品文案的首屏 / 钩子标题时
+    context: 接客场景 v0.2 G3 已裁决：允许"延迟揭示"作为表达叙事形式，由文案设计者按品牌调性选直白型或延迟揭示型
+  what:
+    action_type: pcg_moment_first_copy_structure
+    decision_or_action: 钩子标题先给"时间戳 + 具体动作"（如"下午 5:40 下楼拿外卖"），下翻才给品类名和面料参数
+  result:
+    success_pattern: 首屏只有一张"门边穿鞋的半身 + 袖口和锁骨" + 时刻钩子 → 观众接住"这件懂我会在哪些时刻需要它"——按时刻卖的命中率高于按品类卖
+    flip_pattern: 首屏先给"亚麻衬衫 / 通勤百搭" → 像电商模板默认结构，AI 一键生成的批量赛道
+  underlying_mechanism: |
+      服装服务的是人进入社会场景的瞬间——
+      "时刻"是服装购买决策的真实触发点（早高峰 / 会议室冷气 / 下楼拿外卖 / 晚上回家），
+      因此文案命中"时刻"比命中"品类标签"更直接产生"加入我的生活"的冲动。
+  boundary:
+    applicable_when: 服装行业 product_copy_general 内容生产 / 引流场景为主
+    not_applicable_when: 接客场景需要更高信息密度时可走直白型（不强制延迟揭示）
+  alternative_path:
+    - 同时使用 C2-1 具体场景深描（单一时刻多维度）+ C3-1 时刻文案（首屏延迟揭示）+ C3-4 四行舞台指令（多场景并置）
+    - 品牌不适合延迟揭示（如快消促销）→ 退用 C2-4 具体化语言+边界声明
+
+evidence:
+  source_md: Q2-内容类型种子/product_copy_general-交付物-v0.1.md
+  source_anchor: §C3-1 不是产品文案是一个时刻文案 + §G G3 接客延迟揭示裁决 + §C3-4 四行舞台指令
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    C3-1 一句话定义：整张海报或详情页首屏，不写"亚麻衬衫"，而写
+    "下午 5:40，下楼拿外卖时你懒得换衣服，也不想看起来像刚睡醒"。
+    服装行业钩子：⭐⭐⭐⭐⭐ 服装是最适合按"时刻"卖的品类——
+    服装服务的是人进入社会场景的瞬间 / 其他品类没有这种"时刻 - 商品"的天然绑定。
+    备注：打破"先给品类名再给卖点的电商惯性 / 先给生活入口再给产品解释"。
+    G3 用户裁决：接客场景首屏允许"延迟揭示"作为一种表达叙事形式 / 不强制首屏必须给品类名。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装行业 PCG 通用文案结构纪律 / 任意品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-pcg-moment-over-category-moment_first, owner_field: pcg_first_screen_structure, definition: "PCG 首屏纪律：先给时间戳+具体动作（时刻），下翻才给品类名和参数；服装独占的'按时刻卖'结构"}
+  rule:
+    - {rule_id: RL-KP-styling_rule-pcg-moment-over-category, rule_type: pcg_moment_first_copy_structure, applicable_when: "写服装产品文案首屏/钩子标题时", success_scenario: "时刻钩子+延迟揭示 → 命中购买决策真实触发点", flip_scenario: "首屏先给品类+卖点 → 电商模板AI批量赛道", alternative_boundary: "接客高信息密度走直白型；不适合延迟揭示退用具体化+边界声明"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-pcg-moment-over-category, source_md: Q2-内容类型种子/product_copy_general-交付物-v0.1.md, source_anchor: §C3-1 + §G G3 + §C3-4, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-product_copy_general-pcg1, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_copy_general","copy_structure":"moment_first"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-pcg-moment-over-category, runtime_method: content_generation, input_types: "ContentType=product_copy_general", output_types: "FirstScreenStructure"}

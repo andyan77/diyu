@@ -1,0 +1,92 @@
+pack_id: KP-inventory_rescue-customer-priority-six-axes
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  接客时的库存替代优先级正式冻结为 6 级有序轴——wearability → occasion_fit →
+  silhouette_match → color_family_match → price_band_match → fabric_detail_match；
+  必须先保"今天能不能穿/能不能用"，再保"像不像原来那件"，
+  禁止颠倒顺序（先看像不像再看能不能穿=替代后顾客试穿就退）。
+
+scenario:
+  who:
+    primary_role: 门店导购 / 推荐系统
+    target_audience: 库存有缺口需要找替代品的接客现场
+  when:
+    trigger: 软替代命中后开始挑具体替代款
+    context: 候选替代品 ≥ 2 件，需排序
+  what:
+    action_type: customer_substitution_priority_ranking
+    decision_or_action: |
+      按顺序逐级筛：
+        Lv1 wearability（能不能穿）：尺码、版型敏感度——不达标直接淘汰
+        Lv2 occasion_fit（场景能不能成立）：本次穿着场景能否承接
+        Lv3 silhouette_match（廓形像不像）：H/A/X 等核心廓形角色
+        Lv4 color_family_match（色群近不近）：同温度同明度色群
+        Lv5 price_band_match（价带稳不稳）：与原款价带不跳档
+        Lv6 fabric_detail_match（面料细节像不像）：纹理光泽手感细节
+      高级未通过淘汰直接出局，不许用低级补救（如颜色像但穿不上不行）。
+  result:
+    success_pattern: 顾客拿到的替代品先满足"今天能用"，再尽量满足"像原来"，整体接受度高
+    flip_pattern: 推一件颜色版型都像但码不齐的款，顾客一试就退；推一件颜色版型都对但场合不符的，顾客回家发现穿不出去
+  underlying_mechanism: |
+      替代是"保留可成交路径"，wearability 与 occasion_fit 是路径成立的硬门槛；
+      silhouette/color/price/fabric 只是相似度装饰；颠倒顺序=用装饰覆盖路径。
+  boundary:
+    applicable_when: 接客接触点（线下门店 + 私域 1v1 推荐）的替代款排序
+    not_applicable_when: |
+      陈列优先级（走 display priority）；
+      顾客自助选购无导购介入（按通用搜索权重，不强制 6 级）。
+  alternative_path:
+    - Lv1 全部候选淘汰 → 退到 redirect_mode 换条解法
+    - Lv1+Lv2 都过但都掉到 Lv5/Lv6 → 改打"利用率/场景"卖点而非"像原款"卖点
+    - 顾客自带相似度优先级（如执着于颜色） → 按顾客锚点重排，但不许跳过 Lv1
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/库存与替代包.md
+  source_anchor: 五、5.1 接客优先级
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    5.1 接客优先级
+    wearability（能不能穿）→ occasion_fit（场景能不能成立）→ silhouette_match（廓形像不像）
+    → color_family_match（色群近不近）→ price_band_match（价带稳不稳）→ fabric_detail_match（面料细节像不像）
+    解释：先保顾客"今天能不能用"，再保"像不像原来那件"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐；与 styling_rule 的 substitution-priority-ladder（4 级廓形优先）互补：本卡是接客层，那卡是搭配层。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用门店替代排序纪律。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+  semantic:
+    - {semantic_id: SM-KP-inventory_rescue-customer-priority-six-axes-axes, owner_field: rescue_disposition, definition: "接客层替代优先级 6 级：wearability > occasion_fit > silhouette_match > color_family_match > price_band_match > fabric_detail_match；先成交路径后相似度"}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-customer-priority-six-axes-axis, value: wearability, label: 能不能穿, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-customer-priority-six-axes-axis, value: occasion_fit, label: 场景能不能成立, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-customer-priority-six-axes-axis, value: silhouette_match, label: 廓形像不像, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-customer-priority-six-axes-axis, value: color_family_match, label: 色群近不近, ordinal: 4}
+    - {value_set_id: VS-KP-inventory_rescue-customer-priority-six-axes-axis, value: price_band_match, label: 价带稳不稳, ordinal: 5}
+    - {value_set_id: VS-KP-inventory_rescue-customer-priority-six-axes-axis, value: fabric_detail_match, label: 面料细节像不像, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-customer-priority-six-axes, rule_type: customer_substitution_priority, applicable_when: "soft_substitute 后排序候选替代款", success_scenario: "先满足能用再满足像顾客接受度高", flip_scenario: "推像但穿不上或场合不符的顾客试穿退或回家退", alternative_boundary: "Lv1 全淘汰→redirect；只剩低级匹配→改打利用率卖点；顾客锚色→按锚点重排但不跳 Lv1"}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-customer-priority-six-axes, source_md: Q7Q12-搭配陈列业务包/库存与替代包.md, source_anchor: 五、5.1 接客优先级, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-requires_inventory_state-InventoryState-cprio01, source_type: StylingRule, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"layer":"customer_priority","order":["wearability","occasion_fit","silhouette_match","color_family_match","price_band_match","fabric_detail_match"]}'}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-customer-priority-six-axes, runtime_method: inventory_rescue, input_types: [InventoryState, Product, CustomerScenario], output_types: [SubstitutionPlan]}
+    - {mapping_id: CM-outfit_recommendation-KP-inventory_rescue-customer-priority-six-axes, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario, InventoryState], output_types: [OutfitPlan]}

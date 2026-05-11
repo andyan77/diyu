@@ -1,0 +1,103 @@
+pack_id: KP-craft_quality-sewing-stitch-pucker-near-eye
+granularity_layer: L3
+
+runtime_asset:
+  runtime_asset_id: RA-craft_quality-sewing-stitch-pucker-near-eye
+  asset_type: role_split
+  title: "缝口起皱近看分工"
+  summary: "把缝口起皱拆给门店与质检分别判断，避免把综合工艺问题说成顾客挑剔。"
+  source_pointer: "candidates/.../KP-craft_quality-sewing-stitch-pucker-near-eye.yaml#runtime_asset"
+
+schema_version: candidate_v1
+pack_type: craft_quality
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  缝制质量（线迹 / 跳针 / 缝口起皱）是"近看质感工艺"——顾客不一定会说 seam puckering，
+  但她一定能看出"这件怎么有点抽、歪、鼓、皱"；
+  门店要把缝口起皱定位为面料结构 + 缝型 + 针线规格 + 送布问题的综合症状，
+  不是单线问题，更不是顾客挑剔。
+
+scenario:
+  who:
+    primary_role: 门店导购 / sample_worker（样衣工）/ merchandising_director
+    target_audience: 近距离看款的顾客；店员需要解释"为什么这条线看着抽""为什么缝口鼓"的场景
+  when:
+    trigger: 顾客指出某条缝看着抽 / 歪 / 鼓 / 皱；或导购近距离做品质讲解
+    context: 衬衫领口 / 门襟 / 袖口 / 裤头 / 裙腰等近看缝口位
+  what:
+    action_type: craft_quality_signal_recognition_and_explanation
+    decision_or_action: |
+      把"线看着抽 / 缝口鼓 / 歪皱"识别为缝口起皱的可见信号；
+      解释为面料结构 + 缝型 + 针线规格 + 送布问题的综合症状，而非单纯线松紧；
+      抽 / 鼓 / 皱明显的款不许用"做工讲究 / 精细"卖点；
+      可控范围内的轻微起皱可结合面料特性做坦诚说明。
+  result:
+    success_pattern: |
+      导购能识别并坦诚说出原因，顾客认为店员"懂行"，不视为质量黑点；
+      明显失败品被识别后调整推荐或下线。
+    flip_pattern: |
+      把缝口起皱归为"线没拉好"或反驳"这是设计感" → 顾客认为是品控差或被糊弄；
+      把起皱明显的款仍卖"做工讲究" → 信任度受损。
+  underlying_mechanism: |
+      seam puckering 由四源驱动：fabric structure（面料结构松紧 / 弹性）/ seam construction（缝型对面料的剪切）/ thread / needle size（针线规格相对面料的粗细）/ feeding problems（上下送布同步差异）；
+      任何一项不匹配都会产生起皱。
+  boundary:
+    applicable_when: 衬衫 / 西装 / 西裤 / 礼服等近看质感款；任何顾客或店员对缝口起皱的疑问
+    not_applicable_when: |
+      故意做褶皱 / 风琴褶设计款（区分于工艺缺陷）；
+      远观陈列道具款。
+  alternative_path:
+    - 如果起皱来自面料 → 同步说明面料属性，建议顾客接受微皱
+    - 如果起皱来自针线规格不当 → 同款不同批可能差异 / 推荐其他批次
+    - 如果起皱明显且影响穿着 → 直接换款或调换码
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 五、首批 CraftKnowledge 正式冻结清单 · 2. 缝制质量：线迹、跳针、缝口起皱
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这组正式定义为"近看质感工艺"。
+    顾客不一定会说 seam puckering 这个词，但她一定能看出"这件怎么有点抽、歪、鼓、皱"。
+    Coats 对 seam puckering 的说明很清楚：它不只是线的问题，
+    还和 fabric structure、seam construction、thread / needle size 以及 feeding problems 有关。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"近看质感工艺定义 + 四源解释 + 卖点门槛"。
+    Gate 3：通用缝制工艺判断。
+    Gate 4：可被 store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用缝制工艺 + Coats 国际口径，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CraftKnowledge, type_name: CraftKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-craft_quality-sewing-stitch-pucker-near-eye-near_eye_quality, owner_field: craft_feature, definition: "缝制质量是近看质感工艺，缝口起皱是面料/缝型/针线/送布的综合症状"}
+  value_set:
+    - {value_set_id: VS-KP-craft_quality-sewing-stitch-pucker-near-eye-failure_signal, value: stitch_pucker, label: 缝口起皱}
+    - {value_set_id: VS-KP-craft_quality-sewing-stitch-pucker-near-eye-failure_signal, value: skipped_stitch, label: 跳针}
+    - {value_set_id: VS-KP-craft_quality-sewing-stitch-pucker-near-eye-failure_signal, value: crooked_stitch, label: 线迹歪}
+    - {value_set_id: VS-KP-craft_quality-sewing-stitch-pucker-near-eye-failure_signal, value: seam_bulge, label: 缝口鼓}
+  rule:
+    - {rule_id: RL-KP-craft_quality-sewing-stitch-pucker-near-eye, rule_type: craft_signal_recognition, applicable_when: "近看款顾客对缝口提出疑问 或 店员近距离品质讲解", success_scenario: "识别并坦诚解释四源 → 顾客认可懂行 不视为黑点", flip_scenario: "归咎线松紧或反驳设计感 → 信任受损 或 把明显失败品当讲究卖", alternative_boundary: "面料致皱→坦诚说明；针线规格→换批；明显失败→换款换码"}
+  evidence:
+    - {evidence_id: EV-KP-craft_quality-sewing-stitch-pucker-near-eye, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 五、2. 缝制质量, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-craft_quality-sewing-stitch-pucker-near-eye, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-display_guidance-KP-craft_quality-sewing-stitch-pucker-near-eye, runtime_method: display_guidance, input_types: [DisplayGuide, Product], output_types: [DisplayLayout]}

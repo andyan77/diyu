@@ -1,0 +1,87 @@
+pack_id: KP-product_attribute-pcg-five-voice-archetypes
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  product_copy_general 的"5 种声音原型矩阵"是文案型 ContentType 的核心字段：
+  voice_archetype 字段取值集冻结为 5 类——主理人叙事体 / 诗意留白体 / 工艺叙述体 /
+  反讽诚实体 / 判断同盟体。AI 必须按品牌性格调用对应原型而不是生成统一的"电商腔"；
+  超出这 5 类视为字段越界，需走"清单豁免提案"由共享层维护者裁决。
+  服装行业是声音原型最丰富的品类，因此 5 种原型是该 CT 的字段必填项。
+
+scenario:
+  who:
+    primary_role: product_copy_general 文案作者 / AI 文案生成调度
+    target_audience: 任意品牌的产品文案体系建设
+  when:
+    trigger: 为品牌建立产品文案体系或为单条文案生成选定声音原型时
+    context: 5 种原型 v0.2 已升共享层 §H.3 5 Voice Archetypes Matrix 跨 CT 文案/旁白/口播声音设计资产；跨 CT 优先复用清单 lifestyle_expression / emotion_expression / founder_ip / personal_vlog / daily_fragment
+  what:
+    action_type: voice_archetype_field_constraint
+    decision_or_action: voice_archetype 字段必须取这 5 类之一；超出走豁免提案不在单 CT 私自新增
+  result:
+    success_pattern: |-
+      品牌按性格选定 1-2 个原型作为主声 → AI 按原型生成不同分支文案供人工筛选 →
+      跨详情页 / 海报 / 私聊话术保持一致的"听起来是同一个人在说话"
+    flip_pattern: AI 不约束原型直接生成 → 出现统一的"电商腔" / 同质化形容词堆叠 → 北极星不成立
+  underlying_mechanism: |
+      文案的真诚度由"这个声音是不是这个品牌的"决定，而不是由"用了多少形容词"决定。
+      5 种原型覆盖了从"主理人开口"到"诗意留白"到"反讽诚实"到"反销售判断同盟"的常见品牌语气光谱。
+  boundary:
+    applicable_when: product_copy_general 内容生成 / 跨 CT 文案旁白口播声音设计（共享层 §H.3 已展开）
+    not_applicable_when: 真人 founder 自述（按 founder_ip 北极星走，不强制套这 5 原型，但可参考）
+  alternative_path:
+    - 品牌横跨多个原型 → 允许主原型 + 副原型组合（如"主理人叙事 + 工艺叙述"）
+    - 出现新原型候选 → 走共享层 §H.3 提案，不在单 CT 私自新增
+
+evidence:
+  source_md: Q2-内容类型种子/product_copy_general-交付物-v0.1.md
+  source_anchor: §B8 声音原型 5 类 + §G G2 升共享层裁决 + §D 服装行业标杆案例对照表
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    B8 声音原型（voice archetypes）—— 来自 compass 的关键概念：
+    主理人叙事体（"我做这件衣服时在想..." 第一人称 / 有创始人性格）
+    诗意留白体（NEIWAI 风 / 高留白 + 克制比喻）
+    工艺叙述体（远家 YUANJIA 风 / 技术术语 + 朴素表达）
+    反讽诚实体（Fashion Brand Company / Reformation 风 / 把缺点先说出口）
+    判断同盟体（Patagonia "Don't Buy This Jacket" 风 / 反向命令 + 价值观）
+    G2 用户裁决：5 种声音原型矩阵升级为共享层 §H.3 5 Voice Archetypes Matrix 跨 CT 文案/旁白/口播声音设计资产。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过；字段定义+取值集闭环
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 5 种原型本身是抽象 schema 元规则；任意品牌都要在这 5 类里选自己的主声原型；不绑定笛语具体取值
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-voice_archetype, owner_type: ContentType, field_name: voice_archetype, data_type: enum, value_set_id: VS-pcg-voice-archetype}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-pcg-five-voice-archetypes-archetype_field, owner_field: voice_archetype, definition: "PCG 文案声音原型字段 5 取值：主理人叙事体 / 诗意留白体 / 工艺叙述体 / 反讽诚实体 / 判断同盟体；超出走共享层 §H.3 豁免提案"}
+  value_set:
+    - {value_set_id: VS-pcg-voice-archetype, value: "founder_narrative", label: "主理人叙事体", ordinal: 1}
+    - {value_set_id: VS-pcg-voice-archetype, value: "poetic_blank", label: "诗意留白体", ordinal: 2}
+    - {value_set_id: VS-pcg-voice-archetype, value: "craft_narrative", label: "工艺叙述体", ordinal: 3}
+    - {value_set_id: VS-pcg-voice-archetype, value: "ironic_honesty", label: "反讽诚实体", ordinal: 4}
+    - {value_set_id: VS-pcg-voice-archetype, value: "judgment_ally", label: "判断同盟体", ordinal: 5}
+  rule:
+    - {rule_id: RL-KP-product_attribute-pcg-five-voice-archetypes, rule_type: voice_archetype_field_constraint, applicable_when: "为品牌建立 PCG 文案体系 / 单条文案选定声音原型时", success_scenario: "按品牌性格选 1-2 个原型作主声 / 跨载体保持一致", flip_scenario: "AI 不约束原型直接生成 → 电商腔 / 同质化", alternative_boundary: "允许主+副原型组合；新原型走共享层 §H.3 提案不在单 CT 私自新增"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-pcg-five-voice-archetypes, source_md: Q2-内容类型种子/product_copy_general-交付物-v0.1.md, source_anchor: §B8 + §G G2 + §D, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-pcg-five-voice-archetypes, runtime_method: content_generation, input_types: "ContentType=product_copy_general,brand_personality", output_types: "voice_archetype_choice"}

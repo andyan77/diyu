@@ -1,0 +1,77 @@
+pack_id: KP-training_unit-enterprise-narrative-anti-ai-tone
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  企业叙事类内容存在一组"AI 一眼能仿"的高危主流玩法——办公室口播讲道理 / 创业者一天流水账 / 老板回答评论区 FAQ /
+  车间走一遍配解说 / 工序说明书短视频 / 拍摄花絮搞笑翻车 / 高能混剪圆满结束 / 设计灵感说明书。
+  共性是"结论先行 + 密字幕 + 励志/轻 vlog BGM + 没有现场判断 / 没有具体物件 / 没有真实代价"。
+  内容稿落进任一共性 → 必须改稿，否则 AI 替代成本几乎为零，观众跳出率极高。
+
+scenario:
+  who:
+    primary_role: 内容运营 / 内容审稿人 / 企业叙事内容生产 agent
+    target_audience: 任何品牌的企业叙事类内容稿件
+  when:
+    trigger: 一条企业叙事内容（6 类之一）成稿后审稿
+    context: 内容稿审稿环节 / AI 自动生成稿过 gate / Brief 立项前的反推检查
+  what:
+    action_type: anti_ai_tone_review
+    decision_or_action: |
+      第一步：把稿件对照 8 条 mainstream_played_out 共性逐条比对。
+      第二步：命中"结论先行 / 密字幕 / 励志 BGM / 无现场判断 / 无具体物件 / 无真实代价 / 流水账 / FAQ 化"任一项 → 标"AI 仿写风险"。
+      第三步：被标的稿件必须替换为"决策现场 / 物件证据 / 自我矛盾 / 救场过程 / 边角劳动"中至少一种，否则不得发布。
+      第四步：同条内容反复落进同一共性 → 该选题报废，不要继续改。
+  result:
+    success_pattern: 稿件落到"决策现场 / 物件证据 / 自我矛盾 / 救场过程 / 边角劳动"等进阶或突破档位；AI 难以零成本仿写；观众有"看见这个人 / 这件事 / 这件衣服"的感觉
+    flip_pattern: 稿件本质是"老板坐在办公室对着镜头讲道理"或"老板的一天流水账"或"工厂走一遍配解说"——观众接收到的是结论而非这个人，AI 工具一晚能批量仿出 100 条
+  underlying_mechanism: |
+    主流烂玩法之所以是 AI 一眼能仿，是因为它们全部满足"信息密度低 + 结论可枚举 + 无需现场判断 + 物件可被任意衣服替换"。
+    反 AI 腔的真正抓手不是"写得更精致"，而是把"AI 取代不了的东西"塞进内容——具体物件、临场反应、真实代价、个人停顿与犹豫。
+    朴素设备 × 非凡视角 × 真实情感 才是 2025 年企业叙事内容的护城河。
+  boundary:
+    applicable_when: 6 类企业叙事内容（founder_ip / role_work_vlog / event_documentary / product_journey / process_trace / behind_the_scenes）的所有稿件
+    not_applicable_when: 商品文案 / 搭配示范 / 培训教材等非企业叙事类内容（不存在"AI 同质化 founder 口播"风险）
+  alternative_path:
+    - 命中烂玩法但选题本身有价值 → 加入"具体物件 / 真实代价 / 自我矛盾"中至少一种再发布
+    - 创作者条件无法支撑进阶档 → 降到"边角劳动 / 物件特写 / 沉默叙事"等低成本突破玩法
+
+evidence:
+  source_md: Q2-内容类型种子/企业叙事类GPT5.4.md
+  source_anchor: 6 类企业叙事各自的"主流玩法（已被用烂）"小节 + 各自的"为什么烂"标注
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    "为什么烂：观众接收到的是'结论'，不是'这个人'；像 PPT 口播，AI 最容易模仿。"（founder_ip 玩法 1）
+    "为什么烂：只有任务，没有张力；只有'我很忙'，没有'我为什么这样做'。"（founder_ip 玩法 2）
+    "为什么烂：太像客服升级版；观众感受到的是'应付质疑'，不是'人格魅力'。"（founder_ip 玩法 3）
+    （process_trace / behind_the_scenes / product_journey 等章节的"主流玩法"小节均有同型"为什么烂"判断）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 与"6 字段壳 schema 元规则"pack 配对使用；可作为 content_generation 调用前的硬 gate 投影到 09_call_mapping。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 反 AI 腔纪律是企业叙事内容生产的通用元规则，任何品牌都适用；不含具体笛语品牌主张文案。属 SKILL.md §6.1.1 第 8 类"Schema 元规则"。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-enterprise-narrative-anti-ai-tone}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-enterprise-narrative-anti-ai-tone-ai_imitable_patterns, examples: [office_lecture, daily_grind_log, faq_video, factory_walkthrough, process_handbook, funny_ng_clip, highlight_montage, design_inspo_handbook]}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-enterprise-narrative-anti-ai-tone}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-enterprise-narrative-anti-ai-tone}

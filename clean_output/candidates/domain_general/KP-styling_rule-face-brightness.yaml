@@ -1,0 +1,83 @@
+pack_id: KP-styling_rule-face-brightness
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  离脸最近那一层，优先解决气色，不优先解决时髦——成熟客/黄调肤色/熬夜脸顾客最直观反馈是
+  "脸色好不好""我显不显老"；上装缺货可优先替换近脸提亮件，不必整套推翻。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长
+    target_audience: 成熟客 / 黄调肤色 / 熬夜脸 / 第一次试色顾客
+  when:
+    trigger: 顾客试镜后说"脸色发黄/没精神" / 试色推荐
+    context: 整套近脸层（围巾 / 内搭 / 领口 / 耳饰）颜色选择
+  what:
+    action_type: face_brightness_priority
+    decision_or_action: |
+      围巾 / 内搭 / 领口 / 耳饰优先选提亮色；
+      上装缺货时不整套推翻，先替换近脸提亮件即可。
+  result:
+    success_pattern: 顾客在镜前说"气色好多了"，可承接连带购买近脸提亮单品。
+    flip_pattern: 整体比例都对但近脸颜色发灰发黄，顾客觉得"穿了反而显老"。
+  underlying_mechanism: |
+      顾客最直观的视觉反馈优先来自脸；
+      脸色不对，整体比例和颜色搭配再对也救不回成交动机。
+  boundary:
+    applicable_when: 成熟客 / 黄调肤色 / 熬夜脸 / 第一次试色场景
+    not_applicable_when: 强妆造 / 拍摄型造型（脸已被妆容主导）
+  alternative_path:
+    - 上装缺货 → 优先替换近脸提亮件，不整套推翻
+    - 提亮色断货 → 在围巾/耳饰/内搭多个位置任选其一，不强求同一位置
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 09 face_brightness_rule + 6.3 soft_rule
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    离脸最近那一层，优先解决气色，不优先解决时髦。
+    顾客最直观的反馈首先是"脸色好不好""我显不显老"。
+    works_in：围巾、内搭、领口、耳饰提亮。
+    fails_in：整体比例都对，但近脸颜色发灰发黄。
+    上装缺货时，可优先替换近脸提亮件，不必整套推翻。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 近脸提亮是基础搭配通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-face-brightness-near_face_layer, owner_field: rule_name, definition: "近脸提气法：以离脸最近那一层为优先级，先解决气色再解决时髦"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-face-brightness-near_face_position, value: scarf, label: 围巾, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-face-brightness-near_face_position, value: inner_layer, label: 内搭, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-face-brightness-near_face_position, value: neckline, label: 领口, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-face-brightness-near_face_position, value: earring, label: 耳饰, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-styling_rule-face-brightness, rule_type: soft_rule, applicable_when: "成熟客/黄调肤色/熬夜脸/第一次试色", success_scenario: "近脸提亮顾客气色好", flip_scenario: "近脸发灰发黄整体比例再对也显老", alternative_boundary: "上装缺货优先替换近脸提亮件；强妆造场景不适用"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-face-brightness, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 09 + 6.3, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-face01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"soft_rule","focus":"near_face_brightness"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-face02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"近脸单品放在试镜区附近"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-face03, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"训练先看脸再看身"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-face-brightness, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-face-brightness, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

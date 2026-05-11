@@ -1,0 +1,116 @@
+pack_id: KP-training_unit-product-review-fabric-detective-spec-party
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: medium
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "像面料侦探一样从洗标和测试拆出真实价值"
+  steps:
+    - "桌面俯拍翻洗标和成分字幕"
+    - "拍织纹揉搓回弹测试"
+    - "同价位对比后给购买提醒"
+  anti_pattern: "只说显瘦百搭而不让观众看到成分证据"
+  duration: medium
+  audience: "买衣前会查成分的理性顾客"
+  source_pack_id: KP-training_unit-product-review-fabric-detective-spec-party
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  product_review 进阶档"面料侦探 / 成分党测评"是给**不擅长口播**的创作者
+  的服装独占内容护城河——不从"显瘦 / 百搭"入手而从"你买到的到底是什么"入手：
+  桌面俯拍翻洗标 + 字幕"成分：天丝 70% / 棉 30%" + 纱线/织纹近景 +
+  10 秒揉搓回弹测试 + 同价位另一件对比测试 + "下次买之前先翻洗标"收口。
+  本卡的核心训练点是"**术语写在字幕里，不需要镜头前滔滔不绝**"——
+  这是 product_review 在饱和测评赛道里区别于"形容词堆叠+参数播报"
+  （C1-1 默认禁用 / AI 最易复刻）的稀缺信息服务型路径。
+  服装是**可被微观拆解的商品**，"洗标-纱线-织法-克重-起球-缩水-褪色"
+  是其他零售品类无法复制的微观证据链。
+
+scenario:
+  who:
+    primary_role: product_review 内容创作者（不擅长口播 / 想做信息服务型内容）/ 加盟商 / 主理人
+    target_audience: 服装品牌 / AI 内容生成调度 / 对材质敏感的目标客群
+  when:
+    trigger: 商品属于"看起来差不多但用料差很多"的品类 / 创作者本身不擅长口播感染力
+    context: product_review 测评赛道高度饱和；"信息服务型"内容的稀缺度反而在上升；服装可微观拆解
+  what:
+    action_type: fabric_detective_evidence_chain
+    decision_or_action: 桌面俯拍 + 翻洗标+成分字幕 → 纱线/织纹近景+一句轻讲解 → 揉搓回弹测试+计时 → 同价位对比+裁决 → 收口"翻洗标"
+  result:
+    success_pattern: |-
+      0-5 翻洗标+字幕"成分：天丝 70% / 棉 30%" → 5-12 纱线特写+低声"很细但很紧" →
+      12-20 揉搓 10 秒+松开+特写褶皱回弹+字幕"3 秒复原" →
+      20-27 对比另一件便宜款+同样揉搓+褶皱没回弹+字幕"同价差别就在这" → 27-30 字幕"下次买之前先翻洗标"
+      → 不擅长口播的创作者也能做出稀缺测评 → 接客场景给材质敏感顾客做详细说明
+    flip_pattern: |-
+      把"成分"当做唯一卖点（"含 100%棉就是好"）→ 触发 deep-research 警示（成分 ≠ 体感）
+      或揉搓测试只做一件不做对比 → 失"对照证据"
+      或加形容词"高级面料" → 退回 C1 形容词堆叠默认禁用
+      或微距拍不清楚（手机近拍超出 5cm） → 影像证据失效
+  underlying_mechanism: |
+      product_review 北极星"风险已被看清"的实现路径不止"体感测评"一条——
+      "信息服务"是另一条独立路径，服务于"对材质敏感 / 不信形容词"的细分客群。
+      AI 最易复刻"形容词堆叠"和"参数播报"，但很难替代"真实揉搓回弹数据"和
+      "看标小抄式术语翻译"——这是给口播弱但耐心强的创作者的最佳入口。
+      与 C2-1 体感测评（动作反馈）形成 C2 进阶档"信息 vs 体感"二维分工。
+  boundary:
+    applicable_when: 1 人 1 手机 / 微距靠近拍或 ¥30 夹镜头 / 桌面俯拍 / 预算 ≤ 200 / 4 小时内
+    not_applicable_when: 商品材质差异不显著（如同款不同色）→ 改 C3-3 触感法庭 / 想拍体感反馈 → C2-1 体感测评 / 想做反种草 → C2-4 反种草+替代方案
+  alternative_path:
+    - 与 C2-1 体感测评配合（信息服务+体感反馈双玩法形成主理人测评号定位）
+    - 接客场景应用：给对材质敏感的顾客现场做面料微观讲解（"两者通用"标签）
+
+evidence:
+  source_md: Q2-内容类型种子/product_review-交付物-v0.1.md
+  source_anchor: §C2-3 面料侦探 / 成分党测评 + 备注（不擅长口播友好）+ §D 服装行业垂直机会角度二
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C2-3：不从"显瘦/百搭"入手，而从"你买到的到底是什么"入手——
+    成分/织法/克重手感/易皱程度/起球风险/缩水风险。翻开洗标、讲面料成分、做揉搓回弹测试、讲工艺细节。
+    把测评从"审美意见"切换到"信息服务"——降低了"你只是身材好所以好看"的反感点；
+    科普表达更不怕"没口才"，更适配普通人。
+    服装钩子：服装行业独占优势——服装是可被微观拆解的商品。
+    备注：这个玩法对不擅长口播的创作者特别友好——术语可以写在字幕里，不需要镜头前滔滔不绝。
+    §D 角度二：面料/工艺/辅料的微观叙事——把这些拍成可验证证据链是其他品类无法复制的内容护城河。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation + 09_call_mapping
+    可反推"面料侦探五步链 / 与 C2-1 体感测评的二维分工 / 不擅口播友好性"。
+    Gate 3：跨品牌通用——任意服装品牌 + 任意材质敏感品类。
+    Gate 4：可被 content_generation / customer_service / store_training 三个 runtime 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 product_review 内容生产纪律 / 任意品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-product-review-fabric-detective-spec-party-evidence-chain, owner_field: product_review_baseline, definition: "面料侦探五步证据链：洗标+成分字幕 → 纱线特写 → 揉搓回弹+计时 → 同价位对比 → 收口翻洗标；术语写字幕，不依赖口播感染力"}
+  rule:
+    - {rule_id: RL-KP-training_unit-product-review-fabric-detective-spec-party, rule_type: fabric_detective_evidence_chain, applicable_when: "材质差异显著的服装品类 / 不擅长口播的创作者 / 1 人手机+可选微距夹镜头", success_scenario: "五步证据链（洗标→纱线→揉搓→对比→收口）+ 术语字幕化 → 信息服务型稀缺测评", flip_scenario: "成分=唯一卖点 → 体感缺失 / 揉搓不对比 → 失证据 / 加'高级面料'形容词 → C1 默认禁用 / 微距拍不清 → 证据失效", alternative_boundary: "材质差异不显著 → C3-3 触感法庭 / 体感反馈 → C2-1 体感测评 / 反种草 → C2-4"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-product-review-fabric-detective-spec-party, source_md: Q2-内容类型种子/product_review-交付物-v0.1.md, source_anchor: §C2-3 + 备注 + §D 角度二, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-compatible_with_content_type-product_review-pr4, source_type: TrainingMaterial, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_review","play_card":"C2-3","baseline":"fabric_detective_chain","scenario_tag":"both"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-product-review-fabric-detective-spec-party, runtime_method: content_generation, input_types: "ContentType=product_review+FabricSpecCatalog+ComparisonSKU", output_types: "FabricDetectiveScript"}

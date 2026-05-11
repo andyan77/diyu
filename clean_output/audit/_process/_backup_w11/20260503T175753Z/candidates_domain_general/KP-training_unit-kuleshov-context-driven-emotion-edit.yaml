@@ -1,0 +1,63 @@
+pack_id: KP-training_unit-kuleshov-context-driven-emotion-edit
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 情绪表达类内容应优先用"中性表情主镜头 + 不同情境 B-roll 拼接"（Kuleshov 效应）让观众自己投射情绪，而不是靠主角表演崩溃 / 哭腔 / 大字金句；平台生成情绪类脚本时必须把"剪辑结构驱动情绪"列为可调用模板，并给 B-roll 取材清单。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: emotion_expression（也含 product_review 的"同一件衣服三种结局"扩展）
+  when:
+    trigger: 生成情绪表达类视频脚本
+    context: 中文情绪类账号"对镜怼脸 + 伤感 BGM + 大字金句"已饱和；电影认知研究证实剪辑上下文会改变观众对同一张脸的情绪解读（Kuleshov effect）
+  what:
+    action_type: editing_structure_rule
+    decision_or_action: 提供"中性脸主镜头 5 秒 + 三组情境 B-roll（疲惫 / 释然 / 坚硬）+ 仅一行情绪关键词字幕"模板；不强行让主角表演情绪；服装可作为情绪结局的外壳（穿上不同衣服承接不同情绪）
+  result:
+    success_pattern: 同一张脸经三组情境 B-roll 被读出三种情绪，观众在投射中体认"自己也被情境推着走"，共鸣深；内容更难被 AI 单镜头模板复刻
+    flip_pattern: 主角对镜哭诉 / 伤感 BGM + 大字金句，观众识别为表演式情绪，疲劳率高
+  underlying_mechanism: Kuleshov 效应——情绪由结构（剪辑上下文）而非表情产生；把表演压力从演员卸到结构，更稳定、更不依赖天赋
+  boundary:
+    applicable_when: emotion_expression 类内容 / product_review 中"同一件衣服三种结局"扩展
+    not_applicable_when: 创始人 IP 的核心独白（founder_ip 类有自身独白逻辑，依赖真实在场感）
+  alternative_path:
+    - 中性脸 + 三组 B-roll
+    - 衣柜情绪谱（不露脸只拍衣物与手）
+    - 同一动作三种情境（地铁 / 雨天 / 办公室）
+
+evidence:
+  source_md: Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md
+  source_anchor: 三份 md 的"情绪盲测试穿""同一张脸的三种结局""情绪的剪辑学（Kuleshov/POV式情绪投射）""rhythm disruption 错拍"
+  source_type: cross_source_consensus
+  inference_level: low
+  evidence_quote: |
+    通用类compass.md：这种做法利用了电影研究里讨论的"剪辑上下文会改变观众对情绪的解读"的现象（Kuleshov effect）。同一张脸在不同情境镜头的夹击下，会被观众读出不同情绪。
+    通用类compass.md：它用"结构"制造情绪，而不是用"表演"索取共情；更难被AI模板化。
+    deep-research-report.md：Rhythm disruption (节奏打破): 翻转生对比，对比生反差，反差生情绪能量. The "错拍" fashion video: model freezes, hold for 3 full seconds…The disruption breaks the viewer out of autopilot scrolling.
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 情绪类内容剪辑结构规则；跨品牌通用
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用剪辑结构 / 心理机制规则
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType, TrainingMaterial]
+  field: []
+  semantic: [SM-kuleshov-context-driven-emotion-edit]
+  value_set: [VS-emotion-broll-context-categories]
+  relation: []
+  rule: [RL-kuleshov-context-driven-emotion-edit]
+  evidence: [EV-kuleshov-context-driven-emotion-edit]
+  lifecycle: []
+  call_mapping: [CM-content_generation-kuleshov-edit]

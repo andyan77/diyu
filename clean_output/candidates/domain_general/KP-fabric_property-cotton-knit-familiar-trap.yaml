@@ -1,0 +1,96 @@
+pack_id: KP-fabric_property-cotton-knit-familiar-trap
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  棉针织 / 棉弹类的真正风险不是穿着体感，而是"因为太熟反而被低估"——
+  纯棉不等于不透、不变形、不缩水，必须前置告诉顾客领口松、下摆卷、白浅色透、
+  汗后贴身、机洗回缩、针织尺寸波动这六类风险，否则售后必然回流。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional（商品专业者）
+    target_audience: 询问 T 恤 / 打底 / 家常通勤 / 轻休闲棉针织单品的顾客（尤其默认"纯棉=零风险"的顾客）
+  when:
+    trigger: 顾客拿起棉针织单品询问材质或导购准备用"纯棉"做卖点
+    context: 春夏 T 恤 / 打底 / 家常通勤陈列；顾客回家直接扔洗衣机的洗护习惯
+  what:
+    action_type: fabric_recommendation_with_risk_disclosure
+    decision_or_action: |
+      不能只说"亲肤、吸汗"；同步前置说明领口松、下摆卷、白浅色透、汗后贴身、
+      机洗回缩、针织尺寸波动六类风险；薄款 + 浅色 + 白色顾客必须追加透感与
+      内搭判断；针对针织类显式提示尺寸会有波动而非缝制问题。
+  result:
+    success_pattern: |
+      顾客接受棉针织"亲肤但需要洗护小心"的认知，洗后回缩或领口松均不视为质量问题；
+      薄白款顾客在听到透感提示后主动配内搭，二次穿着率正常。
+    flip_pattern: |
+      导购只讲"纯棉亲肤"导致顾客把它当零风险款；
+      洗一次回缩、领口松垮或白色穿出来透 → 顾客认定品质问题或被误导，退换或差评回流。
+  underlying_mechanism: |
+      棉纤维吸湿膨胀导致针织线圈收缩 / 走形；针织结构本身张力不稳定；
+      白浅色对纤维通透性放大；这些是面料+结构特性，洗护工艺只能减轻，
+      所以"亲肤吸汗"必须与"风险前置"成对说，而不是单独说。
+  boundary:
+    applicable_when: 棉针织 / 棉弹类（T 恤 / 打底 / 家常通勤）；顾客洗护偏粗放或对体形痕迹敏感
+    not_applicable_when: |
+      经过预缩 + 树脂定型整理且明示标签的高稳定棉针织；
+      展厅短时间穿着或拍摄场景。
+  alternative_path:
+    - 如果顾客要求"领口长期不松" → 转向罗纹高密针织或加入弹力纤维的混纺
+    - 如果顾客白色款怕透 → 推荐双层或深色款 / 同步推内搭
+    - 如果顾客要"完全免烫稳定" → 转向梭织棉或棉混合化纤
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 四、首批 FabricKnowledge 正式冻结清单 · 1. 棉针织 / 棉弹类
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    最容易误导顾客的点有三条：纯棉不等于不透；纯棉不等于不变形；纯棉也不等于穿久了还保持领口利落。
+    正式风险提示冻结为：领口松、下摆卷、白浅色透、汗后贴身、机洗后回缩、针织类更容易出现尺寸波动。
+    CottonWorks 也明确指出 shrinkage（缩水）会影响 fit（合体感）、seam puckering（缝口起皱）、skew（扭斜）以及面辅料关系。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 FabricKnowledge.risk_alerts value_set + rule + evidence 可反推
+            "纯棉非零风险 + 六类风险位 + 必须前置说明" 三条核心语义。
+    Gate 3：跨女装 / 男装通用棉针织判断成立。
+    Gate 4：可被 outfit_recommendation / store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 围绕棉纤维 + 针织结构的通用特性，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-cotton-knit-familiar-trap-cotton_not_zero_risk, owner_field: risk_alerts, definition: "纯棉针织即使亲肤吸汗也存在透 / 变形 / 缩水 / 尺寸波动六类风险，需前置说明"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-cotton-knit-familiar-trap-risk_position, value: collar_loose, label: 领口松}
+    - {value_set_id: VS-KP-fabric_property-cotton-knit-familiar-trap-risk_position, value: hem_curl, label: 下摆卷}
+    - {value_set_id: VS-KP-fabric_property-cotton-knit-familiar-trap-risk_position, value: light_color_see_through, label: 白浅色透}
+    - {value_set_id: VS-KP-fabric_property-cotton-knit-familiar-trap-risk_position, value: sweat_cling, label: 汗后贴身}
+    - {value_set_id: VS-KP-fabric_property-cotton-knit-familiar-trap-risk_position, value: wash_shrink, label: 机洗回缩}
+    - {value_set_id: VS-KP-fabric_property-cotton-knit-familiar-trap-risk_position, value: knit_size_drift, label: 针织尺寸波动}
+  rule:
+    - {rule_id: RL-KP-fabric_property-cotton-knit-familiar-trap, rule_type: fabric_recommendation_disclosure, applicable_when: "面料=棉针织/棉弹 且 顾客=粗放洗护或默认纯棉零风险", success_scenario: "前置六类风险，顾客接受洗护小心后无售后异议", flip_scenario: "只讲亲肤吸汗未讲风险 → 洗一次回缩或白色透出 → 退换/差评", alternative_boundary: "要求领口不松→罗纹高密；白色怕透→双层或深色；要免烫→梭织棉"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-cotton-knit-familiar-trap, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 四、1. 棉针织 / 棉弹类, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-cotton-knit-familiar-trap, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-store_training-KP-fabric_property-cotton-knit-familiar-trap, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

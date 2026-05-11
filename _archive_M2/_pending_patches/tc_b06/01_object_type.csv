@@ -1,0 +1,15 @@
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-can-rescue-scenarios
+OT-CustomerScenario,CustomerScenario,domain_object,domain_general,KP-inventory_rescue-can-rescue-scenarios
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-customer-priority-six-axes
+OT-DisplayGuide,DisplayGuide,domain_object,domain_general,KP-inventory_rescue-display-priority-five-axes
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-display-priority-five-axes
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-hard-block-five-conditions
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-match-result-output-shape
+OT-CallMapping,CallMapping,domain_object,domain_general,KP-inventory_rescue-match-result-output-shape
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-no-rescue-scenarios
+OT-CustomerScenario,CustomerScenario,domain_object,domain_general,KP-inventory_rescue-no-rescue-scenarios
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-shallow-vs-deep-sensing
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-soft-substitute-four-paths
+OT-InventoryState,InventoryState,domain_object,domain_general,KP-inventory_rescue-state-catalog-six-states
+OT-CustomerScenario,CustomerScenario,domain_object,domain_general,KP-inventory_rescue-three-sentence-discipline
+OT-TrainingMaterial,TrainingMaterial,domain_object,domain_general,KP-inventory_rescue-three-sentence-discipline

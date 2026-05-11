@@ -1,0 +1,99 @@
+pack_id: KP-training_unit-persona-anti-pattern-checklist
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  通用 Persona 内容生产出口必须按"四类反模式清单"拦截，命中任一即不合格、必须重写：
+  ① 万能鸡汤号（只有口号没有真实门店动作 / 只讲前台不讲后场协同）；
+  ② 强推型销售话术（只夸不排雷 / 只讲参数不翻译为身体体感 / 像客服脚本）；
+  ③ 产品说明书或品牌宣传片（只剩术语堆砌 / 没有失败 / 返工 / 疲惫等真实纹理）；
+  ④ 单边正能量（看不到犹豫 / 救火 / 挫败 / 复盘没接住的话）。
+  反模式校验优先于字段壳完整性校验——格式合规但内容空心仍要打回。
+
+scenario:
+  who:
+    primary_role: 内容运营 / 内容审核 / Prompt 模板维护
+    target_audience: 内容生成出口 / 私域分发 / 品牌冷启动质检
+  when:
+    trigger: 一条 Persona 生成内容准备发布前 / Prompt 模板上线前 / 品牌冷启动内容质检
+    context: 冷启动阶段；6 字段壳已正确填写但内容仍可能空心
+  what:
+    action_type: persona_anti_pattern_checklist
+    decision_or_action: |
+      错误：只检查 6 字段壳是否齐全就放行内容。
+      正确：内容出口校验顺序——先跑四类反模式清单，命中任一打回；反模式过了再核字段壳；都过才放行。
+      具体检查锚点：
+        - store_operator：有没有"昨天试衣间痕迹 / 后场没站稳 / 复盘没接住的话"等真实纹理？
+        - styling_advisor：是先排雷还是先夸？有没有"顾客自己照镜子那几秒"这种体感锚点？
+        - product_professional：有没有"反复改到能落地 / 面料一上手就知道 / 明知不成立还被推"等返工纹理？
+        - 三套 Persona：有没有适度的负面情绪（疲惫 / 烦躁 / 挫败）作为可信度证据？
+  result:
+    success_pattern: |
+      内容出口前命中反模式即被拦截重写，真实性纹理被强制保留；
+      Persona 不退化为客服脚本 / 鸡汤号 / 产品说明书。
+    flip_pattern: |
+      只过字段壳不过反模式 → 内容看似格式合规实际空心；用户感知"假人设"，私域出口位失效。
+  underlying_mechanism: |
+    字段壳保证形式合规，反模式清单保证内容真实，二者解耦。
+    Persona 真实性最大杀手不是缺字段，是"完美无瑕的正能量内容"——
+    没有失败、疲惫、犹豫的人设不像活人。
+  boundary:
+    applicable_when: 通用 Persona 内容出口校验
+    not_applicable_when: |
+      非 Persona 类内容（纯产品参数页 / 系统通知）不适用；
+      品牌唯一层 FounderProfile 反模式清单需另行制定（可能更严）。
+  alternative_path:
+    - 命中反模式但素材确实没有真实负面纹理 → 进 RoleProfile 素材采集补真实性锚点，禁止造假
+    - 不同 Persona 反模式权重可不同：styling_advisor 更怕强推 / product_professional 更怕术语堆砌 / store_operator 更怕鸡汤口号
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md
+  source_anchor: 卡片 1/2/3 各自"4. 这张卡最怕写成什么样"
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    [store_operator] 写成万能门店鸡汤号 / 只有管理口号没有真实门店动作 / 只讲前台热闹不讲后场协同 / 只有正能量没有疲惫救火复盘
+    [styling_advisor] 写成强推型销售话术号 / 只会夸不会排雷 / 只会说参数不会翻译成身体体感 / 像客服脚本不像一线导购
+    [product_professional] 只剩术语堆砌没有真实判断 / 只有专业感没有失败疲惫返工 / 像产品说明书不像活人在说话 / 像品牌宣传片不像经历过现场的人
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field(anti_pattern_check_state) + 04_value_set(四类反模式枚举) + 06_rule(反模式优先于字段壳) 可反推
+    "四类反模式 / 命中即拦 / 优先级高于字段壳"三条核心语义。
+    Gate 3：内容出口反模式校验是通用方法，跨品牌可复用。
+    Gate 4：可被 content_generation 出口校验调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 反模式清单是 Persona 内容生产质量校验通用方法，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  field:
+    - {field_id: FD-Persona-anti_pattern_check_state, owner_type: Persona, field_name: anti_pattern_check_state, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-persona-anti-pattern-checklist-four_traps, owner_field: anti_pattern_check_state, definition: "Persona 内容四类反模式：① 万能鸡汤号 ② 强推销售话术 ③ 产品说明书堆砌 ④ 单边正能量"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-persona-anti-pattern-checklist-traps, value: chicken_soup, label: 万能鸡汤号, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-persona-anti-pattern-checklist-traps, value: pushy_sales, label: 强推销售话术, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-persona-anti-pattern-checklist-traps, value: spec_sheet, label: 产品说明书堆砌, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-persona-anti-pattern-checklist-traps, value: monotone_positive, label: 单边正能量, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-training_unit-persona-anti-pattern-checklist, rule_type: persona_anti_pattern_checklist, applicable_when: "Persona 内容出口校验或 Prompt 模板上线", success_scenario: "命中反模式即打回真实性纹理被保留", flip_scenario: "只过字段壳不过反模式 Persona 退化为假人设私域失效", alternative_boundary: "FounderProfile 另行更严反模式；不同 Persona 反模式权重可调"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-persona-anti-pattern-checklist, source_md: Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md, source_anchor: 卡片 1/2/3 §4 最怕写成, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-persona-anti-pattern-checklist, runtime_method: content_generation, input_types: ["Persona","TrainingMaterial"], output_types: ["AntiPatternCheckResult"]}

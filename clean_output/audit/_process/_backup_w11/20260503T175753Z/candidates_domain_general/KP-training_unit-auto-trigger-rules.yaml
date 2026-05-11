@@ -1,0 +1,94 @@
+pack_id: KP-training_unit-auto-trigger-rules
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  门店培训不能等总部排课，必须由 6 类现场信号自动触发——
+  同类搭配错误 3 次 / 同陈列面 2 次被店长改回 / 断码救场连续失败 / 同类退货理由连续出现 /
+  顾客高频问同问题但员工答不一致 / 同类库存救场转化率明显偏低；
+  达到任一条件即应自动生成或推送对应 TrainingMaterial，不靠人盯排课。
+
+scenario:
+  who:
+    primary_role: 店长 / 区域培训系统
+    target_audience: 一线员工
+  when:
+    trigger: 上述 6 类现场信号之一被采集系统 / 店长抽查 / POS 数据触发
+    context: 任意运营中的门店
+  what:
+    action_type: training_auto_dispatch
+    decision_or_action: |
+      错误动作：等总部按月度排课 / 等问题积累成投诉再上培训。
+      正确动作：监测 6 类信号，达任一阈值即自动派发对应 microlearning 单元，
+        优先用班前会 40 秒 / 试衣后微辅导 / error_replay 案例的形式当周完成。
+      为什么错：错误是连续发生的，等月度排课已经损失若干顾客；
+        累积投诉再补课，事后维修成本远高于即时纠偏。
+      如何纠正：把 6 类信号挂到现有数据源（POS / 退货系统 / 神秘顾客 / 店长日志）。
+      掌握检查：店长每周能列出本周自动触发的训练单元数量与类别，
+        且员工能复述被触发后的纠正动作。
+  result:
+    success_pattern: |
+      错误从被发现到被纠偏的时间从月级缩到周级；
+      高频反复错误显著减少，门店培训系统从被动响应变主动运营。
+    flip_pattern: |
+      培训系统按月排课，错误反复发生但无人触发对应单元；
+      问题累积到顾客投诉/退货/差评才进入复盘队列，门店持续失血。
+  underlying_mechanism: |
+      错误信号 → 训练触发 → 现场纠偏，是把"运营数据"和"员工成长"打通的最短回路；
+      靠人盯排课等价于把这条回路打回手工时代。
+  boundary:
+    applicable_when: 任何已运营、有基本数据采集能力的门店
+    not_applicable_when: |
+      新店开业 7 天内（数据不足）→ 用首批训练计划替代触发；
+      数据系统暂未上线 → 用店长日志手工执行 6 类信号判定。
+  alternative_path:
+    - 信号同时触发多个单元 → 按 priority-by-impact-frequency-trust 规则排序
+    - 触发后无可用单元 → 上 backlog 并立即用 error_replay 应急
+    - 数据噪声多 → 设阈值缓冲，避免高频误触发
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 十二、首批培训触发规则 · training_trigger_rules
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    满足以下任一条件，就应自动生成或推送对应 TrainingMaterial：
+    同类搭配错误 3 次以上 / 同一陈列面 2 次以上被店长改回 / 断码救场连续失败 /
+    同类退货理由连续出现 / 顾客高频问同一个问题，员工回答不一致 /
+    同一门店同类库存救场转化率明显偏低。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: rule + value_set(trigger_signal) 可反推 6 类信号 + 自动派发规则。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用培训触发规则，不含笛语专属。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set:
+    - {value_set_id: VS-KP-training_unit-auto-trigger-rules-trigger_signal, value: same_styling_error_x3, label: 同类搭配错误 3 次以上, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-auto-trigger-rules-trigger_signal, value: same_display_face_revised_x2, label: 同陈列面 2 次以上被改回, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-auto-trigger-rules-trigger_signal, value: size_rescue_consecutive_fail, label: 断码救场连续失败, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-auto-trigger-rules-trigger_signal, value: same_return_reason_consecutive, label: 同类退货理由连续出现, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-auto-trigger-rules-trigger_signal, value: customer_question_inconsistent_answers, label: 高频问题员工答不一致, ordinal: 5}
+    - {value_set_id: VS-KP-training_unit-auto-trigger-rules-trigger_signal, value: rescue_conversion_below_baseline, label: 同类库存救场转化偏低, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-training_unit-auto-trigger-rules, rule_type: training_auto_dispatch, applicable_when: "已运营门店采集到 6 类信号之一", success_scenario: "信号触发即派发 microlearning 单元，错误从月级到周级被纠偏", flip_scenario: "靠月度排课，错误反复发生直到顾客投诉/退货才进入复盘队列", alternative_boundary: "新店 7 天内用首批计划替代；无数据系统时改店长日志手工判定"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-auto-trigger-rules, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 十二、training_trigger_rules, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm11, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["store_manager"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-auto-trigger-rules, runtime_method: store_training, input_types: ["TrainingMaterial","CustomerScenario","InventoryState"], output_types: ["TrainingTriggerEvent"]}

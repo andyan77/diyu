@@ -1,0 +1,8 @@
+unprocessable_id,source_md,source_anchor,content_excerpt,classification,classification_reason,follow_up_action,status,created_at
+UP-tcb11-001,Q4-人设种子/phase-3-Q4-参数级填充清单.md,2.1 + 3.4 FounderProfile,"FounderProfile 9 字段壳（founder_name / value_system / worldview / brand_philosophy / lifestyle_manifesto / aesthetic_preferences / inspiration_sources / origin_story / signature_phrases）+ 0/1 柔性使用 + 写入权限 knowledge.manage+role=owner+org_tier=brand_hq",process_description_needs_split,FounderProfile 不在 skeleton core_object_types 18 项内已登记 GAP-004；待人工裁决归属后再决定是否拆为 brand_faye 层 product_attribute pack,等待 GAP-004 决议,open,2026-05-03
+UP-tcb11-002,Q4-人设种子/phase-3-Q4-参数级填充清单.md,4.1 RoleProfile → Persona,"7 个岗位挂接关系清单（store_manager → store_operator 等 7 行）",duplicate_or_redundant,与 TC-B09 首批 Persona-RoleProfile 清单的同源关系定义重复本卡不重抽待 TC-B09 落档,跳过等 TC-B09 落档,open,2026-05-03
+UP-tcb11-003,Q4-人设种子/phase-3-Q4-参数级填充清单.md,六、素材与字段的回填关系清单,"岗位素材 7 类（A-G）→ Persona 字段优先回填映射；岗位素材 → 兼容矩阵真源边证据来源；岗位素材 → 后续 Q（Q19/Q20/Q21/Q22）",process_description_needs_split,流程性描述（"先做 A 再做 B"）非业务断言；真业务断言已在 TC-B09/B10/B13 同步落档不在本卡重复,跳过,open,2026-05-03
+UP-tcb11-004,Q4-人设种子/phase-3-Q4-参数级填充清单.md,七、责任划分与接力清单,"内容运营 / 知识工程 / 技术实现 / 品牌业务专家 4 方接力清单",meta_layer_not_business,工程治理与责任分工非业务知识本仓不抽,跳过,open,2026-05-03
+UP-tcb11-005,Q4-人设种子/phase-3-Q4-参数级填充清单.md,八、当前"已冻结/候选/待补"总表,"对前文 Frozen/Candidate/Pending 三档项目的汇总表",duplicate_or_redundant,本节是前文摘要不重复抽业务断言已在各 pack 内体现,跳过,open,2026-05-03
+UP-tcb11-006,Q4-人设种子/phase-3-Q4-参数级填充清单.md,九、本稿结论 + 本轮 Q4 产物进度,"对本稿与 6 份 Q4 产物落盘状态的总结",meta_layer_not_business,工程进度通报非业务知识,跳过,open,2026-05-03
+UP-tcb11-007,Q4-人设种子/phase-3-Q4-参数级填充清单.md,2.2 通用 Persona 命名规范 / 2.3 RoleProfile 数量,"3 套通用 Persona 数量与命名 / 7 个 RoleProfile 数量与挂接",duplicate_or_redundant,与 TC-B09 / TC-B10 同源不重抽,跳过,open,2026-05-03

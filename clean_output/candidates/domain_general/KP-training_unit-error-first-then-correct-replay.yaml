@@ -1,0 +1,106 @@
+pack_id: KP-training_unit-error-first-then-correct-replay
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: medium
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "先让接客错误发生再倒带重演正确判断顺序"
+  steps:
+    - "拍一段具体翻车对话"
+    - "定格标出错在太快回答"
+    - "倒带重演先问再判断的版本"
+  anti_pattern: "先讲正确答案让员工只背话术不记判断"
+  duration: medium
+  audience: "需要现场接客训练的门店员工"
+  source_pack_id: KP-training_unit-error-first-then-correct-replay
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  服装门店接客培训中，"错误先发生再倒回去重来"比"先讲正确答案"更接近真实上岗——
+  让员工先看一段具体翻车（顾客问'会不会显胯' / 店员立刻回答'不会不会特别显瘦' /
+  顾客表情冷掉），画面定格 + 字幕"问题不是你说错 / 是你说太快"，然后倒带重演正确版本
+  （店员先反问'你平时更在意胯还是腿型' / 再根据回答推荐）。员工接住的不是"背话术"
+  而是"判断顺序的重要性"——错误体验的记忆保持远高于抽象正确讲解（error-driven learning）。
+
+scenario:
+  who:
+    primary_role: 店长 / 总部培训内容生产者 / 兵团内容编剧
+    target_audience: 一线导购（特别是新员工 7-30 天成长期）/ 加盟商
+  when:
+    trigger: 培训某个"高频翻车场景"时（顾客试穿后给反馈 / 砍价 / 退换 / 试穿犹豫）
+    context: 该场景的特点是"员工的本能反应翻车了"——背话术解决不了，需要重训判断顺序
+  what:
+    action_type: store_training_play_card
+    decision_or_action: 拍 30 秒：第一遍错（具体翻车）+ 定格提问（"问题不是你说错 是你说太快"）+ 倒带重演正确版本
+  result:
+    success_pattern: |-
+      员工看完能说出"关键不是背话术 / 是问对问题的顺序"——下次遇到顾客类似反馈时，
+      先反问"你平时更在意 X 还是 Y"再根据回答推荐 / 错误率显著降低
+    flip_pattern: |-
+      做成"先讲对的话术"+ 让员工背 → 员工面对真实顾客时仍按本能反应（立刻给答案 / 推销 / 辩护）
+      / 培训沦为"看懂但不会做"的 C1-2 话术灌输
+  underlying_mechanism: |
+      认知科学中"先测试后讲解"的记忆保持优于"先讲解后测试"（testing effect）；
+      desirable difficulty 让具体错误的细节成为锚点，让正确动作进入程序性记忆。
+      传统培训总想先给正确答案，本玩法先让员工"错得很具体"，再让正确动作有依附点。
+  boundary:
+    applicable_when: 高频翻车的接客判断场景 / 1 店长 + 1 同事即可拍 / 4 小时内可批量做 / 30 秒短视频
+    not_applicable_when: 纯动作 SOP（折叠 / 蒸烫 / 打包）→ 走 C2-2 Do/Don't 对照或 C3-4 SOP ASMR / 没有"具体本能翻车"的事后纠偏
+  alternative_path:
+    - 也可与"门店 RPG 选择题"配合——RPG 是"让员工提前选"，本卡是"让员工看到错的后果"，两者互补
+
+evidence:
+  source_md: Q2-内容类型种子/training_material-交付物-v0.1.md
+  source_anchor: §C3 突破性玩法卡 #C3-1 "错误先发生再倒回去重来 / 反向培训" + §⚠️ 兵团向 3 原则
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-1：视频一开头先给员工看一个小事故：顾客问"这个会不会显胯" / 店员立刻回答"不会不会特别显瘦" /
+    顾客表情立刻冷掉。画面停住 / 字幕"问题不是你说错 / 是你说太快"。然后倒回去 / 重演第二遍：
+    店员先问"你平时更在意胯还是腿型" / 再根据回答推荐。
+    员工接住的不是"背话术" / 而是"判断顺序的重要性"——传统培训总想先给正确答案 /
+    这个玩法先让员工感到错 / 再让正确动作进入记忆。
+    学习机制：Error-driven learning + Desirable difficulty。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（含 alternative）。
+    Gate 2：从 06_rule（培训玩法格式 + 学习机制）+ 09_call_mapping（store_training）+ 05_relation 可反推
+    "高频翻车场景用 错+定格+倒带 三段式 / 与 Do-Dont 对照的边界 / 错误体验的记忆机制"。
+    Gate 3：跨品牌服装零售通用——任何品牌的高频翻车接客场景都适用。
+    Gate 4：可被 store_training 调用，按"翻车场景清单"批量生成 30 秒培训脚本。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装零售通用培训玩法 + 通用认知科学机制；不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-error-first-then-correct-replay, rule_type: store_training_play_card, applicable_when: "高频翻车的接客判断场景（顾客试穿反馈/砍价/退换/试穿犹豫）", success_scenario: "30 秒：错+定格+倒带正确版本 → 员工内化判断顺序", flip_scenario: "先讲正确话术让员工背 → 员工本能反应仍翻车", alternative_boundary: "纯动作 SOP 走 Do/Don't 对照或 SOP ASMR"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-error-first-then-correct-replay, source_md: Q2-内容类型种子/training_material-交付物-v0.1.md, source_anchor: §C3-1, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-compatible_with_content_type-training_material-er1, source_type: TrainingMaterial, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"training_material","play_card":"C3-1","learning_mechanism":"error_driven_learning+desirable_difficulty"}'}
+    - {relation_id: RE-TrainingMaterial-supports_training-RoleProfile-er1, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: supports_training, properties_json: '{"role":"sales_associate","seniority":"new_to_30days"}'}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-error-first-then-correct-replay, runtime_method: store_training, input_types: HighFrequencyFailureScenario, output_types: TrainingScript_30s}
+    - {mapping_id: CM-content_generation-KP-training_unit-error-first-then-correct-replay, runtime_method: content_generation, input_types: ContentType+TrainingScenario, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

@@ -1,0 +1,75 @@
+pack_id: KP-training_unit-enterprise-narrative-north-star-first
+granularity_layer: L2
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  企业叙事类内容立项必须先写"北极星"——一句"观众看完心里发生什么"的具体目标，再选玩法档位与镜头清单；
+  北极星写不出具体心理状态（如"愿意先信他再信他的牌子"/"对岗位产生尊重"/"原来好看是很多普通人托出来的"）→ 选题不成立。
+  北极星缺位是企业叙事类内容最常见的失败根因——团队会用"提升品牌曝光""讲好品牌故事"等泛话开拍，导致拍完没人能说清楚这条内容到底要让观众接住什么。
+
+scenario:
+  who:
+    primary_role: 内容运营 / 选题立项人 / 企业叙事内容生产 agent
+    target_audience: 任何品牌的企业叙事内容立项环节
+  when:
+    trigger: 企业叙事 6 类内容立项 / Brief 撰写 / 选题评审
+    context: 立项会 / Brief 模板第一格 / AI 内容生成提示词的目标段
+  what:
+    action_type: north_star_first_briefing
+    decision_or_action: |
+      第一步：用一句话写出"观众看完心里发生什么"——必须是具体心理状态（信任 / 尊重 / 想象 / 体感），不能是品牌方的 KPI（曝光 / 转化 / 心智）。
+      第二步：北极星写不出具体心理状态 → 立项退回，不进入选题阶段。
+      第三步：北极星具体后，反推应选哪一档玩法（主流烂 / 进阶 / 突破）以及哪一组镜头清单能交付该心理状态。
+      第四步：成稿后用北极星反测——观众看完是否会产生这条心理状态？不会 → 改稿或废稿。
+  result:
+    success_pattern: 北极星具体可观测；选题、玩法档位、镜头清单全部围绕北极星反推；成稿后能用北极星做收口验收
+    flip_pattern: 北极星缺位或写成 KPI / 泛话 → 拍出来的内容指向不明，团队各自带着不同理解开拍，观众接收到混合信号；常见症状是"看着不错但说不清想干嘛"
+  underlying_mechanism: |
+    企业叙事内容的成败不在"画面好不好看"，而在"观众心里有没有发生一件具体的事"。
+    KPI 是品牌方的事，心理状态才是观众的事；两者混淆 → 内容会服务 KPI 而非观众。
+    北极星先行 = 把"观众视角"硬编码进选题第一格，让后续所有选择（玩法档、镜头、节奏、字幕）都有可反推的标尺。
+  boundary:
+    applicable_when: 6 类企业叙事内容立项；任何品牌、任何门店级别均适用
+    not_applicable_when: 商品文案 / 搭配教程 / 库存救场提示等以"决策辅助"为目的的内容（北极星不是这类内容的核心驱动）
+  alternative_path:
+    - 北极星反复写不出具体心理状态 → 选题本身可能不是企业叙事而是商品文案，转去对应字段壳
+    - 北极星写出但与品牌长期心智冲突 → 升级到品牌主张层裁决，不在内容运营单点决定
+
+evidence:
+  source_md: Q2-内容类型种子/企业叙事类GPT5.4.md
+  source_anchor: 6 类企业叙事每一类章节开头的"**北极星：** ……"段落
+  source_type: structural_pattern
+  inference_level: low
+  evidence_quote: |
+    founder_ip："**北极星：** 观众看完后，心里不是'这老板在卖货'，而是'这个人有判断、有代价、有性格，我愿意先信他，再信他的牌子'。"
+    role_work_vlog："**北极星：** 观众看完后，不只是'知道这个岗位在干嘛'，而是对这个岗位产生尊重、对品牌产生体感信任……"
+    （event_documentary / product_journey / process_trace / behind_the_scenes 章节开头均有同型北极星语句）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 6 字段壳 + 反 AI 腔纪律构成企业叙事内容生产的最小完备纪律集。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 北极星先行是企业叙事内容立项的通用元规则；不含具体笛语品牌主张或具体心理目标取值。属 SKILL.md §6.1.1 第 8 类"Schema 元规则"。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-enterprise-narrative-north-star-first}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-enterprise-narrative-north-star-first-north_star}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-enterprise-narrative-north-star-first}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-enterprise-narrative-north-star-first}

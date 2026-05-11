@@ -1,0 +1,84 @@
+pack_id: KP-styling_rule-formality-consistency
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  正式场合下单品正式度尽量统一——场合错位是顾客"说不出哪里怪但就是不买"的典型原因；
+  混搭风/创意行业休闲感场景不在此限。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长
+    target_audience: 面试 / 会议 / 通勤 / 婚礼宾客 / 商务男装顾客
+  when:
+    trigger: 正式场合搭配 / 商务区与休闲区分组陈列
+    context: 一身上下件正式度匹配
+  what:
+    action_type: formality_level_alignment
+    decision_or_action: |
+      西装 + 皮鞋 / 乐福鞋，衬衫 + 西裤，结构连衣裙 + 干净外套；
+      正式裤断码只能换同级正式度单品。
+  result:
+    success_pattern: 顾客觉得"得体、上档次"，正式场合愿意整套带走。
+    flip_pattern: 套装配过于休闲鞋、礼服感上衣配破洞牛仔，顾客嘴上说不出但不下单。
+  underlying_mechanism: |
+      正式度是看不见的视觉一致性；
+      错位会让画面"哪里都对、整体不对"，顾客直觉不舒服但难以表达。
+  boundary:
+    applicable_when: 面试 / 会议 / 通勤 / 婚礼 / 商务男装
+    not_applicable_when: 明确混搭风 / 创意行业休闲感
+  alternative_path:
+    - 正式裤断码 → 必须换同级正式度单品（不可下沉到休闲）
+    - 正式上装断码 → 同级正式度替代后再考虑颜色匹配
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 10 formality_consistency_rule + 6.2 hard_rule
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    正式场合下，单品正式度尽量统一。
+    场合错位是最容易让顾客说不出哪里怪、但就是不买的原因。
+    works_in：西装 + 皮鞋 / 乐福鞋，衬衫 + 西裤，结构连衣裙 + 干净外套。
+    fails_in：套装配过于休闲鞋，礼服感上衣配破洞牛仔。
+    正式裤断码，只能换同级正式度单品。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；硬规则；可被陈列分区与培训直接调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 正式度统一是基础场合搭配通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-formality-consistency-formality_level, owner_field: rule_name, definition: "正式度统一法：一身上下件正式度同级，错位即翻车"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-formality-consistency-formal_occasions, value: interview, label: 面试, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-formality-consistency-formal_occasions, value: meeting, label: 会议, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-formality-consistency-formal_occasions, value: commute, label: 通勤, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-formality-consistency-formal_occasions, value: wedding_guest, label: 婚礼宾客, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-formality-consistency-formal_occasions, value: business_menswear, label: 商务男装, ordinal: 5}
+  rule:
+    - {rule_id: RL-KP-styling_rule-formality-consistency, rule_type: hard_rule, applicable_when: "面试/会议/通勤/婚礼/商务男装", success_scenario: "上下件正式度同级顾客觉得得体", flip_scenario: "套装配休闲鞋/礼服感配破洞牛仔顾客说不出但退", alternative_boundary: "断码只能换同级正式度；混搭风可放行"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-formality-consistency, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 10 + 6.2, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-form01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"hard_rule","focus":"formality_alignment"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-form02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"商务区/婚礼区/周末休闲区分开"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-form03, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"教员工识别为什么这套不高级因为场合错位"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-formality-consistency, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-formality-consistency, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-display_guidance-KP-styling_rule-formality-consistency, runtime_method: display_guidance, input_types: [DisplayGuide], output_types: [DisplayPlan]}

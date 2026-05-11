@@ -1,0 +1,104 @@
+pack_id: KP-training_unit-faye-ctype-store-daily
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: brand_faye
+brand_overlay_kind: content_type_overlay
+state: drafted
+
+knowledge_assertion: >-
+  笛语 ctype_store_daily（门店日常真实内容）核心规格——
+  layer=traffic_acquisition · production_mode=llm_assist_human_edit · review_level=brand_review；
+  required_knowledge 三件套：BrandTone（保证口语轻快但不滑入促销广播）+
+  Persona(store_staff)（运行时优先绑定店长/导购一线视角）+ RoleProfile（店长/导购/陈列/收银动作 + 服务话术）；
+  output_structure 三段制：门店瞬间 80 字 → 现场判断 110 字 → 余味落点 70 字（总长 100-400）；
+  3 个 typical_hooks（今天店里最让我记住的不是卖了多少，是一个很小的瞬间 /
+  她进门时什么都没说，我大概就知道她先不该试那一排 /
+  门店日常真正难的从来不是把货摆出来，是把人接住）；
+  3 个 typical_ctas（路过门口进来试试不着急决定 / 带孩子来先让他上身走两步 /
+  不用被文案说服，来店里摸一下穿一下感觉更准）；
+  5 个 example_references（开门前 10 分钟 / 今天差点出什么事 / 熟客带孩子 / 雨天的店 / 店的声纹 10 个声音）；
+  ab_variants_hint：A 版空间氛围（声音 + 光线 + 秩序 + 体温） / B 版人物关系（熟客 + 孩子 + 店员判断 + 试衣间），
+  两版都不要把门店拍成促销货架扫拍；platform_targets：wechat_moments + douyin。
+  这是笛语门店日常内容的强制蓝图——任何 store_daily 内容生产必须先实例化本规格。
+
+scenario:
+  who:
+    primary_role: 笛语加盟门店主理 / 门店日常内容生成 AI agent
+    target_audience: 笛语加盟终端 / 笛语门店内容运营
+  when:
+    trigger: 门店日常内容（朋友圈 / 短视频配文 / 短图文）生产
+    context: 已绑定 brand_faye + 调用 ctype_store_daily 时
+  what:
+    action_type: content_type_blueprint
+    decision_or_action: |
+      生产 store_daily 内容时按 5 项强制：
+      (1) required_knowledge 三件套必须全部读取，Persona 优先 store_staff（不存在则回退 franchise_owner）；
+      (2) output_structure 必须从具体瞬间（开门 / 试衣 / 熟客带娃 / 补货 / 收工前整理）开场，
+          禁止"今天很忙"抽象起；
+      (3) 现场判断段必须显化"线下不可见的专业 + 人情分寸"；
+      (4) 余味落点不强行上价值——允许小情绪 / 熟客关系 / 孩子上身反馈 / 门店秩序感；
+      (5) ab_variants 强制分流：A 空间氛围 vs B 人物关系，禁止把门店拍成促销货架扫拍。
+  result:
+    success_pattern: >-
+      内容像店主在朋友圈随手记的一段，三段结构清晰、有具体瞬间 + 现场判断 + 真实余味；
+      观众读完感觉"这家店有体温"而非"又一条促销"。
+    flip_pattern: >-
+      文案变成"今天很忙 / 又来了一个客人"等抽象流水账；
+      或滑入"亲~冲就对了！"促销广播；ab_variants 没分流；缺现场判断细节。
+  underlying_mechanism: |
+    门店日常类内容（traffic_acquisition layer）真正的稀缺性是"线下温度 +
+    一线人情判断"，promotion 类内容平台已经过载；
+    output_structure 三段（瞬间 → 判断 → 余味）让内容不变成促销广播；
+    "不强行上价值"是这个 ContentType 的关键纪律。
+  boundary:
+    applicable_when: brand_layer=brand_faye + ContentType=ctype_store_daily
+    not_applicable_when: 其他 ContentType；产品深度测评 / 工艺溯源走 process_trace
+  alternative_path:
+    - 朋友圈版可压到 100-200 字；短视频配文版可保持 200-400 字
+    - 高客流节点（双 11 / 开学季）可加场景标签但不放宽促销话术约束
+
+evidence:
+  source_md: Q-brand-seeds/ctype_store_daily.md
+  source_anchor: §required_knowledge + §output_structure + §typical_hooks + §example_references + §ab_variants_hint
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    content_type_id: ctype_store_daily · layer: traffic_acquisition · production_mode: llm_assist_human_edit ·
+    output_structure 三段：门店瞬间 80 字 / 现场判断 110 字 / 余味落点 70 字 · length_range 100-400 ·
+    typical_hooks：今天店里最让我记住的，不是卖了多少，是一个很小的瞬间 /
+    她进门的时候什么都没说，我大概就知道她先不该试那一排 /
+    门店日常真正难的，从来不是把货摆出来，而是把人接住 ·
+    ab_variants_hint：A版偏'空间氛围'，B版偏'人物关系'；两版都不要把门店拍成促销货架扫拍 ·
+    platform_targets：wechat_moments + douyin。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: partial
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 3 partial: 笛语 ctype_store_daily 专属规格；
+    output_structure 三段（瞬间→判断→余味）和"不强行上价值"纪律可独立成 domain_general schema 元规则。
+
+brand_layer_review:
+  decision_suggestion: brand_faye
+  rationale_review: "W13.A 跨工作区引入 · 笛语 ContentType 绑定品牌调性 + 加盟终端 Persona；先落 needs_review"
+  faye_review_required: true
+  splittable_components:
+    - output_structure 三段 + 不强行上价值纪律可独立 styling_rule 包
+    - 3 typical_hooks 可独立 product_attribute 包
+    - ab_variants_hint 可独立 service_judgment 包
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-faye-ctype-store-daily, rule_type: content_type_blueprint, applicable_when: "brand_faye + ctype_store_daily 调用", success_scenario: "三段结构 + 具体瞬间 + 现场判断 + 真实余味", flip_scenario: "抽象流水账 / 促销广播 / AB 同质化", alternative_boundary: "朋友圈版可压短；高客流节点不放宽促销约束"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-faye-ctype-store-daily, source_md: Q-brand-seeds/ctype_store_daily.md, source_anchor: "§output_structure + §typical_hooks + §example_references + §ab_variants_hint", evidence_quote: "ctype_store_daily 三段制 + 3 hooks + 5 examples + AB 强制分流", source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

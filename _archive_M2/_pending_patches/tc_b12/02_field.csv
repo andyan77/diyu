@@ -1,0 +1,5 @@
+FD-COMPATIBLE_WITH-support,COMPATIBLE_WITH,support,enum,,,domain_general,KP-product_attribute-compatibility-edge-support-risk-reason-shell
+FD-COMPATIBLE_WITH-risk,COMPATIBLE_WITH,risk,enum,,,domain_general,KP-product_attribute-compatibility-edge-support-risk-reason-shell
+FD-COMPATIBLE_WITH-reason,COMPATIBLE_WITH,reason,string,,,domain_general,KP-product_attribute-compatibility-edge-support-risk-reason-shell
+FD-DerivedView-display_tier,PersonaContentTypePlatformDerivedView,display_tier,enum,,,domain_general,KP-product_attribute-compatibility-derived-view-combination-formula
+FD-DerivedView-risk_inherited,PersonaContentTypePlatformDerivedView,risk_inherited,enum,,,domain_general,KP-product_attribute-compatibility-derived-view-combination-formula

@@ -1,0 +1,1575 @@
+{
+  "version": "1.0",
+  "generated_by": "scripts/build_manifest.py",
+  "domain_skeleton": {
+    "path": "clean_output/domain_skeleton/domain_skeleton.yaml",
+    "sha256": "d307c837319b717a906cace0022239dc28cafdb9eeb65ed01dcf3d86bde17e62",
+    "bytes": 8109,
+    "lines": 207
+  },
+  "candidates": {
+    "domain_general": [
+      {
+        "path": "clean_output/candidates/domain_general/KP-craft_quality-brushing-napping-aging-speed.yaml",
+        "sha256": "4eb563ca8deef3a4dc11a4cf0ab1f1452c39c92ba3870e3302b96bb37fa9e856",
+        "bytes": 6147,
+        "lines": 97
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-craft_quality-dye-fastness-daily-risk.yaml",
+        "sha256": "debc016841987d1ce96827e57ee70151f7a64c6db299ef2c908fd493eaa96f28",
+        "bytes": 5852,
+        "lines": 94
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-craft_quality-fusing-lamination-silhouette-gate.yaml",
+        "sha256": "ebf65c8f9a3c9716532a6280a6617bb9a5fbadcc5957af706f53ca2fc2be695b",
+        "bytes": 6114,
+        "lines": 96
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-craft_quality-pleat-topstitch-pattern-match-care.yaml",
+        "sha256": "58fd9e29dab36caacae4c56339250ec9368b113633b0ef47cc16a9cf635cd44d",
+        "bytes": 6039,
+        "lines": 97
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-craft_quality-preshrink-wash-set-after-sale-front.yaml",
+        "sha256": "a340e0bcc8185fc24ccee1674bf615a693a10140b94e0796b33151a4011a507c",
+        "bytes": 5779,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-craft_quality-sewing-stitch-pucker-near-eye.yaml",
+        "sha256": "06f7096b80c399ff03f5ef21117d6542abc2f59900f0f68b72fd9089f60b57fd",
+        "bytes": 5912,
+        "lines": 94
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-craft_quality-store-risk-discipline-evidence-first.yaml",
+        "sha256": "b8885efe97cd6f0f4baab78284b1bfeed4e68fa2cc31b194dd82a7965650aadd",
+        "bytes": 8543,
+        "lines": 113
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-display_rule-attribute-driven-display.yaml",
+        "sha256": "5a3a6dd336a910c67250b007fb0a2de4d65c1722356392e4eaf5bd9df6ad179e",
+        "bytes": 6014,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-display_rule-display-first-then-speak.yaml",
+        "sha256": "a1443a096aa5eb90fd72a19e81b1e5a3eab63a2cbf3c3044a74dabd5caab3566",
+        "bytes": 3647,
+        "lines": 76
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-display_rule-folded-display-purpose.yaml",
+        "sha256": "d792be0d8819206980d9fcfdc6a79b71519d00787bfddeb7878a3d676d577897",
+        "bytes": 5627,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-display_rule-front-hanging-purpose.yaml",
+        "sha256": "c3354029846b920607513da6ff39351961047437576028876095befcde740355",
+        "bytes": 4975,
+        "lines": 80
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-display_rule-full-look-no-broken-size.yaml",
+        "sha256": "75651feb654b6edfa54314a5bce62449291a21c755135641bdb07c5c2c5fe14e",
+        "bytes": 8303,
+        "lines": 111
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-display_rule-mannequin-display-purpose.yaml",
+        "sha256": "1851ff4788de6a00bbcd3412a42fd94b442e31546352e8f73183c12f26c21bc6",
+        "bytes": 5007,
+        "lines": 79
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-display_rule-side-hanging-purpose.yaml",
+        "sha256": "31881d3165e234ed1427be13e925cb7eefdcb62a74392e5210ec3282a8d854f3",
+        "bytes": 5155,
+        "lines": 81
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-display_rule-window-display-purpose.yaml",
+        "sha256": "e0504cf14fce6b269b6f729b941652e574c252ded395454d6bfaa4b726629d1c",
+        "bytes": 5306,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-chiffon-organza-layering-tool.yaml",
+        "sha256": "bda129784f37ca44b4f8bacfdf54837d334c45ad5484007bf1895f1f5c60fbed",
+        "bytes": 5989,
+        "lines": 95
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-composition-only-no-scenario-bound.yaml",
+        "sha256": "8be96cc841f6774198a3614a6425df8963730ac8241baddcbae05e2efefd417d",
+        "bytes": 5886,
+        "lines": 94
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-cotton-knit-familiar-trap.yaml",
+        "sha256": "15d40d799304ac7cbd8d3ce1a0d1d4999f4b375c1845c4c8caf663a0336bd263",
+        "bytes": 6481,
+        "lines": 95
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-denim-twill-mirror-not-truth.yaml",
+        "sha256": "68ed2ff7547d77add1d9e84860cd70011b82fa2903a60dea5da12d0a8c0ba1b9",
+        "bytes": 6226,
+        "lines": 95
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-gloss-not-equal-luxe.yaml",
+        "sha256": "562b7fcfaf7719418369c78498e24e815511098d5c2ff67dab4fc41a1ad618ec",
+        "bytes": 5582,
+        "lines": 93
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-heavy-not-equal-quality.yaml",
+        "sha256": "9fd922ff6446bca67422558de5d38878fa12f93369efe2197d2ce5583a44c33f",
+        "bytes": 5157,
+        "lines": 88
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-linen-natural-creases.yaml",
+        "sha256": "f4bcfebc531cc88d0fc74822e5725def25e9e0cd67ee4513e3d8bc05acb7e179",
+        "bytes": 6524,
+        "lines": 101
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-polyester-nylon-functional-no-blanket.yaml",
+        "sha256": "5374558de137145c022119a431ceb47be226af9401ce318bbc866ed4523f29fc",
+        "bytes": 6480,
+        "lines": 96
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-pure-cotton-not-zero-risk.yaml",
+        "sha256": "8afc7a9f57c14c11fb4749c6890807ca37868cd35d8d9ec32d4984b068f85152",
+        "bytes": 5299,
+        "lines": 90
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-silk-acetate-satin-honest-fabric.yaml",
+        "sha256": "953ebf560b6ac7ba0ae7259af791f42c742d61fc120ac086f2c818c2caa0be6c",
+        "bytes": 6409,
+        "lines": 96
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-soft-not-equal-premium.yaml",
+        "sha256": "87c4cb5bbc09938f849e2bd6f723ed01e0df1b0bf3400fac8085d779af4a27cd",
+        "bytes": 4951,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-viscose-modal-tencel-mirror-win.yaml",
+        "sha256": "3d39e0757d46763820181821a16115d31b7407261bd3ecc04b6fe5f121929eac",
+        "bytes": 6298,
+        "lines": 95
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-wool-cashmere-care-claim-bound.yaml",
+        "sha256": "cd3d7f5ca75dd970afc3f84145ce42606ae8715509355bd10d1055f950c7c5eb",
+        "bytes": 6619,
+        "lines": 97
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-fabric_property-wrinkle-not-equal-low-grade.yaml",
+        "sha256": "03674ce470d637d593a53ec14ecbd518aa3b61ab41e6724a6c14ea1c11499960",
+        "bytes": 5227,
+        "lines": 88
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-can-rescue-scenarios.yaml",
+        "sha256": "6d4dfdcdd9b9dd6a3b49cec13ad6842a499c9485595c9bd260a5a5b78efc7e05",
+        "bytes": 3717,
+        "lines": 81
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-customer-priority-six-axes.yaml",
+        "sha256": "e4527863b2f44bdcb3a63dad1d287bc628b9b3bf835580c04a3b99f127e2e864",
+        "bytes": 6438,
+        "lines": 91
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-display-priority-five-axes.yaml",
+        "sha256": "7c6e761b672bcb305ebc892de7db087e8a315f0863ecc89ee323d0bb7973c072",
+        "bytes": 6096,
+        "lines": 91
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-hard-block-five-conditions.yaml",
+        "sha256": "b9cebb8141def2aa334ea400f90215949e75066276bc6e5ed680c7a6d4e97d12",
+        "bytes": 7248,
+        "lines": 97
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-match-result-output-shape.yaml",
+        "sha256": "70ce18aad8ebfe98c9a0a5ae08771372682225a4047606b7fc86cdb038fac15c",
+        "bytes": 7487,
+        "lines": 104
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-no-rescue-scenarios.yaml",
+        "sha256": "64c0544f339da3c0442cb76085b0e87757e524856df32e748e79875b51c09501",
+        "bytes": 3623,
+        "lines": 74
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-shallow-vs-deep-sensing.yaml",
+        "sha256": "720bb0c0b29b6658542540318386abd0822a1a0ec2edde783235819fdd10b976",
+        "bytes": 7974,
+        "lines": 103
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-soft-substitute-four-paths.yaml",
+        "sha256": "9248a572f5609d04543c88ca5ee8a759f05f7176152b360891752b1d4b4fab4f",
+        "bytes": 5863,
+        "lines": 89
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-state-catalog-six-states.yaml",
+        "sha256": "e3b313096e54cdc8069bf647e34d562b61947c43e1de2d89efa777ceb1fc1a9c",
+        "bytes": 9308,
+        "lines": 117
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-inventory_rescue-three-sentence-discipline.yaml",
+        "sha256": "5dba8fb9e7dc09306a5b124721dc1856166858ebb0db70950bf591881fefc19f",
+        "bytes": 6947,
+        "lines": 102
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-clothing-as-emotional-medium-stance.yaml",
+        "sha256": "cd6a236c801d8a3c6a3a21eab1e3c567f1ad3efdf68b93550d009e69b92b4c16",
+        "bytes": 4162,
+        "lines": 62
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-collection-cold-start-scope.yaml",
+        "sha256": "bd07c919973162473c82e1e1fd401b0dac9ae069f44406473d621729e1ab497c",
+        "bytes": 5769,
+        "lines": 88
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-compat-matrix-truth-source-layering.yaml",
+        "sha256": "8601664be505c5ab75fa751f4879522f00521a43f533a50ae6a55986e55f4094",
+        "bytes": 6389,
+        "lines": 90
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-compatibility-derived-view-combination-formula.yaml",
+        "sha256": "e3fac283980d7c3978016293c40f3160c3d57b39983cc2b9f0ae29254ded8244",
+        "bytes": 8508,
+        "lines": 109
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-compatibility-edge-support-risk-reason-shell.yaml",
+        "sha256": "1ff75ea02676dcb377d350c3ceca76717f8d07a19c177e677e0b35a0ca2a4ed2",
+        "bytes": 7976,
+        "lines": 104
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-compatibility-matrix-two-layer-truth-source.yaml",
+        "sha256": "5323c143f6762bd9bcf5b0f328e195dbe3f2ad101cafba4015ed5497691f82dc",
+        "bytes": 7154,
+        "lines": 96
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-compatible-with-edge-properties.yaml",
+        "sha256": "932e84132b8824955a924687097a821e887a7a6fff8f36e3117a68d53e01d5e8",
+        "bytes": 5823,
+        "lines": 84
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-behind-scenes.yaml",
+        "sha256": "02cd67a8a985fe9d5e7efb8267d8b5de73244585d9276021bd2a896edce639cd",
+        "bytes": 5929,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-daily-fragment.yaml",
+        "sha256": "609125c0023fb3a7c6d20db1cb076f76b9c928cfd9c3b160ffe1ce0302618d9d",
+        "bytes": 5624,
+        "lines": 87
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-emotion-expression.yaml",
+        "sha256": "3227a762f9cc9ffea287f58d107cd44f330fc5f6cfece3d873e56cd9631a58c5",
+        "bytes": 7280,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-founder-ip.yaml",
+        "sha256": "2a46e9c871b3a39f158d05f20e63d004fff47a07460d67c5f15322d128738db6",
+        "bytes": 6468,
+        "lines": 81
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-knowledge-sharing.yaml",
+        "sha256": "903a8df885df432596138dbe8c56148f2ce558a81c42fb6a6ae6823580445079",
+        "bytes": 5767,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-outfit-of-the-day.yaml",
+        "sha256": "2b9f2646395df1205e7d9b32b8fd056e8719b2f760526eb91ac4bc851bf6d23b",
+        "bytes": 5551,
+        "lines": 86
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-personal-vlog.yaml",
+        "sha256": "515d3e3c2e1a971767296a8831b0fabc7d2689352cb9bfd3a7766814dd75fd29",
+        "bytes": 5623,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-process-trace.yaml",
+        "sha256": "eb9b8f905b77cce39a276bb84b3c28a3cf170be5dd90bbb3aba24705e276bf5b",
+        "bytes": 5862,
+        "lines": 78
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-product-copy-general.yaml",
+        "sha256": "151e35945272eb384a436cd15b96b4cafa975fe3797ad05ff10ff0dfb2ea955e",
+        "bytes": 6852,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-product-journey.yaml",
+        "sha256": "3b06e1ae9e348a8a6b2ec0386667c4a14ca9592315e578fc83a2a01dede80314",
+        "bytes": 6152,
+        "lines": 80
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-product-review.yaml",
+        "sha256": "13e9ad251fa835d1812977e6b6338e906f5f49b9ff65bbfd7d9f9b2a44924b2c",
+        "bytes": 6694,
+        "lines": 88
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-role-work-vlog.yaml",
+        "sha256": "c8cae7a300abe46cbb72e1066412320ee9cb17446bdbe08b49d993a4b4a8814f",
+        "bytes": 5745,
+        "lines": 86
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-talent-showcase.yaml",
+        "sha256": "a826929dc536f2fc85b21e55a4d0bd22729aaf3bcdef4418c1279dc6e29de2cd",
+        "bytes": 5777,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-north-star-training-material.yaml",
+        "sha256": "9dfd4de2fdee6bbbe118a9d14cf26d5647077d059cebfee51bae8f47a32bbc38",
+        "bytes": 7503,
+        "lines": 94
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-content-type-three-tier-maturity.yaml",
+        "sha256": "b9a2f585b643384bc4bc23037c42293f38878526e56d46364342b87188006bd3",
+        "bytes": 3652,
+        "lines": 62
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-core-category-7-plus-3.yaml",
+        "sha256": "495bb86e4473c8809291a54199d656f0d9024a279e5f6437b28f56694473a9f2",
+        "bytes": 6160,
+        "lines": 95
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-decision-level-hard-vs-high.yaml",
+        "sha256": "4381860aea2665647c261816bce283b5072f637867780b57ee8bf6678e130c1a",
+        "bytes": 6096,
+        "lines": 93
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-display-only-fields.yaml",
+        "sha256": "c284c5ee051aa934255d2ae716189a6003d551a0aa48c0aea5249aaa60fcb3fc",
+        "bytes": 6226,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-engine-card-vs-play-card-shell.yaml",
+        "sha256": "c687e2138333308a2e1844f576a219e41ed1263cf0d236428d5aabf814249b2f",
+        "bytes": 6287,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-enterprise-narrative-six-section-shell.yaml",
+        "sha256": "1d7fade3b082cb967b0bee19ff8bbf7d6d4e8bd09211d76ff4f6faf0ad2eee2c",
+        "bytes": 5649,
+        "lines": 82
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-no-forced-merge.yaml",
+        "sha256": "6e990f01780bf5f8abab005f2a6a1e12abd193881cb5fe8bad9a1f9dcc5dbc01",
+        "bytes": 5182,
+        "lines": 90
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-pcg-five-voice-archetypes.yaml",
+        "sha256": "0c643ac9fd063a1e234d14e506e31d257fd824ebc9322d9bd5b44a8f860f5ed9",
+        "bytes": 6069,
+        "lines": 86
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-persona-field-fill-state.yaml",
+        "sha256": "61565a8b507f46b8feaafd7cdf0051f0aa0838781747838400b6ace4f6c7a692",
+        "bytes": 5312,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-persona-shell-not-equal-role.yaml",
+        "sha256": "a87ef3090ea9df315afe26c74e7c47474fb9fa923588f60fd68ff72e7a3d4bc9",
+        "bytes": 6957,
+        "lines": 96
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-persona-six-field-shell.yaml",
+        "sha256": "4e6659e22dc3036b4d4e9c3d15fdcb7dadfd5814ba1c55c561667332cb8db832",
+        "bytes": 6453,
+        "lines": 91
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-persona-three-shell-coverage.yaml",
+        "sha256": "8fceaa61559d456a72ff8072078cd631413d3cd73d1bbc878e4378a23dc02f76",
+        "bytes": 6764,
+        "lines": 97
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel.yaml",
+        "sha256": "a74f62d7af430e72ba7a74191ad1e8aaebfc650e5c7ccbb7e1ab9f8452b05779",
+        "bytes": 9123,
+        "lines": 103
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-play-card-scenario-tag-three-values.yaml",
+        "sha256": "8d0a56f173787192ba4eda71c5746462af50ddc0d897fb39e7c1b90e503419cb",
+        "bytes": 5881,
+        "lines": 82
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-play-card-tier-three-values.yaml",
+        "sha256": "9007f5fc39e0e1ac2289fd28227e79ec62260414fdc519c5792c9267626076c3",
+        "bytes": 5562,
+        "lines": 80
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-shared-6-decision-dims.yaml",
+        "sha256": "cc32c8cf8352b0da79855e08bb6b14fc570b1e5318f263a6efb0617b85c331d8",
+        "bytes": 5575,
+        "lines": 87
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-storyboard-30s-dual-decoding.yaml",
+        "sha256": "17ac1e7a009623e462619564af0ef2fa2e336a51a3e5f986b66ee37d869534d3",
+        "bytes": 6077,
+        "lines": 81
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-synonym-convergence.yaml",
+        "sha256": "a744839154be6a5b308951f370aedc0aea51b4811288b6f69e99d7bbac822d68",
+        "bytes": 6479,
+        "lines": 96
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-product_attribute-troop-facing-register-five-fields.yaml",
+        "sha256": "235b926b822338a6db9ec2f13fe76f71233d9b2c837b198d20b78967ba6209b8",
+        "bytes": 7037,
+        "lines": 87
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-budget-controlled.yaml",
+        "sha256": "6f22acca2927d8d557bb09069d08086ced95c6867e1ce267c9fb127b837f81de",
+        "bytes": 3612,
+        "lines": 72
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-comfort-sensitive-trigger.yaml",
+        "sha256": "55fda34095bfea0180da95029b0c5aa25f2c2ea72fb68a9c1254f3dc9bfa5f74",
+        "bytes": 7650,
+        "lines": 110
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-commute-mainstay.yaml",
+        "sha256": "42b6f855a23b5b96eceb7cea8994eba55fa8899e057a5a1c77a2acf35b35a4b6",
+        "bytes": 3517,
+        "lines": 71
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-derivation-formula-eight-row.yaml",
+        "sha256": "b8787a9524de8d620cdf43c1c6f4aac8690b81b5a9108343a78eae125769f362",
+        "bytes": 6168,
+        "lines": 89
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-derived-view-risk-inherits-from-source-edge.yaml",
+        "sha256": "60b7778c16c3281135044583cb6f44404ccc43bc10d6980c8ef2a7af968c7b52",
+        "bytes": 6586,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-frontline-cover-public-and-private.yaml",
+        "sha256": "f114fd068a526e7d9be559710e3f8820c0dc361cd8e2c1188296bbbf2d7073e3",
+        "bytes": 4474,
+        "lines": 76
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-functional-gap-fill.yaml",
+        "sha256": "c4dc1734e1f6e7142fd888a61bc389d168ae631ee69325774ac4be065069d1f7",
+        "bytes": 3509,
+        "lines": 72
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-greeting-master-principles.yaml",
+        "sha256": "827b500461d18e7d7ff4d186a8161be88a02999f36e7229b44b572019524ce73",
+        "bytes": 3457,
+        "lines": 72
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-must-ask-first.yaml",
+        "sha256": "b59616ad35cbfb5590b15814b2006de6d663922a8b957535084d20b36d6aa04c",
+        "bytes": 3701,
+        "lines": 81
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-new-item-cannot-style.yaml",
+        "sha256": "77cbf0d5d326de5837576a3fc895e90901b01220d5274ee5beaff3bf2a3db85a",
+        "bytes": 3599,
+        "lines": 72
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-platform-derivation-not-source.yaml",
+        "sha256": "7759c9521c32733f6a7ff6cdea5e6dd5b1e4ce10e9467a6477000d300deff1e9",
+        "bytes": 5738,
+        "lines": 86
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-private-outlet-needs-sales-associate-base.yaml",
+        "sha256": "d0de2bd86ffb8504a2bb2ef202e2d1f130c0edff851454b3badfef7715c66acd",
+        "bytes": 6571,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-product-review-concerns-clearance-on-spot.yaml",
+        "sha256": "76f13a29363b91332233af9743bf6ecfee835d73338c640871a6b0f374edc3a7",
+        "bytes": 7179,
+        "lines": 96
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-product-review-tactile-court-three-piece-compare.yaml",
+        "sha256": "d8eb7969a95cd7fde1a8ba2749fee83f21d927f9831e13b14307299753a5e797",
+        "bytes": 7271,
+        "lines": 98
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-ready-made-full-set.yaml",
+        "sha256": "1c4847a5dd9eb5ecddc2a76482255df2a21131b766f132174b38c53b923682a4",
+        "bytes": 3630,
+        "lines": 72
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-repeat-purchase-replenish.yaml",
+        "sha256": "08a0055ba5903b75e66974995d26025f516cacfe3be47e8a22c1e7d285c03931",
+        "bytes": 3678,
+        "lines": 72
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-second-third-set-blocker.yaml",
+        "sha256": "40e43ebeca0ca2e671272b13cf06d7ec6661d64afefcb5f59714d5502eed8087",
+        "bytes": 3762,
+        "lines": 78
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-shape-correction.yaml",
+        "sha256": "2eb994b1a6809bcfc9d85d656655a1bd1bd74facde5169930bb521a3272bb6ab",
+        "bytes": 3677,
+        "lines": 71
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-store-daily-three-required-elements.yaml",
+        "sha256": "32eef42c352749b31959ea2180c0a15511239470ab42390ce6dfd4028db542b5",
+        "bytes": 6457,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-urgent-full-look.yaml",
+        "sha256": "1b9203456c22ea26159b6bde47d44bc4f1c0e5ae5e0faf9fbe93a9a57b5e1e83",
+        "bytes": 3907,
+        "lines": 74
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-service_judgment-weekend-social.yaml",
+        "sha256": "72fae3f3842d6cd5b20c1c064e277fbcadaca8050375f678c1f35af1cd6082e7",
+        "bytes": 3477,
+        "lines": 71
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-behind-scenes-invisible-completion-cost.yaml",
+        "sha256": "15a68feefb9b25979223541792b1f72ecfe14d1a4918cfbd73bb000b24ad1873",
+        "bytes": 5818,
+        "lines": 87
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-behind-scenes-parallel-split-screen.yaml",
+        "sha256": "95fb70525df61665dee53462390986e18d0e17ea122b0474ecfeee9040bd7e87",
+        "bytes": 6366,
+        "lines": 91
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-behind-scenes-store-soundprint.yaml",
+        "sha256": "c8ff7081e11f310207d3bf17b3a73c13c0c0e4401084df38b5c8f35df0ea5053",
+        "bytes": 6518,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-color-echo.yaml",
+        "sha256": "7b9ab8389c1751f02972d106194246d18e95e37eaaf7dd1e8f33b6fd6689d27c",
+        "bytes": 5523,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-daily-fragment-fixed-corner-time-fold.yaml",
+        "sha256": "187b950c26c95b2de07927aa0c6bff4ca062748b82164bfdad7f6b41a5c3bef7",
+        "bytes": 6481,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-daily-fragment-no-face-traces.yaml",
+        "sha256": "b8a7b5dfc244d973202a24cffcd9edcf615a4e05eaea78a3b77214c5ea402498",
+        "bytes": 5689,
+        "lines": 87
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-daily-fragment-sensory-sort-not-time.yaml",
+        "sha256": "01e80f6ca5dc09814cfb56eda3683b7565201e44b908a4b30aa4f76a26daae40",
+        "bytes": 5907,
+        "lines": 89
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-daily-fragment-single-chair-time-fold.yaml",
+        "sha256": "5eb43041c14f533507178ac4009e6c80cba8fee1eba966a371bfcd2647ceedd3",
+        "bytes": 6204,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-emotion-expression-clothes-as-emotion-vessel.yaml",
+        "sha256": "fd977348b2e53651ccb2a1e0637c57571f05db6132ebc8299965b58790d80c7f",
+        "bytes": 6929,
+        "lines": 92
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-face-brightness.yaml",
+        "sha256": "40d12380d36b3f89424a700cb17d3a6237121443c12d4525aa4a270a65b22b85",
+        "bytes": 4976,
+        "lines": 82
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-formality-consistency.yaml",
+        "sha256": "a224787e1a37b8a422f17b526fe32e3b90cbd96d1272e58402f9273a91f85cbd",
+        "bytes": 5355,
+        "lines": 84
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-looks-good-but-unsellable.yaml",
+        "sha256": "6b18f27f964859c9b284281b9caf7b0182597c18c091f56968337a88afab1017",
+        "bytes": 7548,
+        "lines": 100
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-menswear-belt-shoe.yaml",
+        "sha256": "2c5f231e6568de2acfcc9b6d5c7a7524071d3607cc90d8af83cc87641b382565",
+        "bytes": 5417,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-neutral-plus-accent.yaml",
+        "sha256": "1ffbcc98db29e06045f540cfc78b2cff70c867b4b3908a941665ea2c3729d73e",
+        "bytes": 5764,
+        "lines": 86
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-old-sample-as-error-archive.yaml",
+        "sha256": "3286beeb3fa564e0a83a1c58f115861dfb6fd73e66f2234b56fad7d9938467ee",
+        "bytes": 6062,
+        "lines": 82
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-one-focus.yaml",
+        "sha256": "9e62001a60ab2ff866dacc1ef0a9cfca666904aaf76c003a13debb92911c1e9c",
+        "bytes": 4775,
+        "lines": 81
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-ootd-clothes-remember-today.yaml",
+        "sha256": "68c76e9cfc0667f6354f8c6db81ee434581ce1e8013f5c2fe0fc176a3ece831b",
+        "bytes": 6084,
+        "lines": 90
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-ootd-micro-suspense-decision-chain.yaml",
+        "sha256": "34bae4ab23c8607c5654d8b6d507cb099c3dff558c4595a3d893c44504864a52",
+        "bytes": 6623,
+        "lines": 95
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-ootd-route-fitness-not-display.yaml",
+        "sha256": "ea1b66a5219e51c681584c6c00b66591e815cd3b8fa7554501af7ea224a35d5e",
+        "bytes": 6808,
+        "lines": 94
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-pcg-moment-over-category.yaml",
+        "sha256": "f2998bdecb76733c4baa45c48ad55431a35fb5029e2195debcc905d487d760e7",
+        "bytes": 5286,
+        "lines": 78
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-premium-item-neutralization.yaml",
+        "sha256": "865bcc41bfcf5b5333246b60c5f563ab7d92aad8607e939422e5fc46359bffd9",
+        "bytes": 5914,
+        "lines": 86
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-process-trace-rejected-garment.yaml",
+        "sha256": "6d8a6a947a91614a75e5411da61d3751f3871efa9bde3972d21df4f55f88d16b",
+        "bytes": 5401,
+        "lines": 79
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-process-trace-single-hard-fake-step.yaml",
+        "sha256": "132cdbd3d03265c9097cc75f9b0243b9844abbd8ce4591193d7cd3dcbed4ac23",
+        "bytes": 5373,
+        "lines": 75
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-product-journey-sample-version-tree.yaml",
+        "sha256": "4102ed47d7b3216cebe0cc328719eac3575bb79b6680b9c37563dcece870ee5e",
+        "bytes": 5371,
+        "lines": 78
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-product-journey-vs-process-trace-boundary.yaml",
+        "sha256": "45aaaa576832e4fafe6eed06edb6aaa7168f71eb58095de7106c081cd6e04e0b",
+        "bytes": 6342,
+        "lines": 90
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-proportion-split-37.yaml",
+        "sha256": "107b1ca49e6a6fba59eebcc6935377cf52389aabc113d48f84c22b20ba8fe2fb",
+        "bytes": 6885,
+        "lines": 98
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-silhouette-balance.yaml",
+        "sha256": "41f5c267fbecc2f6ee9fd736928507288fdea80fd7176ee75347d8c0b1fe8d19",
+        "bytes": 5669,
+        "lines": 86
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-single-problem-priority.yaml",
+        "sha256": "e676b7907e83d62d7f5dfb003a66dd93d5b73d9fa088d5fde0b11aec3c65052a",
+        "bytes": 5355,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-structure-drape.yaml",
+        "sha256": "44aeef149470cf06f85e914a1422e99da93436953a060cae6096733b4acaae6e",
+        "bytes": 5176,
+        "lines": 84
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-substitution-priority-ladder.yaml",
+        "sha256": "ad5f55d1958b2c418fedceb5143f490c851289b8a38487b173628ed05fc05160",
+        "bytes": 7308,
+        "lines": 96
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-talent-showcase-micro-skill-hundred-reps.yaml",
+        "sha256": "22b28d99a4c9b19c5fdc20c83448db5b51a88ef2b286d06d59c44cdb9d203d63",
+        "bytes": 5674,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-styling_rule-waistline-anchor.yaml",
+        "sha256": "1dc07b354aeaddca2c00bbaf5c2781e95732ac15001e480b75a790d08d1c8dae",
+        "bytes": 5495,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-ai-tone-banned-list-veto.yaml",
+        "sha256": "a184cdbad42bd3e593d61da1bb90f908a8006e898d1ac567c8b23c2ce1e79c70",
+        "bytes": 5128,
+        "lines": 78
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-auto-trigger-rules.yaml",
+        "sha256": "b6a8b2fd74b9091714c519ce7d48d168aec77d188c7a0e1d98b6b8dd5ba46900",
+        "bytes": 6024,
+        "lines": 94
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-behind-scenes-near-disaster-narrative.yaml",
+        "sha256": "7e97e8c31d748380c8af7160e6df3bc2d2a3cf443054ffd66b1c14a5139701cf",
+        "bytes": 6036,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-body-shape-objection-structure-points.yaml",
+        "sha256": "5326310c4e86a4438730a5b7231eca4199b869f676db1bdc175ca01c8df821c7",
+        "bytes": 6007,
+        "lines": 95
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-cold-start-role-priority-frontline.yaml",
+        "sha256": "c759775213e8b1a3726430eadca9aace6c0cef892b1f0104d3a35bf24bcafaa5",
+        "bytes": 8434,
+        "lines": 118
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-collect-failure-not-only-success.yaml",
+        "sha256": "12363702237ddc3e20d55cde2835cff9b5cf6a2919961813554ebb81a4bf65f6",
+        "bytes": 7514,
+        "lines": 108
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-collect-real-action-before-script.yaml",
+        "sha256": "5d35f8d058fcf585478fd86936fe2341f739aa1cdd29f2696e9a2a6f52dee01b",
+        "bytes": 7327,
+        "lines": 105
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-color-hesitation-disambiguation.yaml",
+        "sha256": "54c6be04e349b4d421a917985aba48f216a96f26f2eec47a19a9a5bdc08d3f07",
+        "bytes": 5923,
+        "lines": 98
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-concrete-action-over-adjective.yaml",
+        "sha256": "084672a6c86fc4fd96387cef71a20bf4c7aaa47786b87c6ecb8c73f2734c3ccb",
+        "bytes": 4318,
+        "lines": 63
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-content-template-saturation-anti-pattern.yaml",
+        "sha256": "16b3545f18c232cb33a62fedc53d6e91e6d253f677f8791501751982f8924d69",
+        "bytes": 4488,
+        "lines": 62
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-customer-first-look-judgment.yaml",
+        "sha256": "2b95c8d69e8d42b4ced2c5d723e2506f18ad3a99f6e8bd7b43697f0f74711e6f",
+        "bytes": 6354,
+        "lines": 98
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-designer-locate-defect-source.yaml",
+        "sha256": "5a70060f24b693c01e1a9306ce9a65ae6a6e4bb2ba0afbd359edbe1622d7da07",
+        "bytes": 4539,
+        "lines": 79
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-emotion-expression-9-ai-tone-banlist.yaml",
+        "sha256": "33cf5108963ed34d4f8cb7d559a2795b26efb81a97edf8e482dcd956af32a84e",
+        "bytes": 8054,
+        "lines": 91
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-emotion-expression-truth-3-questions-prepublish.yaml",
+        "sha256": "927d5067ed7a181925d1eeb957c59281f18efb9d35a27ee099437a560cb136da",
+        "bytes": 7277,
+        "lines": 87
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-engine-vs-play-by-cross-ct-test.yaml",
+        "sha256": "9365d4b5b1c6abf84a0764dc99bbfef18296245fa6f73348e19e76dce68082a7",
+        "bytes": 5803,
+        "lines": 78
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-enterprise-narrative-anti-ai-tone.yaml",
+        "sha256": "8f52ecbd0514a703a9cf35d244670f9647066964d517ab4906300f67db553f93",
+        "bytes": 5308,
+        "lines": 76
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-enterprise-narrative-north-star-first.yaml",
+        "sha256": "4f7d16b06ab7786eac3e9b920ee2e95cb2f6d10caa20dee9f107f2535d4e03b7",
+        "bytes": 4946,
+        "lines": 74
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-enterprise-narrative-object-witness-over-talking-head.yaml",
+        "sha256": "cf2f4a6c5ae3d8a23cf3276ab81d56ef7cf2fb30ea97c5c5ffc982170cdcf2bb",
+        "bytes": 5476,
+        "lines": 75
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-error-first-then-correct-replay.yaml",
+        "sha256": "d0133d4d7094d834dca1cbc0ff4c06fc114ee84da67c8adc34973ff3437d9f25",
+        "bytes": 6331,
+        "lines": 88
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-event-documentary-failure-perspective.yaml",
+        "sha256": "ff935a377cb36cde99abe5e020f0e02ffc68bdf86595605a236034bcdf00186b",
+        "bytes": 6122,
+        "lines": 80
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-event-documentary-long-term-tier-discipline.yaml",
+        "sha256": "98ad5c6486029db2b7668b85f49194a521561e242251985ca0c3bdd6df06491f",
+        "bytes": 6778,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-evidence-shape-four-types.yaml",
+        "sha256": "18badca9895e4045cc654ebb33a3cca71f885ab6507fccc6e001016c66c83c74",
+        "bytes": 7269,
+        "lines": 110
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-fabric-touch-before-spec.yaml",
+        "sha256": "e3c39dc36418ba2795c3c15e5e08b4f81009e3a8e59e9035390428f987983aba",
+        "bytes": 5379,
+        "lines": 93
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-founder-profile-brand-unique-layer.yaml",
+        "sha256": "6764e3c7a6bac0da2b7cc46517ad0ee99d4eed476a8d2bde82bd9cef44db1ce3",
+        "bytes": 6953,
+        "lines": 97
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-founder-profile-soft-use-no-rename.yaml",
+        "sha256": "c817bc581ed37df8357adbb515a58e28283db2b0dcd9607446b9de95c7c6cc85",
+        "bytes": 6560,
+        "lines": 97
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-greeting-format-lock.yaml",
+        "sha256": "bee4e74813fc676209e7f63f0f1986eb10c3ad1543d75b545e0b079589518bbe",
+        "bytes": 3987,
+        "lines": 81
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-grounding-over-polish-default.yaml",
+        "sha256": "8dd1db49cf3b05dfc02f02228db27927ec95dbe17931314f232b4f78b6c9d645",
+        "bytes": 5353,
+        "lines": 79
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-humor-content-brand-tone-gate-for-puppetry.yaml",
+        "sha256": "9cc21131f8581fb271f97aeb0997dd0fa44d8036f6c5b75e022a7c5f53abf082",
+        "bytes": 7152,
+        "lines": 88
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-humor-content-clothing-as-persona-switch.yaml",
+        "sha256": "730a5008ebb798f4f1f0adaf1b16522b363d26192b7896dd37ea6274e240dcd4",
+        "bytes": 5962,
+        "lines": 80
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-knowledge-not-teacher-but-event.yaml",
+        "sha256": "fde868e2a5d913024047e4759ce7ebf427b48be85e493e5f86ad9a2ad44374e8",
+        "bytes": 5305,
+        "lines": 76
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-kuleshov-context-driven-emotion-edit.yaml",
+        "sha256": "80517395d1d1ae7bce76cda00ab3b21bf0c8d825fa2f82d8c46570e5e70eba47",
+        "bytes": 3828,
+        "lines": 63
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-lifestyle-expression-old-defines-premium.yaml",
+        "sha256": "9a725558a8222ab8d0b6a9ebb5e6b9f819800b6e7f4de9f7cfafaabf6598e5f1",
+        "bytes": 6367,
+        "lines": 82
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-lifestyle-expression-values-via-rejection.yaml",
+        "sha256": "5a88c12214ada633fc233bdaf9ce5d1bfb4e8e406e805a298b5e84a107f0efb8",
+        "bytes": 6588,
+        "lines": 85
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-merch-director-stylable-not-sellable.yaml",
+        "sha256": "77fbd4dce5532648da34aa585d8b726ec310e91c5b533f2436318fdcf6601f67",
+        "bytes": 4853,
+        "lines": 79
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-microlearning-not-long-course.yaml",
+        "sha256": "ad84f7d5d8429247472b2585e8377918592a83ce869b03c61bc9c94cbad6bbe0",
+        "bytes": 6506,
+        "lines": 100
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-objection-clearing-over-selling-points.yaml",
+        "sha256": "32c0773c8e4ce1ec42aaabec7f252e7ff14a299bd3e69acb0e6ba8173f5f7f1a",
+        "bytes": 4353,
+        "lines": 63
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-on-floor-four-layer-assessment.yaml",
+        "sha256": "f7546ed86518eedf4152c49581e7b5db9348422bf5993a689c483977a4f8c8ee",
+        "bytes": 6486,
+        "lines": 100
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-ootd-anti-hard-ad-discipline.yaml",
+        "sha256": "924b13bd7db24248f0ad6edeb8a56ff47752e90b70324e24451219ab22358ffd",
+        "bytes": 5777,
+        "lines": 83
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-persona-anti-pattern-checklist.yaml",
+        "sha256": "dadca327c964e6853795c862dec43f4e04295d41430a267b84094c75c6e6303a",
+        "bytes": 6794,
+        "lines": 98
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-persona-vs-roleprofile-layering.yaml",
+        "sha256": "e9f6668bd88b80f8177fb20b0ea976c8cdc85a92a1a6e4cf0c174dc468ea7046",
+        "bytes": 6370,
+        "lines": 94
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-priority-by-impact-frequency-trust.yaml",
+        "sha256": "5cff15c0c401a744e957e3892313d77ef31e5d6bfde4fa9edd70238df1074487",
+        "bytes": 7419,
+        "lines": 102
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-process-trace-stop-the-bad-one-builds-trust.yaml",
+        "sha256": "9ac16c6c74ba9e6ee747fc93119a75e8821443bdc6153c498ab8979e3bf37748",
+        "bytes": 6366,
+        "lines": 82
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-product-review-anti-filter-pledge.yaml",
+        "sha256": "a26c776fd05d5cfa84639ef23f664630a7edf7e643f1cc0c9e105d808f938540",
+        "bytes": 5409,
+        "lines": 79
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-product-review-fabric-detective-spec-party.yaml",
+        "sha256": "750d2b63c704e06f9e4cb809cdfdd709449ea84e088d2c1a7f41400ed62e1e61",
+        "bytes": 7436,
+        "lines": 98
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-relational-witness-over-monologue.yaml",
+        "sha256": "e80f6f3137646db302d17172204d3ebad967d4a51e59a37824e38971fc2b60b5",
+        "bytes": 3942,
+        "lines": 63
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-role-binding-frontline-priority.yaml",
+        "sha256": "79cbd7f58b0f5d7da8f35effbd32d605bb55ed69b91a748d55afa390c6360368",
+        "bytes": 6866,
+        "lines": 101
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-role-material-five-kinds-minimum.yaml",
+        "sha256": "3b695c8041d120d378479e5feb8771fc9cfc94e6703e8e02cd38101e190b2c2a",
+        "bytes": 8844,
+        "lines": 118
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-role-profile-required-skills-binding.yaml",
+        "sha256": "a7577c4eab1a35ba757064c8d1e22e25f5725a7eab4107713ac9b15f19d1d0e2",
+        "bytes": 5525,
+        "lines": 89
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-roleprofile-not-speaking-shell.yaml",
+        "sha256": "bbb973527dc63ea59baa2a3649b5b142dd714c712215b3d847472af2f09fdaae",
+        "bytes": 6492,
+        "lines": 94
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-sample-worker-rework-as-judgment.yaml",
+        "sha256": "ba6200e8172878201196f38ca11e3beccd8965bdf9874e7e19278b978c859b24",
+        "bytes": 4465,
+        "lines": 79
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-shared-layer-registration-not-rewrite.yaml",
+        "sha256": "883c799c2d4a588b6d773b610d2f34dded1f803551321c668ee6752c52978df6",
+        "bytes": 5338,
+        "lines": 77
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-silence-as-pattern-interrupt.yaml",
+        "sha256": "b2a7f48cc7e3899423ff614fbe7b2abc52a9504d3e32fff2b530b4cf759823fd",
+        "bytes": 3961,
+        "lines": 63
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-sop-asmr-procedural-memory.yaml",
+        "sha256": "b891839ef08f1823aa60c840ca4f71ee3eca824c883fae22f891ed5671777ee5",
+        "bytes": 6014,
+        "lines": 87
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-standard-action-vs-judgment-skill.yaml",
+        "sha256": "e9c83f647791c40db125f30b8b9cad14f9c3a330213790ba88299a805321de0a",
+        "bytes": 7174,
+        "lines": 104
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-store-manager-rhythm-first.yaml",
+        "sha256": "0c5d15c0bebe50bb71f0e3e4ff8b68b7485c0f0100932a21b14df210c940bbd9",
+        "bytes": 4502,
+        "lines": 77
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-styling-error-top-priority-eight.yaml",
+        "sha256": "d6417ee85ff8f38524f19814fff0fac551d7ae06dbc6fde84254441707e8f2b4",
+        "bytes": 6777,
+        "lines": 99
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-substitution-honest-disclosure.yaml",
+        "sha256": "ad6cb1c227b008c39f20f86158851ea703fb6f3c3b70c7b6d949ab449ca44f45",
+        "bytes": 7478,
+        "lines": 107
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-tactile-cue-language-online-compensation.yaml",
+        "sha256": "7f3a9857b9e57a5313b26e217b6a5982a61044c1f10326a785f82f4b4b78cb85",
+        "bytes": 3736,
+        "lines": 63
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-talent-showcase-rescue-not-show-off.yaml",
+        "sha256": "12c59e2297ef36851ce853a9a42f6bc26a62efc08127a79733fad9175a24e0b9",
+        "bytes": 6296,
+        "lines": 82
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-try-on-guidance-one-main-one-backup.yaml",
+        "sha256": "fb66e81666756dee94ddf7b4520ccc2208e591ba1613a10bb77a6ed1edbfb25e",
+        "bytes": 4911,
+        "lines": 88
+      },
+      {
+        "path": "clean_output/candidates/domain_general/KP-training_unit-warehouse-supervisor-fact-not-promise.yaml",
+        "sha256": "fd2f08c9c7edeeca2854c1658523bc31f130a43c4840203bc9cd50ee977d3835",
+        "bytes": 4574,
+        "lines": 80
+      }
+    ],
+    "brand_faye": [],
+    "needs_review": [
+      {
+        "path": "clean_output/candidates/needs_review/KP-service_judgment-product-review-concerns-clearance-on-spot-faye-positioning.yaml",
+        "sha256": "930d9d0eef11b855ad0792d9f8064f57b4041e6ccf3f7ff32df191a3b39f4ffc",
+        "bytes": 3687,
+        "lines": 72
+      }
+    ]
+  },
+  "nine_tables": [
+    {
+      "path": "clean_output/nine_tables/01_object_type.csv",
+      "sha256": "00baf40377921806ff60c2292667cadc10d234507b6f73b94575dab303a5b8b6",
+      "bytes": 1934,
+      "lines": 19,
+      "data_rows": 18
+    },
+    {
+      "path": "clean_output/nine_tables/02_field.csv",
+      "sha256": "7d1fca3c1b0c90252fccb3d3076ea1ead39b0e40c7a5b6f59a8febb2019792c4",
+      "bytes": 15326,
+      "lines": 99,
+      "data_rows": 98
+    },
+    {
+      "path": "clean_output/nine_tables/03_semantic.csv",
+      "sha256": "9b54344ae0d21a45084289025f8063d48df3d038041abd5927bac31f9746d695",
+      "bytes": 48912,
+      "lines": 164,
+      "data_rows": 163
+    },
+    {
+      "path": "clean_output/nine_tables/04_value_set.csv",
+      "sha256": "36edbbcf4c9249e63c49bd22fe84869d44275096c18c3202bc7938be5e450684",
+      "bytes": 94696,
+      "lines": 605,
+      "data_rows": 604
+    },
+    {
+      "path": "clean_output/nine_tables/05_relation.csv",
+      "sha256": "8daf4b48f8e58a5f1f9e5c7185353bbdf50c4098cf80fe393a28d20b1164ac0b",
+      "bytes": 45579,
+      "lines": 174,
+      "data_rows": 173
+    },
+    {
+      "path": "clean_output/nine_tables/06_rule.csv",
+      "sha256": "809dfb7f793990e7e7ab9064a37a948a620943d57eab4ba4c8f1de4fc5c90cc9",
+      "bytes": 90163,
+      "lines": 195,
+      "data_rows": 194
+    },
+    {
+      "path": "clean_output/nine_tables/07_evidence.csv",
+      "sha256": "47185bdc566c1afd33ca3992cdd852640b60607342f9a95bb7e4484c05bdc15a",
+      "bytes": 136572,
+      "lines": 916,
+      "data_rows": 194
+    },
+    {
+      "path": "clean_output/nine_tables/08_lifecycle.csv",
+      "sha256": "7d75992d032b0817710b467052fcf13b5aa92cc46a2760edd6c696ec47fded51",
+      "bytes": 311,
+      "lines": 2,
+      "data_rows": 1
+    },
+    {
+      "path": "clean_output/nine_tables/09_call_mapping.csv",
+      "sha256": "4c04fac7cdc8640de312211f6b0ed6a8e24e47c04ce0291fc3eba1932ea9877a",
+      "bytes": 64476,
+      "lines": 244,
+      "data_rows": 243
+    }
+  ],
+  "audit": [
+    {
+      "path": "clean_output/audit/audit_status.json",
+      "sha256": "930ad202bceca2e2ace1b92e7d4b35dffbf9d484234f1adfddcade8213017e1a",
+      "bytes": 5192,
+      "lines": 162
+    },
+    {
+      "path": "clean_output/audit/blockers.md",
+      "sha256": "8617b7b90a7a3501c1a5ace44d3afd571c6acb7454990f5a82bd2943771e9202",
+      "bytes": 695,
+      "lines": 17
+    },
+    {
+      "path": "clean_output/audit/brand_layer_review_queue.csv",
+      "sha256": "022388e6d36a19ae9eb38554179072c42f7a7fd25a02632daae02c3a6fe27a6a",
+      "bytes": 457,
+      "lines": 2
+    },
+    {
+      "path": "clean_output/audit/coverage_report.md",
+      "sha256": "d30c8460805e839dd7dc989042e4376a5901965fd635e8e92bec288ee4213f56",
+      "bytes": 1368,
+      "lines": 34
+    },
+    {
+      "path": "clean_output/audit/coverage_status.json",
+      "sha256": "c5a01b537a879c9f06c9e768b07cad1173a03050a2fbdb87c4038b7474f5e7b6",
+      "bytes": 4759,
+      "lines": 106
+    },
+    {
+      "path": "clean_output/audit/extraction_log.csv",
+      "sha256": "0f4468fcce7a98d342ccbe7923e88af3d066c7c4768c6f05389a7e18c2362189",
+      "bytes": 19827,
+      "lines": 86
+    },
+    {
+      "path": "clean_output/audit/final_report.md",
+      "sha256": "3e16052ad6d95b0983c9fc2f50fe61d37639fc47bb91d9e0f5089e97ebcffd85",
+      "bytes": 9364,
+      "lines": 174
+    },
+    {
+      "path": "clean_output/audit/four_gate_results.csv",
+      "sha256": "3285a6193125d9738e477d7e21173705ad85919b746251dc0ed9d5e130abe4a3",
+      "bytes": 21341,
+      "lines": 195
+    },
+    {
+      "path": "clean_output/audit/gap_decision_recommendations.md",
+      "sha256": "58531da7843e9c5675077d5d779ba149b123ab5b1f565b6c5d61c192bdab9e9d",
+      "bytes": 9997,
+      "lines": 214
+    },
+    {
+      "path": "clean_output/audit/knowledge_point_coverage.csv",
+      "sha256": "e1b46697d5eafd80127f4a9239d80c1e58b0c1e9bf846253c964accd3d1dd357",
+      "bytes": 214412,
+      "lines": 1579
+    },
+    {
+      "path": "clean_output/audit/phase_a_review.md",
+      "sha256": "b223af9d3c3f15242456bdcbd72e32dce5a73e198ee1bd435955b32bac3ddf4a",
+      "bytes": 6831,
+      "lines": 114
+    },
+    {
+      "path": "clean_output/audit/schema_extension_register.csv",
+      "sha256": "55ef2d218e6d8abbe9a5bd745a7f2f72a0b369cf9d881f1f716eb3b50ad8f64d",
+      "bytes": 635,
+      "lines": 2
+    },
+    {
+      "path": "clean_output/audit/source_unit_inventory.csv",
+      "sha256": "ba4540886e62c9fd5b851ac014748034ac0de29d5648ada365422ed053dbb727",
+      "bytes": 471551,
+      "lines": 1579
+    },
+    {
+      "path": "clean_output/audit/task_cards.md",
+      "sha256": "5e057fb39c69034097b37d4eb06255fe9af67f6fca62c3c7bc7338d347b309e4",
+      "bytes": 26227,
+      "lines": 362
+    },
+    {
+      "path": "clean_output/audit/uncovered_md_register.md",
+      "sha256": "bf11a47f56f41e10eb4903d06be1f01760b6607fb05ba212dccdb48d4c69e950",
+      "bytes": 2587,
+      "lines": 37
+    }
+  ],
+  "unprocessable_register": [
+    {
+      "path": "clean_output/unprocessable_register/classification_taxonomy.md",
+      "sha256": "96e72ea985b34b9b1aa0288e92949beef27add56b853eaefc745b9d89f891fb8",
+      "bytes": 1425,
+      "lines": 19
+    },
+    {
+      "path": "clean_output/unprocessable_register/register.csv",
+      "sha256": "151337a0440b22d9d5323ab2389272938fe32a9a94dc3e4b6f29418730540e52",
+      "bytes": 35250,
+      "lines": 57
+    }
+  ],
+  "scripts": [
+    {
+      "path": "clean_output/scripts/build_manifest.py",
+      "sha256": "e148d042e793860b78256c8f6b505c8de5cc237aedd4eb090e7a6606d2f38ca1",
+      "bytes": 3989,
+      "lines": 112
+    },
+    {
+      "path": "clean_output/scripts/check_clean_output_purity.py",
+      "sha256": "9f334a7d3f38c229eb8c8891a8e556b80e95764302134509449cd1f8e3fb6c48",
+      "bytes": 3075,
+      "lines": 89
+    },
+    {
+      "path": "clean_output/scripts/check_constraint_demo.py",
+      "sha256": "09b4ebcc64d22915a30c8da404db7080455996c67a499a37d39cb58ebddd1683",
+      "bytes": 2718,
+      "lines": 97
+    },
+    {
+      "path": "clean_output/scripts/check_ddl_sync.py",
+      "sha256": "1a76c047db47fa943c1aba2c53cf74ee3419c7bd8e8bdb7821699edc5256ece3",
+      "bytes": 1959,
+      "lines": 62
+    },
+    {
+      "path": "clean_output/scripts/check_fk_constraints.py",
+      "sha256": "df0b3e31aefd846f944e24c08bbbddee16ac4fcce9d5dffa2c2dba20b7b3b139",
+      "bytes": 4418,
+      "lines": 104
+    },
+    {
+      "path": "clean_output/scripts/check_knowledge_point_coverage.py",
+      "sha256": "b35ba7a21a61cbaf3bfe79c84ede9690e0f04884ec9448059547ae1687ead0aa",
+      "bytes": 2196,
+      "lines": 56
+    },
+    {
+      "path": "clean_output/scripts/check_manifest_consistency.py",
+      "sha256": "ac951609efeda63a11002a2df164e75797e6a4cab6da33d49809a41b6f7daa6e",
+      "bytes": 2700,
+      "lines": 65
+    },
+    {
+      "path": "clean_output/scripts/classify_inference_level.py",
+      "sha256": "0baacf0fc86551b99302009e91ddb0fcf2217759d452ed6cbd8db7055bb80cab",
+      "bytes": 4468,
+      "lines": 131
+    },
+    {
+      "path": "clean_output/scripts/classify_uncovered_md.py",
+      "sha256": "5792ff6283d295301abfc5c1687e9b22d3f80ac347fcb9c53f8386217f51b72f",
+      "bytes": 6356,
+      "lines": 163
+    },
+    {
+      "path": "clean_output/scripts/compute_coverage_status.py",
+      "sha256": "b0ab06a25f791f20c0bb92b060ada5837e714ed535cf817d17df0df40c517e5f",
+      "bytes": 4220,
+      "lines": 112
+    },
+    {
+      "path": "clean_output/scripts/compute_knowledge_point_coverage.py",
+      "sha256": "f9595be6ad1ad4ffe98bb7c14e1072833c3194376987c771e0696c246d64691d",
+      "bytes": 12899,
+      "lines": 316
+    },
+    {
+      "path": "clean_output/scripts/csv_structure_check.py",
+      "sha256": "26e9c33b44d242dac8b7906731202c489baa2e666d72b277fc8d6f6cc1d24615",
+      "bytes": 3702,
+      "lines": 96
+    },
+    {
+      "path": "clean_output/scripts/fix_register_csv.py",
+      "sha256": "49896a43a8e0d8a47d73dbd19c29f55d3e728a7d6fb4972c87d82fe89c6373d1",
+      "bytes": 2063,
+      "lines": 61
+    },
+    {
+      "path": "clean_output/scripts/full_audit.py",
+      "sha256": "4f0376d0b212a1972821230f61c61ee97bfe065536555486123b3389f83010fb",
+      "bytes": 6346,
+      "lines": 157
+    },
+    {
+      "path": "clean_output/scripts/load_to_sqlite.py",
+      "sha256": "1db76c73d75e4bdae69ac7e27351d29ca72a64be6728922667944b5b5eed2ee2",
+      "bytes": 4967,
+      "lines": 139
+    },
+    {
+      "path": "clean_output/scripts/merge_patches.py",
+      "sha256": "d767276828d6103ae45fdeb1b804302a990b12437f4207d4151a75a1e9671297",
+      "bytes": 2815,
+      "lines": 73
+    },
+    {
+      "path": "clean_output/scripts/parse_md_source_units.py",
+      "sha256": "6c16aa537f4f75e2ec478d3d14cbdbcd5637d1747c93ceda2f33928e3a3e8623",
+      "bytes": 3889,
+      "lines": 124
+    },
+    {
+      "path": "clean_output/scripts/patch_b15_synth.py",
+      "sha256": "1da16724638cd97d48cd2bd76d8d6501f0f6eaaf851ac0b33ed60844618635c0",
+      "bytes": 5754,
+      "lines": 127
+    },
+    {
+      "path": "clean_output/scripts/patch_full.py",
+      "sha256": "45320d1a4c40d8b566cde6c181d8dd4bad2ba79d054e85c9a2aca45127d3fb2f",
+      "bytes": 7742,
+      "lines": 155
+    },
+    {
+      "path": "clean_output/scripts/render_coverage_report.py",
+      "sha256": "fcc807e90b87860d235fad6c88c6c916761ee424bb185a7ef25edbe2a5f9a915",
+      "bytes": 2061,
+      "lines": 60
+    },
+    {
+      "path": "clean_output/scripts/render_final_report.py",
+      "sha256": "ec30766414d64606f960642615e0bb796da45d46465a2b451634cd52d5cc229f",
+      "bytes": 12149,
+      "lines": 247
+    },
+    {
+      "path": "clean_output/scripts/repair_inference_level.py",
+      "sha256": "2650a94b486bc448b52f0afa8e7636ad681d1515df77ba9ac512bd5093442f29",
+      "bytes": 2649,
+      "lines": 69
+    },
+    {
+      "path": "clean_output/scripts/scan_brand_residue_in_csv.py",
+      "sha256": "3bfe96ff6058704114fdc7ad19adfce0210c60dd9186412edb334353cdbf121a",
+      "bytes": 2314,
+      "lines": 70
+    },
+    {
+      "path": "clean_output/scripts/scan_brand_v2.py",
+      "sha256": "0b4349c2d4acf72a8b66ea224988e8de10d84f9a963b11f50e98ec28507b0266",
+      "bytes": 2497,
+      "lines": 63
+    },
+    {
+      "path": "clean_output/scripts/scan_unprocessed_md.py",
+      "sha256": "e02b01fe8247e5bd8b0f144bffab5ddd68c07813abe2df9bf3b8f082e898e2b6",
+      "bytes": 3621,
+      "lines": 94
+    },
+    {
+      "path": "clean_output/scripts/sqlite_demo.py",
+      "sha256": "7fb9695056f51a00eb05cba18189eea2108447cb704baff24a60ff375ded162b",
+      "bytes": 6527,
+      "lines": 152
+    },
+    {
+      "path": "clean_output/scripts/stage4_repair.py",
+      "sha256": "68c4da2af4c128285fc311652b0f997dc8c0fca6ad1b8cd057dc40a2599b7d70",
+      "bytes": 10494,
+      "lines": 283
+    },
+    {
+      "path": "clean_output/scripts/stage5_repair.py",
+      "sha256": "557f28f8f7df717a0f2ba7220ed579dd370a140004f647a6ba7d81b1686f0aa9",
+      "bytes": 13863,
+      "lines": 313
+    },
+    {
+      "path": "clean_output/scripts/sync_task_cards_status.py",
+      "sha256": "169c72ea88d55a20e59fe2977344b9a7ac5361b58459230b3ea16318dbcb6385",
+      "bytes": 6599,
+      "lines": 159
+    },
+    {
+      "path": "clean_output/scripts/validate_csv_strict.py",
+      "sha256": "cd782210c8551971d23a98b04f8e244c4bb86378ae71d2b3113c8f055d09dfb0",
+      "bytes": 4677,
+      "lines": 136
+    },
+    {
+      "path": "clean_output/scripts/validate_register_enum.py",
+      "sha256": "c72748c881f8fc5d23141f59f37725d56fbda2acee9996193c87d35894647b09",
+      "bytes": 3295,
+      "lines": 94
+    },
+    {
+      "path": "clean_output/scripts/verify_anchor_quote_authenticity.py",
+      "sha256": "2e15636631d9719eb3d075998153833feaef5c690db12acc034463fc48b6a8c7",
+      "bytes": 8089,
+      "lines": 220
+    },
+    {
+      "path": "clean_output/scripts/verify_reverse_traceability.py",
+      "sha256": "526342ca78feeb2ab8fcf0f154af410f31680c9787ce3f92cd8017229d3a01da",
+      "bytes": 3527,
+      "lines": 88
+    },
+    {
+      "path": "clean_output/scripts/verify_yaml_csv_field_sync.py",
+      "sha256": "962b1d396320ba6bc6a46808e01c18e142f975d12a66a10f9e7f76f081e611fc",
+      "bytes": 4837,
+      "lines": 125
+    }
+  ],
+  "templates": [
+    {
+      "path": "clean_output/templates/candidate_pack.template.yaml",
+      "sha256": "3a454e1affc8813920bbacb1278937ad6bacca5784287ff8a4e6c72c289c4629",
+      "bytes": 979,
+      "lines": 57
+    }
+  ],
+  "summary": {
+    "candidate_count_total": 194,
+    "candidate_domain_general": 193,
+    "candidate_brand_faye": 0,
+    "candidate_needs_review": 1,
+    "nine_tables_data_rows_total": 1688,
+    "audit_files": 15,
+    "scripts_count": 34
+  }
+}

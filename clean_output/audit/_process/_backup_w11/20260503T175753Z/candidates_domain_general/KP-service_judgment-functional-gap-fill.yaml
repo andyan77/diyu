@@ -1,0 +1,72 @@
+pack_id: KP-service_judgment-functional-gap-fill
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"我家里都有，就缺一件外套/裤子/内搭"时，导购第一动作是先问她家里已有的主色、主版型、最常穿去哪里——
+  这类客不卡第二套，卡的是"利用率有没有讲透"；只要能补全衣柜缺口就能转，是断码最容易救的场景。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: functional_gap_fill（功能补位型）顾客
+  when:
+    trigger: 顾客原话"我家里都有，就缺一件外套/裤子/内搭"
+    context: 老客与高客单价客高频；顾客自带衣柜地图
+  what:
+    action_type: wardrobe_map_then_fill
+    decision_or_action: |
+      第一步：必须先问 3 件事——家里主色、主版型、最常穿去哪里。
+      第二步：直接锁定缺位的那一件，不要顺带推第二件主件。
+      第三步：核心话术是"这件能跟你已有的 X / Y 怎么搭"——讲透利用率才算成交。
+      第四步：库存断 → 在功能位上同色/同版型替即可，是最容易救的场景。
+  result:
+    success_pattern: 顾客带走那一件并主动说"刚好缺这个"，复购预期高
+    flip_pattern: 想顺手加推第二主件，顾客感到被推销，连原本想买的那件也搁置
+  underlying_mechanism: |
+      补位客的购买路径是"已有衣柜 → 缺口 → 唯一品"；
+      讲不透利用率 = 没把那件挂回她的衣柜地图，购买理由不成立；
+      顺手加推 = 把"补位"做成"扩张"，破坏信任。
+  boundary:
+    applicable_when: 顾客明确说出"缺什么"的接客
+    not_applicable_when: 顾客虽说"缺一件"但实际是想看新款 → 转 new_item_cannot_style
+  alternative_path:
+    - 缺位件断码 → 同功能位的同色/同版型替；可救率高
+    - 顾客对自己衣柜不熟 → 改走通勤主力或周末社交路径
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、6. functional_gap_fill + 三、2）断码可救 + 三、5）必须先问再推
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："我家里都有，就缺一件外套/裤子/内搭。"
+    店员第一反应：先问她家里已有的主色、主版型、最常穿去哪里。
+    最容易卡住：不是卡第二套，而是卡"利用率有没有讲透"。
+    库存不理想怎么转向：最容易救。因为买的是功能位，不是唯一款。只要能补全衣柜缺口，就能转。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 inventory_rescue 路径强联动。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用补位接客逻辑。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-functional-gap-fill}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-functional-gap-fill}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-functional-gap-fill}
+    - {mapping_id: CM-inventory_rescue-KP-service_judgment-functional-gap-fill}

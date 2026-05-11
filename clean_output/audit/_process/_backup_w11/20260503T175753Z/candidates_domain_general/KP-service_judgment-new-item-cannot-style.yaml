@@ -1,0 +1,72 @@
+pack_id: KP-service_judgment-new-item-cannot-style
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"这件我喜欢，但我不知道怎么搭"时，导购必须当场给两条路——一条保守穿法、一条出彩穿法，不能只给一条；
+  第一套只是"能搭"，第二套才决定"买回去会不会穿"——所以第二、三套要守的是"使用路径"而非"原配件"。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: new_item_cannot_style（新款不会搭型）顾客
+  when:
+    trigger: 顾客原话"这件我喜欢，但我不知道怎么搭"
+    context: 新款上市/单品强势接客；顾客被款式吸引但缺乏搭配方案
+  what:
+    action_type: dual_path_styling
+    decision_or_action: |
+      第一步：先陈列后开口——把这件已有的成套位指给她看。
+      第二步：当场必须给两条路：保守穿法（不出错）+ 出彩穿法（出片/有记忆点）。
+      第三步：第二套切到"使用路径"——上班怎么穿、周末怎么穿、换鞋怎么变。
+      第四步：原配件断码 → 守使用路径而非原配件，是可救场景。
+  result:
+    success_pattern: 顾客带走主件 + 至少 1 件搭配件，回家后真的穿出去
+    flip_pattern: 只给一条搭法或夸"百搭"，顾客带回去发现"不会穿"，变成衣柜挂件
+  underlying_mechanism: |
+      新款不会搭客的真正担忧是"买回家穿不出去"；
+      只给一条搭法 = 没解决担忧，单品被孤立；
+      原配件断守不住时改守使用路径 = 把"搭配"卖成"会用"。
+  boundary:
+    applicable_when: 新款/设计款单品接客
+    not_applicable_when: 顾客明确"我就买这件，搭配自己有" → 直接结账，不要硬塞配件
+  alternative_path:
+    - 出彩穿法库存断 → 退到保守穿法 + 1 件可换鞋说明，仍可成交
+    - 顾客对两条路都不接受 → 进 styling_rule 的"风格反转"边界，重新匹配气质
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、7. new_item_cannot_style + 三、2）断码可救 + 三、4）先陈列后开口
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："这件我喜欢，但我不知道怎么搭。"
+    店员第一反应：必须先给两条路：一条保守穿法，一条出彩穿法。
+    最容易卡住：第二套、第三套。第一套只是"能搭"，第二套才决定"买回去会不会穿"。
+    库存不理想怎么转向：可救。关键不是守住原配件，是守住使用路径：上班怎么穿，周末怎么穿，换鞋怎么变。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 styling_rule 路径联动。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用新款搭配判断。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-new-item-cannot-style}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-new-item-cannot-style}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-new-item-cannot-style}
+    - {mapping_id: CM-outfit_recommendation-KP-service_judgment-new-item-cannot-style}

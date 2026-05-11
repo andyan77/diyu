@@ -1,0 +1,97 @@
+pack_id: KP-fabric_property-silk-acetate-satin-honest-fabric
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  真丝 / 醋酸 / 缎面类不是"显贵万能牌"而是"对穿着状态最诚实"的面料：
+  光泽会同步放大体表痕迹、内衣边、肩带和灯光反射，必须前置勾丝、水痕、压痕、
+  静电、浅色透、局部发白、体表痕迹七类风险，并先判顾客对"痕迹暴露"的容忍度。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional（商品专业者）
+    target_audience: 询问真丝衬衫 / 醋酸缎裙 / 真丝礼服 / 精致通勤单品的顾客（特别是只看光泽不看暴露感的）
+  when:
+    trigger: 顾客被光泽吸引或导购把光泽当唯一卖点
+    context: 晚宴 / 轻礼服 / 精致通勤 / 拍摄表达；强光 / 灯光反射环境
+  what:
+    action_type: fabric_recommendation_with_tolerance_check
+    decision_or_action: |
+      推荐前先用一两句话判断顾客对腹部 / 内衣边 / 肩带 / 痕迹暴露的容忍度；
+      把"光泽诚实"前置说清；同步说明勾丝、水痕、压痕、静电、浅色透、局部发白、体表痕迹；
+      高暴露敏感顾客直接转向哑光仿缎或厚重缎面。
+  result:
+    success_pattern: |
+      顾客在被告知光泽放大效应后主动选择适合自己接受度的款式；
+      买了的顾客对水痕 / 压痕 / 体表痕迹有心理预期，无售后异议。
+    flip_pattern: |
+      只卖光泽不讲暴露感 → 顾客上身后发现腹部 / 内衣边明显或一沾水留痕 → 退换或差评；
+      未提示静电导致顾客在动作中起静电粘身，体验差。
+  underlying_mechanism: |
+      真丝纤维表面三角棱镜结构反光强，醋酸 / 涤纶缎也通过织法获得高反光；
+      高光泽材质在视觉上同步放大任何阴影 / 凸起 / 痕迹；
+      天然蛋白纤维耐摩擦低、易勾丝；动物纤维和合成纤维静电累积差异大。
+  boundary:
+    applicable_when: 真丝 / 醋酸 / 高光泽缎面单品；用于晚宴 / 轻礼服 / 精致通勤
+    not_applicable_when: |
+      哑光真丝 / 砂洗真丝 / 厚重重磅缎（光泽弱化）；
+      明确做艺术拍摄一次性穿着场景。
+  alternative_path:
+    - 如果顾客对体表痕迹敏感 → 转向哑光仿缎 / 砂洗真丝 / 厚重重磅
+    - 如果顾客怕勾丝 → 推荐高密织法或表面带肌理的款
+    - 如果顾客怕静电 → 推荐含真丝主成分而非涤纶缎
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 四、首批 FabricKnowledge 正式冻结清单 · 4. 真丝 / 醋酸 / 缎面类
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这类不是"显贵万能牌"，而是"对穿着状态很诚实"的面料。
+    最容易误导的是只卖光泽，不讲暴露感。
+    正式风险提示冻结为：勾丝、水痕、压痕、静电、浅色透、局部发白、体表痕迹明显；
+    这类面料推荐时必须同步判断顾客对"痕迹暴露"的容忍度。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"光泽诚实 + 七类风险 + 容忍度前置判断"三层语义。
+    Gate 3：通用真丝 / 缎面接客判断。
+    Gate 4：可被 outfit_recommendation / store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用纤维 + 反光物理特性，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-silk-acetate-satin-honest-fabric-honest_gloss, owner_field: risk_alerts, definition: "真丝 / 醋酸 / 缎面光泽会同步放大任何体表痕迹与状态，是诚实而非美化的面料"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-silk-acetate-satin-honest-fabric-risk_position, value: snag, label: 勾丝}
+    - {value_set_id: VS-KP-fabric_property-silk-acetate-satin-honest-fabric-risk_position, value: water_mark, label: 水痕}
+    - {value_set_id: VS-KP-fabric_property-silk-acetate-satin-honest-fabric-risk_position, value: press_crease, label: 压痕}
+    - {value_set_id: VS-KP-fabric_property-silk-acetate-satin-honest-fabric-risk_position, value: static_cling, label: 静电}
+    - {value_set_id: VS-KP-fabric_property-silk-acetate-satin-honest-fabric-risk_position, value: light_color_see_through, label: 浅色透}
+    - {value_set_id: VS-KP-fabric_property-silk-acetate-satin-honest-fabric-risk_position, value: spot_whitening, label: 局部发白}
+    - {value_set_id: VS-KP-fabric_property-silk-acetate-satin-honest-fabric-risk_position, value: body_mark_visible, label: 体表痕迹明显}
+  rule:
+    - {rule_id: RL-KP-fabric_property-silk-acetate-satin-honest-fabric, rule_type: fabric_recommendation_disclosure, applicable_when: "面料=真丝/醋酸/高光泽缎 且 顾客可能在意暴露感", success_scenario: "前置光泽放大效应+七类风险 → 顾客按容忍度选款无售后", flip_scenario: "只卖光泽不讲暴露感 → 上身发现腹部/内衣边明显 → 退换/差评", alternative_boundary: "怕暴露→哑光仿缎/砂洗真丝；怕勾丝→高密织法；怕静电→真丝主成分而非涤纶缎"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-silk-acetate-satin-honest-fabric, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 四、4. 真丝 / 醋酸 / 缎面类, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-silk-acetate-satin-honest-fabric, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-store_training-KP-fabric_property-silk-acetate-satin-honest-fabric, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

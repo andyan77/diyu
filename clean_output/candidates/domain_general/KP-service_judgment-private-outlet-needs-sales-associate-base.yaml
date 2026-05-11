@@ -1,0 +1,93 @@
+pack_id: KP-service_judgment-private-outlet-needs-sales-associate-base
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  对服装零售业务，门店导购的私域（朋友圈 / 1v1 沟通）是出货主战场——
+  styling_advisor（穿搭顾问）这套通用 Persona 必须挂接 sales_associate（导购）作为 RoleProfile 底座；
+  否则导购口吻在私域内容里没有岗位知识支撑，私域内容生成会空心，转化路径断裂。
+
+scenario:
+  who:
+    primary_role: 知识工程负责人 / 私域内容生成负责人
+    target_audience: 私域文案 Skill / 导购朋友圈生成 Prompt
+  when:
+    trigger: 注册 styling_advisor 通用 Persona / 设计私域内容生成链 / 评估"为什么导购朋友圈像 KOL 推文"
+    context: 冷启动私域出货搭建 / PrivateOutletChannel 启用 / 导购账号矩阵建设
+  what:
+    action_type: persona_roleprofile_binding_for_private_channel
+    decision_or_action: |
+      错误动作：styling_advisor Persona 不挂 sales_associate RoleProfile，
+        私域内容生成只用 Persona 通用口吻，没有真实导购岗位知识。
+      正确动作：styling_advisor → sales_associate 必挂；
+        私域内容生成入口校验该绑定存在，否则拒绝出稿。
+      为什么错：服装零售出货主路径是导购在私域里 1v1 沟通 + 朋友圈触达；
+        没有导购岗位的"试穿建议 / 顾客体感判断 / 转化沟通 / 私域出货承接"知识，
+        Persona 只能写出"通用穿搭 KOL"内容，与真实导购体感不一致，转化失败。
+      如何纠正：把 sales_associate 加入首批 7 个 RoleProfile 必选列表，
+        私域内容生成 Skill 链强校验该绑定。
+      掌握检查：抽样 10 条 styling_advisor 生成内容，能否识别出 sales_associate 的岗位动作或体感语言。
+  result:
+    success_pattern: |
+      私域内容含真实导购体感（试穿、推断、邀约），转化路径打通；
+      PrivateOutletChannel 上的内容能承接成交。
+    flip_pattern: |
+      styling_advisor 只用通用口吻 → 朋友圈像穿搭 KOL，缺导购体感 →
+      顾客感知"这是营销号不是我熟悉的导购" → 私域转化失败。
+  underlying_mechanism: |
+    私域转化依赖"被熟人导购推荐"的信任路径，需要内容里有具体岗位动作与体感词；
+    通用 Persona 提供口吻，岗位 RoleProfile 提供体感，缺一即转化断裂。
+  boundary:
+    applicable_when: 任何启用 PrivateOutletChannel 或导购账号矩阵的服装零售品牌
+    not_applicable_when: |
+      纯品牌官号公域内容 → 走品牌 Persona 链路，不强制挂 sales_associate；
+      非导购岗位的私域账号 → 按对应 RoleProfile 挂接（如店长私域走 store_operator + store_manager）。
+  alternative_path:
+    - 单店暂无导购账号 → 由 store_manager 兼任，临时绑 store_operator + store_manager，但需补 sales_associate 知识素材
+    - 多店导购矩阵 → 共享 sales_associate RoleProfile，按门店属地化 properties 微调
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md
+  source_anchor: 六、6.2 为什么 sales_associate 必须补进首批 7 个岗位
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    如果不补，styling_advisor（穿搭顾问）这套人设会缺岗位底座，导致它虽然名字成立，
+    但真实感和专业度来源不清。更重要的是：对服装零售业务，门店导购的朋友圈是出货主战场——
+    导购人设如果没有对应的岗位知识底座，私域内容生成就会空心。这在 Q3 新增 PrivateOutletChannel
+    （私域出口位）之后变得尤其致命。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐。Gate 2：rule + relation(styling_advisor-spoken_by_role-sales_associate, required=true)
+    + relation(Persona-compatible_with_content_type-private_channel) 可反推核心断言。
+    Gate 3：跨服装零售品牌通用。Gate 4：content_generation + private_channel 入口可调用校验。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装零售私域转化依赖导购岗位真实感，是行业通用规律，与笛语品牌专属表达无关。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+    - {type_id: OT-PrivateOutletChannel, type_name: PrivateOutletChannel, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-private-outlet-needs-sales-associate-base, rule_type: persona_roleprofile_binding_for_private_channel, applicable_when: "注册 styling_advisor 或设计私域内容生成链", success_scenario: "styling_advisor 必挂 sales_associate，私域内容含真实导购体感，转化打通", flip_scenario: "Persona 不挂 sales_associate，私域内容像 KOL，导购体感缺失 → 转化失败", alternative_boundary: "纯品牌官号公域不强制；非导购私域按对应 RoleProfile 挂接"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-private-outlet-needs-sales-associate-base, source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md, source_anchor: 六、6.2, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Persona-spoken_by_role-RoleProfile-styling-sales, source_type: Persona, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"persona_id":"styling_advisor","roleprofile_id":"sales_associate","required":true,"reason":"private_outlet_channel_dependency"}'}
+    - {relation_id: RE-Persona-compatible_with_content_type-PrivateOutletChannel-styling, source_type: Persona, target_type: PrivateOutletChannel, relation_kind: compatible_with_content_type, properties_json: '{"persona_id":"styling_advisor","scope":"private_channel_primary"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-service_judgment-private-outlet-needs-sales-associate-base, runtime_method: content_generation, input_types: ["Persona","RoleProfile","PrivateOutletChannel"], output_types: ["PrivateChannelContent"]}

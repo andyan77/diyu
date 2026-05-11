@@ -1,0 +1,86 @@
+pack_id: KP-training_unit-event-documentary-long-term-tier-discipline
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  event_documentary（事件纪实）允许"长期型"（long_term）玩法分级——单条成片仍 ≤ 4 小时收敛，但素材采集
+  阶段允许跨日（典型 3 天 / 72 小时时间压缩）。这是企业叙事类继 talent_showcase C3-7（100 天挑战）之后第 2 个
+  使用"单条合规但素材采集跨天"策略的 CT。规则：单条内容剪辑成品必须收敛到 4 小时标准；素材跨日不视为违反
+  实拍可行性基线；元数据必须显式标注"long_term"分级，进入默认调用池（与"brand_tier 品牌级"不同——后者跨地区
+  采集，超出个人创作基线，不进入默认调用池）。
+
+scenario:
+  who:
+    primary_role: 事件纪实创作者 / 1-3 人小团队
+    target_audience: event_documentary 中跨时间的事件（如开业筹备 72 小时、布展到撤展全程）
+  when:
+    trigger: 选用 C3-6 "72 小时时间压缩 / 定点延时一镜到底"等长期型玩法
+    context: event_documentary 单条 4 小时基线 vs 事件本身天然跨时间的张力
+  what:
+    action_type: long_term_tier_classification
+    decision_or_action: 标注玩法分级 = long_term；素材采集允许跨日 + 成片剪辑 ≤ 4 小时；进入默认调用池但元数据标"长期"
+  result:
+    success_pattern: 时间压缩叙事的真实跨度被保留 / 单条成片仍合规 / 元数据可让下游正确识别"需提前 N 天启动"
+    flip_pattern: 把跨日素材成片不收敛到 4 小时 → 突破创作基线 / 或把跨日采集偷换成"4 小时摆拍" → 失去时间压缩的真实纵深
+  underlying_mechanism: |
+      "实拍可行性基线"约束的是单条成片可执行性，不是素材采集时间。
+      区分"long_term"与"brand_tier"是为下游调用池的扇出决策——前者仍是个人创作基线内可执行（默认调用），
+      后者超出个人创作基线（仅品牌模式调用）。
+  boundary:
+    applicable_when: event_documentary C3 中标注"long_term"的玩法卡（如 C3-6）
+    not_applicable_when: brand_tier（品牌级）玩法——跨地区采集、超出个人创作基线，不在本规则覆盖
+  alternative_path:
+    - 创作者无法跨日采集 → 改用 C3-1 "开场前一分钟无人声" 或 C3-2 "散场叙事"等单条 4 小时内完成的玩法
+    - 长期型素材但成片大幅超 4 小时 → 拆为系列短片（每条 ≤ 4 小时），不许单条突破基线
+
+evidence:
+  source_md: Q2-内容类型种子/event_documentary-交付物-v0.1.md
+  source_anchor: 实拍可行性基线 + §C C3-6 玩法分级 long_term + 玩法卡备注（与 talent_showcase C3-7 的 long_term 同源）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    单条内容在 4 小时内，但整场事件可能跨越数日——素材采集阶段允许更长时间，剪辑成品必须收敛到单条 4 小时标准
+    🏷️ 玩法分级 (v0.2 M3 / J.1)：long_term（长期型）—— 素材采集需 3 天 / 单条成片 ≤ 4 小时 / 进入默认调用池 / 元数据标"长期"
+    这是企业叙事类里第 2 次使用"单条合规但素材采集跨天"的策略（第 1 次是 talent_showcase C3-7 的 100 天挑战）——归类为"长期积累型"
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 04_value_set（玩法分级 long_term / brand_tier 取值）+ 06_rule（单条 4 小时收敛 + 跨日采集允许）可反推核心语义。
+    Gate 3：任意品牌的事件纪实场景都需要此分级以处理跨时间事件 vs 单条基线的张力。
+    Gate 4：可被 content_generation 在玩法卡选择时消费——根据创作者可投入时间过滤 long_term 玩法。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 玩法分级元规则，不含具体笛语品牌调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-event-documentary-long-term-tier-discipline-tier, owner_field: play_card_tier, definition: "玩法分级：long_term（单条成片 ≤ 4 小时但素材采集跨日，默认调用池）vs brand_tier（跨地区采集，超个人基线，仅品牌模式）vs 普通（默认 4 小时内完成）"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-event-documentary-long-term-tier-discipline-tier, value: standard, label: 普通（4 小时内完成）, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-event-documentary-long-term-tier-discipline-tier, value: long_term, label: 长期型（成片 ≤ 4 小时素材跨日）, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-event-documentary-long-term-tier-discipline-tier, value: brand_tier, label: 品牌级（跨地区采集超基线）, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-training_unit-event-documentary-long-term-tier-discipline, rule_type: long_term_tier_compliance, applicable_when: "事件纪实玩法素材采集天然跨日（如 72 小时时间压缩 / 定点延时）", success_scenario: "成片 ≤ 4 小时 + 元数据标 long_term + 进默认调用池", flip_scenario: "成片不收敛 → 突破基线；或偷换为 4 小时摆拍 → 失去时间真实纵深", alternative_boundary: "创作者无法跨日 → 改用 C3-1/C3-2 等单条完成玩法；成片大幅超 4 小时 → 拆系列短片"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-event-documentary-long-term-tier-discipline, source_md: Q2-内容类型种子/event_documentary-交付物-v0.1.md, source_anchor: 实拍可行性基线 + §C C3-6 玩法分级 long_term, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-evd02, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"event_documentary","also_applies":["talent_showcase","process_trace"],"shared_pattern":"long_term_tier"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-event-documentary-long-term-tier-discipline, runtime_method: content_generation, input_types: '["PlayCard","CreatorCapacity"]', output_types: '["TierFilteredPlayCardList"]', governing_rules_json: '["RL-KP-training_unit-event-documentary-long-term-tier-discipline"]'}

@@ -1,0 +1,97 @@
+pack_id: KP-product_attribute-faye-brand-tone-core
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: brand_faye
+brand_overlay_kind: brand_voice
+state: drafted
+
+knowledge_assertion: >-
+  笛语（DIYU）品牌调性核心规则——五条人格标签（浪漫有诗意 / 有生活方式感 / 温柔但有主张 /
+  重真实表达 / 重审美与品质）锁定语气方向；三轴 tone_axis（formal_to_warm=72 /
+  rational_to_emotional=64 / restrained_to_passionate=58）量化语气取值；六条 allowed
+  情绪（温柔 / 放松 / 开心 / 天真感 / 真诚判断 / 有分寸的共鸣）与五条 forbidden 情绪
+  （廉价煽动 / 强刺激叫卖 / 空洞鸡血 / 攻击性贬低 / 盲目崇拜式鼓动）划定情绪边界；
+  intensity_cap 明确"可表达真实情绪与态度，但不得进入喊口号、强煽动、强推销状态"。
+  这是笛语 brand_layer=brand_faye 内容生成的最高语气约束，所有 founder_ip /
+  process_trace / store_daily 等 ContentType 在生产时都必须先过该约束才能落地。
+
+scenario:
+  who:
+    primary_role: 笛语品牌内容主理人 / 内容生成 prompt 组装者
+    target_audience: 所有 brand_layer=brand_faye 的 ContentType 内容创作者及 AI 生成器
+  when:
+    trigger: 任何笛语品牌内容（图文 / 视频文案 / 公众号 / 朋友圈）生成或审核
+    context: brand_faye 调用池启用时的语气合规检查节点
+  what:
+    action_type: brand_voice_constraint
+    decision_or_action: |
+      生成 / 审核内容时按本规则做 4 项强制检查：
+      (1) 5 条人格标签至少有 2 条在文风中体现；
+      (2) tone_axis 三轴均值不偏离基线 ±15；
+      (3) 6 条 allowed 情绪可用，5 条 forbidden 情绪 0 容忍；
+      (4) 5 条 forbidden_exaggerations（刷爆/闭眼入/冲就对了/全网都在抢/神仙单品）
+          与 8 条 forbidden_words（全网最低/超高性价比/低价/秒杀/疯抢/爆款神价/闭眼入/冲就对了）
+          全文不得出现。
+  result:
+    success_pattern: >-
+      盲听测试通过——3 段去品牌名文案 × 3 位老客户盲听，
+      ≥1 位明确认出（实测 2 recognized + 1 partial，已超出通过线）。
+      五条 signature_phrases 至少 1 条自然出现在文案中。
+    flip_pattern: >-
+      文案里出现"全网最低 / 闭眼入 / 神仙单品 / 冲就对了"等任一 forbidden 词；
+      或情绪滑入廉价煽动 / 强刺激叫卖 / 空洞鸡血 / 攻击性贬低 / 盲目崇拜；
+      或文案换品牌名后老客户完全识别不出（盲听测试 0 recognized）。
+  underlying_mechanism: |
+    笛语作为有生活方式感的童装品牌，目标顾客（杭州/深圳/成都的二胎妈妈类）对
+    "假诚恳"和"促销腔"的辨识阈值远低于普通品类；任何越界都会触发"这又是个普通商家"
+    的认知降级，无法形成品牌心智壁垒。所以语气约束不是修辞建议，是品牌生存线。
+  boundary:
+    applicable_when: brand_layer=brand_faye 内容生成 / 审核 / 训练
+    not_applicable_when: domain_general 行业通用知识不引用本约束
+  alternative_path:
+    - 笛语子品牌（如未来 brand_diyu_xxx）可基于本约束派生子集，但不可放宽 forbidden 项
+
+evidence:
+  source_md: Q-brand-seeds/brandtone_diyu_001.md
+  source_anchor: §core_voice + §emotional_boundary + §vocabulary + §sentence_patterns
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    笛语（DIYU）personality_tags：浪漫有诗意 / 有生活方式感 / 温柔但有主张 /
+    重真实表达 / 重审美与品质。tone_axis：formal_to_warm=72，rational_to_emotional=64，
+    restrained_to_passionate=58。forbidden_emotions：廉价煽动、强刺激叫卖、空洞鸡血、
+    攻击性贬低、盲目崇拜式鼓动。intensity_cap：可以表达真实情绪与态度，
+    但不得进入喊口号、强煽动、强推销的状态。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: partial
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 3 partial: 本 pack 是品牌专属调性约束，不要求跨品牌 generalizable。
+    其他品牌应基于自身 BrandTone 独立声明语气约束。
+
+brand_layer_review:
+  decision_suggestion: brand_faye
+  rationale_review: "W13.A 跨工作区引入 · 笛语品牌调性是核心 brand-only 内容（personality_tags + tone_axis + 情绪边界 + signature_phrases），按 CLAUDE.md §3.5 严格属于 brand_<name> 范畴；先落 needs_review 等 W7 reviewer 一次性审完 W13.A 全部 brand_faye 候选再分流"
+  faye_review_required: true
+  splittable_components:
+    - 5 personality_tags 可独立成一条 styling_rule（语气方向）
+    - 3 tone_axis 可成 product_attribute（量化字段壳）
+    - 5 forbidden_words + 5 forbidden_exaggerations 可成 service_judgment（违例检测）
+    - 5 signature_phrases 可成 product_attribute（品牌专属语料库）
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-product_attribute-faye-brand-tone-core, rule_type: brand_voice_constraint, applicable_when: "brand_layer=brand_faye 内容生成或审核", success_scenario: "盲听测试 ≥1 位老客户认出 + 5 forbidden 词 0 出现", flip_scenario: "出现任一 forbidden_words/exaggerations 或情绪越界", alternative_boundary: "笛语子品牌可派生但不放宽 forbidden 项"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-faye-brand-tone-core, source_md: Q-brand-seeds/brandtone_diyu_001.md, source_anchor: "§core_voice + §emotional_boundary + §vocabulary + §sentence_patterns", evidence_quote: "笛语 personality_tags 五条 + tone_axis 三轴 + forbidden_emotions 五条 + intensity_cap 不得进入喊口号、强煽动、强推销", source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

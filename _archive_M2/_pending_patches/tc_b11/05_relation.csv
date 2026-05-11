@@ -1,0 +1,2 @@
+relation_id,source_type,target_type,relation_kind,properties_json,brand_layer,source_pack_id
+RE-Persona-compatible_with_content_type-ContentType-tcb11a,Persona,ContentType,compatible_with_content_type,"{""required_props"":[""support"",""risk"",""reason""],""support_enum"":[""now"",""enhanced"",""custom"",""unsupported""],""risk_enum"":[""low"",""medium"",""high""]}",domain_general,KP-product_attribute-compatible-with-edge-properties

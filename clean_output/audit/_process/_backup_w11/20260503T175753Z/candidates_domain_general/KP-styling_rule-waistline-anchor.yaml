@@ -1,0 +1,85 @@
+pack_id: KP-styling_rule-waistline-anchor
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客诉求是显高、显瘦、显精神时，先找腰线——门店里大部分"不够精神"不是颜色错而是腰线没出来；
+  腹部敏感不愿强调腰部的顾客除外。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长
+    target_audience: 梨形 / H 型 / 小个子 / 产后体型 / 通勤客
+  when:
+    trigger: 顾客试镜后说"不够精神/没有型" / 试衣镜前讲解
+    context: 上下装层次与腰部呈现方式
+  what:
+    action_type: waistline_anchor_decision
+    decision_or_action: |
+      高腰下装、短外套、半塞衣角、腰带辅助；
+      高腰断码时用腰带 / 短外套 / 内外层次制造假腰线，不直接用无腰线替代。
+  result:
+    success_pattern: 腰线显出后顾客在镜前即说"精神多了"，连带购买配饰可能性提升。
+    flip_pattern: 长上衣全盖、低腰下装、宽松直筒裙无收束，顾客觉得"不够精神"。
+  underlying_mechanism: |
+      腰线是身材比例的视觉锚点；
+      没有锚点时整体重心垮塌，多数客群在镜前的第一感觉就是"垮、钝、显大"。
+  boundary:
+    applicable_when: 显高显瘦显精神诉求 / 试衣镜前演示
+    not_applicable_when: 腹部敏感、明确不想强调腰部的顾客
+  alternative_path:
+    - 高腰下装断码 → 腰带 / 短外套 / 内外层次制造假腰线
+    - 不能直接用无腰线下装等效替代
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 03 waistline_anchor_rule + 6.2 hard_rule
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    只要顾客诉求是显高、显瘦、显精神，先找腰线。
+    门店里大部分"不够精神"不是颜色错，是腰线没出来。
+    works_in：高腰下装、短外套、半塞衣角、腰带辅助。
+    fails_in：长上衣全盖、低腰下装、宽松直筒裙无收束。
+    高腰断码时，可用腰带 / 短外套 / 内外层次制造假腰线；不能直接用无腰线替代。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: G1/G2/G3/G4 全 pass；显高显瘦显精神诉求场景可调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 腰线锚点是基础搭配通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-waistline-anchor-anchor_concept, owner_field: rule_name, definition: "腰线锚点法：以腰线为身材比例视觉锚点，先解决锚点再调颜色与材质"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-waistline-anchor-works_in, value: high_waist_bottom, label: 高腰下装, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-waistline-anchor-works_in, value: short_outer, label: 短外套, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-waistline-anchor-works_in, value: half_tuck, label: 半塞衣角, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-waistline-anchor-works_in, value: belt_assist, label: 腰带辅助, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-waistline-anchor-fails_in, value: long_top_full_cover, label: 长上衣全盖, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-waistline-anchor-fails_in, value: low_rise_bottom, label: 低腰下装, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-waistline-anchor-fails_in, value: loose_straight_no_cinch, label: 宽松直筒裙无收束, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-styling_rule-waistline-anchor, rule_type: hard_rule, applicable_when: "显高/显瘦/显精神诉求 + 梨形/H型/小个子/产后/通勤", success_scenario: "腰线明确顾客觉得精神", flip_scenario: "长上衣全盖+低腰+无收束顾客觉得垮", alternative_boundary: "高腰断码用腰带/短外套/层次制假腰线；不能用无腰线等效替代"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-waistline-anchor, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 03 + 6.2, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-waist01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"hard_rule","focus":"waistline"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-waist02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"显高显瘦主题位必用"}'}
+    - {relation_id: RE-StylingRule-fits_customer_scenario-CustomerScenario-waist03, source_type: StylingRule, target_type: CustomerScenario, relation_kind: fits_customer_scenario, properties_json: '{"customer_types":["pear","h_shape","petite","postpartum","commuter"]}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-waistline-anchor, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-waistline-anchor, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

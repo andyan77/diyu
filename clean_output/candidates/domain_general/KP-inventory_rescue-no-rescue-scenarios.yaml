@@ -1,0 +1,75 @@
+pack_id: KP-inventory_rescue-no-rescue-scenarios
+granularity_layer: L1
+schema_version: domain_general
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  断码时不该硬救的接客场景正式冻结为 3 类——shape_correction / comfort_sensitive / urgent_full_look 中主件断码的情况；
+  这 3 类的共同点是"决策锚点是物理参数或信任本身"，关键参数错位无法用话术补救，硬救必伤复购信任，正确动作是直接告知"这单当前救不了"。
+
+scenario:
+  who:
+    primary_role: 门店导购 / 店长
+    target_audience: 3 类不可救场景中遇到关键断码的客
+  when:
+    trigger: shape_correction 关键版型/长度/落肩断 · comfort_sensitive 同类体感问题面料断 · urgent_full_look 主件断
+    context: 库存波动期；接客已进入到关键参数对齐节点
+  what:
+    action_type: rescue_refusal_disclosure
+    decision_or_action: |
+      第一步：识别是否在 3 类不救清单内。
+      第二步：直接坦诚告知顾客"这件/这套我们当前救不了"——不要换色硬推、不要气质硬转、不要换面料糊弄。
+      第三步：提供替代路径——预留下次到货 / 预约调货 / 换场合定位。
+      第四步：在系统中登记该次失救，作为补货优先级输入。
+  result:
+    success_pattern: 顾客感到被坦诚对待，复购信任不损甚至加强
+    flip_pattern: 用"还行""差不多"硬救，顾客试穿后落差大，当场流失或日后差评
+  underlying_mechanism: |
+      这 3 类的购买决策依赖具体物理参数（版型/落肩）、信任锚（体感）或时间锁（应急），
+      话术无法替代这些硬条件；硬救 = 用沟通技巧覆盖物理事实 = 信任崩塌。
+  boundary:
+    applicable_when: 3 类指定场景的关键参数断码
+    not_applicable_when: 不在清单内的场景（应走可救路径）；shape_correction 非关键参数仅细节断 → 仍可救
+  alternative_path:
+    - 改场合定位（应急客可降级到 weekend 或 commute 路径）
+    - 顾客愿意等 → 预留款 + 到货通知
+    - 顾客不愿等也不接受替代 → 礼貌结束接客，不留尴尬
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 三、3）断码时不该硬救的场景正式冻结
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    3）断码时不该硬救的场景，正式冻结为 3 类
+    shape_correction（显瘦修身型）
+    comfort_sensitive（体感敏感型）
+    urgent_full_look（应急一身型） 中主件断码的情况
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 InventoryState 联动；与 can-rescue 互为反向边界。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用不可救清单。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-no-rescue-scenarios}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-no-rescue-scenarios-no_rescue_scenarios}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-no-rescue-scenarios}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-no-rescue-scenarios}

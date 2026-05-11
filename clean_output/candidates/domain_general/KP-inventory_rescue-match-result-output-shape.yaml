@@ -1,0 +1,105 @@
+pack_id: KP-inventory_rescue-match-result-output-shape
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  库存匹配（inventory_match）每次运行必须输出 8 字段固定结构——match_status /
+  inventory_state_id / decision_mode / hard_block_reason / recommended_substitution_path /
+  display_permission_level / training_trigger_list / customer_explanation_hint；
+  其中 match_status 仅允许 4 种枚举（direct_match / soft_substitute / redirect_required /
+  hard_blocked），缺字段或自由式输出禁止下游消费。
+
+scenario:
+  who:
+    primary_role: 系统架构 / 后端开发 / 推荐引擎 / 陈列调度
+    target_audience: inventory_match runtime 的所有调用方（推荐 / 陈列 / 接客脚本 / 培训触发）
+  when:
+    trigger: 任意运行 inventory_match 调用之后
+    context: 上游需要根据匹配结果驱动具体动作（推荐 / 陈列 / 救场话术 / 培训）
+  what:
+    action_type: inventory_match_result_contract
+    decision_or_action: |
+      每次 inventory_match 输出必须含 8 字段：
+        1. match_status：枚举（direct_match / soft_substitute / redirect_required / hard_blocked）
+        2. inventory_state_id：6 类状态之一
+        3. decision_mode：rescue_mode / redirect_mode / give_up_mode
+        4. hard_block_reason：H1-H5 之一或 null
+        5. recommended_substitution_path：R1-R4 之一或 null
+        6. display_permission_level：D1-D4 之一
+        7. training_trigger_list：T1-T5 子集
+        8. customer_explanation_hint：自然语言话术片段（可空）
+      下游消费方按字段查询：推荐看 1+3+5；陈列看 1+6；接客脚本看 3+5+8；培训看 7。
+  result:
+    success_pattern: 8 字段齐全 → 下游推荐/陈列/接客/培训四链路无歧义可消费；问题可归因到具体字段
+    flip_pattern: 输出自由式或缺字段 → 推荐拿不到 substitution_path 硬猜；陈列拿不到 permission_level 误上主陈列；事故无法归因
+  underlying_mechanism: |
+      inventory_match 是库存判断的总闸口，下游所有动作都依赖它的输出；
+      固定字段契约 = 库存判断与下游动作之间的接口；
+      接口不固定 = 上下游耦合 + 责任不清 + 事故难追溯。
+  boundary:
+    applicable_when: 库存匹配 runtime 的所有输出场景
+    not_applicable_when: |
+      纯库存盘点（不是 match 动作）；
+      离线分析报表（用专用字段集，不走在线契约）。
+  alternative_path:
+    - 某字段无法计算（如深感知数据缺失）→ 显式填 unknown，不许跳过
+    - 某字段冲突（如 match_status=direct_match 但 hard_block_reason 非 null）→ 报错并以 hard_block_reason 为准
+    - 新业务字段提案 → 进 skeleton_gap_register 走升级提案，不私自扩
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/库存与替代包.md
+  source_anchor: 十一、库存匹配结果输出结构 inventory_match_result + 状态枚举建议
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    inventory_match_result（库存匹配结果）每次运行 inventory_match 至少输出：
+    match_status / inventory_state_id / decision_mode / hard_block_reason /
+    recommended_substitution_path / display_permission_level / training_trigger_list /
+    customer_explanation_hint
+    状态枚举建议：direct_match / soft_substitute / redirect_required / hard_blocked
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐；输出结构 + 字段契约 + 下游消费规则全具体。
+    Gate 2：从 9 表 field + value_set + call_mapping 可反推 8 字段契约与 4 状态枚举。
+    Gate 3：通用 schema 元规则，跨品牌通用契约层。
+    Gate 4：可被 inventory_rescue / outfit_recommendation / display_guidance / store_training 四路调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 Schema 元规则（调用映射纪律），属 §6.1.1 第 8 类。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+    - {type_id: OT-CallMapping, type_name: CallMapping, supertype: domain_object}
+  field:
+    - {field_id: FD-InventoryState-match_status, owner_type: InventoryState, field_name: match_status, data_type: enum}
+    - {field_id: FD-InventoryState-decision_mode, owner_type: InventoryState, field_name: decision_mode, data_type: enum}
+    - {field_id: FD-InventoryState-display_permission_level, owner_type: InventoryState, field_name: display_permission_level, data_type: enum}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-match-result-output-shape-match_status, value: direct_match, label: 直接成立, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-match-result-output-shape-match_status, value: soft_substitute, label: 软替代成立, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-match-result-output-shape-match_status, value: redirect_required, label: 必须转向, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-match-result-output-shape-match_status, value: hard_blocked, label: 硬拦截, ordinal: 4}
+    - {value_set_id: VS-KP-inventory_rescue-match-result-output-shape-display_permission, value: hero_display_allowed, label: 允许主陈列, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-match-result-output-shape-display_permission, value: support_display_only, label: 仅允许辅陈列, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-match-result-output-shape-display_permission, value: opportunity_display_only, label: 仅允许机会陈列, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-match-result-output-shape-display_permission, value: display_blocked, label: 禁止陈列, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-match-result-output-shape, rule_type: inventory_match_result_contract, applicable_when: "任意 inventory_match runtime 输出", success_scenario: "8 字段齐全四下游链路无歧义消费事故可归因", flip_scenario: "自由式或缺字段下游硬猜误动作事故难追", alternative_boundary: "字段无法计算→填 unknown 不跳；字段冲突→以 hard_block_reason 为准；新字段→走升级提案"}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-match-result-output-shape, source_md: Q7Q12-搭配陈列业务包/库存与替代包.md, source_anchor: 十一、inventory_match_result + 状态枚举, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-CallMapping-mapped_to_runtime-InventoryState-match01, source_type: CallMapping, target_type: InventoryState, relation_kind: mapped_to_runtime, properties_json: '{"runtime_method":"inventory_match","output_fields":["match_status","inventory_state_id","decision_mode","hard_block_reason","recommended_substitution_path","display_permission_level","training_trigger_list","customer_explanation_hint"]}'}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-match-result-output-shape, runtime_method: inventory_rescue, input_types: [Product, InventoryState, CustomerScenario], output_types: [InventoryMatchResult]}

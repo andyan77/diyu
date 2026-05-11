@@ -1,0 +1,82 @@
+pack_id: KP-styling_rule-old-sample-as-error-archive
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  服装行业 founder_ip 内容里"旧样衣 = 人格化错误档案"是一条独占叙事钩子——
+  老板把一件被压在柜底的旧样衣（皱领口 / 失败版型 / 过时颜色）拿出来，
+  像审问旧证物一样指出"这里当时为什么错、那时我为什么会做这个决定、这件衣服暴露了我哪个阶段的幼稚"。
+  服装行业是唯一能做这种"判断证据链"内容的行业（其他行业没有具象的失败物件），
+  所以 founder_ip 优先级别高于"决策日记 / 反向透明"——能拍旧样衣审判庭就不要先拍办公室口播。
+
+scenario:
+  who:
+    primary_role: founder_ip 玩法卡构建者 / AI 内容生成调度
+    target_audience: 服装行业创始人 / 主理人 / 老板个人 IP 内容
+  when:
+    trigger: 服装品牌建立 founder_ip 内容资产时，需在 16+ 张玩法卡中确定优先调用顺序
+    context: 服装行业 founder_ip 拥有"判断证据链"独占红利（C3-1 旧样衣 / C3-4 桌面证物 / C3-2 沉默日志），其他行业的 founder 内容很容易停在抽象理念
+  what:
+    action_type: founder_ip_signature_play_priority
+    decision_or_action: 把"旧样衣审判庭"作为服装行业 founder_ip 的签名玩法，优先级高于通用决策日记类玩法
+  result:
+    success_pattern: 老板把旧样衣摆到桌面 + 用手指出几处具体错误（缝线 / 颜色 / 版型）+ 配低声自述"心疼 3 块钱后来赔了 30 万" → 观众接住"这个品牌不是平地起高楼，而是从失败里磨出来的"——信任感远强于任何口号
+  result_flip: 老板讲创业初心 / 行业洞察 / 品牌使命，没有具体物件支撑 → 观众识别为"鸡汤口播"，反向伤害品牌
+  underlying_mechanism: |
+      "服装是唯一能做这种玩法的行业"——服装的旧样衣天然是物理化的"过去版本的尸检报告"，
+      代价/犹豫/审美变化都凝结在面料和针脚里。这是"判断证据链"内容的最高密度载体。
+  boundary:
+    applicable_when: 服装品牌做 founder_ip / 老板有可调出的旧样衣（成立 ≥ 6 个月通常都有）
+    not_applicable_when: 非服装行业 / 极新品牌完全没有失败样衣
+  alternative_path:
+    - 没有可拍旧样衣 → 退而用 C3-4 桌面证物剧场（7 个物件）或 C2-1 决策日记
+    - 旧样衣过于敏感（如涉及供应商纠纷）→ 用 C3-2 沉默创始人日志或 C3-5 门口角色切换
+
+evidence:
+  source_md: Q2-内容类型种子/founder_ip-交付物-v0.1.md
+  source_anchor: §C3-1 旧样衣审判庭 + §B9 隐喻 + §D 服装行业垂直机会"身体化判断的人"
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    C3-1 服装行业钩子：⭐⭐⭐⭐ 服装行业独占优势——服装是唯一能做这种玩法的行业，
+    因为"旧样衣"本身就是人格化错误档案。别的行业没有这种具象的"失败物件"。
+    备注：打破"老板一定要往前讲、往上讲、往成功讲"的套路——它往后看、往错看、往羞耻感里看。
+    B9：旧样衣 = 人格化错误档案 / 老板过去版本的尸检报告。
+    §D 三个未被开发角度 1："身体化判断的人"——他/她对衣服的下意识动作，本身就是人格内容。
+    别的行业的 founder 内容很容易停在抽象理念，服装行业却天然拥有可拍的证据链。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（签名玩法优先级）+ 05_relation（compatible_with_content_type=founder_ip）+ 07_evidence
+      可反推"服装 founder_ip 的旧样衣独占性 / 优先级 / 替代路径"三条核心语义。
+    Gate 3：跨品牌服装行业 founder_ip 的通用规则（不绑定笛语）。
+    Gate 4：可被 content_generation 调用作为 founder_ip 玩法选型时的优先级排序输入。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装行业 founder_ip 的通用叙事规则——任何服装品牌都可调用旧样衣审判庭，不绑定笛语
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-old-sample-as-error-archive-archive_metaphor, owner_field: founder_ip_signature_play, definition: "旧样衣 = 人格化错误档案 / 服装行业 founder_ip 独占叙事钩子；优先级高于通用决策日记"}
+  rule:
+    - {rule_id: RL-KP-styling_rule-old-sample-as-error-archive, rule_type: founder_ip_signature_play_priority, applicable_when: "服装品牌建立 founder_ip 内容资产 / 选玩法时", success_scenario: "用旧样衣具体物件做'判断证据链'叙事 → 信任感远强于口号", flip_scenario: "讲抽象创业初心/品牌使命无物件 → 鸡汤口播反向伤品牌", alternative_boundary: "没旧样衣 → 退用桌面证物或决策日记；过于敏感 → 用沉默日志或门口角色切换"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-old-sample-as-error-archive, source_md: Q2-内容类型种子/founder_ip-交付物-v0.1.md, source_anchor: §C3-1 + §B9 + §D, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-founder_ip-osa1, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"founder_ip","signature_play":"old_sample_courtroom"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-old-sample-as-error-archive, runtime_method: content_generation, input_types: "ContentType=founder_ip", output_types: "PlayCardPriority"}

@@ -1,0 +1,87 @@
+pack_id: KP-styling_rule-neutral-plus-accent
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客怕出错、第一次成交、主推通勤时，先用中性色（米白/灰/驼/藏青）打底，再加一处提气；
+  这是软建议——节庆/活动/潮流年轻客群可直接高饱和上身，但要先判断顾客承受力。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长（尤其新导购第一套安全盘）
+    target_audience: 通勤客 / 成熟客 / 初次尝试新色顾客
+  when:
+    trigger: 顾客明显怕出错 / 初次成交 / 通勤主推 / 安全成交墙布展
+    context: 整套主色调选择
+  what:
+    action_type: neutral_base_plus_accent
+    decision_or_action: |
+      米白 / 灰 / 驼 / 藏青打底 + 丝巾 / 鞋 / 包 / 内搭一处提气；
+      提气色断货时把提气点转移到配饰，不硬改主上装。
+  result:
+    success_pattern: 出错率低 / 复制率高 / 门店稳定成交，新导购也敢推。
+    flip_pattern: 全身都灰都米却没有材质层次，看着"性冷淡 + 没精神"，顾客说不出问题但不下单。
+  underlying_mechanism: |
+      中性色容错率高，提气点提供视觉记忆点；
+      没有材质层次时中性色就只剩"无聊"，需要靠提气点和材质起伏拉回。
+  boundary:
+    applicable_when: 通勤 / 怕出错顾客 / 安全成交盘 / 新导购默认推荐
+    not_applicable_when: 节庆 / 活动 / 多巴胺穿搭 / 潮流年轻客群（可反转，但要先判断顾客承受力）
+  alternative_path:
+    - 提气色断货 → 提气点转移到配饰，不硬改主上装
+    - 顾客承受力允许 → 直接高饱和上身（反转路径）
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 06 neutral_plus_accent_rule + 6.3 soft_rule + 6.4 反转三
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    顾客怕出错、第一次成交、主推通勤时，先用中性色打底，再加一处提气。
+    works_in：米白 / 灰 / 驼 / 藏青打底，丝巾 / 鞋 / 包 / 内搭提气。
+    fails_in：全身都灰、都米，但没有材质层次。
+    提气色断货，可把提气点转移到配饰，不要硬改主上装。
+    会反转的规则三：节庆、活动、潮流年轻客群允许高饱和、多彩直接上身；但要先判断顾客承受力。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；软规则定位清晰；新导购首套盘可直接调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 中性色+提气是基础配色通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-neutral-plus-accent-base_plus_accent, owner_field: rule_name, definition: "中性色打底法：中性色主色+一处提气点；属软建议级别"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-neutral-plus-accent-neutral_base, value: off_white, label: 米白, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-neutral-plus-accent-neutral_base, value: grey, label: 灰, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-neutral-plus-accent-neutral_base, value: camel, label: 驼, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-neutral-plus-accent-neutral_base, value: navy, label: 藏青, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-neutral-plus-accent-accent_position, value: scarf, label: 丝巾, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-neutral-plus-accent-accent_position, value: shoe, label: 鞋, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-neutral-plus-accent-accent_position, value: bag, label: 包, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-neutral-plus-accent-accent_position, value: inner_layer, label: 内搭, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-styling_rule-neutral-plus-accent, rule_type: soft_rule, applicable_when: "通勤/怕出错/初次成交/安全盘/新导购首推", success_scenario: "中性色打底+一处提气复制率高", flip_scenario: "全灰全米无材质层次显性冷淡", alternative_boundary: "节庆/潮流年轻客群可高饱和反转；提气断货优先换配饰"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-neutral-plus-accent, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 06 + 6.3 + 6.4 反转三, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-neut01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"soft_rule","focus":"color_safety"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-neut02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"安全成交墙"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-neut03, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"新导购第一套安全盘"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-neutral-plus-accent, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-neutral-plus-accent, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

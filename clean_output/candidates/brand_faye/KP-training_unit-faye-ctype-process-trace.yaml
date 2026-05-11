@@ -1,0 +1,100 @@
+pack_id: KP-training_unit-faye-ctype-process-trace
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: brand_faye
+brand_overlay_kind: content_type_overlay
+state: drafted
+
+knowledge_assertion: >-
+  笛语 ctype_process_trace（流程溯源叙事）核心规格——
+  layer=enterprise_narrative · production_mode=llm_assist_human_edit · review_level=compliance_review_required；
+  required_knowledge 三件套：BrandTone（确保不变成冷硬工业说明书）+
+  GlobalKnowledge（K-DATA-02 L4 产业链知识）+ RoleProfile（版师/工艺/质检/面料/供应链一线动作词）；
+  output_structure 三段制：起点场景 90 字（具体证据点/物件） → 过程细节 170 字 → 价值升华 110 字（总长 180-600）；
+  3 个 typical_hooks（这一步平时看不见但决定你是否放心 / 同样一条拉链贵和便宜的差别在这里 /
+  今天不带你看全流程，只带你看 5 个能核验的点）；
+  3 个 typical_ctas（不急下判断，先看证据 / 愿意看就继续拍后续环节 / 想让你知道价格落在哪里）；
+  5 个 example_references（一块面料从原料到上身 / 为什么这条裙子的拉链更贵 / 样衣版本树 1.0/2.0/3.0 /
+  工艺对比实验 / 被拦下的一件成衣）；
+  ab_variants_hint：A 版证据链（单据/标签/批次/抽检） / B 版感官化（微距纹理/面料声音/机器节奏/手部动作），
+  两版都要避免全流程流水账；platform_targets：xiaohongshu + douyin。
+  这是笛语流程溯源内容的强制蓝图——任何 process_trace 内容生产必须先实例化本规格。
+
+scenario:
+  who:
+    primary_role: 笛语品牌内容主理人 / 流程溯源类内容生成 AI agent
+    target_audience: 笛语团队内容运营 / 笛语 AI 生成器
+  when:
+    trigger: 流程溯源 / 工艺细节 / 溯源卡片 / 视频解说脚本生产
+    context: 已绑定 brand_faye + 调用 ctype_process_trace 时
+  what:
+    action_type: content_type_blueprint
+    decision_or_action: |
+      生产 process_trace 内容时按 5 项强制：
+      (1) required_knowledge 三件套必须全部读取，特别是 RoleProfile（版师/工艺/质检/面料/供应链）必须命中 ≥1；
+      (2) output_structure 三段必须从具体证据点（面料标签/样布/缝线/拉链/入库单）切入，禁止"我们工艺很好"抽象起；
+      (3) 价值升华段必须连接消费者关心的体验（亲肤 / 安全 / 耐穿 / 稳定 / 放心），不停在专业词堆叠；
+      (4) ab_variants 强制分流：A 证据链 vs B 感官化，禁止全流程流水账；
+      (5) review_level=compliance_review_required，不得绕过合规审。
+  result:
+    success_pattern: >-
+      内容从单一证据点切入 → 5 个以内关键证据节点 → 落到消费者可感知体验；
+      观众读完知道"价格落在了哪里"而非"工艺多好"。
+    flip_pattern: >-
+      文案变成完整流程流水账 / 堆砌专业术语 / 缺消费者体验落点；
+      或反向滑入"匠人精神散文"过度抒情；ab_variants 没分流写成同款。
+  underlying_mechanism: |
+    流程溯源类内容真正的稀缺性是"可核验证据点 + 一线岗位真实判断"，
+    把复杂流程压缩成少数关键证据点（5 个以内）反而比全流程展示更可信；
+    AB 强制分流避免同质化（证据链 vs 感官化）。
+  boundary:
+    applicable_when: brand_layer=brand_faye + ContentType=ctype_process_trace
+    not_applicable_when: 其他 ContentType；纯产品测评类不绑本规格
+  alternative_path:
+    - 短视频版可只取一段（起点场景 + 1 证据点 + 价值升华）做 30s 内容
+    - 长图文版可扩展到证据链多卡片轮播
+
+evidence:
+  source_md: Q-brand-seeds/ctype_process_trace.md
+  source_anchor: §required_knowledge + §output_structure + §typical_hooks + §example_references + §ab_variants_hint
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    content_type_id: ctype_process_trace · layer: enterprise_narrative · production_mode: llm_assist_human_edit ·
+    output_structure 三段：起点场景 90 字 / 过程细节 170 字 / 价值升华 110 字 · length_range 180-600 ·
+    typical_hooks：这一步平时看不见，但它决定了你拿到手里会不会放心 / 同样是一条拉链，贵和便宜的差别，
+    不在广告词里，在这里 / 我今天不带你看全流程，只带你看5个能核验的点 ·
+    ab_variants_hint：A版偏'证据链'，B版偏'感官化'，两版都要避免全流程流水账 ·
+    platform_targets：xiaohongshu + douyin。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: partial
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 3 partial: 笛语 ctype_process_trace 专属规格；
+    output_structure 三段制和"5 个以内可核验证据点"原则可独立成 domain_general schema 元规则。
+
+brand_layer_review:
+  decision_suggestion: brand_faye
+  rationale_review: "W13.A 跨工作区引入 · 笛语 ContentType 规格绑定品牌专属调性 + 一线岗位 Persona；先落 needs_review"
+  faye_review_required: true
+  splittable_components:
+    - output_structure 三段 + 5 证据点原则可独立 styling_rule 包
+    - 3 typical_hooks 可独立 product_attribute 包
+    - ab_variants_hint 可独立 service_judgment 包
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-faye-ctype-process-trace, rule_type: content_type_blueprint, applicable_when: "brand_faye + ctype_process_trace 调用", success_scenario: "证据点切入 + ≤5 节点 + 落消费者体验", flip_scenario: "流水账 / 术语堆砌 / 缺体验落点 / AB 同质化", alternative_boundary: "短视频版可压缩；长图文版可扩展轮播"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-faye-ctype-process-trace, source_md: Q-brand-seeds/ctype_process_trace.md, source_anchor: "§output_structure + §typical_hooks + §example_references + §ab_variants_hint", evidence_quote: "ctype_process_trace 三段制 + 3 hooks + 5 examples + AB 强制分流", source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

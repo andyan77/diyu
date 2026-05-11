@@ -1,0 +1,102 @@
+pack_id: KP-fabric_property-linen-natural-creases
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  亚麻 / 棉麻类适合表达干爽、空气感、松弛感，自然折痕是其纤维表情的一部分而非缺陷；
+  但门店不能向顾客承诺它全天平整，肘部、臀部、坐位、前门襟在久坐和动作后必然出褶，
+  版型越直、越薄、越浅色越要把透感和皱感提前讲清楚。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional（商品专业者）
+    target_audience: 进店询问亚麻 / 棉麻单品的顾客（尤其要求"上班整天平整"或"高级不皱"的顾客）
+  when:
+    trigger: 顾客拿起亚麻 / 棉麻单品询问"会不会皱"或导购准备推荐亚麻 / 棉麻
+    context: 夏季通勤 / 度假 / 轻文艺 / 宽松轮廓陈列场景
+  what:
+    action_type: fabric_recommendation_with_risk_disclosure
+    decision_or_action: |
+      把"自然折痕"重新定义为松弛感与空气感的来源；
+      同步前置说明肘部 / 臀部 / 坐位 / 前门襟的出褶位置；
+      根据版型、厚度、颜色判断要不要追加透感提示。
+  result:
+    success_pattern: |
+      顾客理解皱是材质表情而非品质问题，接受后续穿着会有褶；
+      下班后看到褶痕仍然认为"这就是这件衣服该有的样子"，不产生售后异议。
+    flip_pattern: |
+      导购为了成交承诺"全天不皱"或回避皱感问题；
+      顾客上班几小时后腰腹、肘部出褶，认为是品质问题或被骗，产生退换或差评；
+      浅色薄款没说透感，顾客内搭判断错误，二次穿着率掉。
+  underlying_mechanism: |
+      亚麻纤维刚性高、回弹差，受压后纤维定型形成折痕；
+      这是天然纤维特性，整理工艺只能减轻不能消除，
+      因此"高级感"必须建立在接受折痕的认知上，而不是反向承诺。
+  boundary:
+    applicable_when: 亚麻 / 棉麻面料；顾客使用场景含久坐、动作多或长时间通勤
+    not_applicable_when: |
+      经过特殊免烫整理且素材明确标注的亚麻混纺；
+      纯展示用（短时间穿着、拍摄场景）。
+  alternative_path:
+    - 如果顾客要求全天平整 → 转向粘胶混纺或带弹力的混合面料
+    - 如果顾客介意肘部出褶但喜欢亚麻外观 → 推荐宽松直筒或落肩款减少应力点
+    - 如果顾客在意透感 → 选深色或加厚款 / 同步推荐打底
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 四、首批 FabricKnowledge 正式冻结清单 · 2. 亚麻 / 棉麻类
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这类真正卖的不是"精致"，而是"干爽、空气感、松弛感"。
+    最容易误导的是把它讲成"高级且全天不皱"。正式口径应改成：
+    它的高级感，很大一部分恰恰来自自然折痕和纤维表情。
+    正式风险提示冻结为：肘部、臀部、坐位、前门襟容易出褶；
+    版型越直、越薄、越浅色，越要把透感和皱感提前说清。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：who/when/what/success/flip/mechanism/boundary/alternative 八要素齐全。
+    Gate 2：从 9 表派生（FabricKnowledge 对象 + rule + value_set + evidence）可反推
+            "亚麻自然折痕是材质表情、不许承诺全天平整、风险位置具体" 三条核心语义。
+    Gate 3：跨服装零售品牌成立，不依赖具体门店或单一活动。
+    Gate 4：可被 outfit_recommendation / store_training / content_generation 三条调用路径消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      整段判断围绕亚麻纤维通用特性，不含笛语品牌专属表达；
+      跨女装品牌、跨门店均可复用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field:
+    - {field_id: FD-FabricKnowledge-hand_feel, owner_type: FabricKnowledge, field_name: hand_feel, data_type: enum}
+    - {field_id: FD-FabricKnowledge-drape, owner_type: FabricKnowledge, field_name: drape, data_type: enum}
+    - {field_id: FD-FabricKnowledge-risk_alerts, owner_type: FabricKnowledge, field_name: risk_alerts, data_type: list_of_string}
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-linen-natural-creases-natural_creases, owner_field: risk_alerts, definition: "亚麻 / 棉麻在受压部位出现的自然折痕，属于纤维表情而非品质缺陷"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-linen-natural-creases-risk_position, value: elbow, label: 肘部出褶}
+    - {value_set_id: VS-KP-fabric_property-linen-natural-creases-risk_position, value: hip, label: 臀部出褶}
+    - {value_set_id: VS-KP-fabric_property-linen-natural-creases-risk_position, value: seat, label: 坐位出褶}
+    - {value_set_id: VS-KP-fabric_property-linen-natural-creases-risk_position, value: front_placket, label: 前门襟出褶}
+  rule:
+    - {rule_id: RL-KP-fabric_property-linen-natural-creases, rule_type: fabric_recommendation_disclosure, applicable_when: "面料=亚麻/棉麻 且 顾客场景=久坐或长时间通勤", success_scenario: "提前说明自然折痕=纤维表情，顾客接受后无售后异议", flip_scenario: "承诺全天不皱导致出褶后顾客认定品质问题或被骗", alternative_boundary: "要求全天平整→转粘胶混纺；介意肘部出褶→推宽松直筒/落肩"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-linen-natural-creases, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 四、2. 亚麻 / 棉麻类, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-linen-natural-creases, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-store_training-KP-fabric_property-linen-natural-creases, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

@@ -1,0 +1,104 @@
+pack_id: KP-training_unit-standard-action-vs-judgment-skill
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  门店技能必须先拆成 standard_action（标准动作）与 judgment_skill（判断力）两类再设计培训：
+  标准动作类（折叠 / 挂装 / 蒸烫 / 试衣前递衣顺序等）必须拍成手部+空间动作做 Do/Don't；
+  判断力类（顾客顾虑判断 / 身型与比例判断 / 库存救场该救还是该转等）必须放进情境演练，
+  不能只给标准答案——混到一起练，两边都练不出来。
+
+scenario:
+  who:
+    primary_role: 培训内容设计方 / 店长
+    target_audience: 一线员工（导购 / 新人 / 仓库主管）
+  when:
+    trigger: 设计任一新培训单元；评估老培训为什么"教了还是不会"
+    context: 服装零售门店，胜负往往在几秒钟的判断点 + 大量手部空间动作
+  what:
+    action_type: training_format_split
+    decision_or_action: |
+      错误动作：把所有培训都做成统一格式（PPT 或视频或脚本演练），
+        判断类的内容硬塞进标准动作模板，或反过来把标准动作只做口播。
+      正确动作：第一步先把单元打标 standard_action 还是 judgment_skill；
+        standard_action → before_after_timelapse / do_dont_contrast，拍手部动作 + 空间动作；
+        judgment_skill → branching_scenario / error_replay，店长口头给情境，员工现场判断。
+      为什么错：服装零售大量技能是手部和空间动作，不适合只口播；
+        判断点抽象规范练不出，必须放进真实情境。
+      如何纠正：用本规则重审现有单元，错位的格式立刻改型。
+      掌握检查：员工被现场抽测时，标准动作类无漏项重做出来；判断类能 30 秒说出判断顺序 + 1 分钟说行动方案。
+  result:
+    success_pattern: |
+      标准动作类员工能直接重做且达标；
+      判断类员工能先判断顾虑再给方案，不会套万能话术；
+      培训完成度与现场执行率同时上升。
+    flip_pattern: |
+      把判断类做成 PPT 标准答案 → 员工现场套话术、不会真判断；
+      把标准动作只做口播 → 员工"听过"但手上做不出来；
+      两边培训都白做。
+  underlying_mechanism: |
+      技能类型决定培训介质：动作类必须身体记忆（看+做+反馈），判断类必须情境记忆（变量+权衡+复盘）；
+      格式错配 = 把记忆通道堵死。
+  boundary:
+    applicable_when: 任何门店一线培训单元设计 / 老单元改型
+    not_applicable_when: |
+      混合型单元（既含标准动作又含判断点，如 inventory_rescue_at_counter）→ 拆成两段分别训练，
+      不要硬归一类。
+  alternative_path:
+    - 单元同时含标准动作 + 判断 → 拆成两个子单元，各自匹配格式
+    - 资源紧张 → 先保 judgment_skill 类（错配代价更高）
+    - 新人入职 → 标准动作类先排，判断类用 8-12 周间隔复现逐步加码
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 二、2.4 标准动作和判断力必须拆开 · 十、训练拆分策略
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    standard_action（标准动作）：可以拍成固定步骤；
+    judgment_skill（判断力）：必须放到情境里练。
+    适合教标准动作的内容：折叠 / 挂装 / 蒸烫 / 吊牌检查 / 主推位补货 / 模特基础成套 /
+    试衣前递衣顺序 / 面料触感演示动作 / 尾货位陈列 / 班前会 40 秒提醒结构。
+    必须教判断力的内容：顾客真正顾虑的判断 / 身型和比例判断 / 颜色顾虑背后的场景判断 /
+    面料解释顺序 / 搭配重心判断 / 陈列主次判断 / 库存救场时该救还是该转 /
+    替代距离是否过远 / 什么时候该直接放弃推荐 / 哪个错误最值得当场纠正。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1 8 要素齐全；Gate 2：rule + value_set(skill_type / format mapping) 反推拆分策略；
+    Gate 3 通用；Gate 4 store_training 可调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用培训设计原则。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field:
+    - {field_id: FD-TrainingMaterial-skill_type, owner_type: TrainingMaterial, field_name: skill_type, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-standard-action-vs-judgment-skill-skill_type, owner_field: skill_type, definition: "技能类型：standard_action 标准动作 vs judgment_skill 判断力，决定培训格式"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-standard-action-vs-judgment-skill-skill_type, value: standard_action, label: 标准动作, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-standard-action-vs-judgment-skill-skill_type, value: judgment_skill, label: 判断力, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-standard-action-vs-judgment-skill-format_for_action, value: do_dont_contrast, label: 正误对照（标准动作首选）, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-standard-action-vs-judgment-skill-format_for_action, value: before_after_timelapse, label: 前后对比延时（标准动作首选）, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-standard-action-vs-judgment-skill-format_for_judgment, value: branching_scenario, label: 分支情境（判断力首选）, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-standard-action-vs-judgment-skill-format_for_judgment, value: error_replay, label: 错误复盘（判断力首选）, ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-training_unit-standard-action-vs-judgment-skill, rule_type: training_format_mapping, applicable_when: "设计或改造任一培训单元", success_scenario: "按 skill_type 匹配格式：动作类拍手部空间动作；判断类放情境演练", flip_scenario: "格式错配，员工听过看过但现场做不出来或只会套万能话术", alternative_boundary: "混合型单元拆成两段；资源紧张先保 judgment_skill"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-standard-action-vs-judgment-skill, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 二、2.4 + 十、training_split_policy, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm03, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["store_manager","sales_associate"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-standard-action-vs-judgment-skill, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingScript"]}

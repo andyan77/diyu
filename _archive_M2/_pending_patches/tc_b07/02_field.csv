@@ -1,0 +1,7 @@
+FD-TrainingMaterial-format,TrainingMaterial,format,enum,VS-KP-training_unit-microlearning-not-long-course-format,,domain_general,KP-training_unit-microlearning-not-long-course
+FD-TrainingMaterial-mastery_check,TrainingMaterial,mastery_check,string,,SM-KP-training_unit-microlearning-not-long-course-completion_definition,domain_general,KP-training_unit-microlearning-not-long-course
+FD-TrainingMaterial-priority_score,TrainingMaterial,priority_score,composite,,SM-KP-training_unit-priority-by-impact-frequency-trust-priority_dim,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+FD-TrainingMaterial-skill_type,TrainingMaterial,skill_type,enum,VS-KP-training_unit-standard-action-vs-judgment-skill-skill_type,SM-KP-training_unit-standard-action-vs-judgment-skill-skill_type,domain_general,KP-training_unit-standard-action-vs-judgment-skill
+FD-CustomerScenario-customer_type,CustomerScenario,customer_type,enum,VS-KP-training_unit-customer-first-look-judgment-customer_type,SM-KP-training_unit-customer-first-look-judgment-customer_type,domain_general,KP-training_unit-customer-first-look-judgment
+FD-TrainingMaterial-assessment_method,TrainingMaterial,assessment_method,enum,VS-KP-training_unit-on-floor-four-layer-assessment-layer,SM-KP-training_unit-on-floor-four-layer-assessment-layer,domain_general,KP-training_unit-on-floor-four-layer-assessment
+FD-RoleProfile-role_layer,RoleProfile,role_layer,enum,,SM-KP-training_unit-role-binding-frontline-priority-role_layer,domain_general,KP-training_unit-role-binding-frontline-priority

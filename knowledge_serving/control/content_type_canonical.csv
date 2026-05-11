@@ -1,0 +1,19 @@
+canonical_content_type_id,name_zh,name_en,aliases,coverage_status
+behind_the_scenes,幕后揭秘,Behind the Scenes,幕后|后台|behind_scene|后台揭秘,partial
+daily_fragment,日常片段,Daily Fragment,日常|碎片|片段|daily_clip,partial
+emotion_expression,情绪表达,Emotion Expression,情绪|抒情|情感表达|mood,partial
+event_documentary,事件纪实,Event Documentary,事件记录|活动纪实|event_record|纪实,partial
+founder_ip,创始人IP,Founder IP,创始人内容|老板人设|founder_persona|创始人 IP,partial
+humor_content,幽默内容,Humor Content,搞笑|段子|幽默|humor|funny,partial
+knowledge_sharing,知识分享,Knowledge Sharing,干货|科普|知识|分享|tips,partial
+lifestyle_expression,生活方式表达,Lifestyle Expression,生活方式|lifestyle|品味|生活美学,partial
+outfit_of_the_day,每日穿搭 / OOTD,Outfit of the Day,OOTD|穿搭|今日穿搭|搭配|look_of_the_day,partial
+personal_vlog,个人 vlog,Personal Vlog,vlog|个人视频|个人记录|personal_video,partial
+process_trace,过程记录,Process Trace,工艺记录|过程展示|process_record|制作过程,partial
+product_copy_general,通用商品文案,Product Copy (General),商品介绍|商品文案|product_intro|product_copy,partial
+product_journey,商品溯源,Product Journey,商品故事|溯源|product_story|journey,partial
+product_review,产品评测,Product Review,测评|种草测评|好物测评|product_eval|评测,partial
+role_work_vlog,角色工作 vlog,Role Work Vlog,工作 vlog|岗位 vlog|职场 vlog|work_vlog|role_vlog,partial
+store_daily,门店日常,Store Daily,门店动态|店日常|daily_store|门店内容,partial
+talent_showcase,才艺展示,Talent Showcase,才艺|表演|talent_show|showcase,partial
+training_material,培训素材,Training Material,培训|内训|岗位培训|training|training_doc,partial

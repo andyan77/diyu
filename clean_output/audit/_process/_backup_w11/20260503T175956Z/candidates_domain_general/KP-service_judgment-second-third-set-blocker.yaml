@@ -1,0 +1,79 @@
+pack_id: KP-service_judgment-second-third-set-blocker
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  最容易卡在第二/第三套的接客场景正式冻结为 5 类——urgent_full_look / shape_correction / ready_made_full_set / new_item_cannot_style / budget_controlled；
+  这 5 类必须在第一套完成时切换推荐逻辑（从"能成立"切到"为什么是它"），用第一套的逻辑硬推到底就一定塌方。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 处于第二/第三套推荐节点的高风险场景客
+  when:
+    trigger: 第一套已被试穿/确认，进入第二套推荐节点
+    context: 5 类高风险场景的成交关键窗口
+  what:
+    action_type: second_set_logic_switch
+    decision_or_action: |
+      第一步：第一套确认时立刻识别场景类型（是否在 5 类卡位场景内）。
+      第二步：若是 5 类之一，第二套必须切换逻辑——
+        - urgent_full_look：从"能去"切到"像她自己"
+        - shape_correction：从"显瘦参数"切到"安全感细节"
+        - ready_made_full_set：从"现成"切到"整套逻辑"
+        - new_item_cannot_style：从"能搭"切到"使用路径"
+        - budget_controlled：从"价格"切到"确定性证据"
+      第三步：第三套是兜底，只在第二套被否定时启用，不要主动叠。
+  result:
+    success_pattern: 第二套打中场景特定逻辑，整套或主件成交
+    flip_pattern: 用第一套的逻辑重复推第二、三套，顾客觉得"都差不多"，全部退出
+  underlying_mechanism: |
+      第一套的目标是"通过试穿门槛"，第二套的目标是"建立购买理由"——目标不同，推法必须不同；
+      5 类场景的共同点是"购买理由复杂"（任务+身份/安全感/整体感/使用路径/确定性），第一套搞不定理由层。
+  boundary:
+    applicable_when: 5 类指定场景的第二/第三套推荐
+    not_applicable_when: 不在 5 类内的场景（如 functional_gap_fill 不卡第二套，卡的是利用率）
+  alternative_path:
+    - 顾客自带第二套方向 → 顺势承接，不必硬切到模板
+    - 时间不允许（应急下顾客赶时间）→ 砍第三套，第二套必须打透
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 三、1）最容易卡在第二/第三套推荐的场景正式冻结
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    1）最容易卡在第二套 / 第三套推荐的场景，正式冻结为 5 类
+    urgent_full_look（应急一身型）
+    shape_correction（显瘦修身型）
+    ready_made_full_set（现成成套型）
+    new_item_cannot_style（新款不会搭型）
+    budget_controlled（预算控制型）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 5 个场景细则联合派生 value_set。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用第二套推荐节点逻辑。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-second-third-set-blocker}
+  value_set:
+    - {value_set_id: VS-KP-service_judgment-second-third-set-blocker-blocker_scenarios}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-second-third-set-blocker}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-second-third-set-blocker}

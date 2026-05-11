@@ -1,0 +1,93 @@
+pack_id: KP-styling_rule-process-trace-single-hard-fake-step
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: medium
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "只深拍一个最难伪装的工艺节点让真实自己说话"
+  steps:
+    - "选对花缝线整烫等单一节点"
+    - "用近景拍判断标准"
+    - "解释为什么这一点很难假装"
+  anti_pattern: "试图拍完整流程导致每个步骤都浅而像宣传片"
+  duration: medium
+  audience: "想知道衣服到底怎么做的人群"
+  source_pack_id: KP-styling_rule-process-trace-single-hard-fake-step
+
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  process_trace 内容生产纪律：不试图拍全流程，而只拍一个**最容易看出真假的节点**——
+  服装行业最难伪装的步骤集中在"对花 / 缝线收口 / 面料回弹 / 整烫肩线 / QC 拦下"，
+  单点深拍比全流程更有说服力。"knowing is the new owning"——年轻观众着迷的不只是
+  "知道在哪做"，而是"知道怎么做、为什么这样做"。这条规则推翻"工艺溯源必须拍全流程"的默认套路。
+
+scenario:
+  who:
+    primary_role: process_trace 内容创作者 / AI 内容生成调度
+    target_audience: 服装品牌做工艺溯源内容时
+  when:
+    trigger: 制作工艺溯源内容前选择"全流程展示 vs 单点深拍"时
+    context: 服装行业品质差异集中爆发的节点（对花/缝线/回弹/肩线/QC 拦下）天然适合单点深拍
+  what:
+    action_type: process_trace_single_node_priority
+    decision_or_action: 选最难伪装的一个节点深拍 30 秒，配"今天只讲一件事：XX"+ 具体差距数据（如"差 1 毫米成品就不对"），不贪完整
+  result:
+    success_pattern: 0-5 秒"今天只讲一件事：对花" + 5-15 秒手指对齐图案 + 15-22 秒刀落下前 2 秒检查 + 22-30 秒完美对齐 → 观众接住"这家品牌真的有不能偷懒的动作"
+    flip_pattern: 把全流程"面料检验→裁剪→缝制→整烫→质检"罗列一遍 → 像企业宣传片或 SOP 视频化，观众跳出
+  underlying_mechanism: |
+      "差 1 毫米成品就不对"——服装品质的真正差异藏在不可逆动作里，
+      单点深拍把"严格把控"从空话变成可视化证据；全流程罗列让每个节点都浮于表面。
+  boundary:
+    applicable_when: process_trace 内容创作 / 选定服装品类已有可识别的"最难伪装节点"
+    not_applicable_when: 拍 product_journey（设计决策历程）应保留多版本对比；拍 brand_tier 长期纪录片可接受全链路（如 C2-4 / C3-8）
+  alternative_path:
+    - 没有可视化的难伪装节点 → 退用 C3-3 被拦下的那一件 / C3-5 夜班 12 分钟
+    - 节点涉及商业机密（合同 / 价格 / 工艺）→ 红线 E8 不得披露，转用感官类玩法（C3-6 ASMR / C3-7 微距）
+
+evidence:
+  source_md: Q2-内容类型种子/process_trace-交付物-v0.1.md
+  source_anchor: §C2-1 只拍一个最难伪装的步骤 + §D 三个未被开发角度 1 + Vogue 2024 / "knowing is the new owning"
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    C2-1 一句话定义：不试图拍全流程，而只拍一个最容易看出真假的节点。
+    服装行业钩子：⭐⭐⭐⭐ 服装行业最适合做"难伪装步骤"——对花 / 缝线 / 回弹 / 肩线 / 收口都是品质差异集中爆发的节点。
+    备注：compass 特别指出"knowing is the new owning"——年轻观众着迷的，
+    不只是"知道在哪做"，而是"知道怎么做、为什么这样做"。
+    §D 角度 1：最有爆相的方向不是全流程旅游片，而是对花、回弹、拦货、不可逆动作前的停顿——单点深拍比全流程更有说服力。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装行业 process_trace 内容生产通用规则 / 任意品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-process-trace-single-hard-fake-step-single_node, owner_field: process_trace_node_priority, definition: "服装 process_trace 单点深拍纪律：选对花 / 缝线 / 回弹 / 肩线 / QC 拦下中最难伪装的一个节点 30 秒，不贪完整"}
+  rule:
+    - {rule_id: RL-KP-styling_rule-process-trace-single-hard-fake-step, rule_type: process_trace_single_node_priority, applicable_when: "做工艺溯源内容时选全流程 vs 单点深拍", success_scenario: "选最难伪装节点深拍+具体差距数据 → 把'严格把控'变可视化证据", flip_scenario: "全流程罗列像 SOP 视频化 → 观众跳出", alternative_boundary: "无难伪装节点 → 退用被拦下成衣或夜班沉默；商业机密节点不得披露 → 转感官玩法"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-process-trace-single-hard-fake-step, source_md: Q2-内容类型种子/process_trace-交付物-v0.1.md, source_anchor: §C2-1 + §D 角度 1, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-process_trace-pt1, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"process_trace","priority_play":"single_hard_fake_step"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-process-trace-single-hard-fake-step, runtime_method: content_generation, input_types: "ContentType=process_trace", output_types: "PlayCardPriority"}

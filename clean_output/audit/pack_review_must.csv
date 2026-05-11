@@ -1,0 +1,42 @@
+pack_id,brand_layer_dir,suggested_layer,confidence,suggestion_rationale,needs_human_review,reviewer_decision,final_layer,production_tier,default_call_pool,review_notes
+KP-display_rule-folded-display-purpose,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-display_rule-front-hanging-purpose,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-display_rule-side-hanging-purpose,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-display_rule-window-display-purpose,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-product_attribute-compat-matrix-truth-source-layering,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-product_attribute-compatibility-derived-view-combination-formula,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-product_attribute-compatibility-matrix-two-layer-truth-source,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-product_attribute-compatible-with-edge-properties,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-product_attribute-engine-card-vs-play-card-shell,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,override,L1,,,玩法治理/字段壳规则，不是单张玩法卡，回标L1
+KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-product_attribute-play-card-scenario-tag-three-values,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,override,L1,,,玩法治理/字段壳规则，不是单张玩法卡，回标L1
+KP-product_attribute-play-card-tier-three-values,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,override,L1,,,玩法治理/字段壳规则，不是单张玩法卡，回标L1
+KP-product_attribute-storyboard-30s-dual-decoding,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,override,L1,,,玩法治理/字段壳规则，不是单张玩法卡，回标L1
+KP-service_judgment-derivation-formula-eight-row,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-service_judgment-derived-view-risk-inherits-from-source-edge,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-service_judgment-platform-derivation-not-source,domain_general,L1,low,含 L2 词 1（['tier']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-service_judgment-product-review-concerns-clearance-on-spot,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-service_judgment-product-review-tactile-court-three-piece-compare,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-behind-scenes-invisible-completion-cost,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-behind-scenes-parallel-split-screen,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-behind-scenes-store-soundprint,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-daily-fragment-fixed-corner-time-fold,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card', 'tier']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-daily-fragment-no-face-traces,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-daily-fragment-sensory-sort-not-time,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-daily-fragment-single-chair-time-fold,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card', 'long_term']",false,accept,L2,long_term,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-emotion-expression-clothes-as-emotion-vessel,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-ootd-clothes-remember-today,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-ootd-micro-suspense-decision-chain,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-ootd-route-fitness-not-display,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-styling_rule-product-journey-sample-version-tree,domain_general,L1,low,含 L2 词 1（['玩法']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-styling_rule-product-journey-vs-process-trace-boundary,domain_general,L1,low,含 L2 词 1（['玩法']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-styling_rule-talent-showcase-micro-skill-hundred-reps,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-training_unit-behind-scenes-near-disaster-narrative,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-training_unit-error-first-then-correct-replay,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-training_unit-event-documentary-long-term-tier-discipline,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-training_unit-grounding-over-polish-default,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card', 'tier']",false,override,L1,,,玩法治理/字段壳规则，不是单张玩法卡，回标L1
+KP-training_unit-humor-content-brand-tone-gate-for-puppetry,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,override,L1,,,玩法治理/字段壳规则，不是单张玩法卡，回标L1
+KP-training_unit-objection-clearing-over-selling-points,domain_general,L1,low,含 L2 词 1（['实拍']），可能 L1/L2 边界，需审,true,accept,L1,,,确认L1概念/规则层，不需要生产分级字段
+KP-training_unit-product-review-fabric-detective-spec-party,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-training_unit-sop-asmr-procedural-memory,domain_general,L2,high,"yaml 含 play_card/tier 字段：['玩法', '玩法卡', 'play_card']",false,accept,L2,instant,true,确认L2玩法层pack；补齐生产调用字段
+KP-service_judgment-product-review-concerns-clearance-on-spot-faye-positioning,needs_review,L2,high,yaml 含 play_card/tier 字段：['play_card'],false,override,L1,,,玩法治理/字段壳规则，不是单张玩法卡，回标L1

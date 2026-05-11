@@ -1,0 +1,85 @@
+pack_id: KP-product_attribute-persona-field-fill-state
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  Persona 各字段必须显式标注三档成熟度状态：frozen（已冻结，下游可直接消费）/
+  candidate（候选待填，已给最小可用值等品牌素材回填）/ pending（待补证或待后续 Q 承接）；
+  candidate 字段必须挂"候选池"或"最小集"出处，pending 字段必须挂"承接 Q 编号"，
+  禁止字段标"已就绪"却没有可用值，也禁止字段没有任何状态裸奔进入 Prompt 组装。
+
+scenario:
+  who:
+    primary_role: 知识工程 / Persona 字典维护者
+    target_audience: Prompt 组装 / 内容生成 / 品牌素材回填团队
+  when:
+    trigger: 字段值更新或字段被下游消费前的状态校验
+    context: Q4 冷启动阶段；字段成熟度治理与字段壳治理解耦
+  what:
+    action_type: persona_field_maturity_classification
+    decision_or_action: 每个 Persona 字段标 frozen / candidate / pending 三档之一
+  result:
+    success_pattern: |
+      Prompt 组装可按字段状态决定行为——frozen 直接用、candidate 挂候选池兜底、pending 给降级提示，
+      品牌素材回填团队也能直接看到"哪个 Persona 哪个字段还差什么、由哪个 Q 承接"。
+    flip_pattern: |
+      字段没标状态就进 Prompt → 用了一个还没冻结的 emotional_spectrum 候选值，
+      生成出来的内容情绪与品牌不一致，事后无人能溯源到底是字典问题还是 Prompt 问题。
+  underlying_mechanism: |
+      字段成熟度是字段值的元数据，不是字段壳的一部分。
+      在冷启动阶段引入这层显式分档，等于给字段值加了"可消费 / 待回填 / 待承接"三态。
+  boundary:
+    applicable_when: 通用 Persona 字段值维护
+    not_applicable_when: 字段壳本身的增删（属字典升级流程，不在此规则内）
+  alternative_path:
+    - 字段值同时存在最小集和候选池 → 维持 candidate 档，不私自升 frozen
+    - 字段值跨越多个 Q 承接 → pending 多挂承接 Q 编号，不取其一掩盖其他
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md
+  source_anchor: 三、字段层参数清单 + 八、当前"已冻结/候选/待补"总表
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    本稿要做的不是再提新想法，而是把 Q4 当前所有参数拆成三类：
+    已冻结（Frozen）— 本轮 Q4 已正式冻结，下游可直接消费
+    候选待填（Candidate）— 已给出最小可用值，等品牌素材或下一份产物补
+    待补证 / 待后续 Q 承接（Pending）— 等 Q19/Q20/Q21/Q22 或 Q3 真源回填
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field（fill_state 字段）+ 04_value_set（frozen/candidate/pending 三值）+ 06_rule（状态校验规则）可反推"三档分级 / 候选挂池 / pending 挂Q"三条核心语义。
+    Gate 3：字段成熟度治理可推广到 RoleProfile / FounderProfile / 其他对象字典。
+    Gate 4：可被 content_generation 前置字段校验调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale_keep: "domain_general_keep · Persona 字段成熟度三档治理是 schema 元规则，跨品牌通用；scan 误报：pack_id 含 persona 触发"
+  rationale: 字段成熟度治理通用方法
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field:
+    - {field_id: FD-Persona-field_fill_state, owner_type: Persona, field_name: field_fill_state, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-persona-field-fill-state-fill_state, owner_field: field_fill_state, definition: "字段成熟度三档：frozen 下游可直接消费 / candidate 已给最小可用值待回填 / pending 待后续 Q 承接"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-persona-field-fill-state-fill_state, value: frozen, label: 已冻结, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-persona-field-fill-state-fill_state, value: candidate, label: 候选待填, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-persona-field-fill-state-fill_state, value: pending, label: 待补证或待后续Q承接, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-product_attribute-persona-field-fill-state, rule_type: persona_field_maturity_classification, applicable_when: "字段值更新或下游消费前", success_scenario: "frozen 直用 candidate 挂池 pending 给降级提示", flip_scenario: "字段裸奔进 Prompt→事后无法溯源问题源", alternative_boundary: "多 Q 承接→多挂不掩盖；最小集与候选池并存→保持 candidate"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-persona-field-fill-state, source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md, source_anchor: 三、字段层参数清单 + 八、总表, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

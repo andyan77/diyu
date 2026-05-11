@@ -1,0 +1,16 @@
+FD-PlayCard-tier,ContentType,play_card_tier,string,,,domain_general,KP-product_attribute-engine-card-vs-play-card-shell
+FD-PlayCard-north_star,ContentType,play_card_north_star,string,,,domain_general,KP-product_attribute-engine-card-vs-play-card-shell
+FD-PlayCard-storyboard_30s,ContentType,play_card_storyboard_30s,composite,,,domain_general,KP-product_attribute-engine-card-vs-play-card-shell
+FD-NarrativeEngine-origin,ContentType,engine_origin,string,,,domain_general,KP-product_attribute-engine-card-vs-play-card-shell
+FD-NarrativeEngine-principle,ContentType,engine_principle,string,,,domain_general,KP-product_attribute-engine-card-vs-play-card-shell
+FD-NarrativeEngine-callable_content_types,ContentType,engine_callable_content_types,list_of_string,,,domain_general,KP-product_attribute-engine-card-vs-play-card-shell
+FD-PlayCard-scenario,ContentType,play_card_scenario,string,VS-KP-product_attribute-play-card-scenario-tag-three-values-scenario,,domain_general,KP-product_attribute-play-card-scenario-tag-three-values
+FD-PlayCard-tier,ContentType,play_card_tier,string,VS-KP-product_attribute-play-card-tier-three-values-tier,,domain_general,KP-product_attribute-play-card-tier-three-values
+FD-ContentType-output_format,ContentType,output_format,string,VS-KP-product_attribute-storyboard-30s-dual-decoding-output_format,,domain_general,KP-product_attribute-storyboard-30s-dual-decoding
+FD-PlayCard-storyboard_30s,ContentType,play_card_storyboard_30s,composite,,,domain_general,KP-product_attribute-storyboard-30s-dual-decoding
+FD-ContentType-audience_register,ContentType,audience_register,string,VS-KP-product_attribute-troop-facing-register-five-fields-audience_register,,domain_general,KP-product_attribute-troop-facing-register-five-fields
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-troop-facing-register-five-fields
+FD-ContentType-apparel_hook,ContentType,apparel_hook,string,,,domain_general,KP-product_attribute-troop-facing-register-five-fields
+FD-ContentType-shooting_feasibility,ContentType,shooting_feasibility,string,,,domain_general,KP-product_attribute-troop-facing-register-five-fields
+FD-ContentType-red_lines,ContentType,red_lines,list_of_string,,,domain_general,KP-product_attribute-troop-facing-register-five-fields
+FD-ContentType-ai_boundary,ContentType,ai_boundary,string,,,domain_general,KP-product_attribute-troop-facing-register-five-fields

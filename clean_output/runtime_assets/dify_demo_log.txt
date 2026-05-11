@@ -1,0 +1,46 @@
+======================================================================
+W12.A.9 · 笛语 AI 调用 demo（只读反查）
+======================================================================
+
+--- Demo 1: 取一条 L2 play_card 反查到原 md ---
+
+  play_card_id   : PC-service_judgment-product-review-concerns-clearance-on-spot
+  hook           : 把顾客当场说出的顾虑变成三十秒可见测试
+  production_tier: instant
+  default_call_pool: true
+  → source_pack_id: KP-service_judgment-product-review-concerns-clearance-on-spot
+  9 表 rule 反查: 1 行
+    rule_id=RL-KP-service_judgment-product-review-concerns-cle  type=on_spot_concerns_clearance_test
+  → 原 md       : Q2-内容类型种子/product_review-交付物-v0.1.md
+  → source_anchor: §C3-2 + 备注 + 北极星 + B5
+
+--- Demo 2: 取一条 L3 runtime_asset 反查 ---
+
+  runtime_asset_id: RA-craft_quality-sewing-stitch-pucker-near-eye
+  asset_type      : role_split
+  title           : 缝口起皱近看分工
+  summary         : 把缝口起皱拆给门店与质检分别判断，避免把综合工艺问题说成顾客挑剔。
+  source_pointer  : candidates/domain_general/KP-craft_quality-sewing-stitch-pucker-near-eye.yaml#runtime_asset
+  pack_id         : KP-craft_quality-sewing-stitch-pucker-near-eye
+
+--- Demo 3: 多租户组合查询（领域通用 + 品牌专属）---
+
+  domain_general 单层 rule: 193 行
+  brand_xyz 应用 (dg+xyz) rule: 193 行 (xyz=0，等同 dg)
+
+--- Demo 4: L2 玩法卡按 default_call_pool 过滤 ---
+
+  默认调用池 (default_call_pool=true)   : 29
+  非默认（需显式调用）                   : 0
+  instant tier (1人+手机+200元+4h)      : 28/29
+
+--- Demo 5: L3 资产按 asset_type 分桶（消费方按需选层）---
+
+  action_template      9
+  role_split           8
+  dialogue_template    5
+  shot_template        2
+
+======================================================================
+✅ Demo 全部跑通：play_card → 9 表 → md / runtime_asset → yaml 反查链路完整
+======================================================================

@@ -1,0 +1,86 @@
+pack_id: KP-styling_rule-silhouette-balance
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  一身最多只留一个量感重点：上宽下收，或上收下宽——通勤与大众客群上下同时膨大多数会先觉得自己变壮；
+  高个偏瘦或明确追求 oversize 街头风的顾客可放行上下都宽，但不作为门店安全盘默认推荐。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长
+    target_audience: 通勤客、大众客群、第一次试穿推荐顾客
+  when:
+    trigger: 顾客试穿后说"觉得自己穿大了" / 整组挂场陈列检视
+    context: 廓形量感分配，含上下装宽窄选择与配饰
+  what:
+    action_type: silhouette_volume_balance
+    decision_or_action: |
+      宽针织配直筒裤、廓形西装配窄裙、阔腿裤配合体上衣——
+      整组挂场必须有量感对比；替代时先守廓形角色，再守颜色。
+  result:
+    success_pattern: 顾客觉得"穿上顺眼、利落"，不会先抱怨自己变壮；连带成立。
+    flip_pattern: |
+      宽卫衣 + 宽裤 + 厚底鞋——视觉上"先长壮"，
+      顾客嘴上说不出哪里不好，心里直接退。
+  underlying_mechanism: |
+      门店成交优先"穿上顺眼"，不是时装片效果；
+      上下同时膨给普通客群的第一反馈是"我变大了"，与显瘦显利落的核心诉求冲突。
+  boundary:
+    applicable_when: 通勤客 / 大众客群 / 第一次试穿推荐 / 整组挂场量感设计
+    not_applicable_when: 高个偏瘦 / 明确追求 oversize 街头风顾客 / 风格表达型内容拍摄
+  alternative_path:
+    - 主件廓形断码 → 优先找同廓形角色替代（先守廓形）
+    - 颜色换位 → 仅在守住廓形前提下做同温度同明度微调
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 02 silhouette_balance_rule + 6.2 hard_rule + 6.4 反转一
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    一身最多只留一个量感重点，上宽下收，或上收下宽。
+    works_in：宽针织配直筒裤，廓形西装配窄裙，阔腿裤配合体上衣。
+    fails_in：宽卫衣 + 宽裤 + 厚底鞋。
+    替代时先守住廓形角色，不先守颜色。
+    会反转的规则一：高个、偏瘦、年轻、街头风、明确追求 oversize 时，可以上宽下宽；但它不适合作为门店安全盘默认推荐。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    G1 八要素齐全。G2 可从 rule + value_set（works_in/fails_in）+ relation 反推核心语义。
+    G3 跨女装品牌通用硬规则。G4 可被 outfit_recommendation / store_training 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 廓形量感对冲是基础搭配通识，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-silhouette-balance-volume_focus, owner_field: rule_name, definition: "松紧对冲法：一身只留一个量感重点，上下廓形必须呈宽收对比"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-silhouette-balance-works_in, value: wide_knit_with_straight_pants, label: 宽针织配直筒裤, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-silhouette-balance-works_in, value: oversize_blazer_with_pencil_skirt, label: 廓形西装配窄裙, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-silhouette-balance-works_in, value: wide_leg_with_fitted_top, label: 阔腿裤配合体上衣, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-silhouette-balance-fails_in, value: full_oversize_with_chunky_shoe, label: 宽卫衣+宽裤+厚底鞋, ordinal: 1}
+  rule:
+    - {rule_id: RL-KP-styling_rule-silhouette-balance, rule_type: hard_rule, applicable_when: "通勤/大众/初次试穿/整组挂场", success_scenario: "宽收对比成立穿上顺眼", flip_scenario: "上下同膨顾客觉得自己变壮", alternative_boundary: "替代先守廓形角色再守颜色；高个偏瘦/oversize 街头风可反转"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-silhouette-balance, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 02 + 6.2 + 6.4 反转一, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-silh01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"hard_rule","focus":"silhouette_volume"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-silh02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"整组挂场必须量感对比"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-silh03, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"教员工识别顾客为什么觉得自己穿大了"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-silhouette-balance, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-silhouette-balance, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

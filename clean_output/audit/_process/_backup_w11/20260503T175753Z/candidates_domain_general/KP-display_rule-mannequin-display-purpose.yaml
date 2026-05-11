@@ -1,0 +1,79 @@
+pack_id: KP-display_rule-mannequin-display-purpose
+schema_version: candidate_v1
+pack_type: display_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  mannequin_display（模特位）的业务目标是"把单品变成可想象的穿着结果"——目标是提升试穿率与整套带走率；
+  必须建立在 full_look_ready / new_arrival_complete / core_push_deep_stock 三类齐套库存上，
+  且模特身上的 look 必须回指 StylingRule 不能凭审美硬搭；新人只学单模特标准搭法，多模特故事线只给店长老手。
+
+scenario:
+  who:
+    primary_role: 店长 / 老手陈列负责人（多模特）；新人（单模特）
+    target_audience: 进店浏览的顾客
+  when:
+    trigger: 上新 / 模特位调整 / 主推切换
+    context: 门店内模特位（含人台与人形模特）
+  what:
+    action_type: mannequin_look_setup
+    decision_or_action: 选成套感强的通勤 / 周末 look 或外套+内搭+下装组合；过库存校验；look 回指 StylingRule
+  result:
+    success_pattern: 顾客看到整身穿着结果后产生试穿欲望，整套带走率提升
+    flip_pattern: 模特穿得像大片不像门店 / 主件有货配件没货 / 层次过重现实穿不了 → 顾客第一反应"我平时穿不了"
+  underlying_mechanism: |
+      模特位是"试穿想象桥"；如果穿着结果脱离顾客真实生活场景，桥就断了。
+      多模特故事线难度高，要顾及货品节奏，新人做不来，必须分级。
+  boundary:
+    applicable_when: 任何带模特位的门店
+    not_applicable_when: 纯橱窗式模特（业务目标=拦人非试穿，按 window_display 规则）
+  alternative_path:
+    - 配件断码 → 换同气质替代或退回正挂位主推，不在模特位用伪成套
+    - 层次太重 → 减层 + 留一个点睛，不囤所有
+    - 多模特故事线无人 hold → 退回单模特标准搭法
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/陈列方法包.md
+  source_anchor: 二、2. mannequin_display + 四、联动（必须回指 StylingRule、过库存校验）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    业务目标：把单品变成可想象的穿着结果，提升试穿率和整套带走率。
+    最容易犯的错：模特穿得像大片，不像门店；主件有货，配件没货；层次过重，现实里穿不了。
+    培训层级：新人学单模特标准搭法；店长 / 老手学多模特故事线和替换逻辑。
+    mannequin_display 与 full_look_display 必须回指 StylingRule，不得凭审美硬搭。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 KP-display_rule-full-look-no-broken-size 库存白名单一致；与 KP-display_rule-attribute-driven-display 主轴规则不冲突。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用模特位陈列纪律
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-display_rule-mannequin-display-purpose-purpose, owner_field: display_unit, definition: "mannequin_display 业务目标：试穿想象桥（提升试穿率+整套带走率）"}
+  value_set:
+    - {value_set_id: VS-KP-display_rule-mannequin-display-purpose-look_type, value: commute_set, label: 通勤套装}
+    - {value_set_id: VS-KP-display_rule-mannequin-display-purpose-look_type, value: weekend_look, label: 周末 look}
+    - {value_set_id: VS-KP-display_rule-mannequin-display-purpose-look_type, value: outer_inner_bottom, label: 外套+内搭+下装}
+  rule:
+    - {rule_id: RL-KP-display_rule-mannequin-display-purpose, rule_type: mannequin_look_setup, applicable_when: 上新/模特位调整/主推切换, success_scenario: 整身穿着结果引发试穿欲整套带走率提升, flip_scenario: 像大片不像门店/主件有货配件没货/层次过重, alternative_boundary: 配件断码→同气质替代或退正挂；层次重→减层留点睛；多模特无 hold→退单模特}
+  evidence:
+    - {evidence_id: EV-KP-display_rule-mannequin-display-purpose}
+  relation:
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-mannequin01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"allow","values":["full_look_ready","new_arrival_complete","core_push_deep_stock"]}'}
+    - {relation_id: RE-DisplayGuide-governed_by_rule-StylingRule-mannequin01, source_type: DisplayGuide, target_type: StylingRule, relation_kind: governed_by_rule, properties_json: '{"note":"模特身上的 look 必须回指 StylingRule"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-display_rule-mannequin-display-purpose}
+    - {mapping_id: CM-store_training-KP-display_rule-mannequin-display-purpose}

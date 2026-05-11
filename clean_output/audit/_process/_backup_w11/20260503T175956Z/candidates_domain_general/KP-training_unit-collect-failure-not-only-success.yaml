@@ -1,0 +1,109 @@
+pack_id: KP-training_unit-collect-failure-not-only-success
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  岗位素材采集必须主动征集"做砸过什么 / 最怕什么 / 最常卡在哪 / 哪一句最不该说 /
+  哪种判断最容易失手"五类负面颗粒，且其总量不得低于"做得好"成功案例的同等比例；
+  只收成功案例与标准答案的素材库会让生成的人设带很重的 AI 味，emotional_spectrum 与 authenticity_anchors 均无法落地。
+
+scenario:
+  who:
+    primary_role: 知识工程 / 内容运营 / 一线访谈采集者
+    target_audience: RoleProfile 真实性锚点与情绪光谱字段回填
+  when:
+    trigger: 启动岗位访谈大纲 / 素材采集打分 / 素材库验收
+    context: 服装零售人设系统冷启动阶段，正在为通用 Persona 构造真实感底座
+  what:
+    action_type: failure_material_solicitation
+    decision_or_action: |
+      错误动作：访谈大纲只问"你做得最好的一次是什么 / 你最自豪的服务案例是什么"，
+        素材库验收只看"标准答案是否齐全"。
+      正确动作：访谈大纲必须显式包含 5 个负面问题——
+        ① 这个岗位你做砸过什么；② 你最怕遇到什么场景；
+        ③ 你最常卡在哪一步；④ 哪一句话你绝对不会说；
+        ⑤ 哪种判断你失手过 / 几乎失手过；
+        素材库验收新增"负面颗粒占比"指标，低于成功案例同等数量则打回补采。
+      为什么错：成功案例可以被 LLM 模仿生成，失败 / 犹豫 / 卡住的颗粒无法被生成模仿，
+        是反 AI 味的最强证据。
+      如何纠正：访谈表 / 复盘模板新增 5 个负面问题作为必答项；素材库做配额校验。
+      掌握检查：抽样 RoleProfile，每个岗位至少 5 条负面颗粒可指向具体事件。
+  result:
+    success_pattern: |
+      authenticity_anchors 字段填出可被一线认账的具体翻车点，
+      emotional_spectrum 字段填出"焦虑 / 心虚 / 不甘 / 自责 / 无力"等真实情绪锚点；
+      生成的人设输出在内部测试中被一线评为"像我们自己人在说话"。
+  flip_pattern: |
+      素材库 90%+ 是成功案例与标准动作，emotional_spectrum 只剩"专业 / 自信 / 热情" 等正向词；
+      生成的人设输出被一线评为"看就是 AI 写的"，无法上私域出口位。
+  underlying_mechanism: |
+      失败 / 犹豫 / 卡住的颗粒包含具体的时间、地点、人物、物件、错判链路，
+      这些在公开训练语料中稀缺，是真实感最不可替代的来源；
+      标准答案与成功案例则在 LLM 训练语料中过载，已被生成模型饱和模仿。
+  boundary:
+    applicable_when: 任意 RoleProfile 冷启动素材采集 / 一线访谈大纲设计 / 素材库验收
+    not_applicable_when: |
+      合规 / 法律 / 财务硬性 SOP 培训 → 这类内容不靠真实感，靠规范完整度，
+      负面案例可作为风险提示但不必强制配额；
+      品牌唯一层（FounderProfile）的价值主张采集 → 失败颗粒可有可无，
+      但创始人的真实困境与代价仍建议主动征集。
+  alternative_path:
+    - 一线被访者抗拒讲失败 → 改为讲"差点出事但被自己拦下的一次"作为代偿
+    - 集体复盘忌讳互相指认 → 改用匿名问卷收 5 类负面颗粒
+    - 时间紧 → 优先收"最常卡在哪 + 最不该说的话"两类，胜过 10 条成功案例
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md
+  source_anchor: 二、2.5 先收"失败 / 犹豫 / 卡住"，不要只收"做得好"
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    如果素材全是"标准答案"和"成功案例"，系统会长出很重的 AI 味。
+    岗位知识尤其应该主动收：做砸过什么 / 最怕什么 / 最常卡在哪 /
+    哪一句最不该说 / 哪一种判断最容易失手。
+    这类素材最容易生成真实的 authenticity_anchors（真实性锚点）和
+    emotional_spectrum（情绪光谱）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐全（含负面问题清单与配额机制）。
+    Gate 2：从 rule + value_set(failure_question_set) + call_mapping 可反推
+    "5 类负面问题必采 + 配额校验"。
+    Gate 3：跨品牌跨岗位通用反 AI 味方法。Gate 4：可被 store_training 与素材审计直接调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      反 AI 味的素材采集元规则，与笛语具体内容无关，所有品牌都需要。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  field:
+    - {field_id: FD-TrainingMaterial-failure_quota, owner_type: TrainingMaterial, field_name: failure_quota, data_type: ratio}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-collect-failure-not-only-success-failure_quota, owner_field: failure_quota, definition: "负面颗粒（失败/犹豫/卡住/禁说/失手）占比 ≥ 成功案例同等比例"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-collect-failure-not-only-success-failure_question, value: did_what_wrong, label: 做砸过什么, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-collect-failure-not-only-success-failure_question, value: most_afraid_of, label: 最怕什么, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-collect-failure-not-only-success-failure_question, value: most_stuck_at, label: 最常卡在哪, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-collect-failure-not-only-success-failure_question, value: never_say_what, label: 哪一句最不该说, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-collect-failure-not-only-success-failure_question, value: judgment_mistake, label: 哪种判断最易失手, ordinal: 5}
+  rule:
+    - {rule_id: RL-KP-training_unit-collect-failure-not-only-success, rule_type: anti_ai_flavor_collection_policy, applicable_when: "RoleProfile 冷启动素材采集 / 访谈大纲设计 / 素材库验收", success_scenario: "5 类负面问题必采 + 负面配额达标，authenticity_anchors 与 emotional_spectrum 落地", flip_scenario: "只收成功案例与标准答案，人设带 AI 味，被一线识破", alternative_boundary: "合规法律 SOP 不强配额；FounderProfile 创始人困境建议但不强配额"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-collect-failure-not-only-success, source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md, source_anchor: 二、2.5, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-cfns1, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"applies_to":"all_first_batch_role_profiles","material_layer":"failure_grain"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-collect-failure-not-only-success, runtime_method: store_training, input_types: ["RoleProfile","TrainingMaterial"], output_types: ["FailureMaterialAuditReport"]}

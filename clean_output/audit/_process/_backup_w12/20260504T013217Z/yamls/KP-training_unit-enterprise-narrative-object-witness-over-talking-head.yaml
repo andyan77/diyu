@@ -1,0 +1,78 @@
+pack_id: KP-training_unit-enterprise-narrative-object-witness-over-talking-head
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  企业叙事类突破玩法的共性手法是"把具体物件做主角，让物件代替口播承担叙事"——旧样衣 / 别针 / 蒸汽熨斗 / 衣架 / 试衣间门帘 /
+  布料摩擦声 / 缝纫机声 / 边角料 / 失败样衣等"低位物件"先于人脸入镜，人物的判断和品牌气质通过对物件的反应自然显形。
+  这不是装饰手法，而是反 AI 腔的具体可执行抓手：物件越具体、越带劳动痕迹，AI 仿写成本越高，观众"真实完成感"越强。
+
+scenario:
+  who:
+    primary_role: 内容运营 / 拍摄者 / 企业叙事内容生产 agent
+    target_audience: 任何品牌想做进阶或突破档企业叙事内容的拍摄团队（含 1 人 1 手机的小品牌）
+  when:
+    trigger: 企业叙事 6 类内容立项 / 突破玩法选型 / 解决"找不到非 AI 仿区表达方式"
+    context: 选题立项 / 镜头清单撰写 / 反 AI 腔自检后改稿
+  what:
+    action_type: object_first_narrative
+    decision_or_action: |
+      第一步：在内容里挑出至少一个"低位物件"——它必须带劳动痕迹（皱、磨、脏、用过、修过）或承载具体决策（旧样衣、被退的布、被砍的颜色样卡）。
+      第二步：开篇 3 秒内让物件先入镜，人物声音 / 表情先不出现；让观众听见物件的声音（布料、拉链、剪刀、熨斗、踩缝纫机）。
+      第三步：人物对物件做"反应"而非"讲解"——拿起、抚摸、犹豫、挂回、收起；语言保留停顿和不完整。
+      第四步：结尾不给"成品爆闪"或"励志金句"，停在物件上、留白、字幕极简。
+  result:
+    success_pattern: 物件成为"证物 / 错误档案 / 决策对象"；观众从物件细节自动拼出品牌气质与人物性格；AI 难以零成本仿写
+    flip_pattern: 物件只是道具背景，人脸口播仍然占主体；或物件被强行"配解说"，观众接收到的还是结论而非现场
+  underlying_mechanism: |
+    人脸口播是 AI 套话最擅长的形态（结论可枚举、镜头可换脸、字幕可仿写）；
+    具体物件是 AI 套话最不擅长的形态（劳动痕迹无法生成、临场反应无法预测、停顿与犹豫不可仿写）。
+    服装行业的天然优势是"物件证据链极丰富"——每一处版型、面料、缝线、配件都自带故事。
+    把品牌气质从"人对镜头说"切到"人对物件做"，本质是把叙事中心从"可仿写的语言"挪到"不可仿写的现场关系"。
+  boundary:
+    applicable_when: 6 类企业叙事的"进阶 / 突破"档；尤其适合 founder_ip / process_trace / behind_the_scenes / product_journey
+    not_applicable_when: 必须以人物访谈推进的极少数选题；或物件与品牌叙事无关的硬资讯类内容
+  alternative_path:
+    - 找不到合适物件 → 改用"沉默叙事 / ASMR 感官沉浸 / 一镜到底"等同档替代手法（同样是物件 / 声音 / 时间承担叙事）
+    - 物件叙事仍嫌单薄 → 叠加"自我矛盾暴露"或"前台后台并置"提升戏剧密度
+
+evidence:
+  source_md: Q2-内容类型种子/企业叙事类GPT5.4.md
+  source_anchor: founder_ip 突破玩法 1（旧样衣审判庭）+ behind_the_scenes 突破玩法 3（边角料主视角）+ process_trace 突破玩法（只拍手 / 一刀之前的静止 / 被拦下来的那一件）
+  source_type: structural_pattern
+  inference_level: structural_induction
+  evidence_quote: |
+    "镜头一开始不是拍老板本人，而是拍一件被压在柜子最底层的旧样衣……让观众先听到布料摩擦声、拉链声、衣架轻撞桌面的声音。"（founder_ip 突破玩法 1）
+    "把幕后里最不起眼的东西当'主角'：别针、衣架、透明胶、蒸汽熨斗……让物件承担品牌气质。"（behind_the_scenes 突破玩法 3）
+    "服装行业最大的机会，是把'美'的反面拍出来：蒸汽、皱褶、别针、搬箱、返袋、选图争执、临时救场。"
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；横跨 6 类企业叙事的共性突破手法；可作为 content_generation 的具体策略投影到 09_call_mapping。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 反 AI 腔的具体可执行手法，任何品牌的服装企业叙事都适用；不含具体笛语物件或笛语创始人故事原文。属 SKILL.md §6.1.1 第 8 类"Schema 元规则"。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-enterprise-narrative-object-witness-over-talking-head}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-enterprise-narrative-object-witness-over-talking-head-low_position_object}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-enterprise-narrative-object-witness-over-talking-head}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-enterprise-narrative-object-witness-over-talking-head}

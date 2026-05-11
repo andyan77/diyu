@@ -1,0 +1,95 @@
+pack_id: KP-styling_rule-emotion-expression-clothes-as-emotion-vessel
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  服装行业的情绪表达内容里，"一件衣服替我说完今天没说出口的话"是旗舰玩法——
+  镜头从回家开始，主角一句话不说，只是把外套从肩上慢慢脱下来 / 搭在椅背上 /
+  过一会儿又拿起来抱在怀里坐着；背景只有电饭煲跳闸声 / 楼下车声 / 微信提示音但不看；
+  字幕极少，只在最后出现一行："今天没有崩溃，只是一直没空掉下来。"
+  这时那件衣服不是商品也不是穿搭，而是"今天所有没被接住的情绪容器"。
+  服装是情绪载体而非主角商品——这是服装行业独占的"让衣服替主人活着"的叙事空间，
+  其他行业没有的内容化路径。
+
+scenario:
+  who:
+    primary_role: emotion_expression 内容创作者 / 服装品牌内容主理人
+    target_audience: AI 内容生产组装者 / 服装行业内容审核（按 ContentType=emotion_expression + 服装钩子选卡时）
+  when:
+    trigger: 决定为某件服装做情绪内容时（针织 / 外套 / 衬衫等"陪伴感"品类）
+    context: 服装行业情绪表达最易翻车的是"这件针织很温柔"式审美口播；本卡反向破题——服装不被讲述只被使用
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 30 秒一镜到底：归家 + 钥匙声 → 把外套慢脱 + 想挂又抱在怀里 → 坐沙发 + 楼下车声 + 微信响不看 → 字幕"今天没有崩溃 只是一直没空掉下来"
+  result:
+    success_pattern: |-
+      光线 / 门锁声 / 电饭煲跳闸 / 微信提示音都是真实的；动作慢于平时；服装在画面中作为
+      情绪容器（被脱下 / 被抱住 / 被搭起）；观众接住"没有大事但整个人一直悬着"的现代情绪
+    flip_pattern: |-
+      退化成"这件针织很温柔" / "穿上它就能治愈" / "这件衬衫氛围感拉满"——服装成为被讲述的商品
+      / 加伤感 BGM / 加金句 → 北极星映射 ❌ 落入 emotion_expression C1 强默认禁用
+  underlying_mechanism: |
+      服装的特殊性：它是少数能"替主人活着"的物件——外套的包裹感 / 帽衫的遮蔽感 / 衬衫的社会盔甲。
+      把服装作为情绪容器（不是"治愈道具"或"卖点载体"），观众接住的是"我也这样过"的具体性，
+      而不是"这件好看 / 我想买"的购买冲动。这是 emotion_expression 北极星"没说出口的感受被接住"
+      在服装行业的最强落地。同时，"没有崩溃只是一直悬着"是鸡汤接不住的情绪层次。
+  boundary:
+    applicable_when: 1 人 1 手机 / 家里一把椅子 / 下班到家后的前 15 分钟（真实归家窗口）/ 针织 / 外套 / 衬衫 / 帽衫等"陪伴感"品类
+    not_applicable_when: 接客场景（员工不应在工作时拍这种私密内容）/ 显示型搭配（OOTD / 试穿）→ 走 outfit_of_the_day / 公司宣发素材
+  alternative_path:
+    - 与 C3-2 "空间在替我呼吸"配合——本卡用动作（脱、抱、搭）/ 空间卡用静止（站、慢动作）
+    - 与 C3-3 "衣柜情绪谱"配合——本卡用一件衣服全程 / 衣柜卡用三件衣服选择
+
+evidence:
+  source_md: Q2-内容类型种子/emotion_expression-交付物-v0.1.md
+  source_anchor: §C3 突破性玩法卡 #C3-1 "一件衣服替我说完今天没说出口的话" + §A 北极星 + §D 服装行业垂直机会
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-1：镜头从回家开始。主角一句话不说，只是把外套从肩上慢慢脱下来 / 搭在椅背上 /
+    过一会儿又拿起来抱在怀里坐着。背景只有电饭煲跳闸声 / 楼下车声 / 微信提示音但不看。
+    字幕极少，只在最后出现一行："今天没有崩溃，只是一直没空掉下来。"
+    这时候那件衣服不是商品也不是穿搭，而是"今天所有没被接住的情绪容器"。
+    服装行业钩子⭐⭐⭐⭐⭐：服装是情绪载体而非主角商品——这是服装行业独占的"让衣服替主人活着"的叙事空间。
+    §D：❌ "这件针织很温柔" → ✅ "有些人会把外套留在你椅背上"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（含真实感三问的隐式约束）。
+    Gate 2：从 06_rule + 05_relation（compatible_with_content_type=emotion_expression / 服装作为情绪容器）+
+    09_call_mapping 可反推"服装行业 emotion_expression 用 一镜到底归家+服装作为容器+真实环境音 / 与
+    审美口播的边界 / 服装作为情绪载体 vs 商品载体"。
+    Gate 3：跨品牌通用——任何服装品牌都可借此做情绪资产内容（不必直接卖货）。
+    Gate 4：可被 content_generation 调用，按"陪伴感品类清单"生成 30 秒分镜候选。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用服装行业情绪内容玩法格式；不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-emotion-expression-clothes-as-emotion-vessel, rule_type: content_play_card_anchor, applicable_when: "服装行业 emotion_expression 内容（陪伴感品类：针织/外套/衬衫/帽衫）/ 真实归家窗口", success_scenario: "一镜到底+服装作为情绪容器+真实环境音 → 观众接住没说出口的悬浮感", flip_scenario: "服装变成被讲述商品/加伤感BGM/加金句 → 落入 C1 强默认禁用", alternative_boundary: "接客场景不适用 / 显示型搭配走 OOTD"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-emotion-expression-clothes-as-emotion-vessel, source_md: Q2-内容类型种子/emotion_expression-交付物-v0.1.md, source_anchor: §C3-1 + §A + §D, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-emotion_expression-cv1, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"emotion_expression","play_card":"C3-1","apparel_role":"emotion_vessel"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-emotion-expression-clothes-as-emotion-vessel, runtime_method: content_generation, input_types: ContentType+ApparelCompanionCategory, output_types: PlayCardScript_30s}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

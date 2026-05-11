@@ -1,0 +1,86 @@
+pack_id: KP-product_attribute-content-type-north-star-behind-scenes
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `behind_the_scenes`（幕后花絮）的北极星是"愿意把不完美给我看"——
+  观众看完产生"原来你们也会手忙脚乱、也会临时救火、也会笑场，但正因为这样我更喜欢你们"
+  的亲近感。这条北极星把幕后从"正片附属品 / teaser / 搞笑 NG 集锦"
+  反向定义为"独立内容本体 = 看不见的完成成本"，**所有 behind_the_scenes 玩法卡是否成立必须按这条反推**——
+  只展示光鲜 / 只为正片预热 / 只剪 NG 笑场，全部判主流默认禁用。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: behind_the_scenes 内容创作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 behind_the_scenes 玩法卡，或对一条 BTS 内容做"是否符合 ContentType 北极星"判断时
+    context: 18 份 ContentType 交付物各有独立北极星，是单 CT 内容生产的判型锚点
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"愿意把不完美给我看 / 看不见的完成成本"作为 BTS 玩法是否成立的最终判定
+  result:
+    success_pattern: |-
+      玩法卡能反映"差点翻车 / 非 glamorous 劳动 / 边角物件 / 店的声纹 / 反向幕后"
+      等"完成成本"叙事 → 通过北极星映射 → 进 C2 进阶或 C3 突破档
+    flip_pattern: |-
+      玩法卡只剩搞笑 NG / 仓库打包 ASMR 流水线美学 / 正片预热 teaser / 故意制造冲突博眼球
+      → 北极星映射 ❌ → 主流默认禁用档
+  underlying_mechanism: |
+      "幕后即内容"——幕后不是正片的边角料，而是品牌人味与认真的独立证据。
+      只有把"看不见的完成成本"展示出来，观众才会从"看见你们体面"升级到"信任你们认真"。
+  boundary:
+    applicable_when: 单 ContentType 内容创作判型 / behind_the_scenes 玩法库扩张时的卡片新增门禁
+    not_applicable_when: 不是 behind_the_scenes 而是 event_documentary（后台是事件一部分，归 event）
+  alternative_path:
+    - 同一动作（如店员熨衣服）在 event_documentary 与 behind_the_scenes 之间归属判定：为正片/活动开场服务 → event；为日常经营劳动呈现 → BTS
+
+evidence:
+  source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流默认禁用三张卡 + §E 红线 7 条
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完心里产生"原来你们也会手忙脚乱、也会临时救火、也会笑场，
+    但正因为这样我更喜欢你们"的亲近感——"这家公司愿意把不完美给我看"。
+    compass：从"拍摄花絮"到"治愈系 ASMR 补货日"——幕后即内容，不是正片附属品。
+    E7：只展示光鲜一面，缺乏真实的运营困难和情感波动。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（who/when/what/success/flip/mechanism/boundary/alt）。
+    Gate 2：从 06_rule（北极星反推规则）+ 02_field（ContentType.north_star）+ 05_relation 可反推
+      "BTS 北极星 = 愿意把不完美给我看 / 主流三种禁用 / 与 event_documentary 边界"三条核心语义。
+    Gate 3：跨品牌 ContentType 内容创作通用判型——任何品牌做 BTS 都需此锚点。
+    Gate 4：可被 content_generation 调用作为 BTS 玩法选型 / 玩法卡成立性校验的入口。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论——任意品牌的 behind_the_scenes 内容都需此北极星，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-behind-scenes-bts_north_star, owner_field: north_star, definition: "behind_the_scenes ContentType 的北极星：愿意把不完美给我看 / 看不见的完成成本——主流禁用三类（NG 集锦 / 仓库流水线 / 正片 teaser）的判型锚点"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-behind-scenes, rule_type: content_type_north_star_anchor, applicable_when: "新增 BTS 玩法卡或审核一条 BTS 内容时", success_scenario: "玩法呈现完成成本 / 翻车 / 边角物件 / 声纹 → 进 C2/C3", flip_scenario: "只剩搞笑 NG / 流水线 ASMR / 正片预热 → 主流默认禁用", alternative_boundary: "同动作在 event_documentary vs BTS 间按叙事重心二选一"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-behind-scenes, source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md, source_anchor: §A 北极星 + §C1 + §E 红线, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-behind_the_scenes-bts1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"behind_the_scenes"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-behind-scenes, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

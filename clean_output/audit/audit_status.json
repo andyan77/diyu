@@ -1,0 +1,228 @@
+{
+  "summary": {
+    "total": 27,
+    "pass": 26,
+    "fail": 0,
+    "skipped": 0,
+    "deprecated_pass": 1
+  },
+  "gates": [
+    {
+      "gate": "G1",
+      "name": "schema_canonical",
+      "status": "pass",
+      "rc": 0,
+      "summary": "9 tables, definitions OK",
+      "evidence_path": "schema/nine_tables.schema.json"
+    },
+    {
+      "gate": "G0",
+      "name": "csv_structure_check",
+      "status": "pass",
+      "rc": 0,
+      "summary": "清单写入: /home/faye/20-血肉-2F种子/clean_output/audit/_process/csv_struct_violations.csv",
+      "evidence_path": "audit/_process/csv_struct_violations.csv"
+    },
+    {
+      "gate": "G2",
+      "name": "validate_csv_strict",
+      "status": "pass",
+      "rc": 0,
+      "summary": "清单: /home/faye/20-血肉-2F种子/clean_output/audit/_process/csv_violations.csv",
+      "evidence_path": "audit/_process/csv_violations.csv"
+    },
+    {
+      "gate": "G5",
+      "name": "register_enum",
+      "status": "pass",
+      "rc": 0,
+      "summary": "违反: 0 → /home/faye/20-血肉-2F种子/clean_output/audit/_process/register_enum_violations.csv",
+      "evidence_path": "audit/_process/register_enum_violations.csv"
+    },
+    {
+      "gate": "G6",
+      "name": "load_to_sqlite",
+      "status": "deprecated_pass",
+      "rc": 2,
+      "summary": "     ALLOW_DEPRECATED_LOAD_TO_SQLITE=1 python3 clean_output/scripts/load_to_sqlite.py",
+      "evidence_path": "audit/_process/csv_sqlite_consistency.csv"
+    },
+    {
+      "gate": "G7",
+      "name": "task_cards_status",
+      "status": "pass",
+      "rc": 0,
+      "summary": "已写: /home/faye/20-血肉-2F种子/clean_output/audit/task_cards.md",
+      "evidence_path": "audit/task_cards.md"
+    },
+    {
+      "gate": "G8a",
+      "name": "ddl_sync",
+      "status": "pass",
+      "rc": 0,
+      "summary": "   CHECK 表达：CHECK (brand_layer = 'domain_general' OR brand_layer = 'needs_review' OR (brand_layer GLOB 'brand_[a-z]*' AND brand_layer NOT GLOB '*[^a-z_]*' AND length(brand_layer) > 6))",
+      "evidence_path": "schema/nine_tables_ddl.sql + storage/single_db_logical_isolation.sql"
+    },
+    {
+      "gate": "G8b",
+      "name": "ddl_check_demo",
+      "status": "pass",
+      "rc": 0,
+      "summary": "日志: /home/faye/20-血肉-2F种子/clean_output/storage/sqlite3_demo_log.txt",
+      "evidence_path": "storage/sqlite3_demo_log.txt"
+    },
+    {
+      "gate": "Gv",
+      "name": "verify_reverse_traceability",
+      "status": "pass",
+      "rc": 0,
+      "summary": "✅ 反向追溯链路全通",
+      "evidence_path": "audit/extraction_log.csv"
+    },
+    {
+      "gate": "G9",
+      "name": "manifest_consistency",
+      "status": "pass",
+      "rc": 0,
+      "summary": "✅ manifest 与磁盘真相一致",
+      "evidence_path": "manifest.json"
+    },
+    {
+      "gate": "G10",
+      "name": "brand_residue_in_csv",
+      "status": "pass",
+      "rc": 0,
+      "summary": "清单    : /home/faye/20-血肉-2F种子/clean_output/audit/_process/brand_residue_in_csv.csv",
+      "evidence_path": "audit/_process/brand_residue_in_csv.csv"
+    },
+    {
+      "gate": "G11",
+      "name": "yaml_csv_field_sync",
+      "status": "pass",
+      "rc": 0,
+      "summary": "清单    : /home/faye/20-血肉-2F种子/clean_output/audit/_process/yaml_csv_sync_violations.csv",
+      "evidence_path": "audit/_process/yaml_csv_sync_violations.csv"
+    },
+    {
+      "gate": "G12",
+      "name": "coverage_closure",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  json -> /home/faye/20-血肉-2F种子/clean_output/audit/coverage_status.json",
+      "evidence_path": "audit/coverage_status.json"
+    },
+    {
+      "gate": "G13",
+      "name": "anchor_quote_authenticity",
+      "status": "pass",
+      "rc": 0,
+      "summary": "违反: 0 → /home/faye/20-血肉-2F种子/clean_output/audit/_process/anchor_quote_violations.csv",
+      "evidence_path": "audit/_process/anchor_quote_violations.csv"
+    },
+    {
+      "gate": "G14",
+      "name": "fk_constraints",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ DB FK + 应用层引用全绿",
+      "evidence_path": "schema/nine_tables_ddl.sql"
+    },
+    {
+      "gate": "G15",
+      "name": "clean_output_purity",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ 顶层结构 + 残留扫描全绿（prompt §2 七子目录纪律遵守）",
+      "evidence_path": "<root structure>"
+    },
+    {
+      "gate": "G16a",
+      "name": "parse_md_source_units",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  → /home/faye/20-血肉-2F种子/clean_output/audit/source_unit_inventory.csv",
+      "evidence_path": "audit/source_unit_inventory.csv"
+    },
+    {
+      "gate": "G16b",
+      "name": "compute_knowledge_point_coverage",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  → coverage_status.json (knowledge_point_coverage 字段)",
+      "evidence_path": "audit/knowledge_point_coverage.csv"
+    },
+    {
+      "gate": "G16c",
+      "name": "knowledge_point_coverage_baseline",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ 通过基线（实际抽取粒度为'概念级 pack' 非'玩法卡级'，保底 20.0%）",
+      "evidence_path": "audit/coverage_status.json"
+    },
+    {
+      "gate": "G16d_a",
+      "name": "build_source_unit_adjudication",
+      "status": "pass",
+      "rc": 0,
+      "summary": "已写入 coverage_status.json · layer_distribution (W11 三层防漂移)",
+      "evidence_path": "audit/source_unit_adjudication.csv"
+    },
+    {
+      "gate": "G16d_b",
+      "name": "check_source_unit_adjudication",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ 全部 source_unit 有合法 adjudication_status；pending 全部具名+优先级+理由",
+      "evidence_path": "audit/source_unit_adjudication.csv"
+    },
+    {
+      "gate": "G17a",
+      "name": "build_evidence_row_adjudication",
+      "status": "pass",
+      "rc": 0,
+      "summary": "输出: /home/faye/20-血肉-2F种子/clean_output/audit/evidence_row_adjudication.csv",
+      "evidence_path": "audit/evidence_row_adjudication.csv"
+    },
+    {
+      "gate": "G17b",
+      "name": "check_evidence_row_adjudication",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ row 级裁决账本完整、覆盖率 100%、无未签字 needs_human_review",
+      "evidence_path": "audit/evidence_row_adjudication.csv"
+    },
+    {
+      "gate": "G18",
+      "name": "derived_doc_freshness",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ 派生文档全部带合法 frontmatter；live 文档与 manifest 数值一致",
+      "evidence_path": "audit/_process/*.md frontmatter"
+    },
+    {
+      "gate": "G19",
+      "name": "layer_adjudication",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ G19 通过：W11 三层裁决完整、契约合规、无未签字行",
+      "evidence_path": "audit/source_unit_adjudication_w11.csv + pack_layer_register.csv"
+    },
+    {
+      "gate": "G20",
+      "name": "play_card_completeness",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ G20 通过：play_card_register 29 行完整、契约合规、与 yaml 同步",
+      "evidence_path": "play_cards/play_card_register.csv"
+    },
+    {
+      "gate": "G21",
+      "name": "runtime_asset_completeness",
+      "status": "pass",
+      "rc": 0,
+      "summary": "  ✅ G21 通过：runtime_asset_index 24 行完整、契约合规、与 yaml 同步",
+      "evidence_path": "runtime_assets/runtime_asset_index.csv"
+    }
+  ],
+  "rendered_at": "2026-05-12 00:43:32"
+}

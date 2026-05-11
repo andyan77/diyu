@@ -1,0 +1,119 @@
+pack_id: KP-training_unit-role-material-five-kinds-minimum
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  冷启动阶段每个 RoleProfile（岗位画像）必须备齐 5 类基础素材
+  （日常动作 / 判断句 / 高频问题与失败案例 / 典型场景与时间节点 / 特有物件或空间或证物）
+  + 至少 3 个硬证据，否则该岗位画像视为"未喂饱"，不得进入种子数据导入。
+  对话碎片与岗位禁忌为可选第 6、7 类，能补则更稳。
+
+scenario:
+  who:
+    primary_role: 知识工程 / 内容运营 / 业务专家联合采集组
+    target_audience: 首批 RoleProfile 冷启动数据底座（store_manager / sales_associate / designer / sample_worker / warehouse_supervisor / design_director / merchandising_director 等）
+  when:
+    trigger: 任意 RoleProfile 进入素材验收 / 是否可投种子数据库的判定
+    context: 服装零售人设系统 Phase 3 Step 3 种子数据准备前的素材门禁
+  what:
+    action_type: role_material_completeness_gate
+    decision_or_action: |
+      错误动作：只采到岗位的几个金句或一份 SOP，就认为该岗位"准备好了"，
+        提交到种子数据导入；或者把"高频问题与失败案例"和"典型场景与时间节点"合并成一类糊弄过关。
+      正确动作：每个岗位完成度按 5 类必备 + 2 类可选检查——
+        必备类（缺一即不通过）：
+          ① 岗位日常动作清单；② 岗位判断句 / 经验句；
+          ③ 岗位高频问题与失败案例；④ 岗位典型场景与时间节点；
+          ⑤ 岗位特有物件 / 空间 / 证物；
+        可选类（建议补）：⑥ 岗位对话碎片；⑦ 岗位不能说什么 / 不该越界什么；
+        硬证据门槛：每岗至少拿到 3 个硬证据（如真实复盘 / 现场视频 / 失败样衣 / 被否决的样例）。
+      为什么错：5 类素材分别支撑 RoleProfile 不同字段（动作字段 / 判断字段 / 真实性锚点 /
+        典型场景 / 物件证物锚点），缺一类就有字段填不出来。
+      如何纠正：素材验收建立硬清单，每岗按 5/3 双门槛打勾才放行。
+      掌握检查：按 RoleProfile 列表逐岗核对 5 类是否齐全 + 3 硬证据是否到位。
+  result:
+    success_pattern: |
+      每个 RoleProfile 5 类素材齐全 + 3 硬证据到位，下游 authenticity_anchors /
+      typical_scenarios / topic_scope / role_type 等字段全部可回填，种子数据可导入。
+  flip_pattern: |
+      某岗位只有判断句没有动作清单（或反之），导致 RoleProfile 看起来"会说但不会做"或
+      "会做但说不出来"；或没有特有物件证物，导致内容生成时缺空间感与物理真实感。
+  underlying_mechanism: |
+      5 类素材分别对应 5 种字段填充能力：
+      日常动作 → 动作字段 + role_type；
+      判断句 → 真实性锚点 + topic_scope；
+      高频问题 / 失败案例 → 真实性锚点 + emotional_spectrum；
+      典型场景 / 时间节点 → typical_scenarios；
+      特有物件 / 空间 / 证物 → 物件锚点（视觉与触觉真实感）；
+      缺任一类 → 对应字段空白或空泛，岗位画像不完整。
+  boundary:
+    applicable_when: 任意 RoleProfile 冷启动素材验收 / 种子数据准备门禁
+    not_applicable_when: |
+      品牌唯一层（FounderProfile）→ 字段壳不同，不套用此 5 类清单；
+      已稳定运行的成熟岗位补丁素材 → 不必每次补丁都凑齐 5 类，按缺什么补什么。
+  alternative_path:
+    - 某岗位某一类暂时拿不到 → 标记为 partial 并写明缺哪一类，禁止跳过；
+      种子导入流程对 partial 岗位做风险提示
+    - 多岗位共享同一物件 / 空间 → 物件证物可跨岗位复用，但需各自标注关系
+    - 资源紧 → 优先按 P0 / P1 顺序保前 4 岗（sales_associate / store_manager / designer / sample_worker）的 5/3 双门槛
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md
+  source_anchor: 二、2.6 一岗至少准备 5 类素材 + 七、本稿结论 · 每岗最低要求
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    冷启动阶段，每个 RoleProfile（岗位画像）至少要准备以下 5 类素材：
+    1. 岗位日常动作清单；2. 岗位判断句 / 经验句；3. 岗位高频问题与失败案例；
+    4. 岗位典型场景与时间节点；5. 岗位特有物件 / 空间 / 证物。
+    如果还能补到第 6、7 类，会更稳：6. 岗位对话碎片；7. 岗位不能说什么 / 不该越界什么。
+    每岗最低要求：至少准备 5 类基础素材 + 至少拿到 3 个硬证据。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐全。
+    Gate 2：从 rule + value_set(material_kind) + call_mapping 可反推
+    "5 类必备 + 2 类可选 + 3 硬证据双门槛"。
+    Gate 3：跨品牌跨岗位通用素材完备性门禁。
+    Gate 4：可被 store_training 与种子数据准备流程调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      素材完备性门禁是通用元规则，与具体品牌内容无关，任意品牌冷启动均可直接套用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+  field:
+    - {field_id: FD-RoleProfile-material_completeness, owner_type: RoleProfile, field_name: material_completeness, data_type: enum}
+    - {field_id: FD-RoleProfile-hard_evidence_count, owner_type: RoleProfile, field_name: hard_evidence_count, data_type: int}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-role-material-five-kinds-minimum-completeness_gate, owner_field: material_completeness, definition: "5 类必备素材齐全 + 3 硬证据为种子数据可导入门槛"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-role-material-five-kinds-minimum-material_kind, value: daily_action_list, label: 岗位日常动作清单, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-role-material-five-kinds-minimum-material_kind, value: judgment_or_experience_lines, label: 岗位判断句/经验句, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-role-material-five-kinds-minimum-material_kind, value: high_frequency_problem_and_failure_case, label: 岗位高频问题与失败案例, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-role-material-five-kinds-minimum-material_kind, value: typical_scenario_and_time_node, label: 岗位典型场景与时间节点, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-role-material-five-kinds-minimum-material_kind, value: signature_object_space_artifact, label: 岗位特有物件/空间/证物, ordinal: 5}
+    - {value_set_id: VS-KP-training_unit-role-material-five-kinds-minimum-material_kind, value: dialogue_fragment, label: 岗位对话碎片（可选）, ordinal: 6}
+    - {value_set_id: VS-KP-training_unit-role-material-five-kinds-minimum-material_kind, value: forbidden_or_boundary, label: 岗位不能说/不该越界（可选）, ordinal: 7}
+  rule:
+    - {rule_id: RL-KP-training_unit-role-material-five-kinds-minimum, rule_type: role_material_completeness_gate, applicable_when: "任意 RoleProfile 冷启动素材验收 / 种子数据准备门禁", success_scenario: "5 类必备齐全 + 3 硬证据，岗位画像各字段全部可回填", flip_scenario: "缺类或缺硬证据，RoleProfile 字段出现空白或空泛，人设不完整", alternative_boundary: "FounderProfile 不套用；成熟岗位补丁不强凑 5 类；缺类标 partial 不得跳过"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-role-material-five-kinds-minimum, source_md: Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md, source_anchor: 二、2.6 + 七、结论, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-rmfk1, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"applies_to":"all_first_batch_role_profiles","gate_type":"5_required_plus_3_hard_evidence"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-role-material-five-kinds-minimum, runtime_method: store_training, input_types: ["RoleProfile","TrainingMaterial"], output_types: ["RoleMaterialCompletenessReport"]}

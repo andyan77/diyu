@@ -1,0 +1,85 @@
+pack_id: KP-styling_rule-structure-drape
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  挺的配垂的、厚的配薄的、糯的配利落的——材质关系决定一套的"质感"和"贵气感"，
+  不仅是颜色搭配；纯功能运动场景不在此限。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长（贵价感商品较多的门店尤其要会用）
+    target_audience: 想提升质感的顾客 / 客单较高门店 / 贵价感商品较多门店
+  when:
+    trigger: 顾客试穿后觉得"还可以，但不够高级" / 整套质感校验
+    context: 整套搭配的材质对比设计
+  what:
+    action_type: structure_vs_drape_pairing
+    decision_or_action: |
+      挺括西装配垂感裙，毛绒外套配牛仔，真丝衬衫配西裤；
+      替代时先守材质角色（挺/垂/糯/利落），再守颜色。
+  result:
+    success_pattern: 顾客自己说出"这套显贵"，连带购买配件可能性提升。
+    flip_pattern: 全身都软塌或全身都硬挺，画面平整但"廉价感"或"老气"。
+  underlying_mechanism: |
+      材质对比创造"质感层次"，单一材质的全身视觉容易塌掉或硬塞；
+      贵气感来自"挺/垂/糯/利落"的视觉张力，而不只是单品价格。
+  boundary:
+    applicable_when: 想提升质感 / 客单较高门店 / 贵价商品搭配
+    not_applicable_when: 纯功能运动场景
+  alternative_path:
+    - 主件材质断货 → 替代先守材质角色再守颜色
+    - 全身同材质（罕见情况）→ 用配饰金属/光泽件做局部材质对冲
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 07 structure_drape_rule + 6.3 soft_rule
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    挺的配垂的，厚的配薄的，糯的配利落的。
+    材质关系决定一套衣服的"质感"和"贵气感"，不只是谁和谁同色。
+    works_in：挺括西装配垂感裙，毛绒外套配牛仔，真丝衬衫配西裤。
+    fails_in：全身都软塌，或全身都硬挺。
+    替代先守材质角色，再守颜色。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；软规则；可被推荐/陈列/培训三路调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 材质对比是基础质感通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-structure-drape-material_axes, owner_field: rule_name, definition: "挺垂对比法：挺/垂、厚/薄、糯/利落三组材质张力对冲"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-structure-drape-material_role, value: structured, label: 挺括, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-structure-drape-material_role, value: drapey, label: 垂感, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-structure-drape-material_role, value: thick, label: 厚, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-structure-drape-material_role, value: thin, label: 薄, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-structure-drape-material_role, value: gooey, label: 糯, ordinal: 5}
+    - {value_set_id: VS-KP-styling_rule-structure-drape-material_role, value: crisp, label: 利落, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-styling_rule-structure-drape, rule_type: soft_rule, applicable_when: "想提升质感/客单较高门店/贵价商品搭配", success_scenario: "材质对冲成立顾客觉得显贵", flip_scenario: "全软塌或全硬挺显廉价或老气", alternative_boundary: "替代先守材质角色再守颜色；纯运动场景不适用"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-structure-drape, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 07 + 6.3, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-strd01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"soft_rule","focus":"material_contrast"}'}
+    - {relation_id: RE-StylingRule-uses_fabric_knowledge-FabricKnowledge-strd02, source_type: StylingRule, target_type: FabricKnowledge, relation_kind: uses_fabric_knowledge, properties_json: '{"requires":"material_role_classification"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-strd03, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"相邻陈列要有材质起伏"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-structure-drape, runtime_method: outfit_recommendation, input_types: [Product], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-structure-drape, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

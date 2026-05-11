@@ -1,0 +1,97 @@
+pack_id: KP-training_unit-founder-profile-soft-use-no-rename
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  对"没有明显创始人文化"的品牌（老板不愿出镜 / 加工厂转型品牌 / 多人合伙无单一创始人），
+  允许不填 FounderProfile、不启用 founder_ip 题材即可——这是**启用与否**的问题，
+  不是命名贴不贴的问题，禁止通过给对象更名（如改成"品牌主理人画像"等）来回避真问题。
+
+scenario:
+  who:
+    primary_role: 知识工程负责人 / 品牌建模决策者
+    target_audience: 多品牌共用建模池
+  when:
+    trigger: 新品牌入场建模 / 收到"我们没有创始人，能不能改个名字" / FounderProfile 启用与否裁决
+    context: 多品牌共用 Persona 池 / 加工厂转品牌 / 合伙人品牌
+  what:
+    action_type: founder_profile_enablement_decision
+    decision_or_action: |
+      错误动作：因为某品牌"没创始人文化"就把 FounderProfile 改名成"主理人画像 / 品牌精神画像"
+        或拆出多个变体，企图让所有品牌都有得用。
+      正确动作：保留 FounderProfile 名称与定义不变，按柔性使用规则
+        - 该品牌不启用 → 跳过即可，不填、不报错；
+        - 该品牌不启用 founder_ip 题材 → 内容线上层关闭；
+        - 不通过更名解决"对象不通用"的伪问题。
+      为什么错：更名只是表面对称，背后的对象语义、服务题材、权限边界都没变；
+        改名后系统更乱（同义对象多份），且错过"该品牌不适合 founder_ip"这个真实结论。
+      如何纠正：建模决策入口提供 enablement_flag，关闭即不进入校验链；
+        命名冻结，禁止派生别名。
+      掌握检查：多品牌池中 FounderProfile 类型只有 1 种命名，未出现"主理人画像 / xx 主理人"等派生命名。
+  result:
+    success_pattern: |
+      多品牌池干净：有创始人文化的品牌启用 FounderProfile + founder_ip；
+      无创始人文化的品牌跳过，专注其他内容线，不被强制拼凑虚假叙事。
+    flip_pattern: |
+      为照顾"没创始人"品牌而改名 → 同义对象多份污染池子；
+      或反向：硬要无创始人品牌做 founder_ip → 内容生硬、可信度低、品牌叙事失败。
+  underlying_mechanism: |
+    对象通用性问题应通过"启用/不启用"二元开关解决，而不是通过派生命名分支解决；
+    命名分支会让对象语义稀释，启用开关则保持语义清晰且兼容多场景。
+  boundary:
+    applicable_when: 多品牌建模 / 新品牌入场 / FounderProfile 启用裁决
+    not_applicable_when: |
+      品牌确实想要做创始人 IP 但不叫"创始人"（如想叫"主理人"作 display_name）→
+      可在 display_name 字段上本地化，不动 object_type 命名。
+  alternative_path:
+    - display_name 本地化（"创始人"→"主理人"）：允许，前提 object_type 不变
+    - 多创始人合伙：暂按 0 份处理，等独立建模裁决，不强填
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md
+  source_anchor: 二、2.1 说明（命名冻结段）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    对于"没有明显创始人文化"的品牌（老板不愿出镜 / 加工厂转型品牌 / 多人合伙无单一创始人），
+    按 Q1 §柔性使用的口径，允许不填 FounderProfile、不启用 founder_ip 题材——
+    这是启用与否的问题，不是命名贴不贴的问题，不需要通过更名解决。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐。Gate 2：rule + field(enablement_flag/display_name) +
+    value_set(soft_use_modes) 可反推"启用开关解决，命名冻结"。
+    Gate 3：跨品牌通用建模治理。Gate 4：content_generation 入口可调用 enablement 校验。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale_keep: "domain_general_keep · 启用与否非命名问题是抽象元规则；scan 误报：pack_id 含 founder 触发"
+  rationale: 多品牌建模治理通用原则，与笛语品牌专属表达无关。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+  field:
+    - {field_id: FD-Persona-enablement_flag, owner_type: Persona, field_name: enablement_flag, data_type: bool}
+    - {field_id: FD-Persona-display_name, owner_type: Persona, field_name: display_name, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-founder-profile-soft-use-no-rename-enablement, owner_field: enablement_flag, definition: "FounderProfile 是否对该品牌启用：true=启用并对接 founder_ip / false=跳过不报错"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-founder-profile-soft-use-no-rename-mode, value: enabled, label: 启用 FounderProfile + founder_ip, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-founder-profile-soft-use-no-rename-mode, value: disabled, label: 不启用（柔性跳过）, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-founder-profile-soft-use-no-rename-mode, value: display_name_localized, label: object_type 不变仅 display_name 本地化, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-training_unit-founder-profile-soft-use-no-rename, rule_type: founder_profile_enablement_decision, applicable_when: "多品牌建模或新品牌入场 FounderProfile 启用裁决", success_scenario: "对象命名冻结，按 enablement_flag 开关启用，多品牌池干净", flip_scenario: "为照顾差异化品牌派生命名，对象池污染，伪问题被回避", alternative_boundary: "display_name 可本地化但 object_type 不变；多创始人合伙暂按 0 份"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-founder-profile-soft-use-no-rename, source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md, source_anchor: 二、2.1 说明, source_type: explicit_business_decision, inference_level: low}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-founder-profile-soft-use-no-rename, runtime_method: content_generation, input_types: ["Persona"], output_types: ["FounderProfileEnablementValidation"]}

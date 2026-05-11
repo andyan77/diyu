@@ -1,0 +1,112 @@
+pack_id: KP-display_rule-full-look-no-broken-size
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: display_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  full_look_display（成套推荐位）只能建立在 full_look_ready / new_arrival_complete / core_push_deep_stock
+  这三种成套齐套或可补的库存状态上；不得在 broken_size_partial（断码零散）、clearance_tail_stock（清仓尾货）
+  或主件断码的伪成套上做成套陈列，否则画面成立但成交路径断裂——少一件就散，顾客带不走。
+
+scenario:
+  who:
+    primary_role: 店长 / 老手陈列负责人
+    target_audience: 进店浏览成套位、有连带购买可能的顾客
+  when:
+    trigger: 上新 / 周陈列调整 / 节庆活动布场 / 主推变更
+    context: 门店成套推荐位（含模特位 + 成套挂位的组合视图）
+  what:
+    action_type: full_look_display_inventory_gating
+    decision_or_action: |
+      布展前先做库存校验：
+        - 主件、关键辅件是否齐码且深库存；
+        - 任一关键件处于 broken_size_partial 或 clearance_tail_stock → 拒绝建立成套陈列；
+        - 已建成套位中任一关键件转为断码 → 立即下撤或替换为同气质齐套替代。
+      新人不得独立操作成套位，只学"一主件 + 一辅件 + 一点睛"基础版。
+  result:
+    success_pattern: |
+      顾客被成套画面打动后，主件、辅件、点睛三件均能现场拿全；
+      整套带走率提升，连带成交成立；
+      画面真实，门店可信度累积。
+    flip_pattern: |
+      看着高级，编辑感强，但少一件就散——
+      顾客试穿后发现配件断码，从"我要这一套"变成"那算了"；
+      二次成交难以补救，且会反噬门店专业感。
+  underlying_mechanism: |
+      成套陈列承诺的是"可被多数顾客整套购买的路径"；
+      关键件断码 = 路径不成立 = 画面只是审美装置，不是成交工具。
+      陈列位的业务目标决定了它的库存校验门槛，不是颜值越高越成立。
+  boundary:
+    applicable_when: full_look_display 单元；mannequin_display 中以"整套带走"为目标的同类逻辑同样适用
+    not_applicable_when: |
+      window_display（橱窗位）以"拦人定调"为目标，允许少量主推非齐码（但仍需说明）；
+      folded_display / side_hanging_display 以"促上手 / 承接选择"为目标，不在本规则范围。
+  alternative_path:
+    - 关键辅件断码但主件齐码 → 拆为 front_hanging_display 主推位，不强行成套
+    - 全场成套件不足 → 优先做 mannequin_display 单模特基础搭法 + 正挂位组合
+    - 清仓尾货中可重复基础款 → 仅允许进 folded_display，不进成套位
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/陈列方法包.md
+  source_anchor: 二、6. full_look_display + 三、2)/3) 成套陈列库存状态裁决 + 四、联动冻结
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    适合库存状态：full_look_ready / new_arrival_complete / core_push_deep_stock。
+    不适合库存状态：broken_size_partial / clearance_tail_stock / 主件或关键辅件断码的伪成套状态。
+    最容易犯的错：套得太满；主件不清；辅件比主件抢；没有第二套替代；建立在断码货上。
+    什么叫"看着高级但卖不动"：编辑感很强，现实感很弱；少一件就散，顾客带不走。
+    window_display、mannequin_display、full_look_display 必须过库存校验，不得用断码伪成套。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全；who（店长 / 老手）/ when（布展时机）/ what（库存校验门槛）/
+            success（整套带走）/ flip（少一件就散）/ mechanism（陈列位承诺成交路径）/
+            boundary（不适用于橱窗、叠装、侧挂）/ alternative（拆为正挂或单模特）。
+    Gate 2：从 9 表派生（DisplayGuide + InventoryState + relation + rule + call_mapping）
+            可反推"成套位的库存白名单 / 黑名单""断码必下撤""新人不操作成套位" 三条核心语义。
+    Gate 3：跨女装品牌通用陈列纪律。
+    Gate 4：可被 display_guidance（陈列指南调用）/ store_training（before_after_timelapse + do_dont）调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      围绕陈列位与库存状态的通用业务纪律，不含笛语专属表达；
+      可直接被任意女装门店复用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-DisplayGuide, type_name: DisplayGuide, supertype: domain_object}
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+  field:
+    - {field_id: FD-DisplayGuide-display_unit, owner_type: DisplayGuide, field_name: display_unit, data_type: enum}
+    - {field_id: FD-InventoryState-state_label, owner_type: InventoryState, field_name: state_label, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-display_rule-full-look-no-broken-size-full_look, owner_field: display_unit, definition: "full_look_display 是以整套带走为业务目标的陈列单元，承诺多数顾客可整套购买的路径"}
+  value_set:
+    - {value_set_id: VS-KP-display_rule-full-look-no-broken-size-allowed_inventory, value: full_look_ready, label: 成套齐套}
+    - {value_set_id: VS-KP-display_rule-full-look-no-broken-size-allowed_inventory, value: new_arrival_complete, label: 新品齐码}
+    - {value_set_id: VS-KP-display_rule-full-look-no-broken-size-allowed_inventory, value: core_push_deep_stock, label: 主推深库存}
+    - {value_set_id: VS-KP-display_rule-full-look-no-broken-size-forbidden_inventory, value: broken_size_partial, label: 断码零散}
+    - {value_set_id: VS-KP-display_rule-full-look-no-broken-size-forbidden_inventory, value: clearance_tail_stock, label: 清仓尾货}
+    - {value_set_id: VS-KP-display_rule-full-look-no-broken-size-forbidden_inventory, value: pseudo_full_look_main_broken, label: 主件或关键辅件断码的伪成套}
+  rule:
+    - {rule_id: RL-KP-display_rule-full-look-no-broken-size, rule_type: display_inventory_gating, applicable_when: "陈列单元=full_look_display 或 mannequin_display 整套目标", success_scenario: "三件齐全可现场带走，整套带走率提升", flip_scenario: "少一件就散，顾客从我要这套变成那算了", alternative_boundary: "辅件断码→拆为正挂位主推；全场成套不足→单模特+正挂位组合"}
+  evidence:
+    - {evidence_id: EV-KP-display_rule-full-look-no-broken-size, source_md: Q7Q12-搭配陈列业务包/陈列方法包.md, source_anchor: 二、6 + 三、2)/3) + 四、联动, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-full01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"allow","values":["full_look_ready","new_arrival_complete","core_push_deep_stock"]}'}
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-full02, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"forbid","values":["broken_size_partial","clearance_tail_stock","pseudo_full_look_main_broken"]}'}
+    - {relation_id: RE-DisplayGuide-governed_by_rule-StylingRule-full01, source_type: DisplayGuide, target_type: StylingRule, relation_kind: governed_by_rule, properties_json: '{"note":"成套陈列必须回指 StylingRule 不得凭审美硬搭"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-display_rule-full-look-no-broken-size, runtime_method: display_guidance, input_types: [DisplayGuide, InventoryState], output_types: [DisplayPlan]}
+    - {mapping_id: CM-store_training-KP-display_rule-full-look-no-broken-size, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

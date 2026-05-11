@@ -1,0 +1,86 @@
+pack_id: KP-training_unit-store-manager-rhythm-first
+granularity_layer: L3
+
+runtime_asset:
+  runtime_asset_id: RA-training_unit-store-manager-rhythm-first
+  asset_type: role_split
+  title: "店长节奏优先分工"
+  summary: "店长先按货场店员顾客后场的节奏顺序判断整店状态，再处理成交。"
+  source_pointer: "candidates/.../KP-training_unit-store-manager-rhythm-first.yaml#runtime_asset"
+
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  老店长（store_manager）的核心手感不是"会卖"，而是"让整家店不乱"——一进店先看节奏（货场主次→店员站位→顾客停顿→后场库存接力），
+  四件事按顺序看，任何一环不对就先稳节奏再谈成交；颠倒顺序（先看哪件衣服漂亮 / 先冲销量再稳团队）→ 整店当天状态会从最早的弱信号一路滑到失手。
+
+scenario:
+  who:
+    primary_role: store_manager（门店店长）
+    target_audience: 店长本人 / 店长后备 / 跨店区督导
+  when:
+    trigger: 开店前检查 / 高峰期到达 / 闭店复盘 / "今天状态不对"的早期信号出现
+    context: 单店日常运营全时段，特别是开店前 30 分钟、客流高峰前 15 分钟、闭店复盘环节
+  what:
+    action_type: store_rhythm_diagnosis
+    decision_or_action: |
+      老店长一眼按顺序看四件事：
+        1. 货场主次：今天主推位 / 成套位 / 断码区是否分得清
+        2. 店员站位：高峰前是先稳团队还是先冲销量
+        3. 顾客停顿：顾客是来逛还是来确认（停顿点位置 + 时长）
+        4. 后场接力：库存深度 / 断码 / 调货周期能否接住前台承诺
+      四件事中任一异常 → 先稳节奏（调站位 / 调主次 / 限承诺）→ 再谈当日 KPI；
+      不能教条化：不是每个犹豫客都该加压成交，不是每个活动日都该把爆款推到最前，不是陈列好看就等于卖得动，不是新人热情就等于接客有效。
+  result:
+    success_pattern: 高峰前 15 分钟内完成节奏诊断，团队站位与主次到位，当日成交不靠救火也能稳达
+    flip_pattern: 一进店先盯漂亮的款 / 直接冲销量不稳团队，弱信号被忽略，直到顾客流失或新人话术失手才反应过来
+  underlying_mechanism: |
+      门店当日表现是"节奏 → 动作 → 成交"的因果链；店长的位置是节奏诊断者，不是金牌导购；
+      四看顺序是该岗位的判断模板，跳过任一步就等于把判断权交给运气。
+  boundary:
+    applicable_when: 任何线下女装门店的店长岗位日常运营
+    not_applicable_when: 纯线上店 / 无后场库存的快闪店（缺第 4 步的判断对象）
+  alternative_path:
+    - 新店 7 天内站位与主次未稳 → 第 1-2 步暂用首批 SOP 兜底，第 3-4 步必须照走
+    - 顾客极少时段（早场） → 第 3 步降级为"主动观察 1-2 个停顿"，不强求样本量
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md
+  source_anchor: 五、1. store_manager（门店店长）
+  source_type: explicit_role_skill_lock
+  inference_level: low
+  evidence_quote: |
+    老店长不是先看"这件衣服漂不漂亮"，而是先看今天这家店的节奏顺不顺。
+    先看货场有没有主次，再看店员有没有站位，再看顾客有没有停顿，最后看后场和库存能不能接住。
+    这个岗位的核心不是会卖，而是让整家店不乱。
+    老店长一眼先看四件事：顾客今天是来逛，还是来确认；高峰期该先稳团队，还是先冲销量；
+    一家店"今天状态不对"最早从哪里冒出来；哪些话术 / 动作会让前台直接失手。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；为店长培训材料（开店前检查 / 班前会 / 闭店复盘）提供根判断模板。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用门店纪律（店长岗位手感），任意品牌门店都能直接用，不含品牌专属调性。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-store-manager-rhythm-first}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tcb08-01}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-store-manager-rhythm-first}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-store-manager-rhythm-first}

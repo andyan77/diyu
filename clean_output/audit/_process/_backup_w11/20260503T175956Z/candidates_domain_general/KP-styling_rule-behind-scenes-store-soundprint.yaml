@@ -1,0 +1,95 @@
+pack_id: KP-styling_rule-behind-scenes-store-soundprint
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  behind_the_scenes 内容里，"店的声纹 / 10 个声音组成一条幕后"是一条
+  把服装门店声音密度（卷帘门 / 门铃 / 衣架 / 扫码 / 剪吊牌 / 熨烫蒸汽 /
+  纸袋摩擦 / 试衣间门 / 拉链 / 关灯）做成**品牌识别资产**的玩法——
+  全片不靠画面热闹，只用 30 秒里 10 段近距收音的店内声音 + 极近景画面，
+  画面只服务于声音。本卡聚焦"**空间声纹**"，与 daily_fragment C3-4
+  "六声一日"（生活声音）和 role_work_vlog C3-3（手部工作 ASMR）+ process_trace C3-6
+  （面料 ASMR）+ knowledge_sharing C3-5（材质听诊器）形成 ASMR 家族
+  的"空间维度"分工——三者各占维度，不可互替。
+
+scenario:
+  who:
+    primary_role: behind_the_scenes 内容创作者 / 服装门店主理人 / 加盟商
+    target_audience: AI 内容生产组装者（ContentType=behind_the_scenes 选 ASMR 卡时）
+  when:
+    trigger: 想做空间感强的 BTS 但没有"翻车 / 救场"故事素材时 / 想沉淀品牌声音资产时
+    context: 服装门店声音密度极高且独特（卷帘门 / 衣架 / 拉链等），是其他零售品类没有的素材富矿；视觉过载平台中"闭眼能听完"形成强反差
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 30 秒按时间轴排 10 段近距声音 + 极近景画面 + 中段静音断点 + 结尾关灯声
+  result:
+    success_pattern: |-
+      0-3 卷帘门"哗啦" → 3-6 门铃"叮" → 6-9 衣架碰撞 → 9-12 扫码"滴" → 12-15 剪吊牌"咔嚓" →
+      15-18 熨烫蒸汽"嘶" → 18-21 纸袋摩擦 → 21-24 试衣间门 → 24-27 拉链 → 27-30 关灯"啪"
+      → 接住"真实空间的存在感" → 调用共享引擎 #11 ASMR 感官沉浸 → C3 突破档
+    flip_pattern: |-
+      用配 BGM 的方式遮盖原声 / 拍成视觉为主声音为辅 / 凑不齐 10 段去复用同一段
+      → 退化为"店内日常 vlog"，丢失声纹独占性；或拍成"商品音效广告"→ 滑向硬广
+  underlying_mechanism: |
+      服装门店声音密度高且独特，**声纹能变成品牌识别资产**——这是其他零售品类无法复制的内容护城河。
+      "闭眼能听完"在视觉过载的短视频平台形成巨大反差，触发 ASMR 类放松反应。
+      与同 ASMR 家族其他成员的边界靠"声音来源"切分：本卡=空间 / role_work=工作动作 /
+      process_trace=面料 / knowledge_sharing=材质 / daily_fragment=生活时段。
+  boundary:
+    applicable_when: 实体门店 / 1 人手机 + 可选领夹麦 ≤ 200 元 / 4 小时内剪辑 / 单次拍摄合规
+    not_applicable_when: 没有实体门店（声音不真实）/ 想做"工作动作 ASMR"→ role_work_vlog C3-3 / 想做"面料触感 ASMR"→ process_trace C3-6 或 product_review C3-3 触感法庭
+  alternative_path:
+    - 与 C3-5 "补货日治愈系 ASMR"配合：本卡是"声音切片"，C3-5 是"延时+ASMR"双引擎融合（候选引擎 #18 唯一样板）
+    - 服装行业可基于本卡积累"店内声音库"，跨内容复用为标配 BGM 替代品
+
+evidence:
+  source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md
+  source_anchor: §C3-4 店的声纹 / 10 个声音组成一条幕后 + 备注（ASMR 家族口径对齐）
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-4：全片不靠画面热闹，只用"店的声音"：卷帘门、门铃、衣架、扫码、剪吊牌、熨烫蒸汽、
+    纸袋摩擦、试衣间门、拉链、关灯。画面只给极近景，像在听一座小型装置艺术。
+    服装行业声音密度高且独特——声纹能变成品牌识别资产。
+    备注：本卡聚焦空间声纹而非工作动作 / 材质本身。ASMR 家族 7 entries 跨 6 个 ContentType。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation（compatible_with_content_type=behind_the_scenes）+ 09_call_mapping
+    可反推"BTS 用 10 段空间声音+极近景 / 与 role_work / process_trace / daily_fragment 的 ASMR 维度边界 /
+    服装门店独占声音密度"三条核心语义。
+    Gate 3：跨品牌通用——任意有实体门店的服装品牌都可调用。
+    Gate 4：可被 content_generation 调用，按"店内声音清单"生成分镜+剪辑节奏。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 BTS 空间声纹玩法格式，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-behind-scenes-store-soundprint, rule_type: content_play_card_anchor, applicable_when: "实体门店 BTS 选卡 / 想沉淀品牌声音资产 / 1 人手机+可选领夹麦", success_scenario: "10 段店内空间声音+极近景+中段静音+关灯收尾 → 共享引擎 #11 ASMR → 闭眼能听完", flip_scenario: "配 BGM 遮原声 / 视觉为主 / 复用同声音 → 退化为店内 vlog / 商品音效广告", alternative_boundary: "工作动作 ASMR → role_work C3-3 / 面料触感 → process_trace C3-6 或 product_review C3-3 / 生活时段声音 → daily_fragment C3-4"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-behind-scenes-store-soundprint, source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md, source_anchor: §C3-4, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-behind_the_scenes-bts4, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"behind_the_scenes","play_card":"C3-4","shared_engine":"#11_asmr","asmr_family_dimension":"space"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-behind-scenes-store-soundprint, runtime_method: content_generation, input_types: ContentType+StoreSoundCatalog, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

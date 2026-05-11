@@ -1,0 +1,4 @@
+merge_id,merge_type,kept_pack,dropped_or_subsumed_pack,reason,note,created_at
+ML-W1-001,subsume_into_existing,KP-display_rule-full-look-no-broken-size,(B03 拟抽 full_look),Phase A 已派生 full_look display_rule，B03 不再重复抽，覆盖率统计 6 陈列单元 100%（含 Phase A 那条）,B03 验收备注已登记,2026-05-03
+ML-W2-002,duplicate_or_redundant,(B11 4 类元层条目并入 unprocessable_register),(B11 3 类与 B09 重复并入 unprocessable_register),B11 包结构性元层 + 与 B09 founder-profile 内容重叠，进 unprocessable.classification 而非 candidates,共 7 条 unprocessable，详见 unprocessable_register/register.csv,2026-05-03
+ML-W2-003,soft_dedup_no_drop,(B08 接客场景与 B04 / 培训纲要与 B07),(无丢弃),B08 与 B04/B07 软依赖，但目前抽法无重复 pack 落档（B08 尚未抽，待 W3）,登记预防：W3 抽 B08 时需对照已抽的 B04/B07 避免重复,2026-05-03

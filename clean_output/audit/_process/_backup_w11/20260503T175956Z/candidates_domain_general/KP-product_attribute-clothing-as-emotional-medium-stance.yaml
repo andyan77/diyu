@@ -1,0 +1,63 @@
+pack_id: KP-product_attribute-clothing-as-emotional-medium-stance
+granularity_layer: L3
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 平台对所有 ContentType 必须采用"服装作为情绪媒介 / 身体界面 / 关系道具 / 时间标记 / 感官体验"的多重立场，而不是"服装作为视觉商品 / SKU"——只把服装当 SKU 的内容产出会立即丧失差异化；ContentType 默认 garment_role 字段必须显式取值。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: ContentType schema 字段治理
+  when:
+    trigger: 任意 ContentType 内容生成
+    context: deep-research-report 跨 5 个 ContentType 横向归纳的核心论断：表现最好的内容把衣服视为身份标记 / 情绪载体 / 关系连接 / 时间标记 / 感官体验，而非陈列在镜头前的商品；中文素材里 NEIWAI / 远家 / JNBY / @鹦鹉梨 等都被记为该立场代表
+  what:
+    action_type: schema_meta_rule
+    decision_or_action: 在 ContentType 上挂 `garment_role` 字段，取值集 = {`identity_marker`, `emotional_carrier`, `relationship_connector`, `temporal_marker`, `sensory_experience`, `sku_only`}；生成时明确指定一种主 role（`sku_only` 仅限纯促销 / 上新公告类型，其他场景不允许默认）
+  result:
+    success_pattern: 同一件单品在不同 ContentType 中以不同角色出场（测评中是"动作伙伴"、情绪表达中是"防御层"、门店日常中是"被照料的对象"），内容富有层次
+    flip_pattern: 全平台所有 ContentType 都把衣服当 SKU（参数+价格+折扣），产出与电商详情页无异，无品牌人格沉淀
+  underlying_mechanism: 服装是高情绪/高身体/高关系负载品类，把它降维成 SKU 等于扔掉品类天然优势；把 garment_role 显式化能让生成系统按 role 调用不同语言库与镜头库
+  boundary:
+    applicable_when: 全部 ContentType（含 5 类通用 + 18 类交付物层）
+    not_applicable_when: 系统通知类（订单状态 / 物流推送 / 售后口径）——不属内容创作场景
+  alternative_path:
+    - 多 role 组合（一条内容同时承载 emotional_carrier + sensory_experience）
+    - 默认主 role + 副 role 的双标注
+
+evidence:
+  source_md: Q2-内容类型种子/通用类deep-research-report.md & 通用类.md & 通用类compass.md
+  source_anchor: deep-research-report.md "Clothing as emotional medium" 章节 + 三份 md 的 5 类 ContentType 各章服装角色描述
+  source_type: cross_source_consensus
+  inference_level: low
+  evidence_quote: |
+    deep-research-report.md：clothing is not the product being sold — it is the visual language through which human stories are told. The garment can function as identity marker, emotional carrier, relationship connector, temporal marker, and sensory experience.
+    通用类compass.md（每节末"服装角色"小节）：服装在这里是"动作伙伴"/"被照料的对象"/"情绪语言本身"/"风险对象"/"价值观载体"……
+    通用类.md：服装在这里同时是身份标签和身体容器，这正是服装类目最独特的地方。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: ContentType schema 元规则；同时是平台内容立场基线
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 ContentType schema 元规则与内容立场，剥离品牌后任意品牌可继承；属 SKILL §6.1.1 "Schema 元规则"通用范畴。具体的笛语 garment_role 取值偏好（如笛语主推 emotional_carrier）才属 brand_faye，但本 pack 仅定义通用字段壳。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType]
+  field: [FD-ContentType-garment_role]
+  semantic: [SM-clothing-as-emotional-medium-stance]
+  value_set: [VS-garment-role]
+  relation: []
+  rule: [RL-clothing-as-emotional-medium-stance]
+  evidence: [EV-clothing-as-emotional-medium-stance]
+  lifecycle: []
+  call_mapping: []

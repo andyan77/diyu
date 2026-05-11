@@ -1,0 +1,79 @@
+pack_id: KP-training_unit-ai-tone-banned-list-veto
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  AI 内容生成中"AI 腔禁用清单"是优先级最高的一票否决层：所有 ContentType 在 AI 生成时强制查表，命中清单
+  任一条 → 直接拒绝输出并要求重写，不得通过其他后处理"修补"上线。清单条目只在共享层维护，单 ContentType
+  文件不复制清单内容，避免漂移；引用方式统一为"参见共享层 α 清单"。
+
+scenario:
+  who:
+    primary_role: AI 内容生成调度器 / 共享层维护者
+    target_audience: 18 个 ContentType 的所有 AI 生成产出
+  when:
+    trigger: AI 草稿落盘前；命中清单任一条款
+    context: AI 生成的"AI 味"是真实性压倒精致度趋势下的最大信任杀手（55% 用户更信任人类创作 / 56% 用户频繁看到 AI slop）
+  what:
+    action_type: ai_tone_banned_list_veto
+    decision_or_action: 命中清单 → 一票否决，要求重写；未命中 → 进下游审核流程
+  result:
+    success_pattern: 所有 CT 跨产出共用同一份 AI 腔黑名单，AI slop 在最早闸点被拦截，平台输出始终不带"看起来很 AI"的句式
+    flip_pattern: 清单在单 CT 内复制 → 漂移；或 AI 腔被允许后处理"调整"上线 → 用户在不同 CT 反复遇到同一种 AI 句式，信任崩塌
+  underlying_mechanism: |
+      AI 腔有跨 CT 同质性——同一句"愿你也"无论出现在 vlog 还是测评都是同款 AI slop。
+      因此黑名单必须共享层维护、所有 CT 共用、且必须是一票否决（不是建议）——否则修不掉 AI 味。
+  boundary:
+    applicable_when: AI 生成内容（不论 CT、不论档位、不论受众）
+    not_applicable_when: 真人创作者手写内容不强制走此清单（但平台可在显示层提示"该句式接近 AI 腔"）
+  alternative_path:
+    - 命中清单但语义在某 CT 内必要（如学术 CT 需用某术语而该术语恰被列入禁用）→ 走"清单豁免提案"，由共享层维护者裁决，不在单 CT 文件里私自豁免
+    - 新发现的 AI 句式 → 提交共享层补入清单，不在单 CT 内自行禁用
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: §H.1 α 层 9 种 AI 腔禁用清单
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    类型：跨 ContentType 负面样板库
+    覆盖范围：所有 18 个 ContentType 在 AI 生成时强制查表 / 优先级最高的"一票否决"层
+    作用：AI 生成内容时，命中清单中任一条 → 直接拒绝输出，要求重写
+    维护原则：清单条目只在共享层维护 / 单 CT 文件不复制清单内容 / 避免漂移
+    使用方式：任何 ContentType 的 §F AI 辅助边界段在 v0.2 回写时引用本清单：参见共享层 H.1 α 清单
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（一票否决）+ 07_evidence + 09_call_mapping（content_generation 前置闸）可反推核心语义。
+    Gate 3：任意品牌的 AI 内容平台都需要 AI 腔黑名单——通用度极高。
+    Gate 4：直接绑定 content_generation 运行时方法。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: AI 内容生产元规则；清单具体条目原文在 emotion_expression §E-α 但本 pack 抽象的是"清单的使用纪律"——任意品牌 AI 内容平台都需要此一票否决机制
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-ai-tone-banned-list-veto-veto, owner_field: ai_tone_banned_list, definition: "AI 腔禁用清单 = AI 生成的一票否决层；命中即拒绝输出；清单只在共享层维护"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-ai-tone-banned-list-veto, rule_type: ai_tone_banned_list_veto, applicable_when: "任意 CT 在 AI 生成草稿落盘前", success_scenario: "命中即拒所有 CT 共用同一份黑名单 AI slop 早闸拦截", flip_scenario: "清单单 CT 复制漂移 / 命中后被后处理修补上线 → 跨 CT 出现同款 AI 句式信任崩塌", alternative_boundary: "豁免走共享层提案；新句式补入共享层清单不在单 CT 私自禁用"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-ai-tone-banned-list-veto, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: §H.1 α 层 9 种 AI 腔禁用清单, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-ai-tone-banned-list-veto, runtime_method: content_generation, input_types: "ai_draft", output_types: "veto_or_pass"}

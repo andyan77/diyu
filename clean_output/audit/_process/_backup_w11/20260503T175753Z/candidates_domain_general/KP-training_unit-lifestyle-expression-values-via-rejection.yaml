@@ -1,0 +1,85 @@
+pack_id: KP-training_unit-lifestyle-expression-values-via-rejection
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  lifestyle_expression（生活方式表达）的突破性玩法不靠"我怎样生活"的正面陈述，而靠"我今天拒绝了什么"——
+  价值观只通过"拒绝动作"出现：拒绝在外面多待一会儿提前回家 / 拒绝外卖哪怕只煮一碗面 /
+  拒绝为了好看硬穿一双不舒服的鞋。镜头只拍 keys 放回桌上 / 手机扣住转身去厨房 / 镜前换回平底鞋等
+  具体放下动作，结尾三件物件并排在桌上 + 字幕"我今天决定不去"。这把生活方式从"购买和拥有来表达"翻成
+  "选择和舍弃来表达"——服装在此是"价值观筛子"（舒适优先 / 场合优先 / 心情优先），不是搭配标签。
+
+scenario:
+  who:
+    primary_role: 生活方式类内容创作者
+    target_audience: lifestyle_expression 突破性档；目标观众认同边界感 / 秩序感 / 自我尊重
+  when:
+    trigger: 想表达个人生活立场但避免"被教育 / 被说服"的距离感
+    context: 算法奖励"活人感"+ 反消费主义高级感窗口；TikTok 2026 polished → grounding 趋势
+  what:
+    action_type: values_via_rejection
+    decision_or_action: 拍"放下 / 换掉 / 关掉 / 离开"等具体拒绝动作 + 物件并排收尾 + 极少字幕
+  result:
+    success_pattern: 观众接住边界感 / 秩序感 / 自我尊重 / 不被"slogan 贴脸输出"距离感推开
+    flip_pattern: 把品牌 slogan 当生活主张贴脸输出（违反 §E E4）/ 大段鸡汤字幕替代真正的生活动作（违反 E1）→ 观众识别为说教
+  underlying_mechanism: |
+      生活方式内容的北极星是"我突然想靠近这种活法，并且感到被允许这样活"——
+      "拒绝什么"比"主张什么"门槛更低、距离感更轻、不构成说教。
+      服装在此是"价值观筛子"——同一双鞋穿不穿、同一件外套留不留，是比口播主张更可信的态度输出。
+  boundary:
+    applicable_when: lifestyle_expression 突破性档；C3-1 拒绝玩法
+    not_applicable_when: 强主张型品牌 slogan 推广（属于 product_copy_general）；伪装拒绝实为炫耀（违反 §E E6 过度摆拍）
+  alternative_path:
+    - 创作者无具体拒绝场景 → 改用 C3-2 反差场景里的柔软穿着（粗粝场景里的稳定感）
+    - 拒绝动作过于戏剧化 → 改用 C3-3 气味叙事的视觉化（感官表达替代观念表达）
+
+evidence:
+  source_md: Q2-内容类型种子/lifestyle_expression-交付物-v0.1.md
+  source_anchor: §C 玩法卡 #C3-1 价值观只通过"我拒绝了什么"来出现 + §D 三个未被开发的角度 第 2 条
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    不拍"我怎样生活"，而拍"我今天拒绝了什么"：拒绝在外面多待一会儿提前回家 / 拒绝外卖哪怕只煮一碗面 / 拒绝为了好看硬穿一双不舒服的鞋
+    观众接住的是边界感、秩序感、自我尊重
+    打破"生活方式靠购买和拥有来表达"的套路，改成靠选择和舍弃来表达
+    服装是"价值观筛子"——舒适优先、场合优先、心情优先，各自代表不同生活方式
+    把衣服当作价值观的行为接口——你怎么叠衣服、怎么修补、怎么在不同场景穿同一件基础款，都是比"口播主张"更可信的生活态度输出
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（拒绝叙事玩法）+ 03_semantic（服装 = 价值观筛子）+ 05_relation（lifestyle_expression 的服装钩子是行为接口）可反推核心语义。
+    Gate 3：任意品牌生活方式内容都可使用此玩法（普适性高）。
+    Gate 4：可被 content_generation 在 lifestyle_expression 玩法选择时消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论纪律 + 服装行业钩子定义；不含具体笛语品牌调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-lifestyle-expression-values-via-rejection-policy, owner_field: lifestyle_narrative_path, definition: "lifestyle_expression 突破性叙事路径 = 通过拒绝动作出现价值观；服装在此是'价值观筛子'/'行为接口'而非搭配标签"}
+  value_set:
+    - {value_set_id: VS-KP-lifestyle-expression-values-via-rejection-axis, value: comfort_first, label: 舒适优先, ordinal: 1}
+    - {value_set_id: VS-KP-lifestyle-expression-values-via-rejection-axis, value: occasion_first, label: 场合优先, ordinal: 2}
+    - {value_set_id: VS-KP-lifestyle-expression-values-via-rejection-axis, value: mood_first, label: 心情优先, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-training_unit-lifestyle-expression-values-via-rejection, rule_type: values_via_rejection_play, applicable_when: "lifestyle_expression 突破性档想表达生活立场避免说教距离感", success_scenario: "拒绝动作 + 物件并排 + 极少字幕观众接住边界感秩序感", flip_scenario: "slogan 贴脸输出或鸡汤字幕替代生活动作 → 观众识别为说教距离感推开", alternative_boundary: "无具体拒绝场景 → 改用反差场景柔软穿着；动作过戏剧化 → 改用气味叙事视觉化"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-lifestyle-expression-values-via-rejection, source_md: Q2-内容类型种子/lifestyle_expression-交付物-v0.1.md, source_anchor: §C C3-1 + §D 第 2 条, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-lif01, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"lifestyle_expression","clothing_role":"values_filter_behavior_interface"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-lifestyle-expression-values-via-rejection, runtime_method: content_generation, input_types: '["ContentType","CreatorContext"]', output_types: '["PlayCardSelection"]', governing_rules_json: '["RL-KP-training_unit-lifestyle-expression-values-via-rejection"]'}

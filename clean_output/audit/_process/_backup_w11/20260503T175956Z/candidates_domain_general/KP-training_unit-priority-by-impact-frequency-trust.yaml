@@ -1,0 +1,103 @@
+pack_id: KP-training_unit-priority-by-impact-frequency-trust
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  门店培训的优先级排序只看三件事：对成交影响（conversion_impact）、出错频率（error_frequency）、
+  对信任伤害（trust_damage）；冷启动阶段先练高频高损失的少数项，不练大全，否则
+  覆盖面看起来漂亮，门店成交不动。
+
+scenario:
+  who:
+    primary_role: 培训组织者（店长 / 区域培训）
+    target_audience: 一线员工 + 培训内容设计方
+  when:
+    trigger: 编排首批训练单元清单 / 重新评估已上线单元的优先级 / 新店冷启动
+    context: 培训资源（时间/人力/精力）有限的真实门店
+  what:
+    action_type: training_priority_ranking
+    decision_or_action: |
+      错误动作：按"内容大全"目录铺开，每个错误都给一个单元，平均用力。
+      正确动作：每个候选单元打三个分——成交影响、出错频率、对信任伤害；
+        冷启动只上三项均"高/最高"的少数单元，其余先冻在 backlog。
+      为什么错：员工注意力有限，平均用力 = 没有重点 = 高优先级错误也没改掉。
+      如何纠正：用本规则给每张候选单元卡评分，按总分倒序排队上线。
+      掌握检查：店长能在 1 分钟内说出本店 Top5 训练单元，并解释为什么不是别的。
+  result:
+    success_pattern: |
+      首批 8-12 个单元都集中在 wrong_proportion_balance / ignoring_body_shape /
+      wrong_scene_matching / selling_single_piece_without_full_logic /
+      too_many_main_items / wrong_hanging_density / inventory_depth_mismatch /
+      fake_same_item_substitution 这 8 类，门店成交最先发生变化。
+    flip_pattern: |
+      培训单元数量铺得很大但没重点，新人覆盖率高、错误率却没降；
+      高频高损失错误（如假冒同款替代）继续发生，门店信任持续流失。
+  underlying_mechanism: |
+      培训资源是稀缺资源，必须用最少单元换最大成交与信任改善；
+      "影响成交 × 出错频率 × 信任损伤"三者加权后排序，等价于按"门店损失最大化"反向修复。
+  boundary:
+    applicable_when: 冷启动 / 季度培训规划 / 新人首批入职培训
+    not_applicable_when: |
+      合规、安全、法律相关培训 → 必须 100% 覆盖，不走优先级裁剪；
+      已稳定运营门店的微调阶段 → 改为按近 30 天异常事件驱动，本规则次要参考。
+  alternative_path:
+    - 三维度评分平手 → 优先按 trust_damage 高的先做（信任最难恢复）
+    - 数据不全 → 先用店长经验估值，3 周后用真实退货 / 神秘顾客数据复核排序
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 二、训练原则 · 2.2 先练高频高损失，不练大全 · 九、哪些错误优先级最高
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    优先顺序只看三件事：conversion_impact（对成交影响）、error_frequency（出错频率）、
+    trust_damage（对信任伤害）。
+    第一优先级，只抓会直接影响成交的 8 类：比例失衡 / 忽略身型 / 场景错配 /
+    只卖单品不讲整套逻辑 / 陈列主角过多 / 挂装密度失控 / 陈列与库存深度不匹配 /
+    替代款假装同款。这 8 类先练熟，门店成交会最先变化。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐全；Gate 2：rule + value_set 可反推三维度排序与首批 8 类；
+    Gate 3：跨品牌零售通用；Gate 4：store_training 调用可生成首批清单。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 优先级方法论与冷启动排序均不含笛语专属。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field:
+    - {field_id: FD-TrainingMaterial-priority_score, owner_type: TrainingMaterial, field_name: priority_score, data_type: composite}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-priority-by-impact-frequency-trust-priority_dim, owner_field: priority_score, definition: "训练优先级三维度：conversion_impact / error_frequency / trust_damage"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-dim, value: conversion_impact, label: 对成交影响, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-dim, value: error_frequency, label: 出错频率, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-dim, value: trust_damage, label: 对信任伤害, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-top8, value: wrong_proportion_balance, label: 比例失衡, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-top8, value: ignoring_body_shape, label: 忽略身型, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-top8, value: wrong_scene_matching, label: 场景错配, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-top8, value: selling_single_piece_without_full_logic, label: 只卖单品不讲整套, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-top8, value: too_many_main_items, label: 陈列主角过多, ordinal: 5}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-top8, value: wrong_hanging_density, label: 挂装密度失控, ordinal: 6}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-top8, value: inventory_depth_mismatch, label: 陈列与库存深度不匹配, ordinal: 7}
+    - {value_set_id: VS-KP-training_unit-priority-by-impact-frequency-trust-top8, value: fake_same_item_substitution, label: 替代款假装同款, ordinal: 8}
+  rule:
+    - {rule_id: RL-KP-training_unit-priority-by-impact-frequency-trust, rule_type: training_priority_policy, applicable_when: "编排首批训练单元清单或季度培训规划", success_scenario: "按三维度评分挑选首批8-12单元集中在Top8错误上，门店成交最先变化", flip_scenario: "平均用力铺大全，高优先级错误未被改掉，信任持续流失", alternative_boundary: "合规安全类必须100%覆盖；稳定门店改为按30天异常事件驱动"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-priority-by-impact-frequency-trust, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 二、2.2 + 九、priority_error_group, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm02, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["store_manager"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-priority-by-impact-frequency-trust, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingPriorityList"]}

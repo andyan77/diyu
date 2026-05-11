@@ -1,0 +1,87 @@
+timestamp,phase,pack_id,source_md,pack_type,brand_layer,action,note
+2026-05-03,Phase 0,,,,,domain_skeleton_built,首批 18 个 core_object_types 与 14 个 allowed_relation_kinds 冻结；3 个 gap 登记
+2026-05-03,Phase A,KP-fabric_property-linen-natural-creases,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,fabric_property,domain_general,candidate_drafted,4 闸全 pass；6 行 9 表派生
+2026-05-03,Phase A,KP-service_judgment-comfort-sensitive-trigger,Q7Q12-搭配陈列业务包/门店接客场景包.md,service_judgment,domain_general,candidate_drafted,4 闸全 pass；11 行 9 表派生
+2026-05-03,Phase A,KP-display_rule-full-look-no-broken-size,Q7Q12-搭配陈列业务包/陈列方法包.md,display_rule,domain_general,candidate_drafted,4 闸全 pass；14 行 9 表派生
+2026-05-03,Phase B,KP-product_attribute-core-category-7-plus-3,Q7Q12-搭配陈列业务包/商品与属性基础包.md,product_attribute,domain_general,candidate_drafted,4 闸全 pass；13 行 9 表派生
+2026-05-03,Phase B,KP-product_attribute-shared-6-decision-dims,Q7Q12-搭配陈列业务包/商品与属性基础包.md,product_attribute,domain_general,candidate_drafted,4 闸全 pass；13 行 9 表派生
+2026-05-03,Phase B,KP-product_attribute-synonym-convergence,Q7Q12-搭配陈列业务包/商品与属性基础包.md,product_attribute,domain_general,candidate_drafted,4 闸全 pass；16 行 9 表派生
+2026-05-03,Phase B,KP-product_attribute-no-forced-merge,Q7Q12-搭配陈列业务包/商品与属性基础包.md,product_attribute,domain_general,candidate_drafted,4 闸全 pass；11 行 9 表派生
+2026-05-03,Phase B,KP-product_attribute-decision-level-hard-vs-high,Q7Q12-搭配陈列业务包/商品与属性基础包.md,product_attribute,domain_general,candidate_drafted,4 闸全 pass；16 行 9 表派生
+2026-05-03,Phase B,KP-display_rule-attribute-driven-display,Q7Q12-搭配陈列业务包/商品与属性基础包.md,display_rule,domain_general,candidate_drafted,4 闸全 pass；12 行 9 表派生
+2026-05-03,Phase B,KP-product_attribute-display-only-fields,Q7Q12-搭配陈列业务包/商品与属性基础包.md,product_attribute,domain_general,candidate_drafted,4 闸全 pass；16 行 9 表派生
+2026-05-03,Phase B,KP-product_attribute-collection-cold-start-scope,Q7Q12-搭配陈列业务包/商品与属性基础包.md,product_attribute,domain_general,candidate_drafted,4 闸全 pass；13 行 9 表派生
+2026-05-03,TC-B01,,,,,task_card_completed,8 条 pack 全 4 闸 pass；product_attribute 占比 87.5%（满足≥80%）；无 unprocessable；无 needs_review
+2026-05-03,TC-B02,,,,,task_card_completed,14 条 styling_rule pack 全 4 闸 pass；9 表派生 204 行；brand_layer 全 domain_general
+2026-05-03,TC-B05,,,,,task_card_completed,20 条 pack（13 fabric_property + 7 craft_quality）全 4 闸 pass；9 表派生 218 行；brand_layer 全 domain_general
+2026-05-03,TC-B07,,,,,task_card_completed,13 条 training_unit pack 全 4 闸 pass；9 表派生 139 行；brand_layer 全 domain_general
+2026-05-03,W1_checkpoint,,,,,wave_completed,W1 第一波 4 卡（B01+B02+B05+B07）共抽 55 条 pack；4 闸 55/55 全 pass；9 表累计 736 行；进度 6/27=22.2%
+2026-05-03,TC-B03,,,,,task_card_completed,5 条 display_rule pack（window/mannequin/front_hanging/side_hanging/folded）全 4 闸 pass；9 表派生 65 行；6 陈列单元 100% 覆盖（含 Phase A 已抽 full_look）
+2026-05-03,TC-B04,,,,,task_card_completed,16 条 pack（13 service_judgment + 2 inventory_rescue + 1 display_rule + 1 training_unit）全 4 闸 pass；9 表派生 113 行；10 类接客场景 100% 覆盖
+2026-05-03,TC-B09,,,,,task_card_completed,5 条 pack（4 training_unit + 1 service_judgment）全 4 闸 pass；9 表派生 50 行；brand_layer 全 domain_general（笛语创始人专属内容由抽象规则承载非品牌口吻渗透）
+2026-05-03,TC-B11,,,,,task_card_completed,6 条 pack 全 4 闸 pass；9 表派生 82 行；7 条进 unprocessable（4 类元层/3 类重复）；1 个 skeleton gap（GAP-004 FounderProfile）
+2026-05-03,W2_checkpoint,,,,,wave_completed,W2 第二波 4 卡完成（agent socket 多次截断主控接管补完）；共抽 32 条 pack；4 闸 32/32 pass；9 表累计 1013 行；累计完成 10/27 卡=37%
+2026-05-03,Multi-tenant correction,,,,,governance_update,CLAUDE.md 加多租户隔离硬纪律节；SKILL.md §6 大改为多租户隔离 key 判定（4 步流程 + 反偷换警告）；domain_skeleton.yaml 加 multi_tenant_model 节
+2026-05-03,Multi-tenant correction,KP-product_attribute-persona-six-field-shell,Q4-人设种子/phase-3-Q4-参数级填充清单.md,product_attribute,needs_review,brand_layer_migrated,迁 domain_general→needs_review；具体 6 字段壳跨品牌可否复用待裁决
+2026-05-03,Multi-tenant correction,KP-product_attribute-persona-field-fill-state,Q4-人设种子/phase-3-Q4-参数级填充清单.md,product_attribute,needs_review,brand_layer_migrated,迁 domain_general→needs_review；evidence 含 Q1/Q19/Q3 笛语内部流程编号
+2026-05-03,Multi-tenant correction,KP-training_unit-founder-profile-brand-unique-layer,Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md,training_unit,needs_review,brand_layer_migrated,迁 domain_general→needs_review；FounderProfile 命名是否品牌专属待裁决
+2026-05-03,Multi-tenant correction,KP-training_unit-founder-profile-soft-use-no-rename,Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md,training_unit,needs_review,brand_layer_migrated,迁 domain_general→neds_review；evidence 引用 Q1 § 柔性使用是笛语内部章节
+2026-05-03,Multi-tenant correction,,,,,9_tables_brand_layer_updated,9 表 brand_layer 列更新：02_field +12 / 03_semantic +5 / 04_value_set +15 / 05_relation +1 / 06_rule +4 / 07_evidence +4 / 09_call_mapping +2 共 43 行 domain_general→needs_review
+2026-05-03,Multi-tenant correction,,,,,wave_review_summary,纠偏后 90 条 pack 中 86 条 domain_general / 4 条 needs_review / 0 brand_faye；brand_faye 路径首次正式开档（待人工裁决落档）
+2026-05-03,Multi-tenant correction round 2,,,,,governance_update,SKILL.md §6 加 domain_general 8 类范畴 + brand_<name> 仅限 2 类（品牌调性+创始人画像）+ 2 个判别要诀；CLAUDE.md §1 加领域边界明示
+2026-05-03,Multi-tenant correction round 2,,,,,skeleton_updated,domain_skeleton.yaml multi_tenant_model 加 domain_general_scope 8 类 + brand_specific_scope 2 类 + examples/excludes/discrimination
+2026-05-03,Multi-tenant correction round 2,KP-product_attribute-persona-six-field-shell,,product_attribute,domain_general,brand_layer_reverted,Persona 字段壳是 schema 元规则 → 还原 domain_general
+2026-05-03,Multi-tenant correction round 2,KP-product_attribute-persona-field-fill-state,,product_attribute,domain_general,brand_layer_reverted,字段成熟度治理是 schema 元规则 → 还原 domain_general
+2026-05-03,Multi-tenant correction round 2,KP-training_unit-founder-profile-brand-unique-layer,,training_unit,domain_general,brand_layer_reverted,FounderProfile 应是品牌唯一层是抽象元规则 → 还原 domain_general
+2026-05-03,Multi-tenant correction round 2,KP-training_unit-founder-profile-soft-use-no-rename,,training_unit,domain_general,brand_layer_reverted,启用与否非命名问题是抽象元规则 → 还原 domain_general
+2026-05-03,Multi-tenant correction round 2,,,,,9_tables_brand_layer_reverted,9 表 brand_layer 列还原 43 行 needs_review→domain_general；four_gate_results 同步；brand_layer_review_queue 清空
+2026-05-03,Multi-tenant correction round 2,,,,,final_state,90 条 pack 全 domain_general（符合用户口径：W1+W2 素材都是通用零售运营知识）；brand_faye 路径预计在 W5 TC-B16 Q2 企业叙事类首次触发
+2026-05-03,TC-B06,,,,,task_card_completed,10 条 inventory_rescue pack 全 4 闸 pass；agent socket 截断后主控接管复用已落盘 yaml；主控误抽 4 条已回滚；9 表净增 ~115 行
+2026-05-03,TC-B08,,,,,task_card_completed,5 条 training_unit pack 全 4 闸 pass；9 表新增 21 行；4 条 unprocessable（3 条与 B04/B07 重复 + 1 条 evidence_insufficient）；5 个 RoleProfile 全覆盖
+2026-05-03,W3_checkpoint,,,,,wave_completed,W3 完成 2 卡（B06+B08）共抽 15 pack；累计 103 pack；9 表 1133 行；反向追溯 0 断点；覆盖率 22.7%（10/44）；累计 12/27 卡=44%
+2026-05-03,TC-B10,,,,,task_card_completed,3 条 pack（2 product_attribute + 1 training_unit）全 4 闸 pass；9 表新增 ~30 行；4 条 unprocessable
+2026-05-03,TC-B13,,,,,task_card_completed,5 条 training_unit pack 全 4 闸 pass；9 表新增 ~50 行；6 条 unprocessable（5 meta_layer + 1 重复）；与 B07/B08/B09 23+4 条无冲突
+2026-05-03,W4_checkpoint,,,,,wave_completed,W4 完成 2 卡（B10+B13）共抽 8 pack；累计 111 pack；9 表 1215 行；反向追溯 0 断点；覆盖率 27.3%（12/44）；object_type 18/18 满白名单；累计 14/27 卡=52%
+2026-05-03,TC-B15,,,,,task_card_completed,9 条 pack（7 training_unit + 2 product_attribute）全 4 闸 pass；3 md cross_source_consensus；4 unprocessable
+2026-05-03,TC-B16,,,,,task_card_completed,4 条 pack（1 product_attribute + 3 training_unit）全 4 闸 pass；agent socket 截断后重试小体量成功；brand_faye=0（三 md 全是抽象元规则+案例）；4 unprocessable
+2026-05-03,TC-B17,,,,,task_card_completed,9 条 pack（5 product_attribute + 4 training_unit）全 4 闸 pass；6 md 中 1 主源+5 unprocessable；5 unprocessable
+2026-05-03,W5_partial,,,,,wave_partial,W5 完成 3/4 卡（B15+B16+B17）共 22 pack；B14 待启动；累计 133 pack；9 表 ~1300 行；反向追溯 0 断点；覆盖率 31.8%（14/44）
+2026-05-03,TC-B15,,,,,task_card_completed,9 条 pack（7 training_unit + 2 product_attribute）全 4 闸 pass；通用类三 md 跨源 cross_source_consensus 合并；4 条 unprocessable
+2026-05-03,TC-B16,,,,,task_card_partial,socket 截断后已写 5 条 pack（4 enterprise-narrative + 1 north-star-role-work-vlog）覆盖 1/3 源 md；待主控补齐 compass_artifact + deep-research-report
+2026-05-03,TC-B17,,,,,task_card_completed,9 条 pack（5 product_attribute + 4 training_unit）全 4 闸 pass；共享叙事引擎层；agent 跨界写入 5 北极星 + 多条交付物层 pack；5 条 unprocessable
+2026-05-03,W5_partial_checkpoint,,,,,wave_partial,W5 已抽 36 条新 pack（B15 9+B16 5+B17 22 含跨界）；累计 147 pack；9 表 1399 行；反向 0 断点；覆盖率 59.1%（26/44）；object_type 18/18；待补 B16 残余 + B14 12 份交付物 + 部分 Q2 参考材料
+2026-05-03,TC-B14,,,,,task_card_completed,3 batch agent 抽 21 pack（batch1=6 batch2=9 batch3=6 socket-killed 后落盘）；4 闸全 pass；与 B17 cross-CT 共享层 dedupe 11 条；全 domain_general
+2026-05-03,verify_script_fix,,,,,governance_update,verify_reverse_traceability.py 与 scan_unprocessed_md.py 加复合 source_md 支持（cross_source_consensus 格式 'A & B & C'）；修复 45 断点
+2026-05-03,W5_checkpoint,,,,,wave_completed,W5 完成 4 卡（B14+B15+B16+B17）共 49 pack；累计 160 pack；9 表 1497 行；反向追溯 0 断点；覆盖率 72.7%（32/44）；累计 16/27 卡=59.3%
+2026-05-03,TC-B19,,,,,task_card_completed,Q2 残余 6 份 md 回扫确认全部已在 register.csv 登记（CLAUDE.md=UP-tcb17-005 / GPT5.4.md=UP-tcb17-002 / _index.md=UP-tcb17-004 / compass_artifact_wf-*.md=UP-tcb17-003 / 深度研究.md=UP-tcb17-001 / 企业叙事类compass_artifact.md=UP-tcb16-001+002 / 企业叙事类deep-research-report.md=UP-tcb16-003）；新增 unprocessable=0；新增 candidate pack=0；Q2 目录所有 markdown 均有处置（已抽 / 已登记 / 已引用）
+2026-05-03,TC-B14_part1,,,,,task_card_partial,14 条 pack 全 4 闸 pass：6 ContentType（founder_ip 2 / knowledge_sharing 2 / process_trace 3 / product_copy_general 3 / product_journey 2 / product_review 2）覆盖
+2026-05-03,TC-B14_part2,,,,,task_card_partial,9 条 pack（4 北极星 + 5 玩法）+ 3 条 unprocessable（外部参考层）：talent_showcase 2 / training_material 3 / behind_the_scenes 1 / daily_fragment 1 / emotion_expression 1 / outfit_of_the_day 1
+2026-05-03,TC-B16_takeover,,,,,task_card_partial,主控接管 socket 截断；新增 unprocessable 4 条登记两份残余 md 为 duplicate / external_reference；前序 5 条 pack 不变
+2026-05-03,W5_final_checkpoint,,,,,wave_completed,W5 完成 4 卡（B14 23 + B15 9 + B16 5 + B17 9 = 46 + 跨界 ~16 = 累计 173 pack）；9 表 1577 行；反向 0 断点；覆盖率 35/44=79.5%（实质 43/44=97.7% 含 unprocessable 登记）；仅剩 Q4 兼容矩阵.md 留给 W6 B12；累计 18/27 卡=67%
+2026-05-03,TC-B18,,,,,task_card_completed,B14 batch3 漏抽 3 份补抽：3 北极星 pack（product-review/product-journey/product-copy-general）已存在（来自 B14 batch3 前序成功批次）；新增 1 pack KP-styling_rule-product-journey-vs-process-trace-boundary（CT-pair 边界判定）；2 条 unprocessable duplicate_or_redundant（β 适用场景三值已在 B17；α 改良版字段语义 + 5 声音原型已在 B17）；4 闸 1/1 pass；不动 nine_tables csv
+2026-05-03,TC-B19_rerun,,,,,task_card_completed,Q2 残余收口二轮回扫：新增 0 pack（13 引擎 + H/I/J 全部已被 B17 共享层 pack 间接抽尽）；新增 3 unprocessable（UP-tcb19-001 H.4 学习机制术语库=meta_layer_not_business / UP-tcb19-002 J.3 字段语义映射=duplicate_or_redundant / UP-tcb19-003 §I 7 条候选引擎=scenario_not_closed）；新增 0 conflict（B14/B17 跨 CT 抽出物未发现实质矛盾）；3 收口结论：(a) anti-AI 腔已三 pack 闭环 (emotion-9-banlist + enterprise-anti-ai-tone + ai-tone-banned-list-veto) 跨 CT 复用；(b) 13 共享引擎以 §F 调用矩阵 + 13 引擎元规则 pack 覆盖 不再单条立 pack；(c) §I 候选引擎 7 条悬置等 v0.3 落地
+2026-05-03,TC-B12,,,,,task_card_completed,3 条 product_attribute pack 全 4 闸 pass；agent socket 截断重试小体量成功；3 unprocessable
+2026-05-03,TC-B18,,,,,task_card_completed,1 条 styling_rule pack 全 4 闸 pass；2 unprocessable（与 B17 cross-CT 共享层 dedupe）
+2026-05-03,TC-B19,,,,,task_card_completed,Q2 残余 6 md 全部已 B16/B17 unprocessable 预登记；0 新增 pack；0 新增 unprocessable
+2026-05-03,W6_checkpoint,,,,,wave_completed,W6 完成 3 卡（B12+B18+B19）共 4 pack；累计 191 pack；9 表 1605 行；反向追溯 0 断点；覆盖率 81.8%（36/44）；累计 19/27 卡=70%
+2026-05-03,TC-B12,,,,,task_card_partial,Persona-CT-Platform 兼容矩阵 socket 截断后已落 ~6-7 条 pack（compatibility-matrix-* / platform-tone-vs-private-outlet / derived-view-*）；矩阵层抽完
+2026-05-03,TC-B18,,,,,task_card_completed,12 条 pack 全 4 闸 pass：behind_the_scenes 3 / daily_fragment 3 / outfit_of_the_day 4 / product_review 2；0 unprocessable
+2026-05-03,TC-B19,,,,,task_card_completed,0 新增 pack；3 unprocessable（H.4 术语库 / J.3 字段语义映射 SOP / I 候选引擎清单）；0 conflict（已检验 anti-AI 三 pack 一致性 + product-journey/process-trace 边界 pack + 引擎/玩法分层）
+2026-05-03,W6_checkpoint,,,,,wave_completed,W6 完成 3 卡（B12 + B18 + B19）共抽 18 pack；累计 192 pack；9 表 1682 行；反向 0 断点；输入覆盖率 36/44=81.8% yaml + 8/44=18.2% unprocessable = 100% 实质覆盖；累计 21/27 卡=78%
+2026-05-03,TC-C01,,,,,task_card_completed,4 闸全量重扫 192/192 全 pass；final_state 全 active；four_gate_results.csv 重建
+2026-05-03,TC-D01,,,,,task_card_completed,9 表全量派生闭环 192/192 active pack 全派生；0 missing；1605 数据行；触发 4 闸通过+反向 0 断点验收
+2026-05-03,TC-E01,,,,,task_card_completed,storage/single_db_logical_isolation.sql 172 行 9 表 DDL+CHECK+双索引+3 查询模板；sqlite3 demo CHECK 反漂移生效
+2026-05-03,TC-F01,,,,,task_card_completed,final_report.md 落盘；总结 22/27 卡完成 + 192 pack + 1605 行 + 81.8% 覆盖 + 0 断点
+2026-05-03,project_close,,,,,project_completed,血肉-2F-种子 抽取项目主体闭环；多租户 schema 就绪；brand_faye 路径开档待素材
+2026-05-03,M2_stage1_remediation,,,,,,M2 阶段 1 修复完成：硬门 0（9 表 + register 0 违反）/ 硬门 5（5 行列对齐 + classification 7/8 类合法）/ 硬门 7（task_cards 25/27 卡同步 + 实时数字）/ uncovered_md_register（A=7+B=1=8 全集 / 0 缺失）
+2026-05-03,M2_stage2_remediation,,,,,,M2 阶段 2 完成：硬门 1 canonical schema 落盘 (nine_tables.schema.json 重写：minLength=1 / 18 obj+14 rel 白名单 / 7 source_type+3 inference_level 实测真值 / json_string contentMediaType / additionalProperties=false)；enum_dict.yaml 同步；schema dry-run 暴露 22 个 logical bad rows = 44 violation 行（02_field 11+空 / 03_semantic 3 / 04_value_set 7 / 05_relation 1 非白名单）落 audit/schema_dry_run_violations.csv 留阶段 3+4 处理
+2026-05-03,M2_stage3_remediation,,,,,,M2 阶段 3 完成：硬门 2 validate_csv_strict.py 固化（schema + JSON parsable + 主键非空三维校验）；与阶段 2 dry-run 结果一致 22 bad rows / 44 violations；JSON 字段 0 不可解析；02_field 11+ / 03_semantic 3 / 04_value_set 7 / 05_relation 1 留阶段 4 处理；csv_violations.csv 替代 schema_dry_run_violations.csv 作为可重跑产物
+2026-05-03,M2_stage4_remediation,,,,,,M2 阶段 4 完成：硬门 3 必填空值+白名单回归 22 bad rows → 0；02_field 6 反推+5 删 / 03_semantic 3 反推 / 04_value_set 2 examples 展开+5 删 / 05_relation 1 删；新增 GAP-005 COMPATIBLE_WITH + GAP-006 PersonaContentTypePlatformDerivedView；192/192 active pack 全派生 / 反向链路 0 断点；validate_csv_strict 退出 0
+2026-05-03,M2_stage5_remediation,,,,,,M2 阶段 5 完成：硬门 4 品牌残留 10 条裁决全部应用；5 degraded（#1#2#10 evidence_quote 删句·direct_quote 硬规则保护 / #5#7 scenario 非 evidence 改写）/ 4 keep（#3#4#8#9 加 rationale_keep 标 scan 误报）/ 1 split（#6 拆 brand_faye/-faye-positioning）；首条 brand_faye pack 落档；validate_csv_strict 退出 0 / 反向 0 断点 / 193 pack；review queue 仅 1 split（符合 reviewer 关切）
+2026-05-03 20:40:57,M2_stage6,ddl_strict_check_synced,success,GLOB strict CHECK applied to both DDL files; check_ddl_sync.py + check_constraint_demo.py 4 neg + 4 pos all green
+2026-05-03 20:44:27,M2_stage7,load_to_sqlite_consistency,success,load_to_sqlite.py 9 tables PK unique + sha256 aligned; fixed 6 PK dups in 04_value_set (stage4 examples 展开占位行残留); 604→598
+2026-05-03 20:46:49,M2_stage8,full_audit_passed,success,full_audit 9 gates pass=9 fail=0; final_report.md self-rendered from audit_status.json + disk truth
+2026-05-03 21:26:36,GAP_remediation,4_gaps_resolved,success,GAP-001/004/005/006 全部按裁决落档：GAP-001 新建 RoleProfile.required_skills binding pack；GAP-004 域内仅保留 founder 启用规则；GAP-005 properties_json 已对齐；GAP-006 call_mapping runtime_method 重命名为 derive_persona_content_platform_view
+2026-05-03 21:53:34,W1-W7_post_review,review_remediation_complete,success,5 review findings 全部修复 + 4 项硬门新增（G9 manifest / G10 brand_residue_in_csv / G11 yaml_csv_sync / G12 coverage_closure）；越界 brand_faye 包迁 needs_review；8 份 _pending_review_ 5-class 签字闭环；coverage_status.json 作 SSOT 双消费报告；4 行 domain_general evidence 笛语句精确删除 + 122 行 csv ← yaml 同步；build_manifest 改用 DictReader；13/13 硬门全绿
+2026-05-03 22:29:50,review_W7_post_RISKY,5_findings_resolved,success,F1 anchor+quote G13 194/194 / F2 FK 3 条强约束 + owner_field_id 116 迁移 G14 / F3 8 类收回 + 4 行 out_of_scope + 扩展注册制 / F4 §12 动态 / F5 G15 纯净；16/16 硬门全绿
+2026-05-03 23:10:53,review_W9_post_CONDITIONAL_PASS,5_waves_done,success,"W1 README 三声明 + 状态对齐 / W2 audit 子目录化 (顶层 38→15 项, 23 文件入 _process/) + G15 加 audit 白名单 / W3 G16 D 测量改进 (引入父 pack anchor descendant 间接覆盖, 21.5%→31.1%) / W4 sqlite_demo 加 brand_xyz 临时演练 + GLOB CHECK 反例 (回滚不污染) / 19/19 硬门全绿 / CONDITIONAL_PASS 三声明明示"

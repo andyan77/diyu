@@ -1,0 +1,8 @@
+field_id,owner_type,field_name,data_type,value_set_id,semantic_id,brand_layer,source_pack_id
+FD-Persona-role_type,Persona,role_type,string,,,domain_general,KP-product_attribute-persona-six-field-shell
+FD-Persona-life_archetype,Persona,life_archetype,string,,,domain_general,KP-product_attribute-persona-six-field-shell
+FD-Persona-emotional_spectrum,Persona,emotional_spectrum,list_of_string,,,domain_general,KP-product_attribute-persona-six-field-shell
+FD-Persona-authenticity_anchors,Persona,authenticity_anchors,list_of_string,,,domain_general,KP-product_attribute-persona-six-field-shell
+FD-Persona-topic_scope,Persona,topic_scope,composite,,SM-KP-product_attribute-persona-six-field-shell-topic_scope,domain_general,KP-product_attribute-persona-six-field-shell
+FD-Persona-typical_scenarios,Persona,typical_scenarios,list_of_string,,,domain_general,KP-product_attribute-persona-six-field-shell
+FD-Persona-field_fill_state,Persona,field_fill_state,enum,VS-KP-product_attribute-persona-field-fill-state-fill_state,SM-KP-product_attribute-persona-field-fill-state-fill_state,domain_general,KP-product_attribute-persona-field-fill-state

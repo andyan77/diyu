@@ -1,0 +1,95 @@
+pack_id: KP-product_attribute-content-type-north-star-training-material
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `training_material`（培训物料）的北极星不是"员工觉得讲得不错"，而是
+  "员工 / 加盟商看完后下次真碰到场景时，脑子里会自动跳出正确动作"——
+  我不困 / 我知道下一班 / 下一单怎么做 / 我能记住关键点 / 我愿意照做，
+  因为它省事 / 清楚 / 能让我少背锅。这条北极星把培训物料从"消费者向"显式切到
+  "兵团向"——观众不是顾客而是员工 / 加盟商 / 店长 / 新员工——所有字段语义
+  （北极星映射 / 服装行业钩子 / 实拍可行性 / AI 辅助度）都按"员工的行为改变"重判定，
+  不按"消费者的购买意向"。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 兵团内容生产组装者
+    target_audience: training_material 内容创作者（店长 / 总部培训）/ AI 内容生成审核
+  when:
+    trigger: 新增一张 training_material 玩法卡，或对一条培训内容做"是否符合 ContentType 北极星"判断时
+    context: 18 份 ContentType 中唯一的兵团向 ContentType——观众切换是与前 17 份的硬边界
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"员工下次真碰到场景时脑子里自动跳出正确动作"作为玩法是否成立的最终判定
+  result:
+    success_pattern: |-
+      玩法卡能体现"动作层面的示范 / 先做判断再给答案 / 微学习 ≤ 90 秒 / 真实门店场景"
+      → 通过北极星映射 → 进 C2 进阶或 C3 突破档
+    flip_pattern: |-
+      玩法卡退化为"PPT 录屏 + 照稿念" / "标准答案式话术灌输" / "20 分钟长视频单向输入"
+      → 北极星映射 ❌ → 主流默认禁用档（90% of training content is forgotten within 6 months
+      根本原因是"内容本身不可调用"而不是"员工不认真"）
+  underlying_mechanism: |
+      培训物料的本质是"可调用动作库"，不是"制度手册"或"U 盘存储"。员工记忆走的是
+      程序性记忆（手记得）而不是陈述性记忆（背流程）。任何把培训当成"讲清楚就行"的玩法
+      都会被认知负荷碾压；任何让员工"先错一次再纠正"的玩法都贴近真实上岗（测试效应）。
+  boundary:
+    applicable_when: training_material 玩法库扩张 / 兵团向内容审核 / 员工 / 加盟商 / 店长培训内容
+    not_applicable_when: 消费者向 ContentType（前 17 份）/ knowledge_sharing（教消费者，不是教员工）/ role_work_vlog（把岗位展示给消费者，不是教新人）
+  alternative_path:
+    - 与 store_daily 边界：store_daily 让消费者看见门店生命力 ; training_material 让员工看见自己门店里的高发错误——同样是门店素材但目标观众完全相反
+
+evidence:
+  source_md: Q2-内容类型种子/training_material-交付物-v0.1.md
+  source_anchor: §A 北极星 + §⚠️ 兵团向口径切换 + §C1 主流默认禁用 3 张卡
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：员工 / 加盟商看完后，不是"觉得讲得不错"，而是"下次真碰到场景时，
+    脑子里会自动跳出正确动作"——我不困 / 我知道下一班 / 下一单怎么做 / 我能记住关键点 /
+    我愿意照做。
+    通用类compass：90% of training content is forgotten within 6 months——培训的真实问题不是
+    "员工不认真"，而是"内容本身不可调用"。
+    §4 兵团向 3 个核心原则：① 看懂 ≠ 会做 ② 先做判断再给答案 ③ 微学习 + 即时资源。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。Gate 2：从 06_rule + 02_field（ContentType.north_star + ContentType.audience_orientation）
+    可反推"training_material 北极星 = 员工自动跳出正确动作 / 主流三类禁用 / 与 17 份消费者向 CT 的硬边界"。
+    Gate 3：跨品牌兵团培训通用判型。Gate 4：可被 content_generation 调用作 training_material 玩法选型门禁。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论 + 兵团培训通用纪律——任意品牌的 training_material 都需此锚点
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+    - {field_id: FD-ContentType-audience_orientation, owner_type: ContentType, field_name: audience_orientation, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-training-material-tm_north_star, owner_field: north_star, definition: "training_material ContentType 的北极星：员工下次真碰到场景时脑子里自动跳出正确动作（兵团向 / 行为改变 / 记忆保持）"}
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-training-material-audience_orientation, owner_field: audience_orientation, definition: "ContentType 的观众朝向：consumer-facing（消费者向，前 17 份）/ army-facing（兵团向 / 员工/加盟商/店长，仅 training_material）"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-content-type-north-star-training-material-audience_orientation, value: consumer-facing, label: 消费者向, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-content-type-north-star-training-material-audience_orientation, value: army-facing, label: 兵团向, ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-training-material, rule_type: content_type_north_star_anchor, applicable_when: "新增 training_material 玩法卡或审核兵团向培训内容时", success_scenario: "动作层面示范 / 先判断再答案 / 微学习 ≤ 90 秒 / 真实门店 → 进 C2/C3", flip_scenario: "PPT 录屏 / 话术灌输 / 20 分钟长视频 → 主流默认禁用", alternative_boundary: "与前 17 份消费者向 CT 在观众上硬切换 / 与 store_daily 在目标观众上互逆"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-training-material, source_md: Q2-内容类型种子/training_material-交付物-v0.1.md, source_anchor: §A + §⚠️ 兵团向口径 + §C1, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-training_material-tm1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"training_material","audience_orientation":"army-facing"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-training-material, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}
+    - {mapping_id: CM-store_training-KP-product_attribute-content-type-north-star-training-material, runtime_method: store_training, input_types: ContentType, output_types: TrainingMaterialEligibility}

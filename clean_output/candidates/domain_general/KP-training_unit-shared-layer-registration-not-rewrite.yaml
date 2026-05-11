@@ -1,0 +1,78 @@
+pack_id: KP-training_unit-shared-layer-registration-not-rewrite
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  共享层"登记"≠"内容扩写"——当某条玩法卡被发现是某共享引擎的应用，回写动作只在共享层 §F 总账登记
+  "调用共享引擎：#X（引擎名）"，**不允许**借机改动该玩法卡的正文内容（如增删元素清单、改写北极星、加场景）。
+  这条纪律保证共享层升级是无损的、可重跑的、可追溯的；违反则共享层升级会污染单 CT 文件正文，跨多次升级
+  后无法溯源任何具体改动来自哪一次升级。
+
+scenario:
+  who:
+    primary_role: 共享层维护者 / 内容方法论编辑
+    target_audience: ContentType 玩法库 / 共享叙事引擎库
+  when:
+    trigger: 新增引擎 / 扩大回写范围 / 候选引擎升级时
+    context: §F 调用关系总账维护；§I 候选引擎登记表；版本记录条目
+  what:
+    action_type: shared_layer_registration_only
+    decision_or_action: 升级时仅在 §F / §I / 版本记录追加登记条目；玩法卡 / ContentType 文件正文 0 改动；如确需改正文走独立审稿流程
+  result:
+    success_pattern: 共享层版本号每次升级只追加登记条目，单 CT 文件 byte-identical 跨升级；溯源时一眼看出"哪条引擎在哪个版本被引入"
+    flip_pattern: 借共享层升级顺手"优化"玩法卡正文 → 跨多版本后玩法卡内容漂移、与早期截图/外部引用对不上、版本回滚成本极高
+  underlying_mechanism: |
+      共享层和单 CT 文件是两层资产，升级动作必须正交——共享层只动总账，单 CT 文件只动正文，否则跨层耦合升级会让审计混乱。
+      用户原话："登记缺失 ≠ 内容扩写"——这是共享层升级的最高纪律。
+  boundary:
+    applicable_when: 共享层 §F / §I / 版本记录的所有升级动作
+    not_applicable_when: 单 CT 文件本身的常规版本升级（v0.1 → v0.2 业务裁决）允许改正文，但需走该 CT 自己的版本流程
+  alternative_path:
+    - 发现某玩法卡正文确有错误且必须修 → 拆成两步：先共享层登记本次升级、再单独走该 CT 的修订版本
+    - 共享层和正文都需改动 → 不许同一次提交完成，必须分两个版本号
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: 版本记录 v0.1.4 + v0.1.5 + G7 / G8 落盘说明
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    G7 选项 B 落盘（用户裁决执行）：仅登记回写，未触碰 batch 1 两份文件正文内容（用户明确要求"登记缺失 ≠ 内容扩写"）
+    G8 落盘（batch 3 G4 立即同步原则执行）：仅登记 §F 接入——5 份 batch 3 文件正文已在落盘时直接写入"调用共享引擎"字段，本次仅完成总账登记
+    本次同步未触碰 batch 3 五份文件正文——文件内的"调用共享引擎"字段已在落盘时直接写入，本次仅在共享层 §F 完成总账登记
+    H 节维护原则（H.1 / H.3）：清单条目只在共享层维护 / 单 CT 文件不复制清单内容 / 避免漂移
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（升级正交规则）+ 08_lifecycle（共享层版本与单 CT 版本两条独立轨迹）可反推核心语义。
+    Gate 3：任意品牌的内容方法论资产升级流程都需此正交纪律。
+    Gate 4：可被 content_generation 调用前的方法论资产版本一致性校验消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论资产升级流程纪律；与笛语专属内容无关
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-shared-layer-registration-not-rewrite-policy, owner_field: shared_layer_upgrade_policy, definition: "共享层升级正交纪律：只在共享层 §F/§I/版本记录追加登记；单 CT 文件正文 0 改动；登记缺失 ≠ 内容扩写"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-shared-layer-registration-not-rewrite, rule_type: shared_layer_registration_only, applicable_when: "共享层升级动作（新增引擎 / 扩大回写 / 候选升级）", success_scenario: "共享层只追加登记单 CT byte-identical 跨升级溯源清晰", flip_scenario: "顺手优化玩法卡正文 → 跨多版本后玩法卡内容漂移与外部引用对不上版本回滚成本极高", alternative_boundary: "正文确需修 → 拆两步分两个版本号；不允许同一次提交完成"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-shared-layer-registration-not-rewrite, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: 版本记录 v0.1.4 + v0.1.5 + G7/G8 落盘说明, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

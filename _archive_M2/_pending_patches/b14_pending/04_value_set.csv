@@ -1,0 +1,15 @@
+VS-KP-product_attribute-content-type-north-star-training-material-audience_orientation,consumer-facing,消费者向,1,domain_general,KP-product_attribute-content-type-north-star-training-material
+VS-KP-product_attribute-content-type-north-star-training-material-audience_orientation,army-facing,兵团向,2,domain_general,KP-product_attribute-content-type-north-star-training-material
+VS-KP-training_unit-event-documentary-long-term-tier-discipline-tier,standard,普通（4 小时内完成）,1,domain_general,KP-training_unit-event-documentary-long-term-tier-discipline
+VS-KP-training_unit-event-documentary-long-term-tier-discipline-tier,long_term,长期型（成片 ≤ 4 小时素材跨日）,2,domain_general,KP-training_unit-event-documentary-long-term-tier-discipline
+VS-KP-training_unit-event-documentary-long-term-tier-discipline-tier,brand_tier,品牌级（跨地区采集超基线）,3,domain_general,KP-training_unit-event-documentary-long-term-tier-discipline
+VS-KP-humor-content-brand-tone-gate-suitable,activate,活泼,1,domain_general,KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+VS-KP-humor-content-brand-tone-gate-suitable,street,街头,2,domain_general,KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+VS-KP-humor-content-brand-tone-gate-suitable,young,年轻,3,domain_general,KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+VS-KP-humor-content-brand-tone-gate-suitable,playful,童趣,4,domain_general,KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+VS-KP-humor-content-brand-tone-gate-unsuitable,minimal,极简,1,domain_general,KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+VS-KP-humor-content-brand-tone-gate-unsuitable,haute_couture,高端定制,2,domain_general,KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+VS-KP-humor-content-brand-tone-gate-unsuitable,cold,冷感,3,domain_general,KP-training_unit-humor-content-brand-tone-gate-for-puppetry
+VS-KP-lifestyle-expression-values-via-rejection-axis,comfort_first,舒适优先,1,domain_general,KP-training_unit-lifestyle-expression-values-via-rejection
+VS-KP-lifestyle-expression-values-via-rejection-axis,occasion_first,场合优先,2,domain_general,KP-training_unit-lifestyle-expression-values-via-rejection
+VS-KP-lifestyle-expression-values-via-rejection-axis,mood_first,心情优先,3,domain_general,KP-training_unit-lifestyle-expression-values-via-rejection

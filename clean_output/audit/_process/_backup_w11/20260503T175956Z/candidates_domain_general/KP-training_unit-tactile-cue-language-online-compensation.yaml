@@ -1,0 +1,64 @@
+pack_id: KP-training_unit-tactile-cue-language-online-compensation
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: 服装在线零售里观众"摸不到"是先天劣势，平台必须把"触觉暗示语言（tactile cue language）+ 触觉暗示视觉（手指陷进针织、衣角擦过桌面、布料摩擦声、拉链咔哒声、慢动作垂坠）"作为产品文案与测评的标配模块，因为感官研究显示触觉暗示能在心理上模拟试穿、显著影响购买意愿。
+
+scenario:
+  who:
+    primary_role: content_production_platform
+    target_audience: product_copy_general / product_review 内容生成
+  when:
+    trigger: 生成详情页 / 海报 / 测评视频
+    context: 在线零售缺失"摸"的环节；研究（PMC 综述、JCR 感官语言研究）显示触觉暗示通过心理模拟补偿缺触
+  what:
+    action_type: content_module_rule
+    decision_or_action: 生成时强制至少 1 个触觉暗示模块——文案侧使用触感比喻（"像被穿松三年的旧 T 恤那种软"）+ 视觉侧使用手部触感特写 / 慢动作垂坠 / 布料摩擦声 / 拉链声 / 揉搓回弹对比
+  result:
+    success_pattern: 观众脑内完成"试穿模拟"，对面料 / 工艺差异有具体感知，文案不再依赖"软""舒适"等抽象形容词
+    flip_pattern: 详情页只用"高品质面料"标签 + 白底主图，没有任何触感证据，观众无法判断面料差异，决策卡死
+  underlying_mechanism: 触觉是服装购买的核心通道；缺触的在线场景里，触觉暗示语言+视觉=最低成本的替代试衣间
+  boundary:
+    applicable_when: 服装详情页 / 海报 / 测评视频 / 培训中的面料章节
+    not_applicable_when: 配件硬质品类（如金属饰品）——触感差异不是核心决策维度
+  alternative_path:
+    - 触感比喻文案（旧 T / 第二层肌肤）
+    - 触觉暗示视觉（特写 + 慢动作）
+    - 物体声 ASMR（布料 / 拉链 / 扣子）
+
+evidence:
+  source_md: Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md
+  source_anchor: 三份 md 的"触感型文案+触觉暗示画面""感官动词写作""触感法庭""sound design as emotional architecture"
+  source_type: cross_source_consensus
+  inference_level: low
+  evidence_quote: |
+    通用类.md：研究显示，在线零售里，带有触觉暗示的视觉语言能在一定程度上补偿"摸不到"的缺失，影响购买意愿。([PMC])
+    通用类compass.md：Journal of Consumer Research 的研究指出，在带货语境中使用感官语言会提升互动与购买意愿；感官营销综述强调视觉、触觉想象、嗅觉/听觉线索都能影响广告效果与记忆。
+    deep-research-report.md：Fashion stores have untapped ASMR potential: fabric being unrolled from a bolt, scissors cutting through silk, zipper sounds across different materials.
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 内容生产模块化规则；可挂 content_generation 调用
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用感官内容生产规则，与品牌无关
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: [ContentType, FabricKnowledge]
+  field: []
+  semantic: [SM-tactile-cue-language-online-compensation]
+  value_set: [VS-tactile-cue-modules]
+  relation: []
+  rule: [RL-tactile-cue-language-online-compensation]
+  evidence: [EV-tactile-cue-language-online-compensation]
+  lifecycle: []
+  call_mapping: [CM-content_generation-tactile-cue]

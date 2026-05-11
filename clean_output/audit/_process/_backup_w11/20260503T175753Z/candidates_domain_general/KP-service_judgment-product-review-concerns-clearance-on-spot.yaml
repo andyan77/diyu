@@ -1,0 +1,96 @@
+pack_id: KP-service_judgment-product-review-concerns-clearance-on-spot
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  product_review 内容里，"只拍犹豫 / 不拍优点 / 顾虑解除测评"在
+  **接客现场**有专属用法：店员站在店内顾客旁边，针对顾客当场说出的"我怕 X"
+  （怕透 / 怕勒 / 怕扎 / 怕显胯 / 怕短 / 怕显壮 / 怕难搭），
+  拿出同款现场做 30 秒以内 3 个具体测试（窗边逆光看透 / 侧身镜前看胯 /
+  手臂贴脸颊看扎），测试通过后留一句"如果你和我怕的是同几件事，这件可以进试衣间"。
+  这是 product_review C3-2 玩法在第二层接客场景的转化工具——
+  与引流场景的差别：引流是创作者自述顾虑、接客是顾客当场说出顾虑；
+  测试动作和台词同型，但触发主体不同。
+
+scenario:
+  who:
+    primary_role: 加盟商门店店员 / 主理人对店内犹豫顾客
+    target_audience: 店内试穿犹豫的真实顾客 / 同时拍下作为接客内容素材
+  when:
+    trigger: 店内顾客试穿后表达具体顾虑（"这件会不会太透"/"显不显胯"/"会不会扎"）时
+    context: 服装顾客真正卡住的不是"美不美"而是"会不会踩雷"——透/勒/皱/闷/短/显壮/难搭是服装独有的"心理阻力图谱"；接客场景单次 5-30 分钟无法做 product_review C3-1 一天体感
+  what:
+    action_type: on_spot_concerns_clearance_test
+    decision_or_action: 顾客→店员路径：(1) 复述顾客原话顾虑+做字幕"怕 X"；(2) 现场做对应测试（逆光/侧身/手臂贴脸颊/抬手坐下）；(3) 测试通过后留延迟结论"如果你和我怕的一样，它可以进试衣间"
+  result:
+    success_pattern: |-
+      顾客"这件白衬衫会不会透" → 店员带到窗边逆光让顾客自己抬手看 → 字幕"逆光 ✕ 没透" →
+      顾客"那这条裤子显胯吗" → 侧身镜前站 2 秒 → 字幕"侧身 ✕ 不显" →
+      留一句"如果你和我怕的一样，它可以进试衣间" → 顾客接住"被安慰"，转化阻力降低
+    flip_pattern: |-
+      顾客说怕 X，店员说"不会的姐姐这件可显瘦了" → 命中 E1（形容词代替测试）+ 顾客信任崩塌
+      或店员主动列优点不让顾客说顾虑 → 退回 C1 销售推销逻辑
+      或测试做完直接说"那姐姐拿一件吧" → 强口播购买指令，触发 OOTD 类硬广反感
+  underlying_mechanism: |
+      product_review 北极星是"风险已被看清+信任建立+心理阻力被消解"。
+      接客现场最稀缺的不是"产品讲解"，而是把顾客的犹豫**当场承接**而不是当场反驳。
+      "顾客说怕 X → 店员现场测试 X → 顾客自己看到结果"的路径让顾客
+      从"被推销"切换到"被同盟"，这是服装接客转化的核心心理机制——
+      与"反向透明"在内容创作层的逻辑同源。
+  boundary:
+    applicable_when: 实体门店接客 / 顾客已表达具体顾虑 / 1-2 人即可（店员+可选拍摄者）/ 单次 5-30 分钟
+    not_applicable_when: 顾客没有表达顾虑只是在浏览 → 走 store_daily 接客欢迎流程 / 顾客顾虑超出测试能力（如"会不会缩水"）→ 走 product_review C2-3 面料侦探（成分+工艺）/ 引流内容（无真实顾客）→ 走 C3-2 创作者自述顾虑版本
+  alternative_path:
+    - 引流场景版本：创作者自述"我本来怕 X" + 创作者自己做测试 → 同套测试动作但触发主体不同
+    - 顾虑超过 3 个时 → 改 C3-3 触感法庭（同类三件对照），把"怕 X"测试升级为"对比证据"
+
+evidence:
+  source_md: Q2-内容类型种子/product_review-交付物-v0.1.md
+  source_anchor: §C3-2 只拍犹豫 / 顾虑解除测评 + 备注"接客场景专属用法" + 北极星 + B5 顾虑先行
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-2：整条视频只讲犹豫点——这件白衬衫我本来怕透 / 这条裤子我本来怕显胯 / 这件针织我本来怕扎。
+    每个"怕"都给一个小测试：窗边逆光看透不透 / 侧身站着看胯 / 手臂贴脸颊看扎不扎。
+    前 20 秒都没有说"好"，只是一直验证"原来没我想的那么糟"。
+    最后留一句"如果你和我怕的是同几件事，这件可以进试衣间"。
+    备注·接客场景的专属用法：店员站在店内顾客旁边，拿出同款现场做 3 个顾虑测试——
+    顾客"我怕这个肩太硬"→ 店员让她侧身在镜前看 2 秒 → 真实反馈。
+    。
+    服装钩子：消费者真正卡住的就是透/勒/皱/闷/短/显壮/难搭——服装独有的"心理阻力图谱"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation + 09_call_mapping
+    可反推"接客场景顾虑解除三步路径 / 与引流自述版的触发主体差异 / 与销售推销的反向边界"。
+    Gate 3：跨品牌通用——任意服装门店均可调用此接客判断。
+    Gate 4：可被 customer_service / store_training / content_generation 三个 runtime 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-product-review-concerns-clearance-on-spot, rule_type: on_spot_concerns_clearance_test, applicable_when: "实体门店接客 / 顾客已说出具体顾虑 / 1-2 人即可", success_scenario: "复述顾虑+现场测试（逆光/侧身/贴脸颊）+延迟结论 → 顾客被同盟而非被种草", flip_scenario: "形容词代替测试 → E1 红线 / 主动列优点不让说顾虑 → 销售推销 / 测完直接催单 → 硬广反感", alternative_boundary: "顾客未说顾虑 → store_daily 欢迎流程 / 顾虑超出测试能力 → C2-3 面料侦探 / 引流场景 → C3-2 创作者自述版"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-product-review-concerns-clearance-on-spot, source_md: Q2-内容类型种子/product_review-交付物-v0.1.md, source_anchor: §C3-2 + 备注 + 北极星 + B5, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-CustomerScenario-compatible_with_content_type-product_review-pr2, source_type: CustomerScenario, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_review","play_card":"C3-2","scenario_tag":"customer_service"}'}
+  call_mapping:
+    - {mapping_id: CM-customer_service-KP-service_judgment-product-review-concerns-clearance-on-spot, runtime_method: customer_service, input_types: "CustomerConcerns+ProductSKU", output_types: "OnSpotTestScript"}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

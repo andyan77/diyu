@@ -1,0 +1,97 @@
+pack_id: KP-styling_rule-process-trace-rejected-garment
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: medium
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "拍被拦下来的衣服比拍合格品更能建立信任"
+  steps:
+    - "从一件看似正常的衣服开始"
+    - "指出不能过的具体细节"
+    - "放进返工或淘汰位置收口"
+  anti_pattern: "只展示好品和严格口号却不展示被拒绝证据"
+  duration: short
+  audience: "重视品牌质量边界的顾客"
+  source_pack_id: KP-styling_rule-process-trace-rejected-garment
+
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  process_trace 内容生产纪律：拍**那件被拦下来的衣服**比拍合格品更能建立信任——
+  "认真不是把好的拿出来炫，而是把'不够好的'挡在外面"。
+  服装行业极适合用"被拒绝的成衣"做内容（一毫米偏差 / 平整度不够 / 洗后状态不稳），
+  观众很少被允许看到这个环节，因此**用淘汰建立信任**比用展示流程更稀缺。
+  这是 process_trace 的"边界感证据"独占玩法——用品牌愿意挡掉什么，反向证明品牌珍惜什么。
+
+scenario:
+  who:
+    primary_role: process_trace 内容创作者 / AI 内容生成调度
+    target_audience: 服装品牌做工艺溯源 + QC 类内容时
+  when:
+    trigger: 工艺溯源内容选题 / 选 30 秒讲什么时
+    context: 大多数品牌只愿意拍合格品（红线 E5：只展示完美流程不展示被否决/被返工/被拦下的东西）
+  what:
+    action_type: process_trace_rejected_garment_play
+    decision_or_action: 镜头从一件看似正常的成衣开始，质检员把它摊开指出几处具体瑕疵（领口 1 毫米偏 / 平整度不够 / 洗后不稳），结尾"所以它不能卖给你"，衣服进入返工筐
+  result:
+    success_pattern: 让被拦下的成衣成为主角 + 低声不鼓吹的解释 + 真实质检台场景 → 观众接住品牌的"边界感"——比任何"严格把控"口号都强
+    flip_pattern: 只拍合格品流水线 / 配励志 BGM 强调"我们很用心" → 红线 E1 / E5：等于自找麻烦，在透明焦虑的语境下被识别为"洗白"
+  underlying_mechanism: |
+      品牌的"边界感"= 知道什么不该被卖出去。
+      认真不是把好的拿出来炫，而是把不够好的挡在外面——
+      展示淘汰过程比展示通过过程更稀缺，因此信任增量更高。
+  boundary:
+    applicable_when: 服装品牌有真实的 QC 拦下流程 / 可在不泄露敏感信息前提下展示
+    not_applicable_when: 没有真实拦下案例（编造将造成反向伤害）/ 涉及供应商纠纷的瑕疵不得用于内容
+  alternative_path:
+    - 不便展示被拦下成衣 → 退用 C2-3 证据链 5 个核验点 / C3-4 工艺侦探
+    - QC 流程涉及商业机密 → 仅拍质检员手指动作 + 抽象瑕疵描述，不拍批次/供应商
+
+evidence:
+  source_md: Q2-内容类型种子/process_trace-交付物-v0.1.md
+  source_anchor: §C3-3 被拦下来的那一件 + §E5 红线 + §B9 隐喻"被拦下的衣服=品牌的边界感"
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    C3-3 一句话定义：大多数品牌只愿意拍"合格品"，但真正能建立信任的，
+    是拍那件被拦下来的衣服。
+    北极星映射：认真不是把好的拿出来炫，而是把"不够好的"挡在外面——接住品牌的边界感。
+    服装行业钩子：⭐⭐⭐⭐ 服装行业极适合用"被拒绝的成衣"做内容——观众很少被允许看到这个环节。
+    备注：打破工艺内容永远只展示"漂亮流程"的套路，用淘汰建立信任。
+    B9：被拦下的衣服 = 品牌的边界感（知道什么不该被卖出去）。
+    E5：只展示完美流程，不展示任何被否决、被返工、被拦下的东西。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: process_trace 通用玩法纪律 / 任意服装品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-process-trace-rejected-garment-rejected_metaphor, owner_field: process_trace_signature_play, definition: "被拦下的成衣 = 品牌边界感的具象证据；用淘汰建立信任比展示流程更稀缺"}
+  rule:
+    - {rule_id: RL-KP-styling_rule-process-trace-rejected-garment, rule_type: process_trace_rejected_garment_play, applicable_when: "做 process_trace 内容选题时", success_scenario: "拍质检台被拦下的成衣 + 低声指出具体瑕疵 + 衣服进返工筐 → 信任远强于'严格把控'口号", flip_scenario: "只拍合格品+励志 BGM → 红线 E1/E5 自找麻烦", alternative_boundary: "无真实拦下案例不得编造；涉商业机密只拍抽象瑕疵不拍批次"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-process-trace-rejected-garment, source_md: Q2-内容类型种子/process_trace-交付物-v0.1.md, source_anchor: §C3-3 + §E5 + §B9, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-process_trace-pt2, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"process_trace","signature_play":"rejected_garment"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-process-trace-rejected-garment, runtime_method: content_generation, input_types: "ContentType=process_trace", output_types: "PlayCardPriority"}

@@ -1,0 +1,95 @@
+pack_id: KP-product_attribute-core-category-7-plus-3
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  冷启动首批商品母类 Category 必须冻结为 7 主母类（tops_base / shirts_blouses / knitwear /
+  outerwear / bottoms / dresses / sets）+ 3 扩展母类（shoes / bags / accessories）；
+  这套 7+3 切法的理由不是"全不全"，而是要同时支撑门店接客 / 试衣间救场 / 陈列分区 / 培训演示四条业务路径，
+  且不能让首批库存切得又散又重。
+
+scenario:
+  who:
+    primary_role: 冷启动知识底座搭建者 / 商品总监
+    target_audience: 后续要消费 Category 的所有下游模块（搭配、陈列、培训、库存）
+  when:
+    trigger: 进入冷启动阶段，需要冻结商品母类清单
+    context: P0 任务，先于具体 SKU、先于搭配规则
+  what:
+    action_type: category_taxonomy_freeze
+    decision_or_action: 冻结 10 个 Category（7 主 + 3 扩展），不得在首批增减
+  result:
+    success_pattern: |
+      母类与四条业务路径一一对得上（接客 / 救场 / 陈列 / 培训均能引用）；
+      库存集中度合理，不出现"母类过多导致每类都没货"。
+    flip_pattern: |
+      母类切得太多 → 每类库存稀薄，陈列无法分区，培训演示找不到代表款；
+      母类切得太少 → 接客判断颗粒过粗，搭配规则无法挂靠。
+  underlying_mechanism: |
+      Category 是后续所有模块的挂靠基底；先于 SKU 冻结，是为了让搭配 / 陈列 / 培训 / 库存共享同一坐标系。
+  boundary:
+    applicable_when: 冷启动阶段（首批商品体系建设）
+    not_applicable_when: 已有成熟 Category 体系的成品阶段（变更走升级而非冻结）
+  alternative_path:
+    - 出现明显未覆盖品类 → 进 skeleton_gap_register 而非临时新增母类
+    - 子类需求过强 → 在 Attribute 维度补充（如 subcategory），不动 Category 母类
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md
+  source_anchor: 6.1 首批必须纳入的商品母类
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    首批正式冻结为 7 个主母类 + 3 个扩展母类。
+    7 个主母类：tops_base / shirts_blouses / knitwear / outerwear / bottoms / dresses / sets
+    3 个扩展母类：shoes / bags / accessories
+    这套切法的好处是：门店最高频接客、试衣间救场、陈列分区、培训演示都能用；
+    同时不会一上来把库做得又散又重。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 9 表（Category 对象 + 10 个 value_set + 母类冻结 rule）可反推"7+3 切法 / 四条业务路径 / 不得首批增减"。
+    Gate 3：跨女装零售品牌通用底座切法，不依赖具体品牌。
+    Gate 4：可被 outfit_recommendation / display_guidance / store_training / inventory_rescue 全链路调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 母类清单是通用零售底座，不含笛语专属表达
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Category, type_name: Category, supertype: domain_object}
+  field:
+    - {field_id: FD-Category-category_id, owner_type: Category, field_name: category_id, data_type: string}
+    - {field_id: FD-Category-category_name, owner_type: Category, field_name: category_name, data_type: string}
+    - {field_id: FD-Category-parent_category_id, owner_type: Category, field_name: parent_category_id, data_type: string}
+    - {field_id: FD-Category-is_core_category, owner_type: Category, field_name: is_core_category, data_type: boolean}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-core-category-7-plus-3-core_vs_extended, owner_field: is_core_category, definition: "首批 7 主母类（is_core_category=true）支撑 4 条业务路径主体；3 扩展母类（is_core_category=false）补全配件维度"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-core_categories, value: tops_base, label: 基础上装}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-core_categories, value: shirts_blouses, label: 衬衫小衫}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-core_categories, value: knitwear, label: 针织}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-core_categories, value: outerwear, label: 外套}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-core_categories, value: bottoms, label: 下装}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-core_categories, value: dresses, label: 连衣裙}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-core_categories, value: sets, label: 套装}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-extended_categories, value: shoes, label: 鞋靴}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-extended_categories, value: bags, label: 包袋}
+    - {value_set_id: VS-KP-product_attribute-core-category-7-plus-3-extended_categories, value: accessories, label: 配饰}
+  rule:
+    - {rule_id: RL-KP-product_attribute-core-category-7-plus-3, rule_type: category_taxonomy_freeze, applicable_when: "冷启动阶段且首批 Category 体系建设", success_scenario: "10 个母类对齐接客/救场/陈列/培训四条业务路径", flip_scenario: "母类太多→库存稀薄；母类太少→接客颗粒过粗", alternative_boundary: "未覆盖品类→进 skeleton_gap_register；子类需求→走 Attribute"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-core-category-7-plus-3, source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md, source_anchor: 6.1, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

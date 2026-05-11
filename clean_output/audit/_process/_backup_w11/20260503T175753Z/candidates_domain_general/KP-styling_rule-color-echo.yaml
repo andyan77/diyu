@@ -1,0 +1,85 @@
+pack_id: KP-styling_rule-color-echo
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  一身颜色至少要有两处呼应，不让任何颜色孤零零悬着；
+  替代时同色断货可在同温度同明度内微调，不能冷暖乱跳——故意做冲突感的拍摄型造型除外。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长 / 陈列负责人
+    target_audience: 全部客群
+  when:
+    trigger: 整套搭配定稿 / 整组挂场分组陈列 / 教新员工"为什么这套看着散"
+    context: 整套搭配色彩组织与陈列分组
+  what:
+    action_type: color_echo_arrangement
+    decision_or_action: |
+      鞋包呼应、上衣配饰呼应、内搭下装轻呼应——至少两处颜色锚点；
+      挂场按色阶 / 温度 / 系列走，颜色断货只在同温度同明度内调。
+  result:
+    success_pattern: 整套与挂场看上去"完整、有秩序"，顾客愿意整套带走或在分组内连带购买。
+    flip_pattern: 全身只有一处亮色其他完全断开，画面散，看上去"没收口"。
+  underlying_mechanism: |
+      颜色呼应是公开零售陈列指南的视觉销售工具：
+      呼应让画面"完整"，分组与焦点让顾客理解成本下降，自然带动连带。
+  boundary:
+    applicable_when: 全部客群 / 整套搭配定稿 / 挂场分组陈列
+    not_applicable_when: 故意做冲突感、前卫感的拍摄型造型
+  alternative_path:
+    - 同色断货 → 同温度同明度内微调
+    - 不能冷暖乱跳替代
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 05 color_echo_rule + 6.2 hard_rule
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    一身颜色至少有两处呼应，不让某个颜色孤零零悬着。
+    呼应会显完整，也更利于做陈列分组。公开零售陈列指南也把颜色分组和焦点组织视为最直接的视觉销售工具。
+    works_in：鞋包呼应、上衣配饰呼应、内搭下装轻呼应。
+    fails_in：全身只有一处亮色，其他完全断开。
+    原本同色替代时，可在同温度 / 同明度内微调；不能冷暖乱跳。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；同时挂搭配/陈列两条产线。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 颜色呼应+分组挂场是公开陈列指南通识。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-color-echo-echo_concept, owner_field: rule_name, definition: "颜色呼应法：一身至少两处颜色锚点；挂场按色阶/温度/系列分组"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-color-echo-echo_positions, value: shoe_bag_echo, label: 鞋包呼应, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-color-echo-echo_positions, value: top_accessory_echo, label: 上衣配饰呼应, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-color-echo-echo_positions, value: inner_bottom_echo, label: 内搭下装轻呼应, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-color-echo-substitution_axis, value: same_temperature, label: 同温度内调, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-color-echo-substitution_axis, value: same_brightness, label: 同明度内调, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-color-echo-substitution_axis, value: forbidden_temperature_jump, label: 禁止冷暖乱跳, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-styling_rule-color-echo, rule_type: hard_rule, applicable_when: "整套搭配/挂场分组/全部客群", success_scenario: "至少两处颜色呼应整体显完整", flip_scenario: "孤立亮色其他断开画面散", alternative_boundary: "同温度同明度替代；冷暖乱跳禁止；冲突感造型可放行"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-color-echo, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 05 + 6.2, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-echo01, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"hard_rule","focus":"color_arrangement"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-echo02, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"挂场按色阶/温度/系列分组"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-echo03, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"教新员工理解为什么有些搭配看着散"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-color-echo, runtime_method: outfit_recommendation, input_types: [Product], output_types: [OutfitPlan]}
+    - {mapping_id: CM-display_guidance-KP-styling_rule-color-echo, runtime_method: display_guidance, input_types: [DisplayGuide], output_types: [DisplayPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-color-echo, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

@@ -1,0 +1,69 @@
+VS-KP-training_unit-microlearning-not-long-course-format,branching_scenario,分支情境,1,domain_general,KP-training_unit-microlearning-not-long-course
+VS-KP-training_unit-microlearning-not-long-course-format,do_dont_contrast,正误对照,2,domain_general,KP-training_unit-microlearning-not-long-course
+VS-KP-training_unit-microlearning-not-long-course-format,pre_shift_micro_coaching,班前会微辅导,3,domain_general,KP-training_unit-microlearning-not-long-course
+VS-KP-training_unit-microlearning-not-long-course-format,error_replay,错误复盘,4,domain_general,KP-training_unit-microlearning-not-long-course
+VS-KP-training_unit-microlearning-not-long-course-format,before_after_timelapse,前后对比延时,5,domain_general,KP-training_unit-microlearning-not-long-course
+VS-KP-training_unit-priority-by-impact-frequency-trust-dim,conversion_impact,对成交影响,1,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-dim,error_frequency,出错频率,2,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-dim,trust_damage,对信任伤害,3,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-top8,wrong_proportion_balance,比例失衡,1,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-top8,ignoring_body_shape,忽略身型,2,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-top8,wrong_scene_matching,场景错配,3,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-top8,selling_single_piece_without_full_logic,只卖单品不讲整套,4,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-top8,too_many_main_items,陈列主角过多,5,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-top8,wrong_hanging_density,挂装密度失控,6,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-top8,inventory_depth_mismatch,陈列与库存深度不匹配,7,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-priority-by-impact-frequency-trust-top8,fake_same_item_substitution,替代款假装同款,8,domain_general,KP-training_unit-priority-by-impact-frequency-trust
+VS-KP-training_unit-standard-action-vs-judgment-skill-skill_type,standard_action,标准动作,1,domain_general,KP-training_unit-standard-action-vs-judgment-skill
+VS-KP-training_unit-standard-action-vs-judgment-skill-skill_type,judgment_skill,判断力,2,domain_general,KP-training_unit-standard-action-vs-judgment-skill
+VS-KP-training_unit-standard-action-vs-judgment-skill-format_for_action,do_dont_contrast,正误对照（标准动作首选）,1,domain_general,KP-training_unit-standard-action-vs-judgment-skill
+VS-KP-training_unit-standard-action-vs-judgment-skill-format_for_action,before_after_timelapse,前后对比延时（标准动作首选）,2,domain_general,KP-training_unit-standard-action-vs-judgment-skill
+VS-KP-training_unit-standard-action-vs-judgment-skill-format_for_judgment,branching_scenario,分支情境（判断力首选）,1,domain_general,KP-training_unit-standard-action-vs-judgment-skill
+VS-KP-training_unit-standard-action-vs-judgment-skill-format_for_judgment,error_replay,错误复盘（判断力首选）,2,domain_general,KP-training_unit-standard-action-vs-judgment-skill
+VS-KP-training_unit-customer-first-look-judgment-customer_type,scenario_driven,场景型,1,domain_general,KP-training_unit-customer-first-look-judgment
+VS-KP-training_unit-customer-first-look-judgment-customer_type,single_item_driven,单品型,2,domain_general,KP-training_unit-customer-first-look-judgment
+VS-KP-training_unit-customer-first-look-judgment-customer_type,comfort_driven,体感型,3,domain_general,KP-training_unit-customer-first-look-judgment
+VS-KP-training_unit-customer-first-look-judgment-customer_type,price_driven,价格型,4,domain_general,KP-training_unit-customer-first-look-judgment
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,shoulder_line,肩线,1,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,waist_line,腰线,2,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,hem_line,下摆,3,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,pant_length,裤长,4,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,neckline,领口,5,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,sleeve_length,袖长,6,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-fabric-touch-before-spec-touch_point,cuff,袖口,1,domain_general,KP-training_unit-fabric-touch-before-spec
+VS-KP-training_unit-fabric-touch-before-spec-touch_point,lining,里层,2,domain_general,KP-training_unit-fabric-touch-before-spec
+VS-KP-training_unit-fabric-touch-before-spec-touch_point,collar,领口,3,domain_general,KP-training_unit-fabric-touch-before-spec
+VS-KP-training_unit-styling-error-top-priority-eight-error_class,wrong_proportion_balance,比例失衡,1,domain_general,KP-training_unit-styling-error-top-priority-eight
+VS-KP-training_unit-styling-error-top-priority-eight-error_class,ignoring_body_shape,忽略身型,2,domain_general,KP-training_unit-styling-error-top-priority-eight
+VS-KP-training_unit-styling-error-top-priority-eight-error_class,wrong_scene_matching,场景错配,3,domain_general,KP-training_unit-styling-error-top-priority-eight
+VS-KP-training_unit-styling-error-top-priority-eight-error_class,selling_single_piece_without_full_logic,只卖单品不讲整套逻辑,4,domain_general,KP-training_unit-styling-error-top-priority-eight
+VS-KP-training_unit-styling-error-top-priority-eight-error_class,too_many_main_items,陈列主角过多,5,domain_general,KP-training_unit-styling-error-top-priority-eight
+VS-KP-training_unit-styling-error-top-priority-eight-error_class,wrong_hanging_density,挂装密度失控,6,domain_general,KP-training_unit-styling-error-top-priority-eight
+VS-KP-training_unit-styling-error-top-priority-eight-error_class,inventory_depth_mismatch,陈列与库存深度不匹配,7,domain_general,KP-training_unit-styling-error-top-priority-eight
+VS-KP-training_unit-styling-error-top-priority-eight-error_class,fake_same_item_substitution,替代款假装同款,8,domain_general,KP-training_unit-styling-error-top-priority-eight
+VS-KP-training_unit-substitution-honest-disclosure-rescue_error,hide_stock_problem,隐瞒库存问题,1,domain_general,KP-training_unit-substitution-honest-disclosure
+VS-KP-training_unit-substitution-honest-disclosure-rescue_error,fake_same_item_substitution,替代款假装同款,2,domain_general,KP-training_unit-substitution-honest-disclosure
+VS-KP-training_unit-substitution-honest-disclosure-rescue_error,push_wrong_size_to_force_sale,硬推不合尺码,3,domain_general,KP-training_unit-substitution-honest-disclosure
+VS-KP-training_unit-substitution-honest-disclosure-rescue_error,color_substitution_without_reason,断色后乱换颜色不解释,4,domain_general,KP-training_unit-substitution-honest-disclosure
+VS-KP-training_unit-substitution-honest-disclosure-rescue_error,no_redirect_path,只否定无转向,5,domain_general,KP-training_unit-substitution-honest-disclosure
+VS-KP-training_unit-substitution-honest-disclosure-rescue_error,redirect_too_far,转向过远,6,domain_general,KP-training_unit-substitution-honest-disclosure
+VS-KP-training_unit-on-floor-four-layer-assessment-layer,action_replay_check,A 动作复现,1,domain_general,KP-training_unit-on-floor-four-layer-assessment
+VS-KP-training_unit-on-floor-four-layer-assessment-layer,scenario_response_check,B 情境应答,2,domain_general,KP-training_unit-on-floor-four-layer-assessment
+VS-KP-training_unit-on-floor-four-layer-assessment-layer,do_dont_spotting,C 正误辨识,3,domain_general,KP-training_unit-on-floor-four-layer-assessment
+VS-KP-training_unit-on-floor-four-layer-assessment-layer,mystery_shopper_reflection,D 神秘顾客复盘,4,domain_general,KP-training_unit-on-floor-four-layer-assessment
+VS-KP-training_unit-auto-trigger-rules-trigger_signal,same_styling_error_x3,同类搭配错误 3 次以上,1,domain_general,KP-training_unit-auto-trigger-rules
+VS-KP-training_unit-auto-trigger-rules-trigger_signal,same_display_face_revised_x2,同陈列面 2 次以上被改回,2,domain_general,KP-training_unit-auto-trigger-rules
+VS-KP-training_unit-auto-trigger-rules-trigger_signal,size_rescue_consecutive_fail,断码救场连续失败,3,domain_general,KP-training_unit-auto-trigger-rules
+VS-KP-training_unit-auto-trigger-rules-trigger_signal,same_return_reason_consecutive,同类退货理由连续出现,4,domain_general,KP-training_unit-auto-trigger-rules
+VS-KP-training_unit-auto-trigger-rules-trigger_signal,customer_question_inconsistent_answers,高频问题员工答不一致,5,domain_general,KP-training_unit-auto-trigger-rules
+VS-KP-training_unit-auto-trigger-rules-trigger_signal,rescue_conversion_below_baseline,同类库存救场转化偏低,6,domain_general,KP-training_unit-auto-trigger-rules
+VS-KP-training_unit-role-binding-frontline-priority-role_core,store_manager,门店店长,1,domain_general,KP-training_unit-role-binding-frontline-priority
+VS-KP-training_unit-role-binding-frontline-priority-role_core,sales_associate,门店店员/导购,2,domain_general,KP-training_unit-role-binding-frontline-priority
+VS-KP-training_unit-role-binding-frontline-priority-role_core,warehouse_supervisor,仓库主管,3,domain_general,KP-training_unit-role-binding-frontline-priority
+VS-KP-training_unit-role-binding-frontline-priority-role_secondary,merchandising_director,商品总监,1,domain_general,KP-training_unit-role-binding-frontline-priority
+VS-KP-training_unit-role-binding-frontline-priority-role_secondary,designer,设计师,2,domain_general,KP-training_unit-role-binding-frontline-priority
+VS-KP-training_unit-role-binding-frontline-priority-role_secondary,sample_worker,样衣工,3,domain_general,KP-training_unit-role-binding-frontline-priority
+VS-KP-training_unit-color-hesitation-disambiguation-concern_class,hard_to_match,难搭,1,domain_general,KP-training_unit-color-hesitation-disambiguation
+VS-KP-training_unit-color-hesitation-disambiguation-concern_class,makes_skin_dark,显黑,2,domain_general,KP-training_unit-color-hesitation-disambiguation
+VS-KP-training_unit-color-hesitation-disambiguation-concern_class,not_dirt_friendly,不耐脏,3,domain_general,KP-training_unit-color-hesitation-disambiguation
+VS-KP-training_unit-color-hesitation-disambiguation-concern_class,not_formal_enough,不够正式或太正式,4,domain_general,KP-training_unit-color-hesitation-disambiguation

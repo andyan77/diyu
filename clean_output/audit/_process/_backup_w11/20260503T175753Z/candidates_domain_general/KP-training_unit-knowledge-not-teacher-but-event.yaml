@@ -1,0 +1,76 @@
+pack_id: KP-training_unit-knowledge-not-teacher-but-event
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  knowledge_sharing 类内容生产纪律：知识不是"老师在讲"而是"事故在发言"——
+  从一个具体错误（错搭 / 错洗护 / 错版型 / 错面料认知）开始演示，让观众**先看到后果再倒回拆原因**。
+  这条纪律推翻"知识内容必须正确、完整、体面地铺陈"的默认套路：
+  正确的 KS 内容生产路径是"错误重演 → 前后对比 → 因果倒叙 → 极短结论"，而不是"开头 hook → 三条建议 → 收藏点赞"。
+
+scenario:
+  who:
+    primary_role: KS 内容创作者 / AI 内容生成调度
+    target_audience: 服装品牌 / 主理人 / 个人创作者做干货科普时
+  when:
+    trigger: 写一条服装 KS 内容前的开场结构选择
+    context: 服装行业错误案例库存极大（错搭 / 错洗护 / 错版型 / 错面料）；从错误开始的内容更易触发"我也犯过"的代入感
+  what:
+    action_type: knowledge_sharing_open_with_error
+    decision_or_action: 第一镜不给"正确答案"，而给"被毁的样品 / 翻车现场"作为开场——观众先看到后果，再看到错误重演，再得到极短结论
+  result:
+    success_pattern: 0-3 秒被毁羊毛衫特写 + "上次我把它洗坏了" → 倒叙错误动作 → 拆水温/拆面料 → 22-30 秒给极短结论 → 观众接住"啊这个错误我也会犯"愿意继续看
+    flip_pattern: 开头先给三条建议或正确答案 → 观众识别为"老师在讲"的标准模板 → 跳出率高，AI 味重
+  underlying_mechanism: |
+      从错误开始有三重信任效用：① 创作者敢承认自己也犯过 → 真诚锚点；② 后果可视化 → 知识落地；
+      ③ 因果倒叙制造好奇心 → 完播。
+      "知识不是老师在讲，而是事故在发言"——主语从作者转移到事件本身，KS 的 AI 味由此被根除。
+  boundary:
+    applicable_when: KS 内容生产 / 服装行业错误教学（v0.2 G3 已裁决：错误教学不限制范围）
+    not_applicable_when: 完全无错误案例可调（极冷门话题 / 标准答案唯一）→ 退而用 C3-2 一句知识只靠动作 / C2-4 桌面实验
+  alternative_path:
+    - 错误教学不限制范围（v0.2 G3）；教学内容由创作者自行判断责任边界
+    - 涉及健康 / 材质安全话题不得过度恐吓式表达（红线 E6）
+
+evidence:
+  source_md: Q2-内容类型种子/knowledge_sharing-交付物-v0.1.md
+  source_anchor: §C3-1 从一个错误开始讲（事故在发言）+ §B9 隐喻 + §D §三个未被开发角度 2 错误教学
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    C3-1 北极星映射：观众接住的是"啊，这个错误我也会犯"，于是愿意继续看——
+    知识不是老师在讲，而是事故在发言。
+    服装非常适合错误教学：错误搭配、错误面料认知、错误洗护、错误版型选择。
+    打破"知识内容必须正确、完整、体面地铺陈"的套路。
+    §D 角度 2：错误教学——服装行业错误案例（错搭/错洗护/错版型）库存极大。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: KS 内容生产开场结构通用纪律 / 任意品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-knowledge-not-teacher-but-event-event_speaking, owner_field: ks_open_structure, definition: "KS 开场纪律：知识不是老师在讲而是事故在发言；先看到后果再倒回拆原因"}
+  rule:
+    - {rule_id: RL-KP-training_unit-knowledge-not-teacher-but-event, rule_type: knowledge_sharing_open_with_error, applicable_when: "写服装 KS 内容前选择开场结构时", success_scenario: "0-3 秒被毁样品+'我搞错过' → 倒叙错误动作 → 极短结论 → 完播率高代入感强", flip_scenario: "开头先给正确答案/三条建议 → 老师腔模板 → AI 味重跳出率高", alternative_boundary: "无错误可调 → 退用一句知识只靠动作或桌面实验；健康/材质话题不得恐吓式表达"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-knowledge-not-teacher-but-event, source_md: Q2-内容类型种子/knowledge_sharing-交付物-v0.1.md, source_anchor: §C3-1 + §B9 + §D, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-compatible_with_content_type-knowledge_sharing-ksevent1, source_type: TrainingMaterial, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"knowledge_sharing","open_structure":"error_first"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-knowledge-not-teacher-but-event, runtime_method: content_generation, input_types: "ContentType=knowledge_sharing", output_types: "OpenStructureChoice"}

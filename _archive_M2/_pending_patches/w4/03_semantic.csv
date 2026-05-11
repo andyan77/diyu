@@ -1,0 +1,10 @@
+SM-KP-product_attribute-persona-three-shell-coverage-store_operator,cold_start_positioning,store_operator：门店经营、秩序维护、带队复盘、后场协同的主视角,,domain_general,KP-product_attribute-persona-three-shell-coverage
+SM-KP-product_attribute-persona-three-shell-coverage-styling_advisor,cold_start_positioning,styling_advisor：前台接客、试穿建议、搭配判断、顾客体感翻译的主视角,,domain_general,KP-product_attribute-persona-three-shell-coverage
+SM-KP-product_attribute-persona-three-shell-coverage-product_professional,cold_start_positioning,product_professional：设计、打样、工艺、面料、版型、商品判断与专业叙事的主视角,,domain_general,KP-product_attribute-persona-three-shell-coverage
+SM-KP-product_attribute-persona-shell-not-equal-role-shell,persona_definition_kind,通用 Persona 是 speaking_shell（说话身份壳），不是 single_role（单一岗位）；岗位动作走挂接 RoleProfile,,domain_general,KP-product_attribute-persona-shell-not-equal-role
+SM-KP-training_unit-persona-anti-pattern-checklist-four_traps,anti_pattern_check_state,Persona 内容四类反模式：① 万能鸡汤号 ② 强推销售话术 ③ 产品说明书堆砌 ④ 单边正能量,,domain_general,KP-training_unit-persona-anti-pattern-checklist
+SM-KP-training_unit-collect-real-action-before-script-priority_chain,collection_priority,岗位素材采集 6 阶段固定顺序：动作→判断→困境→话术→情绪→总结,,domain_general,KP-training_unit-collect-real-action-before-script
+SM-KP-training_unit-evidence-shape-four-types-shape_taxonomy,evidence_shape,证据形态四类：口述 / 动作 / 文档 / 物证；缺失视为不可采信,,domain_general,KP-training_unit-evidence-shape-four-types
+SM-KP-training_unit-collect-failure-not-only-success-failure_quota,failure_quota,负面颗粒（失败/犹豫/卡住/禁说/失手）占比 ≥ 成功案例同等比例,,domain_general,KP-training_unit-collect-failure-not-only-success
+SM-KP-training_unit-role-material-five-kinds-minimum-completeness_gate,material_completeness,5 类必备素材齐全 + 3 硬证据为种子数据可导入门槛,,domain_general,KP-training_unit-role-material-five-kinds-minimum
+SM-KP-training_unit-cold-start-role-priority-frontline-priority_phase,cold_start_priority_phase,冷启动素材采集两阶段：P0 四岗（前台/门店/设计/工艺）→ P1 三岗（纵深/决策/协同）,,domain_general,KP-training_unit-cold-start-role-priority-frontline

@@ -1,0 +1,88 @@
+pack_id: KP-fabric_property-wrinkle-not-equal-low-grade
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  "会皱"不等于"低级"——有些皱是材质特性（如亚麻自然折痕），不是品控问题；
+  关键是判断顾客是否接受这种纤维表情、以及场景是否允许。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional
+    target_audience: 看到亚麻 / 棉麻 / 软棉皱感后否定为"低级 / 没整理"的顾客；导购回避皱感问题的场景
+  when:
+    trigger: 顾客或导购把"会皱"等同于"质量差 / 低级"
+    context: 亚麻 / 棉麻 / 高吸湿天然纤维款；通勤 / 久坐场景
+  what:
+    action_type: misjudgment_correction_wrinkle_eq_low
+    decision_or_action: |
+      区分两类皱：材质表情（亚麻 / 棉麻自然折痕）vs 工艺缺陷（缝口起皱）；
+      材质表情类不许定义为低级，要做"接受度判断"——顾客是否接受 + 场景是否允许；
+      工艺缺陷类正常视为质量问题处理。
+  result:
+    success_pattern: |
+      顾客接受材质表情类皱属正常，购买后不视作质量问题；
+      不接受的顾客被识别后转推免烫混纺或聚酯类。
+    flip_pattern: |
+      统一定义"会皱=低级"导致店员对亚麻 / 棉麻款不敢推或贬低 → 错失适合顾客；
+      把工艺缺陷类皱用"材质表情"借口糊弄 → 真品质问题被掩盖。
+  underlying_mechanism: |
+      材质表情来自纤维刚性 + 回弹差（亚麻是典型）；
+      工艺缺陷来自缝制四源（面料结构 + 缝型 + 针线规格 + 送布）；
+      两者外观可分辨：前者随机分布在受压位、后者集中在缝口。
+  boundary:
+    applicable_when: 任何含天然纤维易皱面料；店员或顾客对皱感的认知判断
+    not_applicable_when: |
+      工艺缺陷类皱（属于真品质问题，不在此规则保护范围）；
+      要求"全天平整"的特殊场景（应转向免烫款）。
+  alternative_path:
+    - 如果顾客不接受材质表情类皱 → 转向免烫混纺或聚酯类
+    - 如果场景要求平整 → 推荐定型工艺到位的款
+    - 如果是工艺缺陷类皱 → 按品质问题处理
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 六、首批高频误判 · 误判 3：把"会皱"当成"低级"
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    正式纠偏：有些皱是材质特性，不是低级；关键是顾客是否接受这种表情，以及场景是否允许。
+    落盘对象：FabricKnowledge（面料知识）、TrainingMaterial（培训材料）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"两类皱区分 + 材质表情类不低级 + 接受度判断"。
+    Gate 3：通用面料认知误判。
+    Gate 4：可被 store_training / outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用面料认知误判，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-wrinkle-not-equal-low-grade-wrinkle_two_kinds, owner_field: risk_alerts, definition: "皱分两类——材质表情类（不是低级）vs 工艺缺陷类（是品质问题）"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-wrinkle-not-equal-low-grade-wrinkle_kind, value: material_expression, label: 材质表情类}
+    - {value_set_id: VS-KP-fabric_property-wrinkle-not-equal-low-grade-wrinkle_kind, value: craft_defect, label: 工艺缺陷类}
+  rule:
+    - {rule_id: RL-KP-fabric_property-wrinkle-not-equal-low-grade, rule_type: misjudgment_correction, applicable_when: "店员或顾客把会皱等同于低级", success_scenario: "区分两类皱+做接受度判断 → 顾客理性接受材质表情类", flip_scenario: "统一定义会皱=低级 → 错失适合顾客 或 用材质表情借口糊弄真缺陷", alternative_boundary: "不接受表情类→免烫混纺；要求全天平整→定型工艺到位款；缺陷类→按品质问题处理"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-wrinkle-not-equal-low-grade, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 六、误判 3, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-fabric_property-wrinkle-not-equal-low-grade, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-wrinkle-not-equal-low-grade, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}

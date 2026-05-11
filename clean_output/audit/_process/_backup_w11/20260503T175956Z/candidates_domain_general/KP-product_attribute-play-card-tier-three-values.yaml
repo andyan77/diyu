@@ -1,0 +1,81 @@
+pack_id: KP-product_attribute-play-card-tier-three-values
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  玩法卡的 tier（玩法分级）字段只允许三个取值：instant（即时型 / 1 人 + 手机 + ≤200 元 + ≤4 小时单次完成）、
+  long_term（长期型 / 单次拍摄合规但需跨天/跨周/跨月素材积累）、brand_tier（品牌级 / 多人协作 / 跨地点 / 超出
+  个人创作基线，仅在用户主动选择"品牌模式"时进调用池）。默认调用池只装 instant + long_term；brand_tier 不进
+  默认池，必须由用户显式开启品牌模式后才能被 Prompt 命中。
+
+scenario:
+  who:
+    primary_role: 内容方法论维护者 / Prompt 组装层
+    target_audience: AI 内容生成调度器 / 用户内容创作模式选择
+  when:
+    trigger: 玩法卡落盘或调用池筛选玩法时
+    context: 18 份 ContentType ~210 张玩法卡的统一分级
+  what:
+    action_type: play_card_tier_classification
+    decision_or_action: 按"实拍约束 = 单人/手机/200 元/4 小时基线"判 instant；超基线但仅时间维度突破判 long_term；多人/跨地点/超预算判 brand_tier
+  result:
+    success_pattern: 默认调用池清爽，1 人 1 手机用户不会被推荐需要团队的玩法；品牌方主动切到品牌模式时才看到 brand_tier
+    flip_pattern: 三档混在一个池里 → 中小创作者点开品牌级玩法发现拍不出，信任崩塌；或品牌方拿到的全是 instant 池显得方案"小气"
+  underlying_mechanism: |
+      tier 不是质量分级，是"资源约束分级"——把"我能用什么资源拍"放在玩法选择最前置，避免推荐错位。
+      instant 是基线（1 人 + 手机 + 真实场景 + ≤200 元 + ≤4 小时）；long_term 仅时间维度突破；brand_tier 多维度突破。
+  boundary:
+    applicable_when: 任何视频型 / 文案型 ContentType 的玩法卡分级
+    not_applicable_when: 引擎卡不分档（"没有烂大街的元工具"，引擎是工具不是目标）
+  alternative_path:
+    - 同一个核心创意有 instant 和 brand_tier 两个版本 → 拆成两张玩法卡分别标 tier
+    - 既需跨周积累又需多人协作 → 优先标 brand_tier（资源约束更强者优先）
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: §J.1 玩法分级标准
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    instant：单次拍摄、单条 ≤ 4 小时即可完成 / 1 人 + 手机 + ≤ 200 元 + ≤ 4 小时（基线）/ 默认调用池
+    long_term：需要跨天/跨周/跨月素材积累，单次拍摄合规但系列需要长期运营 / 默认调用池 + 元数据标"长期"
+    brand_tier：多人协作 / 跨地点采集 / 品牌预算超出个人创作基线 / 不在基线内 / 不进入默认调用池 / 仅在用户主动选择"品牌模式"时调用
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field（PlayCard.tier）+ 04_value_set（三取值）+ 06_rule（默认池筛选规则）可反推三档语义。
+    Gate 3：任意品牌的内容生产平台都需要"资源约束 → 玩法可达"的分级。
+    Gate 4：直接被 content_generation 调用前的玩法筛选消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 玩法分级 schema 元规则，与笛语专属内容无关；任何品牌的 ContentType 玩法库都需要相同三档
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-PlayCard-tier, owner_type: ContentType, field_name: play_card_tier, data_type: string, value_set_id: VS-KP-product_attribute-play-card-tier-three-values-tier}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-play-card-tier-three-values-tier, owner_field: play_card_tier, definition: "玩法卡资源约束分级；三取值不可扩"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-play-card-tier-three-values-tier, value: instant, label: "即时型（1人+手机+≤200元+≤4小时单次完成）", ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-play-card-tier-three-values-tier, value: long_term, label: "长期型（跨天/跨周/跨月素材积累）", ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-play-card-tier-three-values-tier, value: brand_tier, label: "品牌级（多人协作/跨地点/超基线，仅品牌模式调用）", ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-product_attribute-play-card-tier-three-values, rule_type: play_card_tier_classification, applicable_when: "玩法卡落盘或 Prompt 调用池筛选时", success_scenario: "默认池仅 instant+long_term；brand_tier 仅在品牌模式调用", flip_scenario: "三档混池 → 中小创作者拍不出 / 品牌方方案过小气", alternative_boundary: "一个创意两版本 → 拆两张卡；多维度突破 → 优先 brand_tier"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-play-card-tier-three-values, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: §J.1 玩法分级标准, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

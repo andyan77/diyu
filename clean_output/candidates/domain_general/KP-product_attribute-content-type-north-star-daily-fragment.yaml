@@ -1,0 +1,88 @@
+pack_id: KP-product_attribute-content-type-north-star-daily-fragment
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `daily_fragment`（日常碎片）的北极星是"原来普通生活不是没内容，是没人会这样看"——
+  观众产生"这就是我的生活"式共鸣，情绪被轻轻托住。这条北极星把日常碎片
+  从"好看画面堆砌 / 一键成片拼盘 / 九宫格 Plog"反向定义为"碎片之间必须有隐形线索 / 选择逻辑"——
+  没有选择逻辑的碎片就是空标签，与"配热门歌的碎片拼盘 / 一句话日记+一堆小镜头"等主流玩法
+  形成判型对照；并由此衍生出 daily_fragment 独有的"声音媒介"突出性（B2 + C3-4 六声一日）
+  与"AI 辅助边界最窄"的特征——选择逻辑必须人来做。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: daily_fragment 内容创作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 daily_fragment 玩法卡或审核一条碎片内容是否成立时
+    context: 18 份 ContentType 交付物各有独立北极星；daily_fragment 与 personal_vlog 边界 = 不连续 vs 连续
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"碎片之间必须有隐形线索 / 选择逻辑"作为 daily_fragment 玩法是否成立的判定
+  result:
+    success_pattern: |-
+      玩法呈现"季节情绪蒙太奇 / 体感排序 / 六声一日 / 同一椅子四次 / 双重时间线"
+      等具备隐形线索的碎片组织 → 进 C2/C3 档
+    flip_pattern: |-
+      碎片只是"咖啡+天空+街角+自拍"等审美打卡，没有选择逻辑或线索
+      → 主流默认禁用 + 红线（剪映一键成片让所有人的碎片看起来一模一样）
+  underlying_mechanism: |
+      日常碎片的灵魂是"选择"而非"展示"——
+      AI 可帮镜头分组、字幕压缩、节奏建议，但"为什么选这 6 个声音 / 为什么按体感排"
+      必须由人决定，否则必然模板化。
+  boundary:
+    applicable_when: daily_fragment 玩法库扩张 / 单条碎片内容审核
+    not_applicable_when: 有"一天的连续感"应归 personal_vlog；有完整事件应归 event_documentary
+  alternative_path:
+    - daily_fragment 与 personal_vlog 区分：连续性——前者是不连续瞬间集合，后者有连续感
+
+evidence:
+  source_md: Q2-内容类型种子/daily_fragment-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流三张 + §E 红线 + §F AI 边界 + 与试点版差异
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完会觉得"原来普通生活不是没内容，是没人会这样看"——
+    产生"这就是我的生活"式共鸣，情绪被轻轻托住。
+    E7：剪映"一键成片"让所有人的碎片看起来一模一样。
+    F 核心判断：碎片有没有灵魂，全看创作者有没有观察到"微小但有意味"的瞬间——
+    "选择逻辑"必须由人决定，否则必然模板化。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"daily_fragment 北极星 = 隐形线索 / 选择逻辑 / 与 personal_vlog 边界 / AI 边界最窄"四条核心语义。
+    Gate 3：跨品牌通用——任意品牌做 daily_fragment 都需此锚点。
+    Gate 4：可被 content_generation 调用做碎片玩法卡选型 / 单条碎片成立性校验。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论；碎片选择逻辑跨品牌通用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-daily-fragment-df_north_star, owner_field: north_star, definition: "daily_fragment ContentType 北极星：碎片之间必须有隐形线索 / 选择逻辑——把审美拼贴升级为情绪证据"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-daily-fragment, rule_type: content_type_north_star_anchor, applicable_when: "新增 daily_fragment 玩法卡或审核碎片内容时", success_scenario: "碎片有隐形线索（季节/体感/声音/时间）→ 进 C2/C3", flip_scenario: "纯审美打卡 + 无选择逻辑 → 主流禁用", alternative_boundary: "与 personal_vlog 边界 = 不连续 vs 连续"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-daily-fragment, source_md: Q2-内容类型种子/daily_fragment-交付物-v0.1.md, source_anchor: §A + §C1 + §E + §F, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-daily_fragment-df1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"daily_fragment"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-daily-fragment, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

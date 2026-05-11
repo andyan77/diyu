@@ -1,0 +1,97 @@
+pack_id: KP-training_unit-founder-profile-brand-unique-layer
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  FounderProfile（创始人画像）是品牌唯一层对象，每品牌仅允许 0 或 1 份，
+  服务于 founder_ip（创始人 IP）这条内容线，不进入通用 Persona 编号体系；
+  把它当成"第 4 套通用人设"会导致权限边界、复用范围、内容服务对象全部错位。
+
+scenario:
+  who:
+    primary_role: 知识工程负责人 / Persona 体系建模者
+    target_audience: 全岗位（建模时使用）
+  when:
+    trigger: 注册 Persona 体系 / 决定 FounderProfile 挂在哪一层 / 评估"为什么 founder 内容感觉像通用 KOL"
+    context: 冷启动品牌建模 / 多品牌共用人设池 / 跨品牌复用讨论
+  what:
+    action_type: object_layer_binding
+    decision_or_action: |
+      错误动作：把 FounderProfile 与 store_operator / styling_advisor / product_professional 并列编入通用 persona_id 体系，按"第 4 套通用人设"使用。
+      正确动作：把 FounderProfile 单独挂在品牌唯一层，scope=brand，multiplicity=每品牌 0/1；
+        通用 persona_id 体系仅含三套通用 Persona，不含 FounderProfile。
+      为什么错：FounderProfile 不可跨品牌复用、服务题材锁定 founder_ip、权限边界与通用 Persona 不同；
+        混编后会被误用于其他 ContentType，破坏品牌真实性。
+      如何纠正：建模时显式标 layer=brand_unique，并在 founder_ip 内容生成入口校验 FounderProfile 存在性。
+  result:
+    success_pattern: |
+      founder_ip 内容稳定调用 FounderProfile，其他内容线不会误用品牌人设；
+      多品牌共用 Persona 池时通用层可复用而品牌唯一层互不干扰。
+    flip_pattern: |
+      FounderProfile 被当通用 Persona 复用 → founder 口吻渗入产品测评/穿搭等内容，品牌混淆；
+      或反向：通用内容也强行套创始人口吻，导致 KOL 化偏离品牌叙事。
+  underlying_mechanism: |
+    对象的复用范围由"是否锚定特定品牌"决定。FounderProfile 锚定单一创始人/品牌叙事，
+    一旦进入通用编号体系就被视作可复用壳，复用即破坏其唯一性语义。
+  boundary:
+    applicable_when: 任何要为品牌注册 Persona 体系或讨论 FounderProfile 归位的场合
+    not_applicable_when: |
+      品牌选择不启用 founder_ip 题材 → 无须建 FounderProfile，本规则不触发；
+      多创始人合伙品牌 → 走柔性使用，按 0 份处理或独立讨论。
+  alternative_path:
+    - 没有明显创始人文化的品牌：走柔性使用，FounderProfile 留空，不启用 founder_ip
+    - 多创始人合伙：暂按 0 份，待裁决后独立建模
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md
+  source_anchor: 一、1.1 品牌唯一层 + 二、2.1 FounderProfile + 六、6.3
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    该层当前只包含 FounderProfile（创始人画像）。特点：每品牌有且仅有一份；不可复用；
+    服务于 founder_ip（创始人 IP）这条内容线；不进入通用 Persona（人设）编号体系。
+    FounderProfile（创始人画像）不是"第 4 套通用人设"，而是品牌唯一层。
+    对象性质不同、权限边界不同、服务题材不同，不能为了表面对称而把它硬塞进通用 Persona 体系。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐。Gate 2：object_type + field(scope/multiplicity) + rule + relation(serves founder_ip) 可反推
+    "FounderProfile 是品牌唯一层、每品牌 0/1、专服务 founder_ip"。
+    Gate 3：跨品牌通用建模原则。Gate 4：content_generation 入口可调用校验。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale_keep: "domain_general_keep · FounderProfile 应作为品牌唯一层是抽象建模规则；scan 误报：pack_id 含 founder + 'FounderProfile' 触发"
+  rationale: 该规则是任何服装零售品牌建 Persona 体系都需遵守的对象分层原则，与笛语品牌专属表达无关。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+  field:
+    - {field_id: FD-Persona-scope, owner_type: Persona, field_name: scope, data_type: enum}
+    - {field_id: FD-Persona-multiplicity, owner_type: Persona, field_name: multiplicity, data_type: string}
+    - {field_id: FD-Persona-layer, owner_type: Persona, field_name: layer, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-founder-profile-brand-unique-layer-layer, owner_field: layer, definition: "Persona 分层：brand_unique 品牌唯一层 / generic 通用层；决定能否跨品牌复用"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-founder-profile-brand-unique-layer-layer, value: brand_unique, label: 品牌唯一层, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-founder-profile-brand-unique-layer-layer, value: generic, label: 通用层, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-founder-profile-brand-unique-layer-multiplicity, value: per_brand_0_or_1, label: 每品牌 0/1, ordinal: 1}
+  rule:
+    - {rule_id: RL-KP-training_unit-founder-profile-brand-unique-layer, rule_type: object_layer_binding, applicable_when: "为品牌注册 Persona 体系或决定 FounderProfile 归位", success_scenario: "FounderProfile 仅服务 founder_ip，通用 Persona 池保持可复用且互不污染", flip_scenario: "FounderProfile 被当通用 Persona，founder 口吻渗入其他内容，品牌真实性破坏", alternative_boundary: "无创始人文化品牌走柔性使用，不强填不更名"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-founder-profile-brand-unique-layer, source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md, source_anchor: 一、1.1 + 二、2.1 + 六、6.3, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Persona-compatible_with_content_type-ContentType-founder, source_type: Persona, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"persona_layer":"brand_unique","persona_id":"FounderProfile","content_types":["founder_ip"],"exclusivity":"only_founder_ip"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-founder-profile-brand-unique-layer, runtime_method: content_generation, input_types: ["Persona","ContentType"], output_types: ["PersonaBindingValidation"]}

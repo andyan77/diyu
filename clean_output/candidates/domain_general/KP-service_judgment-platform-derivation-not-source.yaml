@@ -1,0 +1,87 @@
+pack_id: KP-service_judgment-platform-derivation-not-source
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  Persona × ContentType × Platform/Channel 三维关系是派生视图、不是图谱真源——
+  派生视图由唯一真源边 (:Persona)-[:COMPATIBLE_WITH]->(:ContentType) 与 Q3 已建立的
+  (:System)-[:SUPPORTS_PLATFORM {tier}]->(:PlatformTone / :PrivateOutletChannel) 临时组合计算，
+  禁止在 Q4 阶段新建任何 ContentType × Platform 或 Persona × Platform 方向的关系边或新实体类型（如 DistributionTarget）。
+
+scenario:
+  who:
+    primary_role: 知识工程 / Schema 设计者
+    target_audience: 派生视图引擎 / Schema 评审 / Skill 能力发现机制
+  when:
+    trigger: 任何想把"Persona × Platform"或"ContentType × Platform"沉淀为新关系边/新实体的提案
+    context: Q4 冷启动阶段；与 Q3 v1 平台分层真源解耦
+  what:
+    action_type: relation_source_vs_derivation_judgment
+    decision_or_action: 该提案一律拒绝，引导到派生公式（真源边 + Q3 tier 临时组合）
+  result:
+    success_pattern: |
+      Schema 不会在冷启动阶段被三维真源膨胀（54 真源边 + Q3 tier 即可派生出"默认可用/补充配置后可用/品牌级/不建议"4 档展示档），
+      未来要升级也只需改派生公式不需要重表。
+    flip_pattern: |
+      为了"图谱里直接查得到"而新建 (:Persona)-[:USABLE_ON]->(:Platform) 边 →
+      54 条真源边 × 7 公域 + 3 私域瞬间膨胀为 540 条边，且与 Q3 tier 重复维护，调一处错全表。
+  underlying_mechanism: |
+      真源 vs 派生是建模硬规矩。可由其他真源 + 公式临时组合得出的事实，绝不另立真源。
+      "查得到"不是真源条件，"无法被组合得出"才是。
+  boundary:
+    applicable_when: Q4 冷启动 Persona / ContentType / Platform 关系建模
+    not_applicable_when: 后续 Q（如 Q19/Q20）出现真源级新事实，需要重新评估
+  alternative_path:
+    - 派生视图性能不够 → 落物化视图缓存层，不动真源
+    - 想引入"分发目标"统称 → 用描述性术语，不引入 DistributionTarget 实体类型
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md
+  source_anchor: 五、派生层参数清单（不写入图谱） + 范围约束（本稿明确不做）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    派生视图不是真源、不写入图谱，由真源层 + Q3 真源临时组合计算得出。
+    平台维度承接 Q3 (:System)-[:SUPPORTS_PLATFORM {tier}]->(:PlatformTone / :PrivateOutletChannel)，不新建 ContentType × Platform 关系边。
+    不引入 DistributionTarget 或类似的新实体类型——"平台"只在叙述层做统称。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（派生 vs 真源裁决规则 + flip=540 边膨胀）+ 07_evidence + 09_call_mapping 可反推"三维派生不入真源 / 不新建实体 / 性能不够走物化"三条核心语义。
+    Gate 3：真源 vs 派生的通用建模纪律，跨项目可复用。
+    Gate 4：可被 platform_adaptation 与 content_generation 调用前的兼容性派生消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 Schema 治理纪律
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-PlatformTone, type_name: PlatformTone, supertype: domain_object}
+    - {type_id: OT-PrivateOutletChannel, type_name: PrivateOutletChannel, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-service_judgment-platform-derivation-not-source-derivation_axes, owner_field: derivation_axes, definition: "派生视图三轴：Persona × ContentType × Platform/Channel；不写入图谱，由真源边 + Q3 tier 临时组合"}
+  value_set:
+    - {value_set_id: VS-KP-service_judgment-platform-derivation-not-source-display_band, value: default_available, label: 默认可用, ordinal: 1}
+    - {value_set_id: VS-KP-service_judgment-platform-derivation-not-source-display_band, value: available_after_config, label: 补充配置后可用, ordinal: 2}
+    - {value_set_id: VS-KP-service_judgment-platform-derivation-not-source-display_band, value: brand_or_special, label: 品牌级或特殊场景, ordinal: 3}
+    - {value_set_id: VS-KP-service_judgment-platform-derivation-not-source-display_band, value: not_recommended, label: 不建议, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-service_judgment-platform-derivation-not-source, rule_type: relation_source_vs_derivation_judgment, applicable_when: "Persona/ContentType × Platform 关系提案出现时", success_scenario: "拒绝立真源走派生公式 Schema 不膨胀", flip_scenario: "为查得到而立边→54 边膨胀为 540 与 Q3 tier 重复维护", alternative_boundary: "性能问题→物化视图；想用统称→描述性术语不立实体"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-platform-derivation-not-source, source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md, source_anchor: 五 + 范围约束, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-platform_adaptation-KP-service_judgment-platform-derivation-not-source, runtime_method: platform_adaptation, input_types: [Persona, ContentType, PlatformTone, PrivateOutletChannel], output_types: [CallMapping]}

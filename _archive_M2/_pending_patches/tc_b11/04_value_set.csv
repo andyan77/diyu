@@ -1,0 +1,29 @@
+value_set_id,value,label,ordinal,brand_layer,source_pack_id
+VS-KP-product_attribute-persona-six-field-shell-shell,role_type,岗位类型,1,domain_general,KP-product_attribute-persona-six-field-shell
+VS-KP-product_attribute-persona-six-field-shell-shell,life_archetype,生活原型,2,domain_general,KP-product_attribute-persona-six-field-shell
+VS-KP-product_attribute-persona-six-field-shell-shell,emotional_spectrum,情绪光谱,3,domain_general,KP-product_attribute-persona-six-field-shell
+VS-KP-product_attribute-persona-six-field-shell-shell,authenticity_anchors,真实性锚点,4,domain_general,KP-product_attribute-persona-six-field-shell
+VS-KP-product_attribute-persona-six-field-shell-shell,topic_scope,话题边界,5,domain_general,KP-product_attribute-persona-six-field-shell
+VS-KP-product_attribute-persona-six-field-shell-shell,typical_scenarios,典型场景,6,domain_general,KP-product_attribute-persona-six-field-shell
+VS-KP-product_attribute-persona-field-fill-state-fill_state,frozen,已冻结,1,domain_general,KP-product_attribute-persona-field-fill-state
+VS-KP-product_attribute-persona-field-fill-state-fill_state,candidate,候选待填,2,domain_general,KP-product_attribute-persona-field-fill-state
+VS-KP-product_attribute-persona-field-fill-state-fill_state,pending,待补证或待后续Q承接,3,domain_general,KP-product_attribute-persona-field-fill-state
+VS-KP-product_attribute-compatible-with-edge-properties-support,now,已支持,1,domain_general,KP-product_attribute-compatible-with-edge-properties
+VS-KP-product_attribute-compatible-with-edge-properties-support,enhanced,增强后支持,2,domain_general,KP-product_attribute-compatible-with-edge-properties
+VS-KP-product_attribute-compatible-with-edge-properties-support,custom,品牌级或特殊场景,3,domain_general,KP-product_attribute-compatible-with-edge-properties
+VS-KP-product_attribute-compatible-with-edge-properties-support,unsupported,不建议,4,domain_general,KP-product_attribute-compatible-with-edge-properties
+VS-KP-product_attribute-compatible-with-edge-properties-risk,low,低风险,1,domain_general,KP-product_attribute-compatible-with-edge-properties
+VS-KP-product_attribute-compatible-with-edge-properties-risk,medium,中风险,2,domain_general,KP-product_attribute-compatible-with-edge-properties
+VS-KP-product_attribute-compatible-with-edge-properties-risk,high,高风险,3,domain_general,KP-product_attribute-compatible-with-edge-properties
+VS-KP-service_judgment-platform-derivation-not-source-display_band,default_available,默认可用,1,domain_general,KP-service_judgment-platform-derivation-not-source
+VS-KP-service_judgment-platform-derivation-not-source-display_band,available_after_config,补充配置后可用,2,domain_general,KP-service_judgment-platform-derivation-not-source
+VS-KP-service_judgment-platform-derivation-not-source-display_band,brand_or_special,品牌级或特殊场景,3,domain_general,KP-service_judgment-platform-derivation-not-source
+VS-KP-service_judgment-platform-derivation-not-source-display_band,not_recommended,不建议,4,domain_general,KP-service_judgment-platform-derivation-not-source
+VS-KP-service_judgment-derivation-formula-eight-row-formula_row,now_x_p0,now × P0_native → 默认可用,1,domain_general,KP-service_judgment-derivation-formula-eight-row
+VS-KP-service_judgment-derivation-formula-eight-row-formula_row,now_x_p1,now × P1_light_adapt → 补充配置后可用,2,domain_general,KP-service_judgment-derivation-formula-eight-row
+VS-KP-service_judgment-derivation-formula-eight-row-formula_row,enhanced_x_p0,enhanced × P0_native → 补充配置后可用,3,domain_general,KP-service_judgment-derivation-formula-eight-row
+VS-KP-service_judgment-derivation-formula-eight-row-formula_row,enhanced_x_p1,enhanced × P1_light_adapt → 补充配置后可用,4,domain_general,KP-service_judgment-derivation-formula-eight-row
+VS-KP-service_judgment-derivation-formula-eight-row-formula_row,custom_x_any,custom × 任意 → 品牌级或特殊场景,5,domain_general,KP-service_judgment-derivation-formula-eight-row
+VS-KP-service_judgment-derivation-formula-eight-row-formula_row,unsupported_x_any,unsupported × 任意 → 不建议,6,domain_general,KP-service_judgment-derivation-formula-eight-row
+VS-KP-service_judgment-derivation-formula-eight-row-formula_row,any_x_p2,任意 × P2_cross_post_only → 补充配置后可用,7,domain_general,KP-service_judgment-derivation-formula-eight-row
+VS-KP-service_judgment-derivation-formula-eight-row-formula_row,any_x_deferred,任意 × deferred → 不建议,8,domain_general,KP-service_judgment-derivation-formula-eight-row

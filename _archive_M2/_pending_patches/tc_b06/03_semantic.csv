@@ -1,0 +1,5 @@
+SM-KP-inventory_rescue-customer-priority-six-axes-axes,rescue_disposition,接客层替代优先级 6 级：wearability > occasion_fit > silhouette_match > color_family_match > price_band_match > fabric_detail_match；先成交路径后相似度,,domain_general,KP-inventory_rescue-customer-priority-six-axes
+SM-KP-inventory_rescue-hard-block-five-conditions-hard_block,rescue_disposition,hard_block 是库存决策的物理层硬拦截，5 类条件命中任一即停止原方案，话术不得绕过,,domain_general,KP-inventory_rescue-hard-block-five-conditions
+SM-KP-inventory_rescue-shallow-vs-deep-sensing-layers,sensing_layer,库存感知能力两层：shallow（事实/过滤）vs deep（判断/动作指导）；下游动作必须挂深层,,domain_general,KP-inventory_rescue-shallow-vs-deep-sensing
+SM-KP-inventory_rescue-state-catalog-six-states-state_label,state_label,门店库存状态 6 类标签：size_complete / size_broken / color_broken / single_size_tail / single_item_only / alternate_not_same_sku,,domain_general,KP-inventory_rescue-state-catalog-six-states
+SM-KP-inventory_rescue-state-catalog-six-states-rescue_mode,rescue_disposition,三态决策模式：rescue_mode 救场 / redirect_mode 转向 / give_up_mode 放弃,,domain_general,KP-inventory_rescue-state-catalog-six-states

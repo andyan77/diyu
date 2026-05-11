@@ -1,0 +1,98 @@
+pack_id: KP-service_judgment-product-review-tactile-court-three-piece-compare
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  product_review 内容里，"触感法庭 / 同类三件对照声音证据"在**接客现场**
+  是店内最强转化工具——当两个犹豫的客人选两件相似品时，店员把同类三件
+  （同为白 T / 同为卫衣 / 同为西装裤）摆桌面俯拍，几乎不说话，
+  只用衣料摩擦 / 拉伸 / 扣子碰撞 / 拉链"咔哒"声做三段测试
+  （回弹 / 抬手 / 贴麦声音），最后给一句裁决（"如果你讨厌起球，今天只选 2 号"）。
+  调用共享引擎 #11 ASMR 感官沉浸——把"质感"变成**听得见、看得见的证据**。
+  与 C3-2 顾虑解除测评的差别：C3-2 是单件多顾虑测试，本卡是同类多件单维度对比。
+  服装独占的"声音媒介+触觉媒介"——最适合讲面料 / 工艺 / 辅料差异
+  （尤其是"看起来差不多但价格差很大"的品类）。
+
+scenario:
+  who:
+    primary_role: 加盟商门店店员 / 主理人
+    target_audience: 店内同时在选 2 件以上相似品的犹豫顾客 / 同时拍下作为接客内容素材
+  when:
+    trigger: 顾客在 2-3 件同品类（同款不同色 / 不同价位 / 不同品牌）之间犹豫时
+    context: 服装"看起来差不多但价格差很大"的品类（白 T / 卫衣 / 西装裤）最难口播解释；声音和触感胜过一切口播
+  what:
+    action_type: tactile_court_three_piece_audio_compare
+    decision_or_action: 桌面俯拍三件并排 + 三段测试（揉搓回弹 / 领口拉伸 / 贴麦摩擦声）+ 单维度裁决（起球/垂坠/弹性 三选一）
+  result:
+    success_pattern: |-
+      0-10 三件白 T 并排+逐件揉搓+字幕"回弹/垂坠/发硬" → 10-18 三件依次领口拉伸+小计时器停 2 秒 →
+      18-25 贴麦摩擦声差异明显 → 25-30 镜头停在第 2 件+字幕"如果你讨厌起球，今天只选 2 号"
+      → 顾客自己听到/看到差异 → 转化成立
+    flip_pattern: |-
+      店员一边操作一边讲解"这件含棉 30%所以更软 那件含..." → 退回口播销售逻辑，丢失 ASMR 张力
+      或同时给三个维度裁决（起球+垂坠+弹性都给） → 信息过载顾客无法决策
+      或拿三件不同品类对比（T 恤 vs 衬衫 vs 卫衣） → 失去"对照"前提，沦为商品介绍
+  underlying_mechanism: |
+      "看起来差不多"的品类用口播无法说清差异——口播会被顾客读为销售话术。
+      "桌面俯拍+几乎不说话+物体声"触发类 ASMR 注意力，顾客在 30 秒内完成
+      "触感想象"并自己得出结论——这比任何"我跟你说这件真的好"更有说服力。
+      与 C3-2 顾虑解除（单件多顾虑）形成接客转化的二维分工：
+      C3-2 处理"我怕 X"，本卡处理"我在 A B C 中选哪个"。
+  boundary:
+    applicable_when: 实体门店接客 / 顾客在 2-3 件同品类间犹豫 / 桌面+手机俯拍 / 可选领夹麦 ≤ 200 元 / 单次 5 分钟
+    not_applicable_when: 顾客只在试一件没有对照需求 → C3-2 单件顾虑解除 / 三件不同品类无对照前提 → 改 store_daily 商品介绍 / 顾客就要立即买不愿等 30 秒测试 → 直接走 store_daily 高效接客流程
+  alternative_path:
+    - 引流场景版本：创作者自己摆三件对照 + 三段测试 + 字幕证物标签 → 同型玩法但触发主体不同
+    - 触感差异不明显的品类（如纯色 T）→ 改 C2-3 面料侦探（成分+洗标+揉搓）
+
+evidence:
+  source_md: Q2-内容类型种子/product_review-交付物-v0.1.md
+  source_anchor: §C3-3 触感法庭 + 备注"接客场景最强用法" + 调用共享引擎 #11 ASMR
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-3：镜头固定在桌面俯拍，整条视频几乎不说话——只有衣料摩擦/拉伸/扣子碰撞/拉链"咔哒"声。
+    你像"法官"一样把同类三件衣服摆成三份"证据"：同为白 T / 同为卫衣 / 同为西装裤。
+    三段测试（回弹/抬手/贴麦声音）后给一句裁决："如果你讨厌起球，今天只选 2 号"。
+    服装钩子：服装在这里是"声音媒介+触觉媒介"——最适合讲面料/工艺/辅料差异
+    （尤其是"看起来差不多但价格差很大"的品类）。
+    备注·接客场景最强用法：店内两个犹豫的客人选两件相似品，店员现场做 30 秒触感法庭——
+    声音和触感胜过一切口播，这是店内最强转化工具。
+    调用共享引擎 #11 ASMR 感官沉浸。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation + 09_call_mapping
+    可反推"接客对照三件触感证据 / 与 C3-2 单件顾虑的二维分工 / 共享引擎 #11 ASMR 应用"。
+    Gate 3：跨品牌通用——任意服装门店都有"看起来差不多但价格差大"的品类。
+    Gate 4：可被 customer_service / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用接客判断 + product_review 接客场景应用规则，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-product-review-tactile-court-three-piece-compare, rule_type: tactile_court_three_piece_audio_compare, applicable_when: "实体门店接客 / 顾客在 2-3 件同品类间犹豫 / '看起来差不多但价格差大'的品类", success_scenario: "桌面俯拍三件+三段测试（揉搓/拉伸/贴麦）+单维度裁决 → 顾客自得结论", flip_scenario: "边操作边口播 → 退口播销售 / 多维度同时裁决 → 信息过载 / 不同品类对照 → 失对照前提", alternative_boundary: "单件无对照 → C3-2 顾虑解除 / 触感差异不明显 → C2-3 面料侦探 / 顾客不愿等 → store_daily 高效接客"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-product-review-tactile-court-three-piece-compare, source_md: Q2-内容类型种子/product_review-交付物-v0.1.md, source_anchor: "§C3-3 + 备注 + 共享引擎 #11", source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-CustomerScenario-compatible_with_content_type-product_review-pr3, source_type: CustomerScenario, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_review","play_card":"C3-3","scenario_tag":"customer_service","shared_engine":"#11_asmr"}'}
+  call_mapping:
+    - {mapping_id: CM-customer_service-KP-service_judgment-product-review-tactile-court-three-piece-compare, runtime_method: customer_service, input_types: "CustomerHesitation+SimilarSKUSet", output_types: "TactileCourtScript"}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

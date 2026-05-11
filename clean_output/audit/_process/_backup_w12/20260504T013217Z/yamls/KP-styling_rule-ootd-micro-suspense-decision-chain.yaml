@@ -1,0 +1,98 @@
+pack_id: KP-styling_rule-ootd-micro-suspense-decision-chain
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  outfit_of_the_day 内容里，"30 秒微悬疑"是把 OOTD 多次换装从"快剪秀"
+  反向定义为"**有因果的真实换装决策链**"的玩法——开头 2 秒只露出袖口
+  上面有一粒小线头 + 字幕"今天我为什么换了三次衣服？"（不解释）。
+  手机震动 → 你换成第二套；店里镜前发现第二套会走光 → 换第三套。
+  全片**不说**"显瘦显高"，只让观众跟着你解决真实问题。
+  品牌卖点被转译为"**解决场景问题**"（不走光 / 好活动 / 不闷热）——
+  比参数更有说服力。本卡是 OOTD 反"卡点变装"（C1-3 默认禁用）的核心训练入口，
+  与 C3-1 路线适配 / C3-3 时间痕迹形成 OOTD"决策证据 / 生活适配 / 时间痕迹"三维突破。
+
+scenario:
+  who:
+    primary_role: outfit_of_the_day 内容创作者 / 服装品牌内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=outfit_of_the_day 选 C3 决策叙事卡时）
+  when:
+    trigger: 想做多次换装但不想走"卡点变装"老套路 / 服装本身可解决具体场景问题
+    context: OOTD C1-3 卡点变装是默认禁用 / 主流换装套路同质化严重；本卡用"因果链"反破
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 30 秒按"微悬疑开场→第 1 套→外部触发→第 2 套→新问题→第 3 套→解开悬疑"五节拍剪
+  result:
+    success_pattern: |-
+      0-3 袖口线头特写+字幕"为什么换了三次" → 3-10 第一套出门遇手机震动停顿 →
+      10-18 换第二套店里镜前发现走光 → 18-27 第三套穿上出门 →
+      27-30 那粒线头被剪掉+字幕"不是穿给别人，是穿给今天的自己"
+      → 观众接住"原来我也可以这样选衣服"，更愿意收藏复看
+    flip_pattern: |-
+      把"因果"改成"卡点节拍" → 退回 C1-3 卡点变装默认禁用
+      或换装无因果（每套换的理由是"今天想试试这个"）→ 失去微悬疑钩子，沦为穿搭流水账
+      或开头悬疑结尾不收（线头不剪掉 / 字幕不收口）→ 钩子断裂
+  underlying_mechanism: |
+      OOTD 多次换装的天然陷阱是"卡点变装"——服装被当成"特效素材"，
+      质感与版型细节反而看不见。"微悬疑+因果链"让多次换装的每一次都有"真实问题"
+      作为切换理由，把"展示"逆转为"决策"——这是 AI 最不擅长（AI 偏向"列单+变装"）
+      而真人最有优势的 OOTD 突破语法。
+  boundary:
+    applicable_when: 1 人 1 手机 / 服装能解决具体场景问题（不走光/好活动/挡风/不闷热）/ 4 小时内
+    not_applicable_when: 服装无具体功能差异（纯审美款 / 礼服）→ C3-2 身份协商 / C3-6 情绪衣橱 / 不擅长剪辑因果节拍 → C3-1 路线适配（更线性）
+  alternative_path:
+    - 与 C3-2 "两种身份争同一身衣服"互补：本卡是"换三套解决问题"，C3-2 是"一套配饰微改身份谈判"
+    - 与 product_review C3-2 "只拍犹豫"互补：OOTD C3-4 重心是"个人决策叙事"，product_review C3-2 重心是"商品顾虑解除证据"
+
+evidence:
+  source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md
+  source_anchor: §C3-4 穿搭是线索（30 秒微悬疑）+ §C1-3 卡点变装默认禁用对照
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-4：开头 2 秒只露出袖口，上面有一粒很小的线头。字幕："今天我为什么换了三次衣服？"（不解释）。
+    手机震动 → 你换成第二套；店里镜前发现第二套会走光 → 换第三套。
+    全片不说"显瘦显高"，只让观众跟着你解决真实问题。
+    服装钩子：品牌卖点被转译为"解决场景问题"（不走光 / 好活动 / 不闷热）——比参数更有说服力。
+    打破"穿搭=展示"，把穿搭拍成"决策过程"。
+    C1-3 备注：抖音巨量引擎 2024 报告——一旦系统化就意味着烂大街。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation + 09_call_mapping
+    可反推"OOTD 多次换装因果链 / 与 C1-3 卡点变装的边界 / 与 product_review C3-2 顾虑解除的重心区分"。
+    Gate 3：跨品牌通用——任意服装品牌可用此玩法做"决策叙事"OOTD。
+    Gate 4：可被 content_generation 调用，按"问题-解决链清单"生成因果剪辑节点。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 OOTD 玩法格式，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-ootd-micro-suspense-decision-chain, rule_type: content_play_card_anchor, applicable_when: "OOTD C3 突破档 / 服装可解决具体场景问题 / 1 人手机 4 小时内", success_scenario: "微悬疑开场+换装因果链（手机震动/走光/线头）+收口悬疑 → 决策过程被叙事化", flip_scenario: "因果改卡点 → C1-3 默认禁用 / 换装无因果 → 流水账 / 悬疑不收 → 钩子断", alternative_boundary: "无功能差异 → C3-2 身份协商或 C3-6 情绪衣橱 / 不擅剪因果 → C3-1 路线适配 / 商品顾虑证据 → product_review C3-2"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-ootd-micro-suspense-decision-chain, source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md, source_anchor: §C3-4 + §C1-3, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-outfit_of_the_day-ootd4, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"outfit_of_the_day","play_card":"C3-4","angle":"decision_chain"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-ootd-micro-suspense-decision-chain, runtime_method: content_generation, input_types: ContentType+ProblemSolutionChainCatalog, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

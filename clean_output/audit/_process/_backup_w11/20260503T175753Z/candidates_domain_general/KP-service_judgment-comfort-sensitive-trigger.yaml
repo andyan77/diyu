@@ -1,0 +1,110 @@
+pack_id: KP-service_judgment-comfort-sensitive-trigger
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  当顾客抛出"会不会扎 / 热 / 透 / 勒 / 掉"这类体感问题时，导购的第一动作不是回答"不会"，
+  而是先识别她真正介意的是触感、温度、透度、弹性、静电还是内搭难度中的哪一个；
+  体感顾虑没讲透就接着推套装，后面推几套都白搭，因为这是信任问题而不是选品问题。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: comfort_sensitive（体感敏感型）顾客
+  when:
+    trigger: 顾客在试穿前或拿起单品时问"会不会扎 / 热 / 透 / 勒 / 掉色"
+    context: 任何品类（针织、缎面、亚麻、化纤、深色牛仔等）均可触发；夏季和换季出现频率最高
+  what:
+    action_type: comfort_concern_disambiguation
+    decision_or_action: |
+      第一步：拒绝直接回答"不会"。
+      第二步：用一个反问识别她介意的具体维度——
+        - 介意触感 → 谈纤维表面与缝口处理；
+        - 介意温度 → 谈透气吸湿与厚薄；
+        - 介意透度 → 谈颜色 / 厚度 / 织法 / 内搭；
+        - 介意弹性 → 谈弹力含量与回弹；
+        - 介意静电 → 谈纤维组合与穿着季节；
+        - 介意内搭难度 → 谈领口 / 袖口 / 透感与配色路径。
+      第三步：先回应这一维度，再判断是否进入下一套推荐。
+  result:
+    success_pattern: |
+      顾客感到顾虑被认真对待，对导购建立专业信任；
+      接受当前单品的真实体感，或主动配合切换更合适的款式；
+      后续 2-3 套推荐能被认真试穿，而不是被礼貌拒绝。
+    flip_pattern: |
+      导购直接答"不会扎 / 不会透 / 不会掉色"，但顾客实际敏感点在别处；
+      顾客表面接受但内心已不信任，对后续所有推荐都说"再看看"；
+      门店损失的不是这一单，是这位顾客的整段试穿耐心。
+  underlying_mechanism: |
+      "会不会扎/热/透/勒/掉"是聚合性表达，背后至少 6 个不同维度；
+      不识别维度就回答 = 用一个泛词应付一个具体担忧，必然落空。
+      接客的瓶颈在信任，不在选品；信任丢了，再多 SKU 也救不回来。
+  boundary:
+    applicable_when: 任何带体感顾虑触发语的接客场景
+    not_applicable_when: |
+      顾客已自带技术词汇并明确表达单一维度（如直接说"我对静电特别敏感"）→ 跳过反问直接进入针对性回应。
+      纯线上场景（无法即时反问）→ 走预置 FAQ 路径而非本规则。
+  alternative_path:
+    - 顾客无法或不愿明确介意维度 → 用同类面料分别解释 2 个最常见维度，让她自己挑
+    - 主件面料确实存在该顾虑且无法绕过 → 直接转向同气质替代款，不要包装成"还好"
+    - 顾客已多次表达不信任 → 暂停推荐，用一件试穿单品建立基线信任再继续
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、10 类进店目的正式清单 · 8. comfort_sensitive（体感敏感型）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："这个会不会扎 / 热 / 透 / 勒 / 掉？"
+    店员第一反应：先确认她介意的是触感、温度、透度、弹性、静电还是内搭难度。
+    最容易卡住：不是卡第二套，是卡信任。体感没讲透，后面推几套都白搭。
+    库存不理想怎么转向：原则上不硬救。同类面料、同类结构、同类体感问题，不能换个颜色就继续推。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全；触发语、第一动作、成功 / 翻车模式、机制、边界、替代均明确。
+    Gate 2：从 9 表派生（CustomerScenario + TrainingMaterial + rule + value_set + call_mapping）
+            可反推"先识别介意维度再回应""体感卡的是信任不是选品""断码不能硬救" 三条核心语义。
+    Gate 3：跨服装零售门店通用，不依赖笛语专属表达。
+    Gate 4：可被 store_training（branching_scenario / do_dont_contrast）与 outfit_recommendation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: |
+      整条规则围绕通用接客判断顺序，不含笛语专属口吻；
+      可直接被任意女装零售门店复用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  field:
+    - {field_id: FD-CustomerScenario-trigger_phrase, owner_type: CustomerScenario, field_name: trigger_phrase, data_type: string}
+    - {field_id: FD-CustomerScenario-first_judgment, owner_type: CustomerScenario, field_name: first_judgment, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-service_judgment-comfort-sensitive-trigger-comfort_concern, owner_field: first_judgment, definition: "comfort_sensitive 触发语下导购需要识别的 6 个具体维度的总称"}
+  value_set:
+    - {value_set_id: VS-KP-service_judgment-comfort-sensitive-trigger-concern_dimension, value: tactile, label: 触感}
+    - {value_set_id: VS-KP-service_judgment-comfort-sensitive-trigger-concern_dimension, value: thermal, label: 温度}
+    - {value_set_id: VS-KP-service_judgment-comfort-sensitive-trigger-concern_dimension, value: opacity, label: 透度}
+    - {value_set_id: VS-KP-service_judgment-comfort-sensitive-trigger-concern_dimension, value: elasticity, label: 弹性}
+    - {value_set_id: VS-KP-service_judgment-comfort-sensitive-trigger-concern_dimension, value: static, label: 静电}
+    - {value_set_id: VS-KP-service_judgment-comfort-sensitive-trigger-concern_dimension, value: layering_difficulty, label: 内搭难度}
+  rule:
+    - {rule_id: RL-KP-service_judgment-comfort-sensitive-trigger, rule_type: customer_concern_disambiguation, applicable_when: "顾客触发语包含 扎/热/透/勒/掉 中任意之一", success_scenario: "识别具体维度并定向回应，建立信任，后续推荐被认真试穿", flip_scenario: "直接答不会导致信任流失，整段接客陷入 再看看", alternative_boundary: "已明确表达单一维度→跳过反问；纯线上→走预置 FAQ"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-comfort-sensitive-trigger, source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md, source_anchor: 二、8. comfort_sensitive, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-CustomerScenario-fits_customer_scenario-TrainingMaterial-cs01, source_type: CustomerScenario, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"format":"branching_scenario|do_dont_contrast"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-comfort-sensitive-trigger, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-outfit_recommendation-KP-service_judgment-comfort-sensitive-trigger, runtime_method: outfit_recommendation, input_types: [CustomerScenario, Product], output_types: [StylingRule, RiskDisclosure]}

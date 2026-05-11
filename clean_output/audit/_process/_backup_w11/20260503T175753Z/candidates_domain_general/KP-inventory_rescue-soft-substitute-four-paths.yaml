@@ -1,0 +1,89 @@
+pack_id: KP-inventory_rescue-soft-substitute-four-paths
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  库存软替代（soft_substitute）正式冻结为 4 类路径——same_sku_other_color /
+  near_color_family / same_occasion_same_silhouette / same_item_new_pairing_piece；
+  软替代不是"差不多就行"，而是按这 4 类路径选一条挂上对应规则输出，
+  其中 R1 同款异色为最优，R3 同场景同廓形异款为高质量转向，R4 适合主角单品仍成立的情况。
+
+scenario:
+  who:
+    primary_role: 门店导购 / 店长 / 商品搭配系统
+    target_audience: 库存有缺口但仍可继续成交的接客与陈列场景
+  when:
+    trigger: 命中可救场景（非 hard_block）但原款关键属性缺失
+    context: 顾客原需求基本可以保留，只需调整一个维度
+  what:
+    action_type: soft_substitute_path_selection
+    decision_or_action: |
+      按以下 4 路径择优：
+        R1 same_sku_other_color（同款异色）→ 最优软替代；首选
+        R2 near_color_family（近色群替代）→ 适合非强颜色锚定需求；次选
+        R3 same_occasion_same_silhouette（同场景同廓形异款）→ 高质量转向型替代
+        R4 same_item_new_pairing_piece（单品不变，搭配件替换）→ 主角单品仍成立的情况
+      选定后必须明示顾客"这是替代解法"，不许说成同款；
+      四路径都失败 → 退到 redirect_mode 或 give_up_mode。
+  result:
+    success_pattern: 顾客在被告知替代逻辑后接受成交，对门店专业感加分
+    flip_pattern: 把替代款说成"差不多就是这个"，顾客试穿后发现"不是这件"，当场退或日后差评
+  underlying_mechanism: |
+      软替代的本质是"保留核心轴 + 替换可让步轴"——
+      4 路径分别针对色 / 色群 / 廓形场景 / 搭配件四类可让步维度；
+      不分路径乱替=核心轴错位=替代质量崩盘。
+  boundary:
+    applicable_when: 已通过 5 类 hard_block 检查 + 顾客原需求未变味
+    not_applicable_when: |
+      命中 hard_block 任一项；
+      仅因库存压力硬推高毛利（明确禁止）；
+      顾客已明确说"我只要那一款"。
+  alternative_path:
+    - 4 路径都不成立 → 进 redirect_mode（换条解法）
+    - 选 R3 但廓形价带都不达标 → 降级为低质量替代或退到 give_up
+    - 走 R4 但配件断码不止一件 → 退到 R3 或单品推荐
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/库存与替代包.md
+  source_anchor: 四、4.2 soft_substitute R1-R4
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    4.2 soft_substitute（软替代）
+    R1 same_sku_other_color（同款异色）最优软替代
+    R2 near_color_family（近色群替代）适合非强颜色锚定需求
+    R3 same_occasion_same_silhouette（同场景同廓形异款）高质量转向型替代
+    R4 same_item_new_pairing_piece（单品不变，搭配件替换）适合"主角单品仍成立"的情况
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐；与 hard_block 互为前置；与 substitution_priority_ladder（B02）正交。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用门店替代纪律。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-soft-substitute-four-paths-soft_path, value: same_sku_other_color, label: 同款异色, ordinal: 1}
+    - {value_set_id: VS-KP-inventory_rescue-soft-substitute-four-paths-soft_path, value: near_color_family, label: 近色群替代, ordinal: 2}
+    - {value_set_id: VS-KP-inventory_rescue-soft-substitute-four-paths-soft_path, value: same_occasion_same_silhouette, label: 同场景同廓形异款, ordinal: 3}
+    - {value_set_id: VS-KP-inventory_rescue-soft-substitute-four-paths-soft_path, value: same_item_new_pairing_piece, label: 单品不变搭配件替换, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-soft-substitute-four-paths, rule_type: soft_substitute_path_selection, applicable_when: "已过 hard_block 且原款关键属性缺失", success_scenario: "按 4 路径择优替代且明示替代逻辑顾客接受成交", flip_scenario: "把替代款说成差不多就是这个顾客试穿后退或差评", alternative_boundary: "4 路径全失败→redirect 或 give_up；R3 廓形价带不达标→降低质量；R4 多件配件断→退 R3 或单品"}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-soft-substitute-four-paths, source_md: Q7Q12-搭配陈列业务包/库存与替代包.md, source_anchor: 四、4.2 soft_substitute R1-R4, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-requires_inventory_state-InventoryState-ss01, source_type: StylingRule, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"soft_substitute","paths":["same_sku_other_color","near_color_family","same_occasion_same_silhouette","same_item_new_pairing_piece"],"priority_order":[1,2,3,4]}'}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-soft-substitute-four-paths, runtime_method: inventory_rescue, input_types: [InventoryState, Product], output_types: [SubstitutionPlan]}
+    - {mapping_id: CM-outfit_recommendation-KP-inventory_rescue-soft-substitute-four-paths, runtime_method: outfit_recommendation, input_types: [Product, InventoryState, CustomerScenario], output_types: [OutfitPlan]}

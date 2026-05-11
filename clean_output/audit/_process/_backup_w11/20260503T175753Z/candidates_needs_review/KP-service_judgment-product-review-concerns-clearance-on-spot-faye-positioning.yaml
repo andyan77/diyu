@@ -1,0 +1,72 @@
+pack_id: KP-service_judgment-product-review-concerns-clearance-on-spot-faye-positioning
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: needs_review
+state: drafted
+
+knowledge_assertion: >-
+  笛语品牌将"product_review C3-2 顾虑解除接客现场用法"显式定为
+  接客场景下最强的转化工具——优于其他 service_judgment 工具
+  （尺码补救 / 替代款引导 / 主推连带等）。这是笛语对该方法的
+  品牌级优先级声明，不是通用方法本身（通用方法已落 domain_general 层
+  KP-service_judgment-product-review-concerns-clearance-on-spot）。
+
+scenario:
+  who:
+    primary_role: 笛语门店店员 / 笛语品牌内容主理
+  when:
+    trigger: 笛语门店接客场景中顾客当场说出顾虑
+    context: 笛语品牌服务流水线
+  what:
+    action_type: brand_priority_declaration
+    decision_or_action: |
+      在笛语品牌的接客 SOP 中，把"被安慰路径"列为最高优先级转化工具。
+  result:
+    success_pattern: 笛语门店转化数据验证该工具在接客场景中实际表现优于其他工具。
+    flip_pattern: 若不显式优先化，店员易回退到尺码补救/替代款等次优工具。
+  underlying_mechanism: |
+    笛语对消费者"心理阻力"的品牌定位（理解 + 不施压）与该工具的
+    "被安慰路径"语义高度契合，故定为最强转化工具。
+  boundary:
+    applicable_when: 笛语品牌门店
+    not_applicable_when: 其他品牌门店（应自行评估并独立声明优先级）
+  alternative_path:
+    - 其他品牌可基于自身定位选择不同最强工具
+
+evidence:
+  source_md: Q2-内容类型种子/product_review-交付物-v0.1.md
+  source_anchor: §C3-2 备注·接客场景的专属用法
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    备注·接客场景的专属用法：店员站在店内顾客旁边，拿出同款现场做 3 个顾虑测试——
+    顾客"我怕这个肩太硬"→ 店员让她侧身在镜前看 2 秒 → 真实反馈。
+    这是笛语在接客场景下最强的转化工具。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: partial
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 3 partial: 本 pack 是品牌级优先级声明，不要求跨品牌 generalizable；
+    通用方法部分已在 domain_general 层 KP-service_judgment-product-review-concerns-clearance-on-spot 落档。
+
+brand_layer_review:
+  decision_suggestion: needs_review
+  rationale_review: "reviewer_decision_W1 · 品牌级优先级声明不属于两类品牌专属（品牌调性/创始人画像），暂落 needs_review 待真笛语调性内容到位再裁决 · 笛语将通用方法定为最强工具的品牌优先级声明"
+  faye_review_required: true
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-service_judgment-product-review-concerns-clearance-on-spot-faye-positioning, rule_type: brand_priority_declaration, applicable_when: "笛语门店接客场景", success_scenario: "store transformation data validates", flip_scenario: "回退到次优工具", alternative_boundary: "其他品牌自行声明"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-product-review-concerns-clearance-on-spot-faye-positioning, source_md: Q2-内容类型种子/product_review-交付物-v0.1.md, source_anchor: §C3-2 备注, evidence_quote: "这是笛语在接客场景下最强的转化工具", source_type: explicit_play_card, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

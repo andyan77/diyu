@@ -1,0 +1,90 @@
+pack_id: KP-styling_rule-ootd-clothes-remember-today
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  outfit_of_the_day 内容里，"衣服记住了今天"是一条对服装品牌极有杀伤力的玩法——
+  从拍"穿上它"改成拍"它怎么被今天留下痕迹"：早上平整的裤线 → 下午坐久后的褶皱；
+  刚出门时笔挺的衬衫 → 晚上领口松掉一点；包带在肩上压出的痕迹；牛仔裤膝盖处的弯曲。
+  最后把衣服挂起来，OOTD 才真正完整。它天然把"耐看 / 耐穿 / 会呼吸"这类隐性价值拍出来——
+  比任何材质 / 工艺参数都更有说服力，因为观众接住的是"衣服真的进入了生活"
+  而不是"摆拍的 30 秒"。
+
+scenario:
+  who:
+    primary_role: outfit_of_the_day 内容创作者 / 服装品牌内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=outfit_of_the_day + 服装品牌钩子选卡时）
+  when:
+    trigger: 决定为某件 OOTD 主角服装做内容时（且该服装的隐性价值在"耐穿 / 耐看 / 会呼吸"）
+    context: OOTD 最易翻车的是"镜前转圈+单品罗列" / "GRWM+最终成片"——本卡用"时间痕迹"反向破题
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 30 秒：早晨笔挺 → 中午坐褶 → 傍晚包带痕迹 → 夜里挂回衣架 + 字幕"它记住了今天"
+  result:
+    success_pattern: |-
+      早晨镜前裤线笔挺、衬衫平整 → 中午工作褶皱 → 傍晚包带痕迹 → 夜里挂回衣架
+      → 观众接住"衣服真的进入了生活"——把"耐看 / 耐穿 / 会呼吸"从参数变成可视化证据
+    flip_pattern: |-
+      退化为"穿上它的瞬间转圈展示" / "GRWM 最终成片" / "单品罗列 + 价格字幕"
+      → 落入 C1 主流默认禁用档（观众只接住 SKU 不接住生活）
+  underlying_mechanism: |
+      OOTD 的隐性价值（耐穿 / 耐看 / 会呼吸）几乎不能用文案讲清楚——讲了也像广告。
+      "时间痕迹"用真实证据替代描述：褶皱 / 压痕 / 弯曲 / 松垮都是"衣服活在身上"的物证，
+      AI 模板无法伪造（因为需要真实穿着 + 真实时间跨度）。这是服装行业内容化"耐穿性"
+      最有说服力的路径——观众接住"我也能穿出这种状态"。
+  boundary:
+    applicable_when: 1 人手机 / 4 小时内可完成（早 + 中 + 晚 + 夜 4 个时段）/ 主角服装具有"耐看 / 耐穿 / 会呼吸"隐性价值（针织 / 衬衫 / 牛仔 / 西装等）
+    not_applicable_when: 一次性即弃服装 / 仅展示新品光鲜的硬种草 / 不允许出现"褶皱 / 痕迹"的品牌调性
+  alternative_path:
+    - 与 C3-1 "穿搭服务今天的路线"配合——本卡聚焦时间痕迹 / 路线卡聚焦功能场景
+    - 与 product_review C3 "衣橱考古"配合——本卡是"今天留下的痕迹" / 衣橱考古是"多年留下的痕迹"
+
+evidence:
+  source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md
+  source_anchor: §C3 突破性玩法卡 #C3-3 "衣服记住了今天"
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-3：从拍"穿上它"改成拍"它怎么被今天留下痕迹"：早上平整的裤线到下午坐久后的褶皱；
+    刚出门时笔挺的衬衫到晚上领口松掉一点；包带在肩上压出的痕迹；牛仔裤膝盖处的弯曲。
+    最后把衣服挂起来，OOTD 才真正完整。
+    服装行业钩子⭐⭐⭐：对服装品牌极有杀伤力——天然把"耐看、耐穿、会呼吸"这类隐性价值拍出来。
+    打破"OOTD 只拍穿上那一刻"的套路。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation（compatible_with_content_type=outfit_of_the_day）+
+    09_call_mapping 可反推"OOTD 用 早+中+傍+夜 4 时段时间痕迹格式 / 与转圈展示的边界 /
+    服装的隐性耐穿价值如何被可视化"。
+    Gate 3：跨品牌通用——任何主打"耐穿 / 耐看 / 会呼吸"的服装品牌都适用。
+    Gate 4：可被 content_generation 调用，按"耐穿型主角服装"生成 4 时段分镜候选。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 OOTD 玩法格式；不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-ootd-clothes-remember-today, rule_type: content_play_card_anchor, applicable_when: "OOTD 主角服装具有耐穿/耐看/会呼吸的隐性价值（针织/衬衫/牛仔/西装）", success_scenario: "30 秒早+中+傍+夜 4 时段时间痕迹 → 观众接住衣服进入生活", flip_scenario: "镜前转圈+单品罗列/GRWM 最终成片 → 落入 C1 主流默认禁用", alternative_boundary: "聚焦功能场景走 路线卡 / 多年痕迹走 衣橱考古"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-ootd-clothes-remember-today, source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md, source_anchor: §C3-3, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-outfit_of_the_day-rt1, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"outfit_of_the_day","play_card":"C3-3","apparel_role":"time_witness"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-ootd-clothes-remember-today, runtime_method: content_generation, input_types: ContentType+DurableApparelMain, output_types: PlayCardScript_4timeSlots}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

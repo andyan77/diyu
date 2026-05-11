@@ -1,0 +1,81 @@
+pack_id: KP-display_rule-side-hanging-purpose
+schema_version: candidate_v1
+pack_type: display_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  side_hanging_display（侧挂位）的业务目标是"承接颜色 / 尺码 / 版型选择，支持顾客连续浏览和补选"——
+  适合 core_push_deep_stock / basic_replenishable 两类深库存；
+  最大的反例是"像仓库不像卖场"：挂得太满 / 尺码颜色顺序乱 / 季节混挂——顾客不敢翻、不愿拿，一摸就乱、乱了没人恢复。新人日常基本功训练点。
+
+scenario:
+  who:
+    primary_role: 新人陈列负责人（日常维护）
+    target_audience: 进入选择阶段的顾客（已锁定品类后挑色挑码挑版型）
+  when:
+    trigger: 日常补货 / 上新衍生 / 季节换挂
+    context: T 恤 / 衬衫 / 针织 / 牛仔 / 裤装 / 基础外套 / 多色同款的侧挂杆
+  what:
+    action_type: side_hanging_setup
+    decision_or_action: 同款多色 / 同色多码 / 同版型多长度有序排列；适度留白；季节统一
+  result:
+    success_pattern: 顾客敢翻、愿意拿、能找到自己的码 / 色 / 版型，连续浏览路径成立
+    flip_pattern: 像仓库不像卖场 / 挂得太满 / 尺码颜色顺序乱 / 季节混挂 → 顾客一摸就乱乱了没人恢复
+  underlying_mechanism: |
+      侧挂位是"选择带"——它承诺的是"在这个品类里能挑到合自己的"。
+      过满会让顾客不敢碰，乱序会让顾客找不到，季节混杂会让顾客困惑。
+  boundary:
+    applicable_when: 选择型品类（色 / 码 / 版型有多取值的）
+    not_applicable_when: 单焦点主推（按 front_hanging）；折叠基础款（按 folded）
+  alternative_path:
+    - 库存稀薄无法成杆 → 收并到正挂位，不空挂稀疏侧挂
+    - 季节切换中 → 优先清旧再上新；不混挂
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/陈列方法包.md
+  source_anchor: 二、4. side_hanging_display + 三、5）适合培训新人
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    业务目标：承接颜色、尺码、版型选择，支持顾客连续浏览和补选。
+    最容易犯的错：像仓库，不像卖场；挂得太满；尺码和颜色顺序乱；季节混挂。
+    什么叫"看着高级但卖不动"：整杆颜色很顺，但顾客不敢翻、不愿拿，一摸就乱，乱了没人恢复。
+    培训层级：首批给新人训练。它是日常维护基本功。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 attribute-driven-display 8 维度规则一致；与 front_hanging 互补。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用侧挂陈列纪律
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-display_rule-side-hanging-purpose-purpose, owner_field: display_unit, definition: "side_hanging_display 业务目标：承接选择（顾客连续浏览+补选）"}
+  value_set:
+    - {value_set_id: VS-KP-display_rule-side-hanging-purpose-allowed_inventory, value: core_push_deep_stock, label: 主推深库存, ordinal: 1}
+    - {value_set_id: VS-KP-display_rule-side-hanging-purpose-allowed_inventory, value: basic_replenishable, label: 基础可补, ordinal: 2}
+    - {value_set_id: VS-KP-display_rule-side-hanging-purpose-error_pattern, value: warehouse_look, label: 像仓库不像卖场}
+    - {value_set_id: VS-KP-display_rule-side-hanging-purpose-error_pattern, value: overfilled, label: 挂得太满}
+    - {value_set_id: VS-KP-display_rule-side-hanging-purpose-error_pattern, value: disorder_size_color, label: 尺码颜色顺序乱}
+    - {value_set_id: VS-KP-display_rule-side-hanging-purpose-error_pattern, value: season_mix, label: 季节混挂}
+  rule:
+    - {rule_id: RL-KP-display_rule-side-hanging-purpose, rule_type: side_hanging_setup, applicable_when: 日常补货/上新衍生/季节换挂, success_scenario: 顾客敢翻愿拿能找自己的码色版型, flip_scenario: 像仓库/挂太满/顺序乱/季节混挂, alternative_boundary: 库存稀薄→收并正挂；季节切换→先清旧再上新}
+  evidence:
+    - {evidence_id: EV-KP-display_rule-side-hanging-purpose}
+  relation:
+    - {relation_id: RE-DisplayGuide-requires_inventory_state-InventoryState-side01, source_type: DisplayGuide, target_type: InventoryState, relation_kind: requires_inventory_state, properties_json: '{"polarity":"allow","values":["core_push_deep_stock","basic_replenishable"]}'}
+    - {relation_id: RE-DisplayGuide-supports_training-TrainingMaterial-side01, source_type: DisplayGuide, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"tier":"novice_priority","note":"日常维护基本功"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-display_rule-side-hanging-purpose}
+    - {mapping_id: CM-store_training-KP-display_rule-side-hanging-purpose}

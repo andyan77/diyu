@@ -1,0 +1,2 @@
+gap_id,surface_concept,appears_in,why_unresolved,decision,status,created_at
+GAP-004,FounderProfile,Q4-人设种子/phase-3-Q4-参数级填充清单.md,"素材中以独立对象（品牌唯一层）出现含 9 字段壳与 0/1 柔性使用约束；core_object_types 18 项无对应槽位；与通用 Persona 显式分层处理（不进 persona_id 体系），归属待人工裁决（候选：作为 Persona 子类 / 升格新对象 / 并入品牌配置层）",defer_to_human,open,2026-05-03

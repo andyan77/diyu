@@ -1,0 +1,79 @@
+pack_id: KP-styling_rule-product-journey-sample-version-tree
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  product_journey 内容生产纪律：把 1.0 / 2.0 / 3.0 失败样衣**摆在同一面墙或桌面**，
+  逐件指出否决理由（领口高了 1 厘米 / 袖山塌了 / 洗后不对 / 上身太像别人家），
+  让产品从"灵感结果"变成"判断轨迹"——**轨迹比结论更有说服力**。
+  服装是最适合做"版本树"的行业（每次微调都肉眼可见），其他行业很少有这种判断轨迹展示空间。
+  这条规则推翻"产品历程必须只展示最终成品"的默认套路。
+
+scenario:
+  who:
+    primary_role: product_journey 内容创作者 / AI 内容生成调度
+    target_audience: 服装品牌做产品历程内容时
+  when:
+    trigger: 写一条服装 product_journey 内容前的素材选择
+    context: 服装行业每次版型微调都肉眼可见——这是 product_journey 的"判断轨迹"独占红利
+  what:
+    action_type: product_journey_version_tree_play
+    decision_or_action: 把 1.0/2.0/3.0 等失败样衣摆出来 + 镜头逐件近拍问题点 + 配否决语句 + 最后镜头切到第 4 版成品并标注"这是我们留下的"
+  result:
+    success_pattern: 桌面或墙面三件样衣并排 + "这里高了 1 厘米 / 这个塌了 / 这个洗后不对" + 第 4 版被留下 → 观众接住"这件衣服不是一次做对的"——信任感远强于完美成品展示
+    flip_pattern: 只拍最终成品 + 配励志 BGM + 文艺旁白讲灵感 → 红线 E1 / E2：只拍魔术转场不拍失败版本，无法建立"为什么值这个价"的信任
+  underlying_mechanism: |
+      "差一点做成别的样子"是 product_journey 的最核心独占价值——
+      失败版本是"判断轨迹"的物理证据，让观众看到"被争论后留下来的那个"
+      远比看到"突然出现在货架上的那个"更能产生为价值付费的意愿。
+  boundary:
+    applicable_when: 服装品牌做 product_journey / 至少有 2 个失败样衣可调（成立 ≥ 3 个月通常都有）
+    not_applicable_when: 极新品牌 / 完全没有失败版本
+  alternative_path:
+    - 没有版本树 → 退用 C2-2 真实使用测试 / C2-3 用户困惑驱动 / C3-2 同一张桌子时间累积
+    - 失败版本涉及供应商纠纷 → 改用 C3-7 微物叙事（一粒纽扣）/ C3-5 纸片三连
+
+evidence:
+  source_md: Q2-内容类型种子/product_journey-交付物-v0.1.md
+  source_anchor: §C2-1 样衣版本树 + §C3-1 失败样衣辩论会 + §B9 隐喻 + §D 三个未被开发角度
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    C2-1 北极星映射：让产品从"灵感结果"变成"判断轨迹"——轨迹比结论更有说服力。
+    服装行业钩子：⭐⭐⭐ 服装是最适合做"版本树"的行业——每次微调都肉眼可见。
+    备注：Instagram 上 sample day / sample unboxing / founder diaries / from sketch to sample 都在证明
+    观众愿意看"产品并不是一次做对"的过程。
+    B9：样衣 = 判断轨迹 / 差一点做成别的样子。
+    §D 角度 1：让观众看到差一点做成别的样子——这是其他行业很少能做的"判断轨迹"展示。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装行业 product_journey 通用内容生产规则 / 任意品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-product-journey-sample-version-tree-version_tree, owner_field: product_journey_signature_play, definition: "样衣版本树 = 服装 product_journey 独占叙事；轨迹比结论更有说服力"}
+  rule:
+    - {rule_id: RL-KP-styling_rule-product-journey-sample-version-tree, rule_type: product_journey_version_tree_play, applicable_when: "服装品牌做 product_journey 选玩法时", success_scenario: "桌面摆 1.0/2.0/3.0 + 逐件指否决理由 + 第 4 版被留下 → 信任远强于完美成品展示", flip_scenario: "只拍最终成品+灵感旁白 → 红线 E1/E2 无法建立价值信任", alternative_boundary: "无版本树 → 退用真实测试或同一张桌子；涉供应商纠纷 → 改用微物或纸片三连"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-product-journey-sample-version-tree, source_md: Q2-内容类型种子/product_journey-交付物-v0.1.md, source_anchor: §C2-1 + §C3-1 + §B9 + §D, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-product_journey-pj1, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"product_journey","signature_play":"sample_version_tree"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-product-journey-sample-version-tree, runtime_method: content_generation, input_types: "ContentType=product_journey", output_types: "PlayCardPriority"}

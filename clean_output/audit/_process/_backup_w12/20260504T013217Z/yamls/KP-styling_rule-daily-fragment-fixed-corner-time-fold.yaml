@@ -1,0 +1,95 @@
+pack_id: KP-styling_rule-daily-fragment-fixed-corner-time-fold
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  daily_fragment 内容里，"同一个角落，不同的我"是一条用**单地点 + 时间褶皱**
+  反掉"碎片必须多地点多切换"套路的玩法——手机放在同一角度，连续 5-7 天
+  拍某个固定时刻（回家推门进来的 5 秒 / 店里开灯前的 10 秒 / 晚上脱鞋坐下的 6 秒）。
+  没有"大事"，但每天动作、穿着、包的摆放、表情、进门速度都不一样。
+  服装在此自然成为时间变化的证据：同一个人这几天为什么穿得更松、更紧、更轻、更硬。
+  本卡是 daily_fragment 北极星"碎片之间必须有隐形线索"的"时间线索"实现，
+  与 C3-5 同一椅子四次的"单日时段折叠"形成"跨日重复 vs 单日切换"的二维分工。
+
+scenario:
+  who:
+    primary_role: daily_fragment 内容创作者 / 服装品牌内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=daily_fragment 选 long_term 卡时）
+  when:
+    trigger: 想做"陪伴感"内容但单日素材不够 / 愿意接受 5-7 天素材积累的创作者
+    context: daily_fragment 易翻车点是"配热门歌的碎片拼盘"（C1-1 默认禁用）；本卡用"时间隐形线索"反破
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 手机固定机位 + 连续 5-7 天同一时刻拍 1 分钟 + 剪 30 秒成片 + 字幕只标"周一/周三/周五..."
+  result:
+    success_pattern: |-
+      0-5 周一你推门匆忙 → 5-10 周三你推门慢一些外套湿了 → 10-18 周四/五/六/日各不同 →
+      18-30 最后一天定格 2 秒 + 字幕"同一扇门，7 个我" → 服装作为时间变化证据被自然接住
+    flip_pattern: |-
+      把 5-7 天的素材剪成"日记 vlog"（加旁白讲发生了什么）→ 滑向 personal_vlog 的"连续感"，
+      失去碎片"不连续瞬间集合"的核心；或拍成"七天穿搭挑战"加品牌讲解 → 滑向 OOTD/硬广
+  underlying_mechanism: |
+      daily_fragment 的真正抓力是"不解释的存在感"。固定机位让"变化"自己说话——
+      观众用自己的经验补全意义：为什么周三外套湿了 / 为什么周日推门特别慢。
+      服装是时间变化最强的可视化证据（褶皱 / 松紧 / 季节切换）——
+      这是服装行业 daily_fragment 的独占机会。
+  boundary:
+    applicable_when: 1 人 1 手机 / 5-7 天连续 / 每次拍 1 分钟 / 预算 0 / long_term 玩法分级
+    not_applicable_when: 单条 4 小时硬约束下无法等 5-7 天 → 用 C3-2 不拍脸痕迹版（同样不出镜但单日完成）/ 想加旁白解释 → 改 personal_vlog
+  alternative_path:
+    - 与 C3-5 "同一椅子四次"配合：本卡是跨日重复同时刻，C3-5 是单日切换四时段——形成时间维度的两种语法
+    - 长期连载化 → 升级为 daily_fragment 的"时间档案"账号定位
+
+evidence:
+  source_md: Q2-内容类型种子/daily_fragment-交付物-v0.1.md
+  source_anchor: §C3-1 同一个角落，不同的我 + 玩法分级 long_term + 与 personal_vlog 边界
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-1：手机放在同一个角度，连续 5-7 天拍某个固定时刻：回家推门进来的 5 秒、
+    店里开灯前的 10 秒、晚上脱鞋坐下的 6 秒。没有"大事"，但每天动作、穿着、包的摆放、
+    表情、进门速度都不一样。
+    服装会自然成为时间变化的证据：同一个人这几天为什么穿得更松、更紧、更轻、更硬。
+    打破"碎片必须多地点、多画面、多切换"的套路。
+    🏷️ 玩法分级：long_term —— 需 5-7 天连续素材 / 单次拍摄合规 / 系列需长期运营。
+    与 personal_vlog 差别：连续性——前者有"一天的连续感"，daily_fragment 是"不连续的瞬间集合"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation（compatible_with_content_type=daily_fragment / play_card=C3-1）+ 09_call_mapping
+    可反推"DF 用固定机位+5-7天跨日重复 / 与 personal_vlog 连续感的边界 / 服装作为时间变化证据"。
+    Gate 3：跨品牌通用——任意品牌都可借此做陪伴感内容。
+    Gate 4：可被 content_generation 调用，按"固定时刻清单+时间编排"生成长周期分镜计划。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 daily_fragment long_term 玩法格式，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-daily-fragment-fixed-corner-time-fold, rule_type: content_play_card_anchor, applicable_when: "daily_fragment long_term 选卡 / 5-7 天连续素材积累 / 服装品牌做陪伴感内容", success_scenario: "固定机位+跨日重复同时刻+服装作为时间变化证据 → 不连续瞬间集合的隐形时间线索", flip_scenario: "加旁白讲故事 → 滑向 personal_vlog 连续感 / 加穿搭讲解 → 滑向 OOTD/硬广", alternative_boundary: "无法等多日 → C3-2 单日痕迹版 / 单日时段切换 → C3-5 同一椅子四次"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-daily-fragment-fixed-corner-time-fold, source_md: Q2-内容类型种子/daily_fragment-交付物-v0.1.md, source_anchor: §C3-1, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-daily_fragment-df2, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"daily_fragment","play_card":"C3-1","play_card_tier":"long_term"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-daily-fragment-fixed-corner-time-fold, runtime_method: content_generation, input_types: ContentType+FixedMomentCatalog, output_types: LongTermPlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

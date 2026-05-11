@@ -1,0 +1,80 @@
+pack_id: KP-training_unit-sample-worker-rework-as-judgment
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  样衣工（sample_worker）的核心手感是"做出来"和"做得好"是两回事，返工不是丢脸而是工艺判断的一部分——
+  线迹 / 裁片 / 返工痕迹都是证据，必须记录；只追求完成不追求质感、只看图不看工艺单、返工只补表面不补根因、以为快=熟练，
+  是新人最常学歪的 4 类陷阱，会让品牌质感直接掉一档。
+
+scenario:
+  who:
+    primary_role: sample_worker（样衣工）
+    target_audience: 样衣工本人 + 样衣新人 + 与之协同的 designer
+  when:
+    trigger: 打样 / 裁剪 / 缝制 / 返工 / 设计要求转工序动作
+    context: 服装开发链路中样衣物化阶段，特别是"图能不能落地"的边界环节
+  what:
+    action_type: rework_as_quality_judgment
+    decision_or_action: |
+      样衣工的核心判断点：
+        1. 哪种设计一看就知道难做（识别工艺风险点）
+        2. 哪一步最容易翻车（定位高失败概率工序）
+        3. 哪种缝法会让成衣质感直接掉下去（预判质感风险）
+        4. 返工时区分"补表面"还是"补根因"（根因不补 → 量产复发）
+      线迹 / 裁片 / 返工痕迹必须保留为证据，不当边角料丢掉。
+      新人 4 类学歪：只追求完成不追求质感 / 只看图不看工艺单 / 返工只补表面 / 以为快就是熟练。
+  result:
+    success_pattern: 返工根因被定位并修正，正确线迹/失败线迹对照库形成，下一批样衣同类问题不复发
+    flip_pattern: 返工只补表面 → 量产环节同样问题继续出现 → 成衣质感掉档 → 退货率上升
+  underlying_mechanism: |
+      样衣阶段是把"设计意图"翻译成"手上动作"的最后一公里，工艺判断的精度直接决定品牌质感地基；
+      返工被污名化（视为丢脸）→ 工人会掩盖问题 → 根因不暴露 → 量产复发——这是质感掉档的隐形通道。
+  boundary:
+    applicable_when: 服装样衣开发的全链路（打样 / 裁剪 / 缝制 / 返工）
+    not_applicable_when: 设计创意阶段（尚未进入物化），或纯外协代工无样衣回路的极简款式
+  alternative_path:
+    - 设计图工艺无法落地 → 反推 designer 修改设计稿，不在样衣环节硬扛
+    - 工艺风险已知但本批必须出货 → 转告 design_director 决定是否降标或推迟
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md
+  source_anchor: 五、5. sample_worker（样衣工）
+  source_type: explicit_role_skill_lock
+  inference_level: low
+  evidence_quote: |
+    样衣工的手感最能把"专业"从嘴上拉回手上。
+    这个岗位看的是：哪种设计一看就知道难做，哪一步最容易翻车，哪种缝法会让成衣质感直接掉下去。
+    做出来和做得好是两回事；返工不是丢脸，是工艺判断的一部分；
+    设计图能不能落地，要看手上动作能不能成立；线迹、裁片、返工痕迹都是证据，不是边角料。
+    新人最容易学歪：只追求完成，不追求质感；只看图，不看工艺单；
+    返工时只补表面，不补根因；以为快就是熟练。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 craft_quality 类 pack 互补——本卡是岗位手感视角，craft_quality 是工艺规则视角。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用样衣工艺纪律 + 岗位手感，任意品牌样衣间均可用，不含品牌专属内容。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-sample-worker-rework-as-judgment}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tcb08-04}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-sample-worker-rework-as-judgment}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-sample-worker-rework-as-judgment}

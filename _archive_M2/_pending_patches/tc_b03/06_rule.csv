@@ -1,0 +1,5 @@
+RL-KP-display_rule-window-display-purpose,window_display_setup,上新/季节切换/节庆活动/主推变更,路人看懂主推+进店率提升,店外好看店内拿不齐/塞太多/道具压货/季节错位,库存稀薄→单焦点+主题道具；季节切换→双焦点过渡,domain_general,KP-display_rule-window-display-purpose
+RL-KP-display_rule-mannequin-display-purpose,mannequin_look_setup,上新/模特位调整/主推切换,整身穿着结果引发试穿欲整套带走率提升,像大片不像门店/主件有货配件没货/层次过重,配件断码→同气质替代或退正挂；层次重→减层留点睛；多模特无 hold→退单模特,domain_general,KP-display_rule-mannequin-display-purpose
+RL-KP-display_rule-front-hanging-purpose,front_hanging_setup,上新/主推切换/日常陈列维护,顾客一眼锁定第一主款主推转化率提升,一排都是重点/颜色风格长度乱/挂没货样子款,主推无货→临时下撤；多候选冲突→选一个进正挂,domain_general,KP-display_rule-front-hanging-purpose
+RL-KP-display_rule-side-hanging-purpose,side_hanging_setup,日常补货/上新衍生/季节换挂,顾客敢翻愿拿能找自己的码色版型,像仓库/挂太满/顺序乱/季节混挂,库存稀薄→收并正挂；季节切换→先清旧再上新,domain_general,KP-display_rule-side-hanging-purpose
+RL-KP-display_rule-folded-display-purpose,folded_display_setup,日常补货/上新衍生/折叠位维护,顾客敢抽能展开看面料顺手加购,叠太高/尺码混叠/没打开样件/只求齐,库存稀薄→正挂单挂或收回库；样件易脏→2 小时补换机制,domain_general,KP-display_rule-folded-display-purpose

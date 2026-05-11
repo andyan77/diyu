@@ -1,0 +1,83 @@
+pack_id: KP-training_unit-talent-showcase-rescue-not-show-off
+granularity_layer: L2
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  talent_showcase（才艺展示）的北极星不是"你很厉害"，而是"你的能力有个性、有温度、能留下你这个人"——
+  突破性档的核心翻面是"才艺不是表演，是救场"：不说"我会什么"，而拍"今天遇到一个小问题，我的才艺刚好派上
+  用场"。会搭配的人临时帮朋友从"像上班"改到"像今天的她"；会缝补的人快速把一件衣服救活；会拍视频的人在
+  店门口 5 分钟把普通走路拍得像故事。观众最后会自然得出结论："这人真有两下子"——接住的是有用、有温度的能力。
+  这条把才艺从"天赋神话 / 炫技"翻成"能力外溢 / 服务关系"，与 C3-3"把才艺传给另一个人"共同形成"才艺=关系"的叙事方向。
+
+scenario:
+  who:
+    primary_role: 才艺类内容创作者（搭配师 / 缝补师 / 拍摄师 / 任何手艺人）
+    target_audience: talent_showcase 突破性档；目标观众希望能力可信、可持续、可追随
+  when:
+    trigger: 想表达个人能力但避免"简历式 / 高光拼盘"距离感
+    context: 算法奖励"活人感"+ 从"技术炫耀"到"世界观构建"趋势
+  what:
+    action_type: talent_as_rescue_not_performance
+    decision_or_action: 拍真实救场场景（朋友 / 同事 / 顾客遇到小问题）+ 你的才艺刚好派上用场 + 前后变化
+  result:
+    success_pattern: 观众接住有用 / 有温度 / 救场感 / 把你当作"值得追随的人"
+    flip_pattern: 正面站桩展示完成品（C1-1）→ 看完只记得你会，不记得你是谁；像简历不像内容；像能力证明不像吸引关系
+  underlying_mechanism: |
+      才艺展示的根本张力是"展示标签 vs 服务关系"——观众对前者免疫，对后者亲近。
+      "救场"是把才艺从"封闭的天赋"释放为"流向他人的关系"，是 talent_showcase 北极星最直接的实现路径。
+      服装行业里"搭配 / 改造 / 陈列 / 讲版型 / 选配色"都能这样做——服装行业有特别多"小问题救场"的素材。
+  boundary:
+    applicable_when: talent_showcase 突破性档；C3-1 救场玩法；有真实救场场景的创作者
+    not_applicable_when: 创作者无可救场对象（一人独居 / 才艺类型不适合救场如纯艺术创作）→ 改用 C3-2 同动作练 100 次
+  alternative_path:
+    - 无救场场景 → 改用 C3-2 "同一个动作练一百次的痕迹"（用控制力代替关系外溢）
+    - 才艺过于专业（普通观众无法识别救场效果）→ 改用 C3-6 ASMR 化才艺（用沉浸感代替关系感）
+
+evidence:
+  source_md: Q2-内容类型种子/talent_showcase-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C 玩法卡 #C3-1 才艺不是表演是救场 + §B9 隐喻元素（才艺作为社交媒介 ≠ 展示标签 / 才艺作为救场工具 ≠ 炫技）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    观众看完不只是"你很厉害"，而是"你的能力有个性、有温度、能留下你这个人"——感到能力可信、可持续，并愿意把你当作"值得追随的人"
+    不说"我会什么"，而拍"今天遇到一个小问题，我的才艺刚好派上用场"
+    观众最后会自然得出结论："这人真有两下子"——接住的是有用、有温度的能力
+    打破"才艺展示必须正面炫技"的套路
+    才艺作为社交媒介 ≠ 展示标签；才艺作为救场工具 ≠ 炫技；才艺作为关系外溢 ≠ 个人封闭
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（救场玩法）+ 03_semantic（才艺 = 救场工具 / 关系外溢 ≠ 炫技 / 展示标签）+ 05_relation（与 C3-3 传递型才艺共同构成关系叙事方向）可反推核心语义。
+    Gate 3：任意品牌的才艺类内容都可使用此玩法（含服装行业 / 手艺人 / 服务行业）。
+    Gate 4：可被 content_generation 在 talent_showcase 玩法选择时消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论纪律；不含具体笛语品牌调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-talent-showcase-rescue-meaning, owner_field: talent_role_in_showcase, definition: "talent_showcase 中才艺的角色 = 救场工具 / 关系外溢 / 社交媒介；不是展示标签 / 炫技 / 个人封闭"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-talent-showcase-rescue-not-show-off, rule_type: talent_as_rescue, applicable_when: "talent_showcase 突破性档有真实救场场景", success_scenario: "救场叙事观众接住有用有温度把创作者当作值得追随", flip_scenario: "正面站桩展示完成品 → 只记得会不记得是谁简历感强", alternative_boundary: "无救场对象 → 改用同动作练 100 次；过专业普通观众难识别 → 改用 ASMR 化才艺"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-talent-showcase-rescue-not-show-off, source_md: Q2-内容类型种子/talent_showcase-交付物-v0.1.md, source_anchor: §A + §C C3-1 + §B9, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-ContentType-tal01, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"source_ct":"talent_showcase","narrative_path":"relationship_overflow","north_star":"useful_with_warmth"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-talent-showcase-rescue-not-show-off, runtime_method: content_generation, input_types: '["ContentType","CreatorContext"]', output_types: '["PlayCardSelection"]', governing_rules_json: '["RL-KP-training_unit-talent-showcase-rescue-not-show-off"]'}

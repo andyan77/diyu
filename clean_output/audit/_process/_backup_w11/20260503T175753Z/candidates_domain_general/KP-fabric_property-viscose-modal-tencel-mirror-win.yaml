@@ -1,0 +1,95 @@
+pack_id: KP-fabric_property-viscose-modal-tencel-mirror-win
+schema_version: candidate_v1
+pack_type: fabric_property
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  粘胶 / 莫代尔 / 天丝类是"镜前赢、穿后暴露"的典型面料，软垂只能跟着身体线条走，
+  不会帮顾客藏掉在意的位置；不许把"软垂"卖成"修形"，必须前置贴肉、挂长、缝位变形、
+  薄款体表痕迹、浅色透、久穿局部发亮六类风险。
+
+scenario:
+  who:
+    primary_role: 门店导购 / product_professional（商品专业者）
+    target_audience: 在镜前一站爱上粘胶 / 莫代尔 / 天丝裙装 / 衬衫 / 阔腿裤的顾客（尤其想"显瘦修形"的）
+  when:
+    trigger: 顾客试穿后说"垂感真好""一下就显瘦"或导购把软垂面料卖成修形
+    context: 春夏 / 早秋柔和轻盈陈列；动作多 / 久坐 / 在意贴肉的穿着情境
+  what:
+    action_type: fabric_recommendation_with_risk_disclosure
+    decision_or_action: |
+      把"软垂"重新定义为顺着身体线条走、不藏在意位；
+      同步前置说明贴肉 / 挂长 / 缝位变形 / 薄款体表痕迹 / 浅色透 / 久穿局部发亮六类风险；
+      薄款 + 浅色顾客必须配判断内搭；动作多 / 在意轮廓的顾客转向带支撑面料。
+  result:
+    success_pattern: |
+      顾客理解软垂≠修形，接受"会跟着身体走"的事实；
+      在意贴肉的顾客主动选厚款或加内搭，二次穿着率高，售后无"显胖"投诉。
+    flip_pattern: |
+      导购为成交把"软垂"说成"修形"或"显瘦"；
+      顾客实际穿出去发现暴露腹部 / 内裤痕 / 胸下垂感 → 退换或差评；
+      浅色 / 薄款没说透 → 二次穿着率掉。
+  underlying_mechanism: |
+      粘胶 / 莫代尔 / 天丝纤维素再生纤维质地偏软，悬垂系数高、回弹差；
+      湿强度比棉低，受拉扯容易在缝位变形；
+      高吸湿同时也意味着汗后局部贴身和发亮风险更明显。
+  boundary:
+    applicable_when: 主成分为粘胶 / 莫代尔 / 天丝的裙装 / 衬衫 / 阔腿裤；柔和轻盈场景
+    not_applicable_when: |
+      混入足量涤纶 / 锦纶且明示稳定的高弹混纺；
+      明确卖"流动感"而非"修形"的礼服 / 度假场景。
+  alternative_path:
+    - 如果顾客要"清楚轮廓 + 修形" → 转向梭织棉麻 / 重磅缎或带弹力的混纺
+    - 如果顾客要"流动感但不挂长" → 推荐厚一档克重的莫代尔混纺
+    - 如果顾客在意贴肉痕迹 → 同步推荐无痕内衣 / 内搭
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+  source_anchor: 四、首批 FabricKnowledge 正式冻结清单 · 3. 粘胶 / 莫代尔 / 天丝类
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    这类最容易在镜前赢，但也最容易在穿后暴露问题。
+    最容易误导的是把"软垂"说成"修形"。很多时候它只是顺着身体线条走，不会帮顾客藏掉她在意的位置。
+    正式风险提示冻结为：贴肉、挂长、缝位变形、薄款暴露体表痕迹、浅色透、久穿后局部发亮。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"软垂≠修形 + 六类风险位 + 顺身体走的机制"三层语义。
+    Gate 3：跨品牌通用粘胶 / 天丝判断。
+    Gate 4：可被 outfit_recommendation / store_training / content_generation 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用纤维素再生纤维特性，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-FabricKnowledge, type_name: FabricKnowledge, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-fabric_property-viscose-modal-tencel-mirror-win-soft_drape_not_shaping, owner_field: risk_alerts, definition: "粘胶/莫代尔/天丝的软垂只是顺着身体走，不具备藏肉修形效果"}
+  value_set:
+    - {value_set_id: VS-KP-fabric_property-viscose-modal-tencel-mirror-win-risk_position, value: body_cling, label: 贴肉}
+    - {value_set_id: VS-KP-fabric_property-viscose-modal-tencel-mirror-win-risk_position, value: hang_stretch, label: 挂长}
+    - {value_set_id: VS-KP-fabric_property-viscose-modal-tencel-mirror-win-risk_position, value: seam_distort, label: 缝位变形}
+    - {value_set_id: VS-KP-fabric_property-viscose-modal-tencel-mirror-win-risk_position, value: thin_body_mark, label: 薄款体表痕迹}
+    - {value_set_id: VS-KP-fabric_property-viscose-modal-tencel-mirror-win-risk_position, value: light_color_see_through, label: 浅色透}
+    - {value_set_id: VS-KP-fabric_property-viscose-modal-tencel-mirror-win-risk_position, value: long_wear_shine, label: 久穿局部发亮}
+  rule:
+    - {rule_id: RL-KP-fabric_property-viscose-modal-tencel-mirror-win, rule_type: fabric_recommendation_disclosure, applicable_when: "面料=粘胶/莫代尔/天丝 且 顾客在意修形或贴肉", success_scenario: "把软垂讲为顺身体而非修形，前置六类风险 → 顾客接受流动感", flip_scenario: "把软垂卖成修形 → 顾客觉得显胖或暴露体表 → 退换/差评", alternative_boundary: "要清晰轮廓→梭织棉麻/重磅缎；要流动感不挂长→厚克重莫代尔混纺"}
+  evidence:
+    - {evidence_id: EV-KP-fabric_property-viscose-modal-tencel-mirror-win, source_md: Q7Q12-搭配陈列业务包/面料工艺品质判断包.md, source_anchor: 四、3. 粘胶 / 莫代尔 / 天丝类, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-fabric_property-viscose-modal-tencel-mirror-win, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [StylingRule, RiskDisclosure]}
+    - {mapping_id: CM-store_training-KP-fabric_property-viscose-modal-tencel-mirror-win, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}

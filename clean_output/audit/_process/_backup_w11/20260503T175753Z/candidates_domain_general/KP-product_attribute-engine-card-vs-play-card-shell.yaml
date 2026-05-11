@@ -1,0 +1,83 @@
+pack_id: KP-product_attribute-engine-card-vs-play-card-shell
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  内容方法论资产分两类壳：玩法卡（PlayCard / 属于某个具体 ContentType）用 10 字段壳——档位 / 定义 / 北极星 /
+  元素 / 分镜 / 服装钩子 / 可行性 / AI / 来源 / 备注；引擎卡（NarrativeEngine / 跨多个 ContentType 复用的元工具）
+  用另一套 10 字段壳——出处 / 原理 / 为什么高级 / 降维执行 / 分镜 / 服装适配 / 可调用ContentType / 可行性 /
+  AI / 备注。两套壳不许互相塞、不许在玩法卡上加引擎字段（反之亦然），否则跨 CT 复用与单 CT 落地的语义会混。
+
+scenario:
+  who:
+    primary_role: 内容方法论维护者 / 知识工程
+    target_audience: ContentType 玩法库构建者 / 共享叙事引擎库构建者 / Prompt 组装下游
+  when:
+    trigger: 新增一条内容创作技法时，先判断它是单 CT 内的玩法还是跨 CT 的引擎，再选对应壳填字段
+    context: 共享叙事引擎库 vs 18 份 ContentType 玩法卡的层级隔离
+  what:
+    action_type: card_shell_layer_enforcement
+    decision_or_action: 跨 ContentType 可复用 → 走引擎卡壳；只在某 ContentType 内成立 → 走玩法卡壳
+  result:
+    success_pattern: 引擎卡可被多张玩法卡引用且字段名稳定，玩法卡只引用引擎编号不复制引擎内容，下游 Prompt 组装能按"玩法→引擎"两步解码
+    flip_pattern: 把引擎硬塞进单一 ContentType 的玩法库 → 同一引擎在不同 CT 里被多次复述并漂移；或把单 CT 玩法升级到共享层 → 共享层被一次性内容污染
+  underlying_mechanism: |
+      "玩法是具体的、属于某个 ContentType 的；引擎是抽象的、可被多个 ContentType 复用的"——
+      复用度决定壳类型，壳类型决定字段集，字段集决定下游消费路径。
+  boundary:
+    applicable_when: 内容方法论资产建设期；新增技法 / 升级候选引擎 / 玩法卡引用引擎时
+    not_applicable_when: 业务规则类资产（陈列 / 接客 / 面料 / 工艺 / 库存 / 培训）不走两套壳，按 9 表 rule/semantic 直出
+  alternative_path:
+    - 一条技法跨 ≥2 个 ContentType 但尚未做完整引擎卡 → 进候选引擎登记表，仅占用编号 + 一句话原理，延后卡片化
+    - 玩法卡同时调用 ≥2 条引擎 → 允许"双引擎融合卡"，但仍是玩法卡壳，不变形
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: 与 13 份 ContentType 交付物的关键差异点 / §I 候选引擎登记表
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    玩法卡：10 字段（档位/定义/北极星/元素/分镜/服装钩子/可行性/AI/来源/备注）
+    引擎卡：10 字段（出处/原理/为什么高级/降维执行/分镜/服装适配/可调用ContentType/可行性/AI/备注）
+    "玩法是具体的、属于某个 ContentType 的；引擎是抽象的、可被多个 ContentType 复用的"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 02_field（PlayCard 10 字段 / NarrativeEngine 10 字段）+ 06_rule（壳隔离规则）可反推"两套壳 / 不互塞 / 复用度判型"三条核心语义。
+    Gate 3：跨品牌内容方法论资产维护通用纪律。
+    Gate 4：可被 content_generation 调用前的 schema 校验消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论资产的 schema 元规则；任意品牌的 ContentType 玩法库 / 共享叙事引擎库都需要分壳——不含笛语专属
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-PlayCard-tier, owner_type: ContentType, field_name: play_card_tier, data_type: string}
+    - {field_id: FD-PlayCard-north_star, owner_type: ContentType, field_name: play_card_north_star, data_type: string}
+    - {field_id: FD-PlayCard-storyboard_30s, owner_type: ContentType, field_name: play_card_storyboard_30s, data_type: composite}
+    - {field_id: FD-NarrativeEngine-origin, owner_type: ContentType, field_name: engine_origin, data_type: string}
+    - {field_id: FD-NarrativeEngine-principle, owner_type: ContentType, field_name: engine_principle, data_type: string}
+    - {field_id: FD-NarrativeEngine-callable_content_types, owner_type: ContentType, field_name: engine_callable_content_types, data_type: list_of_string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-engine-card-vs-play-card-shell-play_card_shell, owner_field: play_card_tier, definition: "玩法卡 10 字段壳：档位/定义/北极星/元素/分镜/服装钩子/可行性/AI/来源/备注；属于单一 ContentType 的具体玩法"}
+    - {semantic_id: SM-KP-product_attribute-engine-card-vs-play-card-shell-engine_card_shell, owner_field: engine_principle, definition: "引擎卡 10 字段壳：出处/原理/为什么高级/降维执行/分镜/服装适配/可调用ContentType/可行性/AI/备注；跨 ContentType 可复用的元工具"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-product_attribute-engine-card-vs-play-card-shell, rule_type: card_shell_layer_enforcement, applicable_when: "新增内容技法或升级候选引擎时", success_scenario: "引擎卡被多张玩法卡按编号引用字段稳定下游可两步解码", flip_scenario: "壳互塞导致跨 CT 复述漂移或共享层被单 CT 内容污染", alternative_boundary: "尚未卡片化的跨 CT 技法走候选引擎登记；双引擎融合仍是玩法卡壳"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-engine-card-vs-play-card-shell, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: 与 13 份 ContentType 交付物的关键差异点, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

@@ -1,0 +1,87 @@
+pack_id: KP-product_attribute-content-type-north-star-outfit-of-the-day
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `outfit_of_the_day`（OOTD 每日穿搭）的北极星是"我明白这套穿搭在表达什么，
+  我能想象自己穿上以后的状态"——观众接住的不是 SKU，而是审美与品牌的长期记忆。
+  这条北极星把 OOTD 从"镜前转圈+单品罗列 / GRWM 完成片 / 卡点变装"反向定义为
+  "穿搭即决策 / 路线适配 / 身份协商 / 时间痕迹 / 情绪翻译"五个未被开发角度——
+  并强调 OOTD 是 18 类 ContentType 中"商业化风险最高 / 最容易滑向硬广"的 CT，
+  必须用最强红线（满屏 SKU 字幕 / 强口播购买指令 / 显瘦高级氛围感空词）反向把守。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / OOTD 内容生产 prompt 组装者
+    target_audience: OOTD 创作者 / 品牌内容审核
+  when:
+    trigger: 新增 OOTD 玩法卡或审核一条 OOTD 内容是否成立时
+    context: 18 份 ContentType 中 OOTD 与服装行业最直接相关，但也最容易商业化滑坡
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"想象自己穿上后状态 / 穿搭即决策非陈列"作为 OOTD 玩法成立的判定
+  result:
+    success_pattern: |-
+      玩法呈现"今天的路线 / 两种身份争同一身衣服 / 衣服记住了今天 / 30 秒微悬疑 /
+      城市声学 / 情绪衣橱 / 一件白 T 的 N 种表达 / 穿给过去的自己" → 进 C3 突破档
+    flip_pattern: |-
+      镜前转圈+SKU 清单 / GRWM 完成片 / 卡点变装 / 显瘦高级氛围感空词 / 强口播购买指令
+      → 主流默认禁用 + 红线
+  underlying_mechanism: |
+      OOTD 的核心是"今天为什么这样穿"——这是最难 AI 化的真实生活决策；
+      一旦决策做完，分镜/字幕/剪辑 AI 全程辅助；但"决策本身"必须从真实生活长出来。
+  boundary:
+    applicable_when: OOTD 玩法库扩张 / 单条 OOTD 内容审核
+    not_applicable_when: 重心是产品评价 → product_review；重心是个人情绪流 → personal_vlog
+  alternative_path:
+    - OOTD vs personal_vlog C3-1 的区分延后到边界矩阵任务（v0.2 G4 已登记 iteration-backlog）
+
+evidence:
+  source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流三张 + §D 服装行业垂直机会四角度 + §E 红线 + §F AI 边界
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：不只是"这套衣服好看"，而是"我明白这套穿搭在表达什么，
+    我能想象自己穿上以后的状态"——对审美和品牌建立长期记忆。
+    F 核心判断：OOTD 最核心的"今天为什么这样穿"，只能从真实生活里长出来。
+    与试点版差异：商业化风险最高——OOTD 是最容易滑向"硬广 / 种草"的 ContentType。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"OOTD 北极星 = 穿搭即决策 / 商业化风险最高需强红线 / 4 个突破角度 /
+      AI 不可替代决策本身"四条核心语义。
+    Gate 3：跨品牌通用 OOTD 内容创作判型。
+    Gate 4：可被 content_generation 调用做 OOTD 玩法选型与硬广反偏判定。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论；任意服装品牌 OOTD 内容都需此判型
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-outfit-of-the-day-ootd_north_star, owner_field: north_star, definition: "OOTD ContentType 北极星：穿搭即决策 / 路线-身份-时间-情绪四种叙事；与商业化硬广反向把守"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-outfit-of-the-day, rule_type: content_type_north_star_anchor, applicable_when: "新增 OOTD 玩法卡或审核 OOTD 内容时", success_scenario: "玩法呈现路线/身份/时间/情绪叙事 → C3 突破", flip_scenario: "镜前转圈+SKU 清单/卡点变装/空词 → 主流禁用+红线", alternative_boundary: "与 product_review 重心区分；与 personal_vlog C3-1 边界延后"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-outfit-of-the-day, source_md: Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md, source_anchor: §A + §C1 + §D + §E + §F, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-outfit_of_the_day-ootd1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"outfit_of_the_day"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-outfit-of-the-day, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

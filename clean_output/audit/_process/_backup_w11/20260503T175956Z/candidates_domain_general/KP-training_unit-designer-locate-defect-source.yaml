@@ -1,0 +1,80 @@
+pack_id: KP-training_unit-designer-locate-defect-source
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  设计师（designer）的核心手感不是"会想"，而是"知道一件衣服的问题到底出在版型、面料还是细节"——
+  样衣有问题先定位三选一（版型 / 面料 / 细节），定位错则反复改版仍救不回；
+  把"审美好"当成"设计成立"、把"灵感"当成"可落地"、把"改版多次"理解成"不专业"——是新人最常学歪的 4 个判断错位。
+
+scenario:
+  who:
+    primary_role: designer（设计师）
+    target_audience: 设计师本人 + 设计新人 + 与之协同的 sample_worker / design_director
+  when:
+    trigger: 样衣评估 / 版型初判 / 修改建议会议 / 新人设计稿评审
+    context: 设计开发链路（灵感 → 选料 → 版型 → 样衣 → 修改）任一环出现"看起来好看但上身不成立"
+  what:
+    action_type: garment_defect_root_cause_locate
+    decision_or_action: |
+      面对"看起来好看但上身不成立"的样衣，设计师先按三选一定位问题来源：
+        1. 版型问题（廓形 / 比例 / 结构线）
+        2. 面料问题（克重 / 垂感 / 弹性 / 体感）
+        3. 细节问题（线迹 / 收口 / 装饰 / 配比）
+      定位错 → 改错地方 → 反复改版仍不成立；
+      同时判断：什么灵感属于品牌、什么必须砍掉、设计逻辑何时与商品逻辑冲突。
+      新人最易学歪：把审美好当设计成立 / 把灵感当可落地 / 把改版多次理解成不专业 / 把坚持自我理解成不听反馈。
+  result:
+    success_pattern: 三选一定位准 → 一次改版到位 → 1.0/2.0/3.0 版本对照可见迭代逻辑
+    flip_pattern: 不定位直接改 → 改了细节其实是版型问题 → 改三版仍不成立 → 浪费打样资源 + 错过上新窗口
+  underlying_mechanism: |
+      服装问题源是分层结构（版型 > 面料 > 细节），上层错下层补不回；
+      设计师手感的价值在于先做根因定位再决策改哪一层，而不是凭审美直觉改任意可见之处。
+  boundary:
+    applicable_when: 服装设计开发链路中的样衣评估与修改决策
+    not_applicable_when: 纯视觉创意 / 平面图阶段（尚未涉及上身 / 物化成立性）
+  alternative_path:
+    - 三层都有问题且修改成本过高 → 走"砍掉方案"路径而非继续改版
+    - 设计逻辑与商品逻辑冲突且无法调和 → 升级到 design_director 裁决，不在本环节硬扛
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md
+  source_anchor: 五、4. designer（设计师）
+  source_type: explicit_role_skill_lock
+  inference_level: low
+  evidence_quote: |
+    设计师的手感不是"会想"，而是知道一件衣服的问题到底出在版型、面料还是细节。
+    她要能判断：什么看起来好看但上身不成立，什么灵感适合品牌，什么必须砍掉。
+    一件衣服的问题出在版型、面料还是细节；为什么要砍掉自己喜欢的方案；
+    什么灵感属于品牌，什么不属于；设计逻辑什么时候会和商品逻辑冲突。
+    新人最容易学歪：把"审美好"当成"设计成立"；把"灵感"当成"可落地"；
+    把"改版多次"理解成不专业；把"坚持自我"理解成不听反馈。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；为设计师培训材料（样衣评估 / 改版会 / 1.0-3.0 版本对照）提供根判断模板。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用设计开发纪律 + designer 岗位手感，任意品牌设计团队均可用，不含品牌调性具体内容。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-designer-locate-defect-source}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tcb08-03}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-designer-locate-defect-source}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-designer-locate-defect-source}

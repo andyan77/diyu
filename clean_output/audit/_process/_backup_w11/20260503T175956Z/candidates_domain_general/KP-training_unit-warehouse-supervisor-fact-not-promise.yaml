@@ -1,0 +1,81 @@
+pack_id: KP-training_unit-warehouse-supervisor-fact-not-promise
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  仓库主管（warehouse_supervisor）的核心手感是"让前场承诺与后场事实对得上"——
+  最怕前场把库存事实说成销售承诺（断码当齐码卖 / 替代款当同款卖 / 调货周期没确认就答应顾客 / 成套承诺与后场货况脱节）；
+  这 4 类乱推会直接造成退货、差评、信任流失，是该岗位与导购联训的首要纠错点。
+
+scenario:
+  who:
+    primary_role: warehouse_supervisor（仓库主管）
+    target_audience: 仓库主管 + 与之联动的 sales_associate（导购）
+  when:
+    trigger: 前台对顾客做出库存承诺前 / 调货答复前 / 替代款推荐前 / 成套搭配推荐前
+    context: 任何含库存承诺的接客场景（断码 / 调货 / 替代 / 成套）
+  what:
+    action_type: inventory_promise_discipline
+    decision_or_action: |
+      仓库主管对前台 4 类乱推必须立刻回拒并复盘：
+        1. 断码当齐码卖：必须先核对实际尺码深度再承诺
+        2. 替代款按同款卖：必须明确告知是替代 + 哪里变了
+        3. 调货周期没确认就答应：必须确认调拨时点再答复顾客
+        4. 成套承诺与后场货况脱节：成套位推荐前先核对后场是否可整套接力
+      仓库岗位最核心的判断维度：什么货一看就知道容易压、哪种断码最伤门店节奏、
+      什么时候优先保速度什么时候优先保准确、少一件货是粗心还是流程没立住。
+  result:
+    success_pattern: 前台承诺与后场事实对齐，调拨/替代/成套场景下顾客无落差，复购信任建立
+    flip_pattern: 前台凭印象承诺，顾客到货发现是替代 / 断码 / 调货迟到 → 退货 + 差评 + 信任流失
+  underlying_mechanism: |
+      仓库岗的价值不在"会整理"，而在维护"承诺-事实"一致性这条隐形规则；
+      4 类乱推都是把库存的概率事件当成确定承诺，破坏的是顾客对门店的整体信任成本。
+  boundary:
+    applicable_when: 任何含后场库存接力的女装门店
+    not_applicable_when: 纯前店无后场的快闪 / pop-up（库存即陈列，无承诺-事实差距）
+  alternative_path:
+    - 顾客愿意等且接受"待确认" → 走预售/到货通知路径，不强行当场承诺
+    - 替代款气质差距过大 → 走 inventory_rescue 的"不可救场景"，不在本规则继续推
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md
+  source_anchor: 五、2. warehouse_supervisor（仓库主管）
+  source_type: explicit_role_skill_lock
+  inference_level: low
+  evidence_quote: |
+    仓库主管的手感不在"会整理"，而在能不能让前场承诺和后场事实对得上。
+    仓库最怕前场怎么乱推：不看库存深度就承诺成套；断码当齐码卖；
+    调货周期没确认就答应顾客；替代款按同款卖；前台卖法和后场实际货况脱节。
+    不是库里"还有"就等于前台能卖；不是爆款都值得优先补深；
+    不是速度永远压倒准确；不是临时救火就能替代稳定流程。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 B07 substitution-honest-disclosure 互补——B07 谈导购该如何坦白替代，本卡谈仓库主管该如何拒绝乱推源头。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用库存纪律 + 仓库岗位手感，任意品牌门店都能直接用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-warehouse-supervisor-fact-not-promise}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tcb08-02}
+    - {relation_id: RE-TrainingMaterial-requires_inventory_state-InventoryState-tcb08-02}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-warehouse-supervisor-fact-not-promise}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-warehouse-supervisor-fact-not-promise}

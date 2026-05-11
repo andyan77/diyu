@@ -1,0 +1,82 @@
+pack_id: KP-training_unit-greeting-format-lock
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  围绕 10 类接客场景的首批培训格式正式冻结为 4 种——branching_scenario / do_dont_contrast / pre_shift_micro_coaching / error_replay；
+  长视频一次讲完、统一话术灌输、PPT 录屏被显式禁用——培训目标不是"讲得不错"，而是员工下次真遇到场景时自动跳出正确动作。
+
+scenario:
+  who:
+    primary_role: 店长 / 培训负责人
+    target_audience: 一线导购（新人 + 老手）
+  when:
+    trigger: 接客场景培训需求出现（新人入职 / 季度复盘 / 错误复盘 / 新场景上线）
+    context: 接客 10 类场景与跨切裁决的承接训练
+  what:
+    action_type: training_format_lock
+    decision_or_action: |
+      允许使用且默认顺序：
+        1. branching_scenario（分支情境训练）：让员工在真实场景树中选动作
+        2. do_dont_contrast（Do/Don't 对照）：把正确与错误动作并排展示
+        3. pre_shift_micro_coaching（班前微教练）：每天 5-10 分钟即时提醒
+        4. error_replay（错误先发生再倒回重来）：复盘真实失败案例
+      禁用：长视频一次讲完 / 统一话术灌输 / PPT 录屏。
+  result:
+    success_pattern: 员工在真实接客中自动跳出正确动作，复购与转化指标改善
+    flip_pattern: 用长视频/话术稿/PPT 培训，员工背得出但用不出，接客现场仍按惯性走
+  underlying_mechanism: |
+      接客判断是"情境-反应"型技能，而非"知识-讲解"型；
+      4 种允许格式的共同点是"短时 + 情境 + 即时反馈"；
+      被禁用的 3 种格式都是"长时 + 脱情境 + 单向灌输"，不能形成肌肉记忆。
+  boundary:
+    applicable_when: 10 类接客场景与 5 类跨切裁决的培训
+    not_applicable_when: 非接客类技能培训（如收银/陈列基础操作）可另选格式
+  alternative_path:
+    - 4 种格式之外的新格式提案 → 进 unprocessable_register 分类 needs_human_judgment
+    - 紧急上线场景（如新政策当天落地）→ 用 pre_shift_micro_coaching 优先承接
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 四、TrainingMaterial 承接方式正式冻结
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    围绕这 10 类接客场景，首批培训只做 4 种格式：
+    branching_scenario（分支情境训练）
+    do_dont_contrast（Do/Don't 对照）
+    pre_shift_micro_coaching（班前微教练）
+    error_replay（错误先发生再倒回重来）
+    长视频一次讲完、统一话术灌输、PPT 录屏，默认禁用。
+    培训目标不是"讲得不错"，而是员工下次真遇到场景时自动跳出正确动作。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；为本任务卡所有 service_judgment pack 提供 TrainingMaterial 承接锚点。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用培训格式约束，跨服装零售门店复用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-greeting-format-lock}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-greeting-format-lock-training_format}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-train01}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-greeting-format-lock}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-greeting-format-lock}

@@ -1,0 +1,96 @@
+pack_id: KP-product_attribute-synonym-convergence
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  散乱叫法必须收敛为标准术语：品类层 8 组（hoodie / sweatshirt / cardigan / blazer / wide_leg_pants /
+  straight_pants / a_line_skirt / base_layer_top）+ 属性层 4 组（off_white / mock_neck / oversized / h_line）
+  共 12 组同义词归并是底座可用的硬纪律；不允许多名并存导致检索 / 推荐 / 培训各说各话。
+
+scenario:
+  who:
+    primary_role: Attribute 字典维护者 / 培训内容编辑
+    target_audience: 所有产生或消费术语的模块（搜索、推荐、培训话术、详情页文案）
+  when:
+    trigger: 写入新商品 / 编辑培训材料 / 录入 Attribute 取值
+    context: 冷启动 P0；同义词收敛是 phase-3-统一知识抽取协议 明确的硬纪律
+  what:
+    action_type: synonym_normalization
+    decision_or_action: 输入侧任意叫法 → 系统统一存为标准术语；展示侧可选地保留同义词以兼容用户搜索习惯
+  result:
+    success_pattern: |
+      "连帽卫衣"和"帽衫"在搜索 / 推荐 / 培训三处指向同一商品集合；
+      培训话术与陈列标签使用同一标准术语，新人不需要学多套叫法。
+    flip_pattern: |
+      搜索"小高领"出 0 结果但有"半高领"商品在库；
+      培训用"宽腿裤"，陈列签写"阔腿裤"，新人困惑；
+      推荐引擎把同物异名误判为不同品类，连带计算失败。
+  underlying_mechanism: |
+      术语是模块间的连接器；多名并存 = 模块间分裂。
+      收敛规则必须在输入侧而非输出侧，否则下游永远在做 fuzzy match 兜底。
+  boundary:
+    applicable_when: 12 组明确收敛的同义词集合
+    not_applicable_when: 第 4 节明确"不得强收"的 4 组（详见 KP-product_attribute-no-forced-merge）
+  alternative_path:
+    - 出现新同义词组 → 进 Attribute 字典升级提案
+    - 顾客 / 销售习惯叫法与标准术语差距大 → 在 synonyms 字段保留以兼容搜索，但存储仍为 canonical_value
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md
+  source_anchor: 6.3 必须收敛的统一术语
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    品类叫法统一：帽衫/连帽卫衣→hoodie；套头卫衣/圆领卫衣→sweatshirt；
+    针织开衫/毛衣开衫→cardigan；小西装/西装外套→blazer；
+    宽腿裤/阔腿裤→wide_leg_pants；直脚裤/直筒裤→straight_pants；
+    A 摆裙/A 字裙→a_line_skirt；打底衫/内搭上衣/基础内搭→base_layer_top。
+    属性叫法统一：米白/象牙白/奶油白→off_white；小高领/半高领→mock_neck；
+    廓形宽松/oversize/超宽松→oversized；H 版/H 型/直身→h_line。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 9 表（12 组 value_set canonical_value + synonyms semantic + 收敛规则）可反推"12 组归并清单 / 输入侧统一 / 不得多名并存"。
+    Gate 3：通用零售底座纪律。
+    Gate 4：可被搜索 / 推荐 / 培训内容生成全链路调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用术语收敛纪律
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field:
+    - {field_id: FD-Attribute-canonical_value, owner_type: Attribute, field_name: canonical_value, data_type: string}
+    - {field_id: FD-Attribute-synonyms, owner_type: Attribute, field_name: synonyms, data_type: list_of_string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-synonym-convergence-canonical, owner_field: canonical_value, definition: "标准术语：输入侧统一存储的唯一术语；synonyms 仅为兼容搜索保留"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-category_terms, value: hoodie, label: "连帽卫衣（含：帽衫）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-category_terms, value: sweatshirt, label: "套头卫衣（含：圆领卫衣）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-category_terms, value: cardigan, label: "针织开衫（含：毛衣开衫）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-category_terms, value: blazer, label: "西装外套（含：小西装）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-category_terms, value: wide_leg_pants, label: "阔腿裤（含：宽腿裤）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-category_terms, value: straight_pants, label: "直筒裤（含：直脚裤）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-category_terms, value: a_line_skirt, label: "A 字裙（含：A 摆裙）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-category_terms, value: base_layer_top, label: "内搭上衣（含：打底衫/基础内搭）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-attribute_terms, value: off_white, label: "米白（含：象牙白/奶油白）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-attribute_terms, value: mock_neck, label: "半高领（含：小高领）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-attribute_terms, value: oversized, label: "廓形宽松（含：oversize/超宽松）"}
+    - {value_set_id: VS-KP-product_attribute-synonym-convergence-attribute_terms, value: h_line, label: "H 型直身（含：H 版/直身）"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-synonym-convergence, rule_type: synonym_normalization, applicable_when: "12 组明确归并清单内的同义术语", success_scenario: "搜索/推荐/培训三处指向同一标准术语", flip_scenario: "多名并存导致跨模块分裂", alternative_boundary: "新同义词→走字典升级；不得强收 4 组例外见 RL-no-forced-merge"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-synonym-convergence, source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md, source_anchor: 6.3, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

@@ -1,0 +1,88 @@
+pack_id: KP-product_attribute-collection-cold-start-scope
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  冷启动阶段 Collection（系列）只承担三件事：① 主题归组；② 成组陈列；③ 培训时讲清"这一组为什么一起卖"；
+  本轮**不**把 Collection 升级为搭配硬约束；只有当品牌后续明确"系列成套优先"策略时才进入更强约束。
+
+scenario:
+  who:
+    primary_role: 商品总监 / 系列策划 / 陈列负责人
+    target_audience: 搭配 / 陈列 / 培训三个模块的下游消费者
+  when:
+    trigger: 创建或维护 Collection 时；或推荐引擎遇到 Collection 字段时
+    context: 冷启动 P0
+  what:
+    action_type: collection_scope_freeze
+    decision_or_action: Collection 仅作为主题归组、成组陈列、培训说明的载体；推荐引擎不强制"同 Collection 优先"
+  result:
+    success_pattern: |
+      推荐保持灵活，跨 Collection 搭配不被无故抑制；
+      陈列与培训能引用 Collection 形成主题感，但不让其绑架搭配自由度；
+      未来若策略升级，可平滑加入 collection-priority 规则而无需重做底层。
+    flip_pattern: |
+      冷启动就把 Collection 当搭配硬约束 → 跨系列搭配被推荐引擎过早压制；
+      Collection 作用过弱（连陈列都不参考） → 浪费系列策划价值。
+  underlying_mechanism: |
+      冷启动期 SKU 与系列体量小，硬约束会显著减少推荐多样性；
+      Collection 在此阶段是"叙事工具"而非"约束工具"，但保留升级空间。
+  boundary:
+    applicable_when: 冷启动阶段
+    not_applicable_when: 品牌明确进入"系列成套优先"策略后（届时走升级流程而非破例）
+  alternative_path:
+    - 个别系列确实需要硬约束 → 在该 Collection 单独标记 collection_priority=hard，但不动全局口径
+    - 推荐场景需要利用系列叙事 → 通过 supports_training / mapped_to_runtime 调取，不强制搭配
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md
+  source_anchor: 6.7 Collection（系列）的正式口径
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    Collection（系列）先只承担三件事：主题归组 / 成组陈列 / 培训时的"这一组为什么一起卖"。
+    本轮不把 Collection 直接升成搭配硬约束。
+    只有当品牌后续明确"系列成套优先"时，再进入更强约束。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 9 表（Collection 对象 + 三件事 value_set + scope_freeze rule + 升级路径 evidence）可反推"冷启动只做三件事 / 非搭配硬约束 / 升级路径明确"三条核心语义。
+    Gate 3：通用冷启动节奏方法。
+    Gate 4：可被 display_guidance / store_training 调用；推荐引擎按本规则不强制 Collection 优先。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用冷启动作用域纪律，不含笛语品牌专属
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Collection, type_name: Collection, supertype: domain_object}
+  field:
+    - {field_id: FD-Collection-collection_id, owner_type: Collection, field_name: collection_id, data_type: string}
+    - {field_id: FD-Collection-collection_name, owner_type: Collection, field_name: collection_name, data_type: string}
+    - {field_id: FD-Collection-theme_keywords, owner_type: Collection, field_name: theme_keywords, data_type: list_of_string}
+    - {field_id: FD-Collection-display_priority, owner_type: Collection, field_name: display_priority, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-collection-cold-start-scope-three_roles, owner_field: collection_name, definition: "Collection 冷启动作用域：theme_grouping（主题归组）/ display_grouping（成组陈列）/ training_narration（培训说明）"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-collection-cold-start-scope-roles, value: theme_grouping, label: 主题归组, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-collection-cold-start-scope-roles, value: display_grouping, label: 成组陈列, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-collection-cold-start-scope-roles, value: training_narration, label: 培训说明, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-product_attribute-collection-cold-start-scope, rule_type: collection_scope_freeze, applicable_when: "冷启动阶段创建/消费 Collection 时", success_scenario: "推荐保持灵活陈列与培训利用系列叙事不绑架搭配", flip_scenario: "硬约束→跨系列搭配被压制；过弱→浪费系列策划", alternative_boundary: "个别系列硬约束→单独 collection_priority=hard；推荐场景→走 mapped_to_runtime"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-collection-cold-start-scope, source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md, source_anchor: 6.7, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-product_attribute-collection-cold-start-scope, runtime_method: display_guidance, input_types: [Collection], output_types: [DisplayPlan]}
+    - {mapping_id: CM-store_training-KP-product_attribute-collection-cold-start-scope, runtime_method: store_training, input_types: [Collection, TrainingMaterial], output_types: [TrainingScript]}

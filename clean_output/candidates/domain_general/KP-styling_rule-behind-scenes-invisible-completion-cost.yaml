@@ -1,0 +1,105 @@
+pack_id: KP-styling_rule-behind-scenes-invisible-completion-cost
+granularity_layer: L2
+production_tier: instant
+default_call_pool: true
+
+play_card:
+  consumption_purpose: generation
+  production_difficulty: low
+  resource_baseline: "1人+手机+200元+4h"
+  hook: "让观众看见漂亮成片背后那些没人拍的完成成本"
+  steps:
+    - "连续拍三个低位劳动瞬间"
+    - "保留杂乱声音和手部动作"
+    - "结尾落到认真完成的人"
+  anti_pattern: "把幕后拍成精修花絮只展示漂亮和热闹"
+  duration: medium
+  audience: "关心品牌真实劳动的人群"
+  source_pack_id: KP-styling_rule-behind-scenes-invisible-completion-cost
+
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  behind_the_scenes 内容里，"看不见的完成成本"应该用"非 glamorous 劳动"格式拍——
+  谁在熨衣服 / 谁在捡地上的胶带 / 谁在搬箱子 / 谁在重新别吊牌 / 谁在把试衣间弄干净 /
+  谁在拍摄结束后把衣服一件件装回袋子。真正有效的 BTS 不是更漂亮，而是更接近"现实中的完成成本"。
+  观众把"看不见的劳动"看见后，会自然把品牌从"logo"还原成"认真的人"，建立尊重而不是好奇。
+  这是 BTS 北极星"愿意把不完美给我看"在玩法层的具体落地。
+
+scenario:
+  who:
+    primary_role: behind_the_scenes 内容创作者 / 品牌内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=behind_the_scenes 选卡时）
+  when:
+    trigger: 决定为某场拍摄 / 上新 / 经营做 BTS 内容时
+    context: BTS 内容最易翻车的地方是退化成"NG 集锦 / 仓库流水线美学 / 正片 teaser"——必须显式强调"非 glamorous 劳动"的素材选取
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 用"非 glamorous 劳动 + 局部特写 + 疲惫表情 + 收尾动作 + 环境音"作为分镜结构
+  result:
+    success_pattern: |-
+      30 秒分镜：蒸汽熨斗 → 蹲地捡胶带和线头 → 擦试衣间镜子 → 搬样衣箱（背影）→ 收尾"今天拍完了"
+      → 观众接住"完成成本"，对品牌产生尊重而不是猎奇
+    flip_pattern: |-
+      把"劳动"拍成"流水线 ASMR / 仓库打包美学 / 后台搞笑 NG 合集"
+      → 退化为 C1 主流默认禁用档（边角动作变成视觉素材而不是劳动证据）
+  underlying_mechanism: |
+      品牌的人味与认真感不靠"展示成果"建立，而靠"展示成本"建立。"看不见的完成成本"
+      是 BTS 区别于 event_documentary（后台为正片服务）和 product_journey（成品诞生）的
+      独立内容本体——这是观众尊重的来源，不是猎奇的来源。
+  boundary:
+    applicable_when: 任意时刻的品牌日常经营劳动（拍摄收尾 / 上新前夜 / 补货 / 试衣间清洁 / 装袋装箱）/ 1 人手机顺手拍 / 预算 0
+    not_applicable_when: 后台是事件一部分（开业 / 大促 / 发布会）→ 归 event_documentary / 完整成品诞生过程 → 归 product_journey
+  alternative_path:
+    - 也可与 C2-3 "幕后人群像"配合——本卡是"以劳动为主线"，群像是"以岗位为主线"
+    - 也可与 C3-3 "边角料主视角"配合——本卡聚焦人的劳动，边角料聚焦物件视角
+
+evidence:
+  source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md
+  source_anchor: §C2-2 "不拍 glamour，只拍没人愿意拍的劳动" + §A 北极星
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C2-2：比如谁在熨衣服、谁在捡地上的胶带、谁在搬箱子、谁在重新别吊牌、谁在把试衣间弄干净、
+    谁在拍摄结束后把衣服一件件装回袋子。
+    因为你把"看不见的完成成本"拍出来了，观众自然会尊重；真正有效的 BTS 往往不是更漂亮，
+    而是更接近"现实中的完成成本"。
+    备注：品牌 BTS 内容越来越被当成独立内容线，而非附属品。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation（compatible_with_content_type=behind_the_scenes）+ 09_call_mapping 可反推
+    "BTS 用 非glamorous劳动+局部特写+疲惫表情 / 与流水线 ASMR 的边界 / 与 event/product_journey 的对象边界"。
+    Gate 3：跨品牌通用——任何品牌的日常经营都有"看不见的完成成本"。
+    Gate 4：可被 content_generation 调用，按"劳动类型清单"生成 BTS 玩法卡候选。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 BTS 玩法格式规则，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-behind-scenes-invisible-completion-cost, rule_type: content_play_card_anchor, applicable_when: "behind_the_scenes 内容选卡 / 任意品牌日常经营劳动场景", success_scenario: "非glamorous劳动+局部特写+疲惫+收尾动作 → 观众接住完成成本产生尊重", flip_scenario: "拍成流水线 ASMR / 仓库打包美学 / NG 集锦 → 退化主流默认禁用", alternative_boundary: "后台为事件服务 → event_documentary / 成品诞生 → product_journey"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-behind-scenes-invisible-completion-cost, source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md, source_anchor: §C2-2 + §A, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-behind_the_scenes-bts2, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"behind_the_scenes","play_card":"C2-2"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-behind-scenes-invisible-completion-cost, runtime_method: content_generation, input_types: ContentType+LaborSceneCatalog, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

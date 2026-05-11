@@ -1,0 +1,16 @@
+VS-KP-product_attribute-play-card-scenario-tag-three-values-scenario,lead_generation,引流（吸引未进店消费者）,1,domain_general,KP-product_attribute-play-card-scenario-tag-three-values
+VS-KP-product_attribute-play-card-scenario-tag-three-values-scenario,customer_service,接客（服务已进店/私域顾客或员工）,2,domain_general,KP-product_attribute-play-card-scenario-tag-three-values
+VS-KP-product_attribute-play-card-scenario-tag-three-values-scenario,both,两者通用,3,domain_general,KP-product_attribute-play-card-scenario-tag-three-values
+VS-KP-product_attribute-play-card-tier-three-values-tier,instant,即时型（1人+手机+≤200元+≤4小时单次完成）,1,domain_general,KP-product_attribute-play-card-tier-three-values
+VS-KP-product_attribute-play-card-tier-three-values-tier,long_term,长期型（跨天/跨周/跨月素材积累）,2,domain_general,KP-product_attribute-play-card-tier-three-values
+VS-KP-product_attribute-play-card-tier-three-values-tier,brand_tier,品牌级（多人协作/跨地点/超基线，仅品牌模式调用）,3,domain_general,KP-product_attribute-play-card-tier-three-values
+VS-KP-product_attribute-storyboard-30s-dual-decoding-output_format,video,视频型（默认四段分镜读法）,1,domain_general,KP-product_attribute-storyboard-30s-dual-decoding
+VS-KP-product_attribute-storyboard-30s-dual-decoding-output_format,copy,文案型（四段文案骨架例外读法）,2,domain_general,KP-product_attribute-storyboard-30s-dual-decoding
+VS-KP-product_attribute-troop-facing-register-five-fields-audience_register,consumer_facing,消费者向（默认读法）,1,domain_general,KP-product_attribute-troop-facing-register-five-fields
+VS-KP-product_attribute-troop-facing-register-five-fields-audience_register,troop_facing,兵团向（5 字段切对内训练读法）,2,domain_general,KP-product_attribute-troop-facing-register-five-fields
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,shoulder_line,肩线,1,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,waist_line,腰线,2,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,hem_line,下摆,3,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,pant_length,裤长,4,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,neckline,领口,5,domain_general,KP-training_unit-body-shape-objection-structure-points
+VS-KP-training_unit-body-shape-objection-structure-points-structure_point,sleeve_length,袖长,6,domain_general,KP-training_unit-body-shape-objection-structure-points

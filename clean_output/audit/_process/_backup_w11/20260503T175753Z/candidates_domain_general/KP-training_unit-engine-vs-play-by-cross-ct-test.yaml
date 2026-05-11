@@ -1,0 +1,78 @@
+pack_id: KP-training_unit-engine-vs-play-by-cross-ct-test
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  判断一条内容创作技法是"玩法（PlayCard）"还是"引擎（NarrativeEngine）"的唯一硬测试是"跨 ContentType 复用度"——
+  能在 ≥2 个 ContentType 里独立成立、且每个 CT 都能找到具体应用的 → 是引擎，进共享层；只在某一个 ContentType 内
+  独有、换 CT 就不成立的 → 是玩法，留在单 CT 玩法库。复用度低于 27%（实测 18 份 ContentType 共 ~130 张 C3 玩法卡
+  里只有 ~35 张调用共享引擎）说明大部分玩法本就是 CT 独有，强行升级共享层会污染共享层。
+
+scenario:
+  who:
+    primary_role: 内容方法论维护者 / 共享层裁决者
+    target_audience: 候选引擎升级评审 / ContentType 玩法库新增技法
+  when:
+    trigger: 一条新技法被识别 / 候选引擎从 §I 登记到 §A-§C 卡片化升级时
+    context: 18 份 ContentType / ~130 张 C3 玩法卡 / 13 条共享引擎 / 7 条候选引擎
+  what:
+    action_type: engine_vs_play_cross_ct_test
+    decision_or_action: 走"跨 CT 测试"——能否在 ≥2 个 CT 里举出具体应用 + 每个应用都不需要重写"原理"段？满足→引擎；不满足→玩法
+  result:
+    success_pattern: 共享层只装真·跨 CT 引擎（如 #10 纯沉默叙事跨 8 CT、#11 ASMR 跨 9 CT），玩法库装单 CT 独有玩法（如 training_material 学习机制 13 项 / talent_showcase 8 张突破性卡），层级清晰
+    flip_pattern: 把单 CT 独有玩法升上共享层 → 共享层被一次性内容污染、§D 矩阵覆盖率虚高但实际只反映 27% 玩法（73% 独有玩法无法在矩阵反映）；或把跨 CT 引擎留在某 CT 内 → 其他 CT 重复发明同款引擎、版本漂移
+  underlying_mechanism: |
+      "玩法是具体的、属于某个 ContentType 的；引擎是抽象的、可被多个 ContentType 复用的"——
+      复用度是层级隔离的唯一硬指标，不是"看起来抽象"或"听起来通用"。
+      实测覆盖率（27%）已经验证：大部分玩法本就 CT 独有，扩矩阵列数无法解决"73% 独有玩法不在矩阵"的根本问题。
+  boundary:
+    applicable_when: 任何"是否升级到共享层"的裁决
+    not_applicable_when: 候选引擎登记阶段（仅占编号 + 一句话原理时不强制做完整测试，延后到卡片化时做）
+  alternative_path:
+    - 一条技法目前只在 1 个 CT 里有应用但理论上能跨 → 进 §I 候选引擎登记，标"待第 2 个 CT 验证"
+    - 跨 CT 应用之间需要重写"原理"段 → 不是同一引擎，可能是同名不同质，拆为两条引擎或两条玩法
+
+evidence:
+  source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md
+  source_anchor: 本文件是什么 + §D 矩阵范围说明（G9 驳回理由）+ §I 候选引擎登记规则
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    "玩法"是具体的、属于某个 ContentType 的（例如"衣椅倒叙日记"属于 personal_vlog）
+    "引擎"是抽象的、可被多个 ContentType 复用的（例如"反讽对位叙事"可以用在 personal_vlog / humor_content / outfit_of_the_day / knowledge_sharing 等多个 ContentType 里）
+    18 份 ContentType 的 ~130 张 C3 玩法卡中，只有约 35 张调用共享引擎（约 27% 覆盖率）/ 矩阵即使扩到 18 列也只能反映约 1/4 的玩法 / 73% 的 CT 独有玩法本就不在矩阵范围内
+    候选引擎可以被 ContentType 玩法卡通过编号引用，但卡片化（10 字段引擎卡）延后到 v0.3。卡片化前的引用形式：调用候选引擎：#14（倒叙开门）— 待 v0.3 卡片化
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（跨 CT 测试）+ 03_semantic（玩法 vs 引擎定义）可反推"复用度是唯一硬指标"。
+    Gate 3：任意品牌内容方法论库都需要此层级隔离测试。
+    Gate 4：可被 content_generation 资产升级评审消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 内容方法论资产层级隔离纪律；与笛语专属内容无关
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-engine-vs-play-by-cross-ct-test-cross_ct_reuse, owner_field: cross_ct_reuse_test, definition: "跨 ContentType 复用度测试 = 引擎 vs 玩法的唯一硬指标；≥2 CT 独立成立且原理段无需重写 → 引擎；否则 → 玩法"}
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-engine-vs-play-by-cross-ct-test, rule_type: engine_vs_play_cross_ct_test, applicable_when: "新增技法或候选引擎升级裁决", success_scenario: "共享层装真·跨 CT 引擎玩法库装 CT 独有玩法层级清晰", flip_scenario: "独有玩法升共享层 → 共享层污染矩阵覆盖率虚高；或跨 CT 引擎留 CT 内 → 重复发明版本漂移", alternative_boundary: "理论可跨但仅 1 CT 应用 → 进 §I 候选；原理段需重写 → 拆两条"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-engine-vs-play-by-cross-ct-test, source_md: Q2-内容类型种子/_shared-narrative-engines-v0.1.md, source_anchor: 本文件是什么 + §D 矩阵范围说明 + §I 候选引擎登记规则, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

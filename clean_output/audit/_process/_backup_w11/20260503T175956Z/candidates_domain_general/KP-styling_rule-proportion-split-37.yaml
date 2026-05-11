@@ -1,0 +1,99 @@
+pack_id: KP-styling_rule-proportion-split-37
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  全身视觉分割优先做 3:7 或 4:6，避免 5:5——衣身被正中切开会显短、显钝、显没精神；
+  绝大多数想显高显利落的顾客都该按此推荐，但低腰复古/Y2K/街头下坠风顾客需反向放行。
+
+scenario:
+  who:
+    primary_role: 导购 / 店长
+    target_audience: 想显高、显利落、显腿长的绝大多数顾客；通勤、初次成交、连带销售场景
+  when:
+    trigger: 试衣间纠错 / 主推人台搭配 / 顾客问"为什么显矮"
+    context: 上下身比例选择，含上衣长度、下装腰高、塞衣角与否
+  what:
+    action_type: proportion_split_decision
+    decision_or_action: |
+      用高腰下装、短上衣、塞衣角、短外套把视觉切成 3:7 或 4:6；
+      避免上衣卡胯、裙长停在小腿最粗处、裤长与鞋口双截断。
+  result:
+    success_pattern: |
+      上短下长 / 内短外长成立，腿线连续，整体利落显高，
+      顾客在镜前能直接说出"这套显腿长"。
+    flip_pattern: |
+      5:5 等分切割，上衣卡胯，裙长停在小腿最粗处，裤长鞋口再叠一刀；
+      顾客觉得"看不出哪里不对，但就是显矮显钝"，不下单。
+  underlying_mechanism: |
+      三分法是公开时尚指南最基础的比例修正法之一：
+      腰线或长度切分让视觉重心上移，整体显修长；
+      正中等分会让人在视觉上被腰线"对半锯开"。
+  boundary:
+    applicable_when: 通勤客 / 大众客群 / 想显高显利落的顾客 / 第一次试穿推荐
+    not_applicable_when: |
+      明确要做低腰复古、Y2K、街头下坠感的人群——此时 5:5 甚至下坠比例是风格本身，不视为翻车。
+  alternative_path:
+    - 高腰下装断码 → 换同长度高腰下装；只能换低腰 → 不视作等效替代，需说明"风格变了"
+    - 短上衣断码 → 用塞衣角或短外套制造视觉短上衣
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/搭配规则包.md
+  source_anchor: 6.1 规则 01 proportion_split_rule + 6.2 hard_rule 清单 + 6.4 反转情形二
+  source_type: explicit_business_rule
+  inference_level: low
+  evidence_quote: |
+    全身视觉分割优先做 3:7、4:6，避免 5:5。
+    works_in：高腰裤 / 高腰裙、短上衣、塞衣角、短外套。
+    fails_in：上衣卡胯、裙长停在小腿最粗处、裤长和鞋口双截断。
+    会反转的规则二：proportion_split_rule —— 低腰复古、Y2K、模特感拍摄可以故意做下坠比例。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    G1：八要素齐全；who/when/what/success/flip/mechanism/boundary/alternative 均有。
+    G2：从 06_rule + 04_value_set（works_in / fails_in）+ 09_call_mapping 可反推"3:7 优先、5:5 翻车、低腰风格反转"三条核心语义。
+    G3：跨女装品牌通用基础规则，硬规则级别。
+    G4：可被 outfit_recommendation / store_training / display_guidance 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 比例修正法是公开时尚指南通识，无笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  field:
+    - {field_id: FD-StylingRule-rule_level, owner_type: StylingRule, field_name: rule_level, data_type: enum}
+    - {field_id: FD-StylingRule-rule_name, owner_type: StylingRule, field_name: rule_name, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-styling_rule-proportion-split-37-three_seven, owner_field: rule_name, definition: "三七比例法：上下视觉切分优先 3:7 或 4:6，腰线或长度让重心上移"}
+  value_set:
+    - {value_set_id: VS-KP-styling_rule-proportion-split-37-works_in, value: high_waist_bottom, label: 高腰下装, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-proportion-split-37-works_in, value: cropped_top, label: 短上衣, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-proportion-split-37-works_in, value: tucked_in, label: 塞衣角, ordinal: 3}
+    - {value_set_id: VS-KP-styling_rule-proportion-split-37-works_in, value: short_outer, label: 短外套, ordinal: 4}
+    - {value_set_id: VS-KP-styling_rule-proportion-split-37-fails_in, value: hip_cut_top, label: 上衣卡胯, ordinal: 1}
+    - {value_set_id: VS-KP-styling_rule-proportion-split-37-fails_in, value: skirt_at_widest_calf, label: 裙长停在小腿最粗处, ordinal: 2}
+    - {value_set_id: VS-KP-styling_rule-proportion-split-37-fails_in, value: double_break_pant_shoe, label: 裤长鞋口双截断, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-styling_rule-proportion-split-37, rule_type: hard_rule, applicable_when: "通勤客/大众客群/显高显利落需求", success_scenario: "3:7 或 4:6 视觉切分成立，腿线连续显高", flip_scenario: "5:5 等分切割+卡胯+裙长停最粗处+鞋口叠刀，显矮显钝", alternative_boundary: "低腰复古/Y2K 风格反转放行；高腰下装断码优先换同长度高腰，不能用低腰等效替代"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-proportion-split-37, source_md: Q7Q12-搭配陈列业务包/搭配规则包.md, source_anchor: 6.1 规则 01 + 6.2 + 6.4 反转二, source_type: explicit_business_rule, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-supports_styling-Product-prop3701, source_type: StylingRule, target_type: Product, relation_kind: supports_styling, properties_json: '{"rule_level":"hard_rule","priority":"first_line"}'}
+    - {relation_id: RE-StylingRule-supports_training-TrainingMaterial-prop3702, source_type: StylingRule, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"training_use":"试衣间纠错第一条"}'}
+    - {relation_id: RE-StylingRule-supports_display-DisplayGuide-prop3703, source_type: StylingRule, target_type: DisplayGuide, relation_kind: supports_display, properties_json: '{"display_use":"主推人台先做上短下长/内短外长"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-outfit_recommendation-KP-styling_rule-proportion-split-37, runtime_method: outfit_recommendation, input_types: [Product, CustomerScenario], output_types: [OutfitPlan]}
+    - {mapping_id: CM-store_training-KP-styling_rule-proportion-split-37, runtime_method: store_training, input_types: [TrainingMaterial], output_types: [TrainingScript]}
+    - {mapping_id: CM-display_guidance-KP-styling_rule-proportion-split-37, runtime_method: display_guidance, input_types: [DisplayGuide], output_types: [DisplayPlan]}

@@ -1,0 +1,95 @@
+pack_id: KP-training_unit-body-shape-objection-structure-points
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客抛出身型顾虑（"显胖 / 显矮 / 显胯 / 不显高"）时，导购必须用版型 + 比例 + 重心解释，
+  并指出至少 2 个起作用的具体结构点（肩线 / 腰线 / 下摆 / 裤长 / 领口 / 袖长之一）；
+  空喊"显瘦"显高"没有证据，顾客只听到套路，信任不进去。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 新人 / 一线导购
+  when:
+    trigger: 顾客在镜前/试穿后说"显胖 / 显矮 / 显胯 / 显腿短 / 显脖短"等身型顾虑
+    context: 任意品类，下装与上下成套时尤其高频
+  what:
+    action_type: body_shape_objection_response
+    decision_or_action: |
+      错误动作：空喊"显瘦""显高"。
+      正确动作：第一步把顾虑翻成结构问题（肩 / 腰 / 胯 / 下摆 / 裤长 / 领口 / 脖颈）；
+        第二步指出本件衣服在哪 2 个结构点起作用，怎么起作用；
+        第三步邀请顾客在镜前确认这 2 个点。
+      为什么错：没有证据 = 像套路；顾客脑子里要的是"为什么这件能解决我的具体问题"。
+      如何纠正：把每件主推款的"结构作用点"提前在班前会上对齐，避免现场临场胡说。
+      掌握检查：员工面对身型顾虑时能说出至少 2 个具体结构点
+        （不是"版型好""设计好"这种泛词）。
+  result:
+    success_pattern: |
+      顾客在镜前能看到结构点起的作用，自己点头确认；
+      接下来更愿意尝试导购给的下一个搭配建议。
+    flip_pattern: |
+      导购只会"显瘦显高"，顾客回"我感觉一般"或"我自己再看看"；
+      整段接客失去专业感，本款 + 后续推荐一起被否。
+  underlying_mechanism: |
+      身型顾虑本质是"具体身体部位看起来不理想"的视觉问题；
+      唯一能正面回应的语言是"哪个结构点改变了视觉重心"——其他都是噪音。
+  boundary:
+    applicable_when: 任何身型类顾虑（含上装、下装、成套）
+    not_applicable_when: |
+      顾客顾虑实际是面料/颜色而非身型（伪装成身型问题）→ 走对应面料/颜色路径，不要硬讲结构；
+      顾客明确说"我不在意显瘦"→ 跳过本规则。
+  alternative_path:
+    - 本款确实在某个结构点不利（例如低腰对短腿型）→ 诚实承认，转向同类替代款
+    - 顾客提出 3 个以上身型顾虑 → 优先解决她最在意的那一个，其余作为备注
+    - 顾客对结构语言不熟 → 用"看肩到腰这条线"等空间指令替代术语
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 五、首批高频接客场景 · C3 body_shape_objection
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    C3 body_shape_objection（身型顾虑应对）
+    正确动作：用版型、比例、重心解释
+    错误动作：空喊"显瘦""显高"
+    为什么错：没有证据，像套路
+    怎么纠正：必须指出肩线、腰线、下摆、裤长哪个在起作用
+    学会判定：员工能说出至少 2 个具体结构点
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: rule + value_set(structure_point) 可反推 2 个结构点 + 邀请顾客确认。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 不含笛语专属，是通用身型应对法。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set:
+    - {value_set_id: VS-KP-training_unit-body-shape-objection-structure-points-structure_point, value: shoulder_line, label: 肩线, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-body-shape-objection-structure-points-structure_point, value: waist_line, label: 腰线, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-body-shape-objection-structure-points-structure_point, value: hem_line, label: 下摆, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-body-shape-objection-structure-points-structure_point, value: pant_length, label: 裤长, ordinal: 4}
+    - {value_set_id: VS-KP-training_unit-body-shape-objection-structure-points-structure_point, value: neckline, label: 领口, ordinal: 5}
+    - {value_set_id: VS-KP-training_unit-body-shape-objection-structure-points-structure_point, value: sleeve_length, label: 袖长, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-training_unit-body-shape-objection-structure-points, rule_type: body_shape_objection_response, applicable_when: "顾客抛出身型类顾虑（显胖/显矮/显胯/显腿短/显脖短等）", success_scenario: "导购指出至少 2 个具体结构点的作用并请顾客在镜前确认，顾客认同建立专业感", flip_scenario: "只会空喊显瘦显高，顾客觉得是套路，本款及后续推荐均被否", alternative_boundary: "实质是面料/颜色伪装→走对应路径；本款确实不利→诚实转向"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-body-shape-objection-structure-points, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 五、C3 body_shape_objection, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm06, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["sales_associate"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-body-shape-objection-structure-points, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingScript"]}

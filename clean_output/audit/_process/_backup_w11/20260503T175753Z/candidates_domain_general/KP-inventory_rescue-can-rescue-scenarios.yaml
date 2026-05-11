@@ -1,0 +1,81 @@
+pack_id: KP-inventory_rescue-can-rescue-scenarios
+schema_version: candidate_v1
+pack_type: inventory_rescue
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  断码时还能救的接客场景正式冻结为 5 类——commute_mainstay / weekend_social / functional_gap_fill / new_item_cannot_style / repeat_purchase_replenish；
+  这 5 类的共同点是"购买动机是功能/气质/利用率/路径/参考轴"，可以在保住核心轴的前提下用替代品成交，不需要原款全在。
+
+scenario:
+  who:
+    primary_role: 门店导购 / 店长
+    target_audience: 5 类可救场景中遇到断码的客
+  when:
+    trigger: 第一套或主件出现库存断码
+    context: 库存波动期；顾客对"原款"依赖度可被转移
+  what:
+    action_type: rescue_axis_substitution
+    decision_or_action: |
+      第一步：识别场景是否在 5 类可救清单内。
+      第二步：找到该场景的核心轴——
+        - commute_mainstay：核心轴=功能（耐穿/好搭/不出错）
+        - weekend_social：核心轴=气质（同松弛/同精致）
+        - functional_gap_fill：核心轴=衣柜缺位
+        - new_item_cannot_style：核心轴=使用路径
+        - repeat_purchase_replenish：核心轴=上次满意维度
+      第三步：在核心轴上找替代品；明确告知顾客"这是同一逻辑下的替代款"。
+  result:
+    success_pattern: 替代品成交且顾客理解"为什么是它"，复购信任不减
+    flip_pattern: 不识轴硬换（如周末社交客被推通勤款），核心轴错位，顾客拒绝
+  underlying_mechanism: |
+      可救的本质是"核心轴可迁移"，原款只是核心轴的一个具象；
+      不识轴 = 把可救场景做成不可救，把替代做成糊弄。
+  boundary:
+    applicable_when: 5 类指定场景且核心轴有库存可对齐
+    not_applicable_when: 在 3 类不救清单内（shape_correction / comfort_sensitive / urgent_full_look 主件断）
+  alternative_path:
+    - 核心轴库存也断 → 转预售/调货，不强凑
+    - 顾客明确"我只要那一款" → 退出救场，不强转
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 三、2）断码时还能救的场景正式冻结
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    2）断码时还能救的场景，正式冻结为 5 类
+    commute_mainstay（通勤主力型）
+    weekend_social（周末社交型）
+    functional_gap_fill（功能补位型）
+    new_item_cannot_style（新款不会搭型）
+    repeat_purchase_replenish（复购补货型）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；与 InventoryState 联动；与 5 个场景细则派生的轴定义对齐。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用救场清单。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-InventoryState, type_name: InventoryState, supertype: domain_object}
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-inventory_rescue-can-rescue-scenarios}
+  value_set:
+    - {value_set_id: VS-KP-inventory_rescue-can-rescue-scenarios-rescue_scenarios}
+  relation:
+    - {relation_id: RE-CustomerScenario-requires_inventory_state-InventoryState-rescue01}
+  evidence:
+    - {evidence_id: EV-KP-inventory_rescue-can-rescue-scenarios}
+  call_mapping:
+    - {mapping_id: CM-inventory_rescue-KP-inventory_rescue-can-rescue-scenarios}

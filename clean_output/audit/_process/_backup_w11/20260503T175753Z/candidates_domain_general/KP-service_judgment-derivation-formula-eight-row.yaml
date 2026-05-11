@@ -1,0 +1,89 @@
+pack_id: KP-service_judgment-derivation-formula-eight-row
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  派生视图必须按一张固定的 8 行组合规则表执行——把真源边的 support 4 档与 Q3 平台 tier 的 4 档逐对组合，
+  映射成 4 档对外展示档：(now, P0_native) → 默认可用；(now, P1_light_adapt) / (enhanced, P0_native) /
+  (enhanced, P1_light_adapt) / (任意, P2_cross_post_only) → 补充配置后可用；(custom, *) → 品牌级或特殊场景；
+  (unsupported, *) / (任意, deferred) → 不建议；不允许临时新增第 5 档展示档或换映射。
+
+scenario:
+  who:
+    primary_role: 派生视图引擎 / 内容运营
+    target_audience: Skill 能力发现 / Prompt 风险提示 / 渠道分发
+  when:
+    trigger: 任意 (Persona, ContentType, Platform/Channel) 三元组进入派生计算
+    context: Q4 派生公式冷启动；与 KP-service_judgment-platform-derivation-not-source 配套
+  what:
+    action_type: derivation_formula_application
+    decision_or_action: 严格按 8 行组合规则表查表得出对外展示档
+  result:
+    success_pattern: 任意三元组都能映射到 4 档展示档之一，运营/Skill 看到的档位口径全链路一致
+    flip_pattern: 某处临时加"实验中"第 5 档 → 公式变多分支，下游 Skill 与运营看到的档位对不上
+  underlying_mechanism: |
+      派生视图必须公式化、查表化，不允许嵌入业务判断。
+      档位收敛到 4 档是为了运营与系统对齐；扩档等于打破这个对齐。
+  boundary:
+    applicable_when: Persona × ContentType × Platform 三维派生计算
+    not_applicable_when: 真源边本身的 support/risk 调档（属真源维护，不在公式表内）
+  alternative_path:
+    - 出现 P3_native 等新 tier → 公式表扩行，不擅自加展示档
+    - 想引入"实验中"等过渡档 → 走人工豁免清单，不污染公式表
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md
+  source_anchor: 5.2 派生公式（已冻结） + 5.3 运营展示档（已冻结）
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    support = now × tier = P0_native → 默认可用
+    support = now × tier = P1_light_adapt → 补充配置后可用
+    support = enhanced × tier = P0_native → 补充配置后可用
+    support = enhanced × tier = P1_light_adapt → 补充配置后可用
+    support = custom × 任意 tier → 品牌级 / 特殊场景
+    support = unsupported × 任意 tier → 不建议
+    任意 support × tier = P2_cross_post_only → 补充配置后可用（转发提示）
+    任意 support × tier = deferred → 不建议（系统未支持）
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 04_value_set（4 档展示档）+ 06_rule（formula_application 含 8 行映射）+ 09_call_mapping 可反推"8 行组合 / 4 档展示 / 不许扩档"三条核心语义。
+    Gate 3：派生公式化的通用方法。
+    Gate 4：可被 platform_adaptation 直接调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用派生公式
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-service_judgment-derivation-formula-eight-row-formula, owner_field: derivation_formula, definition: "派生公式 8 行组合规则表：support × tier → 4 档展示档（默认可用 / 补充配置后可用 / 品牌级或特殊场景 / 不建议）"}
+  value_set:
+    - {value_set_id: VS-KP-service_judgment-derivation-formula-eight-row-formula_row, value: now_x_p0, label: "now × P0_native → 默认可用", ordinal: 1}
+    - {value_set_id: VS-KP-service_judgment-derivation-formula-eight-row-formula_row, value: now_x_p1, label: "now × P1_light_adapt → 补充配置后可用", ordinal: 2}
+    - {value_set_id: VS-KP-service_judgment-derivation-formula-eight-row-formula_row, value: enhanced_x_p0, label: "enhanced × P0_native → 补充配置后可用", ordinal: 3}
+    - {value_set_id: VS-KP-service_judgment-derivation-formula-eight-row-formula_row, value: enhanced_x_p1, label: "enhanced × P1_light_adapt → 补充配置后可用", ordinal: 4}
+    - {value_set_id: VS-KP-service_judgment-derivation-formula-eight-row-formula_row, value: custom_x_any, label: "custom × 任意 → 品牌级或特殊场景", ordinal: 5}
+    - {value_set_id: VS-KP-service_judgment-derivation-formula-eight-row-formula_row, value: unsupported_x_any, label: "unsupported × 任意 → 不建议", ordinal: 6}
+    - {value_set_id: VS-KP-service_judgment-derivation-formula-eight-row-formula_row, value: any_x_p2, label: "任意 × P2_cross_post_only → 补充配置后可用（转发提示）", ordinal: 7}
+    - {value_set_id: VS-KP-service_judgment-derivation-formula-eight-row-formula_row, value: any_x_deferred, label: "任意 × deferred → 不建议（系统未支持）", ordinal: 8}
+  rule:
+    - {rule_id: RL-KP-service_judgment-derivation-formula-eight-row, rule_type: derivation_formula_application, applicable_when: "三元组 (Persona,ContentType,Platform/Channel) 进派生时", success_scenario: "8 行查表无歧义档位全链路对齐", flip_scenario: "临时加第 5 档→公式分支爆炸下游对不上", alternative_boundary: "新 tier→扩公式行；过渡档→走豁免清单不污染表"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-derivation-formula-eight-row, source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md, source_anchor: 5.2 + 5.3, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-platform_adaptation-KP-service_judgment-derivation-formula-eight-row, runtime_method: platform_adaptation, input_types: [Persona, ContentType, PlatformTone, PrivateOutletChannel], output_types: [CallMapping]}

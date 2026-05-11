@@ -1,0 +1,92 @@
+pack_id: KP-product_attribute-persona-six-field-shell
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  通用 Persona（人设）正式冻结为 6 个字段壳：role_type / life_archetype / emotional_spectrum /
+  authenticity_anchors / topic_scope / typical_scenarios；其中 authenticity_anchors / topic_scope /
+  typical_scenarios 三档"首批可用"可立即支撑内容生产，life_archetype / emotional_spectrum 二档"候选待填"
+  必须从已给候选池/最小集中选值，role_type 由挂接的 RoleProfile 反推或裁决（不允许在 6 字段外随意新增）。
+
+scenario:
+  who:
+    primary_role: Persona 字典维护者 / 知识工程
+    target_audience: 内容生成 / Prompt 组装 / 平台分发的下游模块
+  when:
+    trigger: 新建或维护一套通用 Persona 时填写字段
+    context: Q4 冷启动 P0；与 KP-product_attribute-persona-field-fill-state 配套使用
+  what:
+    action_type: persona_field_shell_enforcement
+    decision_or_action: 严格按 6 字段壳填写 Persona；超出 6 字段不进首轮
+  result:
+    success_pattern: 三套通用 Persona 的字段口径一致，下游 Prompt 组装可直接消费 typical_scenarios + topic_scope，无需再裁决"该填什么"
+    flip_pattern: 某 Persona 自行扩字段（如加 voice_style）→ 下游模板对不上字段名，内容生成跳变
+  underlying_mechanism: |
+      6 字段壳是 Persona 跨模块的通用语；超出即破壳，下游消费成本陡增。
+      字段成熟度与字段壳是两件事：壳冻结，值可分档迭代。
+  boundary:
+    applicable_when: 通用 Persona 字典维护
+    not_applicable_when: 品牌唯一层 FounderProfile（独立壳，不走此 6 字段）
+  alternative_path:
+    - 出现新字段需求 → 走 Persona 字典升级提案，不在某一套 Persona 上单加
+    - role_type 单值 vs 多挂 RoleProfile 的 schema 语义争议 → 进 Pending（见素材 §8.3）
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md
+  source_anchor: 三、字段层参数清单
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    Persona（人设）的正式字段壳已由 phase-3-内容生产核心思想落盘方案.md:215-263 定义：
+    role_type（岗位类型）/ life_archetype（生活原型）/ emotional_spectrum（情绪光谱）/
+    authenticity_anchors（真实性锚点）/ topic_scope（话题边界）/ typical_scenarios（典型场景）。
+    本 §三 各表的字段值参考 phase-3-Q4-三套通用Persona首批卡片.md §2。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全（who / when / what / success / flip / mechanism / boundary / alternative）。
+    Gate 2：从 02_field（Persona 6 字段）+ 03_semantic（每字段定义）+ 06_rule（壳冻结规则）可反推"6 字段壳 / 不许扩字段 / 字段值可分档"三条核心语义。
+    Gate 3：通用 Persona 维护纪律，跨品牌可复用。
+    Gate 4：可被 content_generation 与 store_training 调用前的 Persona 字段校验消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale_keep: "domain_general_keep · 通用 6 字段壳治理是 schema 元规则；scan 误报：pack_id 含 persona 触发"
+  rationale: 通用 Persona 字段壳治理纪律，不含笛语专属
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+  field:
+    - {field_id: FD-Persona-role_type, owner_type: Persona, field_name: role_type, data_type: string}
+    - {field_id: FD-Persona-life_archetype, owner_type: Persona, field_name: life_archetype, data_type: string}
+    - {field_id: FD-Persona-emotional_spectrum, owner_type: Persona, field_name: emotional_spectrum, data_type: list_of_string}
+    - {field_id: FD-Persona-authenticity_anchors, owner_type: Persona, field_name: authenticity_anchors, data_type: list_of_string}
+    - {field_id: FD-Persona-topic_scope, owner_type: Persona, field_name: topic_scope, data_type: composite}
+    - {field_id: FD-Persona-typical_scenarios, owner_type: Persona, field_name: typical_scenarios, data_type: list_of_string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-persona-six-field-shell-six_field_shell, owner_field: role_type, definition: "Persona 6 字段壳：role_type / life_archetype / emotional_spectrum / authenticity_anchors / topic_scope / typical_scenarios，超出即破壳"}
+    - {semantic_id: SM-KP-product_attribute-persona-six-field-shell-topic_scope, owner_field: topic_scope, definition: "topic_scope 是复合字段，含 allowed_topics / forbidden_topics / perspective_focus 三子项"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-persona-six-field-shell-shell, value: role_type, label: 岗位类型, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-persona-six-field-shell-shell, value: life_archetype, label: 生活原型, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-persona-six-field-shell-shell, value: emotional_spectrum, label: 情绪光谱, ordinal: 3}
+    - {value_set_id: VS-KP-product_attribute-persona-six-field-shell-shell, value: authenticity_anchors, label: 真实性锚点, ordinal: 4}
+    - {value_set_id: VS-KP-product_attribute-persona-six-field-shell-shell, value: topic_scope, label: 话题边界, ordinal: 5}
+    - {value_set_id: VS-KP-product_attribute-persona-six-field-shell-shell, value: typical_scenarios, label: 典型场景, ordinal: 6}
+  rule:
+    - {rule_id: RL-KP-product_attribute-persona-six-field-shell, rule_type: persona_field_shell_enforcement, applicable_when: "Persona 字典建设或维护时", success_scenario: "6 字段壳一致下游 Prompt 直接消费", flip_scenario: "自行扩字段→下游模板对不上字段名内容跳变", alternative_boundary: "新字段→走字典升级；role_type 多值争议→进 Pending"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-persona-six-field-shell, source_md: Q4-人设种子/phase-3-Q4-参数级填充清单.md, source_anchor: 三、字段层参数清单, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

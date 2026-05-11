@@ -1,0 +1,85 @@
+pack_id: KP-training_unit-behind-scenes-near-disaster-narrative
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  behind_the_scenes 内容生产纪律：BTS 进阶档（C2-1）的"差点翻车 / 一条内容的诞生"
+  必须用"**问题出现 → 临场调整 → 最终镜头**"三段式叙事弧，**而不是**"翻车流水账"。
+  错误做法：把 5 个翻车点平铺直叙都拍出来，每个 5 秒一笔带过，结尾收一句"今天好难"——
+  观众接住的是"你们工作很乱"。正确做法：抓 1 个翻车点（光不对 / 模特迟到 / 拍到一半下雨），
+  展示老板 / 同事如何**当场决定**怎么办，最后定格"成片其实只用了这 2 秒"——
+  观众接住的是"**有问题，才有戏**"，从而获得参与感并理解品牌为什么这样呈现。
+  这条纪律推翻"BTS 越乱越真实"的误区——乱是素材，但叙事必须是"解决问题的过程"。
+
+scenario:
+  who:
+    primary_role: behind_the_scenes 内容创作者 / 加盟商 / 主理人 / AI 内容生成调度
+    target_audience: 服装品牌做 BTS 进阶档玩法（C2-1 / C2-4 / C3-1 / C3-8）时
+  when:
+    trigger: 拍摄 / 上新 / 经营遇到 1 个具体翻车点，决定做 BTS 内容时
+    context: BTS 易翻车点是把"翻车"当结果而非过程——只剪片段不剪叙事，导致沦为 NG 集锦（C1-1 默认禁用）
+  what:
+    action_type: bts_near_disaster_narrative_arc
+    decision_or_action: 用 "字幕开场点出翻车 → 同事/老板介入 → 临场调整动作链 → 最终镜头定格2秒" 四节拍组织 BTS
+  result:
+    success_pattern: |-
+      0-5 秒字幕"今天差点翻车" + 同事抓头发"光不对" → 5-12 秒老板看 iPad 皱眉 →
+      12-18 秒临时换场景到店外手忙脚乱 → 18-25 秒拍到一半下雨躲屋檐下笑出来 →
+      25-30 秒最终镜头"成片其实只用了这 2 秒"定格 → 观众获得参与感
+    flip_pattern: |-
+      把 5 个翻车点平铺都拍 / 只拍翻车不拍解决 / 用搞笑 BGM 喂笑点
+      → 退化为 C1-1 NG 集锦（默认禁用）
+      或拍成"凡尔赛式抱怨"（"你们看多惨然而我们做成了"）→ 触发 E5 红线（演戏）
+  underlying_mechanism: |
+      BTS 北极星"愿意把不完美给我看"≠"展示混乱"。观众接住的不是"你们好惨"，
+      而是"你们怎么应对"。"差点翻车"是钩子，"临场调整"是主体，"最终镜头"是回报——
+      这个三段式让 BTS 从"边角料"升级为"独立内容本体"，是 BTS 区别于 NG 集锦的核心训练点。
+  boundary:
+    applicable_when: 任意拍摄/上新/经营场景的 BTS 内容生产 / 1-2 人手机跟拍 / 预算 0
+    not_applicable_when: 没有真实翻车素材时强行编造 → 触发 E5 红线（故意制造冲突）/ 翻车涉及顾客投诉等敏感场景 → 走 store_daily 而非 BTS
+  alternative_path:
+    - 翻车连载化 → 升级为 C3-8 自嘲式真实困难 BTS（候选引擎 #19 自嘲家族）
+    - 翻车没有"解决"只有"接受" → 改用 C2-2 非 glamorous 劳动玩法（无叙事弧的纯劳动呈现）
+
+evidence:
+  source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md
+  source_anchor: §C2-1 整条幕后只围绕"今天差点出什么事" + §E5 红线（故意制造冲突博眼球）
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C2-1：不是把所有幕后碎片都塞进来，而是抓住一个差点翻车的点：
+    光线不对、模特迟到、衣服没熨平、店里突然来客、拍到一半下雨。
+    "有问题，才有戏"——幕后不是素材残渣，而是解决问题的过程。
+    观众获得"参与感"，并理解品牌为什么这样呈现。
+    E5 红线："故意制造幕后冲突"来博眼球——会让观众觉得你在演戏。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过；与 C1-1 NG 集锦明确分流。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 BTS 内容生产纪律 / 任意品牌可调用
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-training_unit-behind-scenes-near-disaster-narrative-arc, owner_field: bts_narrative_arc, definition: "BTS 进阶档叙事弧 = 问题出现 → 临场调整 → 最终镜头三段式；非翻车流水账"}
+  rule:
+    - {rule_id: RL-KP-training_unit-behind-scenes-near-disaster-narrative, rule_type: bts_near_disaster_narrative_arc, applicable_when: "BTS 进阶档玩法（C2-1/C2-4/C3-1/C3-8）选材", success_scenario: "1 个翻车点+临场调整+最终镜头定格2秒 → 观众获得参与感+理解品牌为什么这样呈现", flip_scenario: "翻车点平铺/只拍翻车不拍解决/搞笑 BGM 喂点 → C1-1 NG 集锦默认禁用 / 凡尔赛抱怨 → E5 演戏红线", alternative_boundary: "翻车连载化 → C3-8 自嘲家族 / 翻车无解决 → C2-2 非 glamour 劳动"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-behind-scenes-near-disaster-narrative, source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md, source_anchor: §C2-1 + §E5, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-compatible_with_content_type-behind_the_scenes-bts5, source_type: TrainingMaterial, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"behind_the_scenes","baseline":"near_disaster_narrative_arc"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-behind-scenes-near-disaster-narrative, runtime_method: content_generation, input_types: "ContentType=behind_the_scenes+NearDisasterIncident", output_types: "NarrativeArcStructure"}

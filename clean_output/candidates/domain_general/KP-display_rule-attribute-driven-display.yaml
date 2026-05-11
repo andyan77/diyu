@@ -1,0 +1,93 @@
+pack_id: KP-display_rule-attribute-driven-display
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: display_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  陈列分组、焦点位、模特组合的设计必须基于 8 个属性维度：color / Collection / Category /
+  length / fit / season / pattern / occasion；仅靠审美直觉做陈列会让顾客难以理解商品关系，
+  从而拉低连带购买与转化——陈列的本质是用属性维度帮顾客降低选择负担。
+
+scenario:
+  who:
+    primary_role: 陈列负责人 / 店长 / 老手
+    target_audience: 进店浏览选择中的顾客
+  when:
+    trigger: 上新布展 / 周陈列调整 / 主推切换 / 节庆活动布场
+    context: 适用于全部 6 类陈列单元（橱窗 / 模特 / 正挂 / 侧挂 / 叠装 / 成套位）
+  what:
+    action_type: attribute_driven_display_grouping
+    decision_or_action: 按 8 维度的某一组合做分组、焦点选择与模特组合，每个陈列动作要能说出基于哪个维度的判断
+  result:
+    success_pattern: |
+      顾客一眼看出商品组的逻辑（"这一片都是同色系" / "这是通勤套装" / "这是夏季短款"），
+      自然形成连带浏览路径，焦点单品试穿率提升。
+    flip_pattern: |
+      整片陈列只有审美感觉无属性逻辑 → 顾客看完不知道"我能选什么"；
+      8 维度混用无主次 → 视觉嘈杂，焦点失效；
+      用展示字段（fabric_story / craft_story）做陈列分组 → 顾客看不到商品关系，只看到讲故事。
+  underlying_mechanism: |
+      陈列是"用空间做信息架构"；属性是这套架构的轴。
+      公开零售陈列研究也指出，颜色分组与焦点单品对转化有直接拉动；
+      没有属性轴的陈列只是装饰，不是销售工具。
+  boundary:
+    applicable_when: 任何陈列单元的分组与焦点设计
+    not_applicable_when: |
+      window_display 以"拦人定调"为主时，可少量牺牲 8 维度严谨性以服务定调，但仍需说明；
+      纯装置艺术展位（不承担成交目标）不适用。
+  alternative_path:
+    - 同一空间多维度并存 → 选 1 主维度做骨架，其他维度做次轴
+    - 库存稀薄无法满足任一维度齐组 → 转向焦点单品 + 故事化文案，不强行做陈列组
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md
+  source_anchor: 6.5 哪些属性会改变陈列方式
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    最直接影响陈列的是：color / Collection / Category / length / fit / season / pattern / occasion。
+    公开零售陈列指南也强调，视觉陈列的核心就是用分组、颜色、焦点位、人体模特/人台组合
+    帮助顾客快速理解商品关系、降低选择负担；颜色分组和焦点单品尤其直接影响转化。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 9 表（DisplayGuide + 8 维度 value_set + 属性驱动陈列规则 + relation 到 Attribute）可反推"8 维度清单 / 必须有属性轴 / 反例（仅审美）"三条核心语义。
+    Gate 3：通用陈列方法。
+    Gate 4：可被 display_guidance / store_training（do_dont_contrast）调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用陈列方法，不含笛语品牌专属
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic:
+    - {semantic_id: SM-KP-display_rule-attribute-driven-display-axis, owner_field: display_unit, definition: "陈列骨架轴：用 8 维度中至少 1 个作为主轴决定分组与焦点"}
+  value_set:
+    - {value_set_id: VS-KP-display_rule-attribute-driven-display-axes, value: color, label: 颜色, ordinal: 1}
+    - {value_set_id: VS-KP-display_rule-attribute-driven-display-axes, value: Collection, label: 系列, ordinal: 2}
+    - {value_set_id: VS-KP-display_rule-attribute-driven-display-axes, value: Category, label: 品类, ordinal: 3}
+    - {value_set_id: VS-KP-display_rule-attribute-driven-display-axes, value: length, label: 长度, ordinal: 4}
+    - {value_set_id: VS-KP-display_rule-attribute-driven-display-axes, value: fit, label: 版型量感, ordinal: 5}
+    - {value_set_id: VS-KP-display_rule-attribute-driven-display-axes, value: season, label: 季节, ordinal: 6}
+    - {value_set_id: VS-KP-display_rule-attribute-driven-display-axes, value: pattern, label: 图案密度, ordinal: 7}
+    - {value_set_id: VS-KP-display_rule-attribute-driven-display-axes, value: occasion, label: 场合, ordinal: 8}
+  rule:
+    - {rule_id: RL-KP-display_rule-attribute-driven-display, rule_type: attribute_driven_display_grouping, applicable_when: "任意陈列单元布展或调整时", success_scenario: "顾客一眼看出组的属性逻辑形成连带浏览", flip_scenario: "无属性轴→视觉嘈杂焦点失效；用展示字段分组→只看故事不看关系", alternative_boundary: "多维度并存→选 1 主轴；库存稀薄→转焦点+故事化"}
+  evidence:
+    - {evidence_id: EV-KP-display_rule-attribute-driven-display, source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md, source_anchor: 6.5, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-DisplayGuide-has_attribute-Attribute-displayaxis01, source_type: DisplayGuide, target_type: Attribute, relation_kind: has_attribute, properties_json: '{"role":"display_axis","required_min":1,"allowed":["color","Collection","Category","length","fit","season","pattern","occasion"]}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-display_guidance-KP-display_rule-attribute-driven-display, runtime_method: display_guidance, input_types: [DisplayGuide, Attribute], output_types: [DisplayPlan]}

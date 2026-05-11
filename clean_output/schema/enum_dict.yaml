@@ -1,0 +1,105 @@
+# 受控枚举字典 · 9 张表跨列共享的枚举取值白名单
+# 任何 9 表行 / candidate yaml 取这些列时，值必须 ⊆ 本字典对应清单。
+
+brand_layer:
+  pattern: '^(domain_general|brand_[a-z_]+|needs_review)$'
+  registered:
+    - domain_general    # 跨品牌通用底座
+    - brand_faye        # 笛语品牌专属（仅品牌调性 + 创始人画像两类具体内容）
+    - needs_review      # 拿不准 → 进 brand_layer_review_queue 待裁决
+  open_for_extension: true   # 未来追加 brand_xyz / brand_abc 时仅追加 registered，不改 schema
+
+object_type:
+  scope: 18 项白名单（domain_skeleton.core_object_types）
+  values:
+    - Product
+    - Category
+    - Attribute
+    - Collection
+    - FabricKnowledge
+    - CraftKnowledge
+    - StylingRule
+    - DisplayGuide
+    - TrainingMaterial
+    - RoleProfile
+    - Persona
+    - ContentType
+    - PlatformTone
+    - PrivateOutletChannel
+    - InventoryState
+    - CustomerScenario
+    - CallMapping
+    - Evidence
+  closed: true   # 不允许临时新增；新对象进 skeleton_gap_register
+
+relation_kind:
+  scope: 14 项白名单（domain_skeleton.allowed_relation_kinds）
+  values:
+    - has_attribute
+    - belongs_to_category
+    - uses_fabric_knowledge
+    - uses_craft_knowledge
+    - governed_by_rule
+    - supports_training
+    - supports_display
+    - supports_styling
+    - requires_inventory_state
+    - fits_customer_scenario
+    - spoken_by_role
+    - compatible_with_content_type
+    - mapped_to_runtime
+    - supported_by_evidence
+  closed: true
+
+pack_type:
+  scope: 8 类（domain_skeleton.allowed_pack_types）
+  values:
+    - fabric_property
+    - craft_quality
+    - styling_rule
+    - display_rule
+    - service_judgment
+    - inventory_rescue
+    - training_unit
+    - product_attribute
+  closed: true
+
+source_type:
+  description: 07_evidence.source_type 取值（v2-rev3-r1 实测真值）
+  values:
+    - direct_quote               # 直引原文（W1 早期样本）
+    - cross_source_consensus     # 多 md cross-source 合并证据
+    - explicit_business_decision # 明示业务决策段落
+    - explicit_business_rule     # 明示业务规则
+    - explicit_play_card         # 明示玩法卡条目
+    - explicit_role_skill_lock   # 明示角色技能闭环
+    - structural_pattern         # 结构性归纳（多段共享框架）
+  closed: true
+
+inference_level:
+  description: 07_evidence.inference_level 取值（v2-rev3-r1 实测真值）
+  values:
+    - direct_quote          # 原文直引（最低推断）
+    - low                   # 低推断（同义改写不变义）
+    - structural_induction  # 结构性归纳（需 evidence_quote 支持框架）
+  closed: true
+
+# ============== NULL 规则 ==============
+null_rules:
+  must_not_null:
+    - 任何表的 brand_layer
+    - 任何表的 source_pack_id
+    - 各表主键列
+    - 02_field.owner_type / field_name / data_type
+    - 05_relation.source_type / target_type / relation_kind
+    - 07_evidence.source_md / source_anchor / evidence_quote / source_type / inference_level
+  may_be_null:
+    - 01_object_type.supertype（无父类型时空）
+    - 02_field.value_set_id（非枚举字段空）
+    - 02_field.semantic_id（无独立语义条目时空）
+    - 03_semantic.examples_json（无示例时空）
+    - 04_value_set.label / ordinal（无显式排序或标签时空）
+    - 05_relation.properties_json（无附加属性时空）
+    - 06_rule.applicable_when / success_scenario / flip_scenario / alternative_boundary（视规则类型而定，但 success+flip 必须成对：要么都有，要么都空）
+    - 08_lifecycle.transition_to / condition（终态时空）
+    - 09_call_mapping.input_types / output_types / governing_rules_json（视方法签名而定）

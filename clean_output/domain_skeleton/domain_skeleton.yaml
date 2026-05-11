@@ -1,0 +1,207 @@
+domain_name: apparel_retail_blood_flesh
+scope_statement: |
+  服装零售（女装为主）业务知识抽取，目标产物是**多租户单库逻辑隔离**的可入库知识。
+  范围限定为当前工作区三个目录：Q2-内容类型种子 / Q4-人设种子 / Q7Q12-搭配陈列业务包。
+  目标是把 markdown 业务血肉抽成 CandidatePack 并投影到 9 张表，存入 single_db_logical_isolation。
+
+multi_tenant_model:
+  description: |
+    本仓的真实数据模型是多租户单库逻辑隔离。brand_layer 列是租户隔离 key。
+    domain_general 是跨品牌通用底座，brand_<name> 是各品牌专属层。
+    笛语应用 SQL： WHERE brand_layer IN ('domain_general','brand_faye')
+    未来 brand_xyz 应用： WHERE brand_layer IN ('domain_general','brand_xyz')
+
+  domain_general_scope:
+    description: 以下全部归 domain_general（不论谁冻结的）
+    categories:
+      - 门店纪律（接客流程 / 库存救场 / 试衣间救场 / 售后口径）
+      - 培训规则（培训格式 / 培训层级 / 错误纠正 / 掌握检查）
+      - 陈列搭配（陈列单元业务目标 / 库存白名单黑名单 / 搭配规则 / 属性维度）
+      - 面料工艺（纤维特性 / 工艺品控 / 风险提示 / 误判纠偏）
+      - 接客判断（触发语识别 / 第一动作判断 / 翻车模式）
+      - 库存替代（救场标准 / 转向边界 / 替代优先级）
+      - 商品属性（Category 体系 / Attribute 字典 / 同义词收敛 / 决策级别）
+      - Schema 元规则（通用 Persona 字段壳 / 字段成熟度治理 / 对象分层规则 / 调用映射纪律）
+    discrimination: 这条规则其他品牌的门店 / 商品总监 / 培训主管能不能直接拿去用？能 → domain_general
+
+  brand_specific_scope:
+    description: 仅以下两类才标 brand_<name>
+    categories:
+      brand_tone:
+        description: 品牌调性（具体的语气 / 视觉 / 价值主张文案 / 品牌专属禁忌）
+        examples:
+          - 笛语具体的语气模板
+          - 笛语视觉准则
+          - 笛语价值主张文案
+          - 笛语品牌专属禁忌（如"不要说贵妇感"）
+        excludes:
+          - 通用的"内容生成应保持品牌一致性"元规则（这是 domain_general）
+      founder_profile:
+        description: 创始人画像（具体创始人的故事 / 口吻 / 签名短语 / 价值观锚点 / 个人审美偏好）
+        examples:
+          - 笛语创始人的具体故事
+          - 笛语创始人的签名短语
+          - 笛语创始人的价值观锚点的具体取值
+          - 笛语创始人的个人审美偏好
+          - 笛语创始人的真实性锚点的具体取值
+        excludes:
+          - "FounderProfile 应是品牌唯一层"的抽象规则（这是 domain_general）
+          - 通用 Persona 6 字段壳的 schema 定义（这是 domain_general）
+    discrimination: 这条内容换到别的品牌是不是必须重写？必须重写 → brand_<name>；不必重写 → domain_general
+
+  hard_rules:
+    - 9 表所有行 brand_layer 列必须显式标注，禁止留空
+    - domain_general 行禁止引用 brand_<name> 行；brand_<name> 行可以引用 domain_general 行（继承通用 schema）
+    - 拿不准的 → needs_review + 写入 audit/brand_layer_review_queue.csv，禁止默认 domain_general
+
+  registered_brand_layers:
+    - {layer: domain_general, scope: cross_tenant, description: 跨品牌通用底座}
+    - {layer: brand_faye, scope: tenant_specific, description: 笛语品牌专属层（仅品牌调性 + 创始人画像两类具体内容）}
+    # 未来追加：brand_xyz / brand_abc / ... 各自独立行，互不污染
+
+  forbidden_drift:
+    - 把"规则形式可抽象"等同于"内容可去笛语化"
+    - 把"门店纪律 / 培训规则 / 陈列搭配 / 面料工艺 / 接客 / 库存 / 商品属性"误判为 brand_<name>——即使是某品牌团队冻结的，这些都是 domain_general
+    - 把"通用 Schema 元规则"（如 Persona 字段壳、字段成熟度治理）误判为 brand_<name>——schema 元规则是 domain_general，只有 schema 中具体的某品牌取值（如笛语 founder origin_story 的具体内容）才是 brand_<name>
+    - 把 brand_<name> 内容强行抽象成 domain_general 来"省事"
+
+core_object_types:
+  - Product
+  - Category
+  - Attribute
+  - Collection
+  - FabricKnowledge
+  - CraftKnowledge
+  - StylingRule
+  - DisplayGuide
+  - TrainingMaterial
+  - RoleProfile
+  - Persona
+  - ContentType
+  - PlatformTone
+  - PrivateOutletChannel
+  - InventoryState
+  - CustomerScenario
+  - CallMapping
+  - Evidence
+
+core_field_groups:
+  product_basic:
+    - product_id
+    - name
+    - category
+    - attributes
+  fabric:
+    - fabric_name
+    - hand_feel
+    - drape
+    - opacity
+    - thermal
+    - care_threshold
+    - risk_alerts
+  craft:
+    - craft_feature
+    - quality_signal
+    - failure_signal
+  rule:
+    - applicable_when
+    - success_scenario
+    - flip_scenario
+    - alternative_boundary
+  inventory_state:
+    - state_label
+    - main_item_available
+    - accessory_available
+  customer_scenario:
+    - trigger_phrase
+    - first_judgment
+    - blockers
+  evidence:
+    - source_md
+    - source_anchor
+    - evidence_quote
+
+allowed_relation_kinds:
+  - has_attribute
+  - belongs_to_category
+  - uses_fabric_knowledge
+  - uses_craft_knowledge
+  - governed_by_rule
+  - supports_training
+  - supports_display
+  - supports_styling
+  - requires_inventory_state
+  - fits_customer_scenario
+  - spoken_by_role
+  - compatible_with_content_type
+  - mapped_to_runtime
+  - supported_by_evidence
+
+allowed_pack_types:
+  - fabric_property
+  - craft_quality
+  - styling_rule
+  - display_rule
+  - service_judgment
+  - inventory_rescue
+  - training_unit
+  - product_attribute
+
+pack_type_to_object_type:
+  fabric_property:
+    primary: FabricKnowledge
+    related: [Product, Attribute, TrainingMaterial, StylingRule]
+  craft_quality:
+    primary: CraftKnowledge
+    related: [Product, TrainingMaterial, DisplayGuide]
+  styling_rule:
+    primary: StylingRule
+    related: [Product, Attribute, CustomerScenario, InventoryState]
+  display_rule:
+    primary: DisplayGuide
+    related: [Product, Category, InventoryState, StylingRule]
+  service_judgment:
+    primary: [CustomerScenario, TrainingMaterial]
+    related: [RoleProfile, Product, StylingRule]
+  inventory_rescue:
+    primary: [InventoryState, StylingRule, DisplayGuide]
+    related: [Product, CustomerScenario]
+  training_unit:
+    primary: TrainingMaterial
+    related: [RoleProfile, StylingRule, DisplayGuide, InventoryState]
+  product_attribute:
+    primary: [Product, Category, Attribute]
+    related: [StylingRule, DisplayGuide]
+
+forbidden_objects:
+  note: |
+    不得临时新增 core_object_types 之外的对象。
+    无法挂靠的内容必须写入 skeleton_gap_register.csv，等待人工裁决，不得直接落 9 表。
+
+unresolved_gaps:
+  - gap_id: GAP-001
+    surface_concept: MerchandisingSkill（陈列搭配技能）
+    appears_in:
+      - Q7Q12-搭配陈列业务包/陈列方法包.md
+      - Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+    why_unresolved: |
+      素材中以 "技能" 实体出现，但 core_object_types 暂无对应槽位。
+      首批按 "DisplayGuide + StylingRule + TrainingMaterial 组合视图" 处理，不立独立对象。
+    decision: defer_to_human
+
+  - gap_id: GAP-002
+    surface_concept: styling_scenario_list（搭配场景清单）
+    appears_in:
+      - Q7Q12-搭配陈列业务包/门店接客场景包.md
+    why_unresolved: |
+      作为 CustomerScenario 的清单视图，暂归 CustomerScenario 子集，不立独立对象。
+    decision: subsume_into_CustomerScenario
+
+  - gap_id: GAP-003
+    surface_concept: care_label（洗护标 / care claim）
+    appears_in:
+      - Q7Q12-搭配陈列业务包/面料工艺品质判断包.md
+    why_unresolved: |
+      作为 FabricKnowledge / Product 的字段而非独立对象处理。
+      若后续频繁作为独立判断主体，再升格。
+    decision: subsume_into_field

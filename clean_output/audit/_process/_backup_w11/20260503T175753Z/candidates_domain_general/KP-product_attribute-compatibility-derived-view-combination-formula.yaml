@@ -1,0 +1,109 @@
+pack_id: KP-product_attribute-compatibility-derived-view-combination-formula
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  `Persona × ContentType × Platform/Channel` 派生视图按固定 8 行组合表计算运营展示档：
+  `now × P0_native = 默认可用`；`now × P1_light_adapt = 补充配置后可用`；
+  `enhanced × {P0_native, P1_light_adapt} = 补充配置后可用`；
+  `custom × 任意 tier = 品牌级 / 特殊场景`；`unsupported × 任意 tier = 不建议`；
+  `任意 support × P2_cross_post_only = 补充配置后可用（转发提示）`；
+  `任意 support × deferred = 不建议（系统未支持）`。
+  **风险位 `risk` 始终从 Persona × CT 真源继承**，平台 tier 不修改 risk——
+  即"风险由人设与内容组合决定，平台无法挽救也不会污染"。
+  组合取最严约束：哪一侧更弱（更高 support 要求 / 更低 tier）哪一侧主导展示档。
+
+scenario:
+  who:
+    primary_role: 派生视图实现者 / 能力发现菜单后端 / Prompt 前置判断器
+    target_audience: 任意品牌 Persona × CT × Platform 派生展示档计算
+  when:
+    trigger: 用户问"我现在能做什么内容" / Prompt 组装前判型 / 运营查可用位时
+    context: 真源层 Persona×CT 兼容边 + Q3 SUPPORTS_PLATFORM.tier 已就绪，需要把组合结果展示给运营/用户
+  what:
+    action_type: derived_view_combination_rule
+    decision_or_action: 按固定 8 行组合表计算展示档；risk 从真源继承不被平台覆盖；P2 与 deferred 兜底
+  result:
+    success_pattern: |-
+      `styling_advisor × outfit_of_the_day × 小红书(P0_native)` = `now × P0_native` → 默认可用 + risk:low；
+      `product_professional × humor_content × 抖音(P0_native)` = `custom × P0_native` → 品牌级/特殊场景 + risk:high
+        （平台无法挽救人设×内容的风险）；
+      `store_operator × store_daily × 微信群(deferred)` = `now × deferred` → 不建议（系统未支持）
+    flip_pattern: |-
+      用平台 tier 反向覆盖 Persona×CT 的 risk（如平台 P0 就把 high 降为 low）→ 错；
+      或把派生结果写入图谱当作真源边 → 违反"派生视图不持久化"；
+      或自造第 9 行组合规则破坏对齐 → 违规
+  underlying_mechanism: |
+      展示档 = min(系统能力, 平台支持度)；风险 = 真源层 risk（独立继承）。
+      系统能力来自 support，平台支持度来自 tier，两者短板决定运营看到的档；
+      但风险来自"人设与内容的角色错位"，平台再强也无法消除——必须保留独立信号。
+  boundary:
+    applicable_when: 任意品牌的 Persona×CT×Platform 派生视图计算；冷启动阶段无品牌级覆盖
+    not_applicable_when: 真源层数据缺失（边不存在）→ 应回退到"未建模"提示而非默认 unsupported；未来出现品牌级 SUPPORTS_PLATFORM 覆盖时需在公式前加品牌优先级层
+  alternative_path:
+    - 派生视图可被实现层缓存（如 Redis），但缓存失效后必须重算，缓存层不等于真源
+    - 业务侧若想"P2 转发提示"显示为可用 → 在 UI 文案层处理，不改组合表
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md
+  source_anchor: §6.1 派生公式 + §6.2 组合规则 + §6.3 派生示例（4 例）+ §七 冷启动派生视图示例
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    support=now × tier=P0_native → 默认可用
+    support=now × tier=P1_light_adapt → 补充配置后可用
+    support=enhanced × tier=P0_native → 补充配置后可用
+    support=enhanced × tier=P1_light_adapt → 补充配置后可用
+    support=custom × 任意 tier → 品牌级 / 特殊场景
+    support=unsupported × 任意 tier → 不建议
+    任意 support × tier=P2_cross_post_only → 补充配置后可用（转发提示）
+    任意 support × tier=deferred → 不建议（系统未支持）
+    最终展示档的风险位继承真源层的 risk。
+    示例 2：product_professional × humor_content × 抖音 → 即使平台 tier=P0_native，
+    因 support=custom → 品牌级/特殊场景；风险继承为 high；问题不在平台而在角色错位。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule（8 行组合表 + risk 独立继承规则）+ 04_value_set（展示档 4 档枚举）+
+      05_relation（派生视图不写入图谱声明）可反推完整派生公式。
+    Gate 3：跨品牌通用——任何品牌的派生视图都按同一组合表计算。
+    Gate 4：可被 capability_discovery / prompt_pre_check / operator_dashboard 三类调用直接消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 派生视图组合公式是矩阵元规则——任意品牌的运行时展示档计算共用同一公式
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-PlatformTone, type_name: PlatformTone, supertype: domain_object}
+    - {type_id: OT-PrivateOutletChannel, type_name: PrivateOutletChannel, supertype: domain_object}
+  field:
+    - {field_id: FD-DerivedView-display_tier, owner_type: PersonaContentTypePlatformDerivedView, field_name: display_tier, data_type: enum}
+    - {field_id: FD-DerivedView-risk_inherited, owner_type: PersonaContentTypePlatformDerivedView, field_name: risk_inherited, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-compatibility-derived-view-combination-formula-short-board, owner_field: PersonaContentTypePlatformDerivedView.display_tier, definition: "派生展示档由 support×tier 组合短板决定；risk 始终从 Persona×CT 真源独立继承不被平台 tier 覆盖"}
+  value_set:
+    - {value_set_id: VS-DerivedView-display_tier, owner_field: PersonaContentTypePlatformDerivedView.display_tier, value_code: "default_available", value_label: "默认可用"}
+    - {value_set_id: VS-DerivedView-display_tier, owner_field: PersonaContentTypePlatformDerivedView.display_tier, value_code: "available_after_config", value_label: "补充配置后可用"}
+    - {value_set_id: VS-DerivedView-display_tier, owner_field: PersonaContentTypePlatformDerivedView.display_tier, value_code: "brand_or_special", value_label: "品牌级 / 特殊场景"}
+    - {value_set_id: VS-DerivedView-display_tier, owner_field: PersonaContentTypePlatformDerivedView.display_tier, value_code: "not_recommended", value_label: "不建议"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-compatibility-derived-view-combination-formula, rule_type: derived_view_combination_rule, applicable_when: "运行时计算 Persona×ContentType×Platform/Channel 派生展示档时", success_scenario: "按 8 行组合表映射展示档 + risk 从真源独立继承 + P2/deferred 兜底", flip_scenario: "用平台 tier 覆盖 risk / 把派生结果写入图谱 / 自造组合规则破坏对齐", alternative_boundary: "未来加品牌级 SUPPORTS_PLATFORM 时在公式前加品牌优先级层"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-compatibility-derived-view-combination-formula, source_md: Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md, source_anchor: §6.1 + §6.2 + §6.3 + §七, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-PersonaContentTypePlatformDerivedView-derived_from-Persona-ContentType-Platform, source_type: PersonaContentTypePlatformDerivedView, target_type: "Persona+ContentType+PlatformTone|PrivateOutletChannel", relation_kind: compatible_with_content_type, properties_json: '{"derived":true,"persisted":false,"formula":"display_tier=combine(support,tier); risk=inherit(persona_x_ct.risk)"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-capability_discovery-KP-product_attribute-compatibility-derived-view-combination-formula, runtime_method: capability_discovery, input_types: "Persona,ContentType,PlatformTone|PrivateOutletChannel", output_types: PersonaContentTypePlatformDerivedView}

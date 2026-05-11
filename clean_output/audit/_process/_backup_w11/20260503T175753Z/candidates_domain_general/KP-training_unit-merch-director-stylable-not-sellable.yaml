@@ -1,0 +1,79 @@
+pack_id: KP-training_unit-merch-director-stylable-not-sellable
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  商品总监（merchandising_director）的核心手感是把"好看 / 能卖 / 可补 / 可推 / 适合门店"五件事同时摆在一张图上看——
+  最在意的搭配误区是"搭得成立但卖得不成立"（脱离货品结构 / 脱离价位 / 脱离连带 / 脱离普通顾客体感 / 脱离门店承接），
+  只看款不看深浅、只顾单套出片不顾结构、只顾模特效果不顾普通顾客体感、只顾内容传播不顾门店承接、只顾主推单品不顾连带与价格带——是该岗位 5 类典型决策失手。
+
+scenario:
+  who:
+    primary_role: merchandising_director（商品总监）
+    target_audience: 商品总监本人 + 商品助理 + 与之联动的 designer / store_manager
+  when:
+    trigger: 上新节奏排期 / 货品结构判断 / 爆款补深决策 / 搭配组合提案 / 门店反馈联动复盘
+    context: 商品经营全链路，特别是"设计成立 → 商品成立"转换环节
+  what:
+    action_type: stylable_vs_sellable_diagnosis
+    decision_or_action: |
+      商品总监对"搭得成立但卖得不成立"的 5 类典型误区必须主动诊断：
+        1. 脱离货品结构：单套搭配不挂深浅 / 价位带 / 连带逻辑
+        2. 脱离价位：忽视价格带与客群购买力
+        3. 脱离连带：只顾主推不顾连带件
+        4. 脱离普通顾客体感：只顾模特出片效果
+        5. 脱离门店承接：传播声量大但门店接不住
+      核心判断维度：什么款该做深 / 什么款只能试水 / 什么货适合门店 vs 适合线上 / 何时为门店让步何时坚持商品逻辑。
+  result:
+    success_pattern: 单套搭配同时挂上货品结构 + 价位 + 连带 + 体感 + 门店承接 5 个维度，整体动销 + 连带率提升
+    flip_pattern: 搭配出片好看但只走 1-2 件主推，结构未挂上 → 模特出片成立但货品端连带断裂、滞销库存累积
+  underlying_mechanism: |
+      搭配在视觉层成立 ≠ 在经营层成立；商品总监的价值是把搭配从单图美学拉回到结构经营；
+      5 类脱离都是把"局部最优"误当"全局最优"——不挂结构的搭配，本质是给设计端送好看图但给经营端留滞销。
+  boundary:
+    applicable_when: 服装零售商品端的搭配组合提案 / 上新规划 / 货品结构复盘
+    not_applicable_when: 纯视觉传播素材生产（如品牌大片）的非经营导向场景
+  alternative_path:
+    - 设计端坚持单套出片优先 → 走 design_director 裁决
+    - 门店反馈与商品逻辑冲突且无法调和 → 进 needs_review，按"门店让步 vs 坚持商品逻辑"专题复盘
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md
+  source_anchor: 五、7. merchandising_director（商品总监）
+  source_type: explicit_role_skill_lock
+  inference_level: low
+  evidence_quote: |
+    商品总监的手感在于：把好看、能卖、可补、可推、适合门店，这几件事同时放在一张图上看。
+    这个岗位不只看款，还看深浅、结构、上新节奏、动销、滞销、门店反馈。
+    什么款该做深，什么款只能试水；为什么设计不错但经营上不成立；
+    什么货适合门店，什么货适合线上；什么时候为门店让步，什么时候坚持商品逻辑。
+    商品相关岗位最在意的搭配误区：搭得好看但卖不动；只顾单套出片，不顾货品结构；
+    只顾模特效果，不顾普通顾客体感；只顾内容传播，不顾门店承接；只顾主推单品，不顾连带与价格带。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；为商品总监培训材料（上新评审 / 结构复盘 / 门店反馈联动）提供根判断模板。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用商品经营纪律 + 岗位手感，任意品牌商品总监均可用。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+    - {type_id: OT-TrainingMaterial, type_name: TrainingMaterial, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-training_unit-merch-director-stylable-not-sellable}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tcb08-05}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-merch-director-stylable-not-sellable}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-merch-director-stylable-not-sellable}

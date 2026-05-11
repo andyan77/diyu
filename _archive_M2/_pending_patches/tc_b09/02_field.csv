@@ -1,0 +1,7 @@
+FD-Persona-scope,Persona,scope,enum,,,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+FD-Persona-multiplicity,Persona,multiplicity,string,,,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+FD-Persona-layer,Persona,layer,enum,,,domain_general,KP-training_unit-founder-profile-brand-unique-layer
+FD-Persona-enablement_flag,Persona,enablement_flag,bool,,,domain_general,KP-training_unit-founder-profile-soft-use-no-rename
+FD-Persona-display_name,Persona,display_name,string,,,domain_general,KP-training_unit-founder-profile-soft-use-no-rename
+FD-Persona-persona_count_cap,Persona,persona_count_cap,int,,,domain_general,KP-training_unit-persona-vs-roleprofile-layering
+FD-RoleProfile-role_function,RoleProfile,role_function,enum,,,domain_general,KP-training_unit-roleprofile-not-speaking-shell

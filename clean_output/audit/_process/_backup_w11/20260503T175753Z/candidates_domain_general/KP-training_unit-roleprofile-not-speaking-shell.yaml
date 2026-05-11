@@ -1,0 +1,94 @@
+pack_id: KP-training_unit-roleprofile-not-speaking-shell
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  RoleProfile（岗位画像）的职责是为通用 Persona 提供岗位动作、术语、困境、真实性锚点和知识素材底座，
+  不是"对外说话身份壳"；不要让 RoleProfile 直接对外发声、也不要让 Persona 不挂 RoleProfile 直接生成内容，
+  否则要么内容过于岗位化丢失人设统一性，要么人设空心丢失专业真实感。
+
+scenario:
+  who:
+    primary_role: 知识工程负责人 / 内容生成 Prompt 设计者
+    target_audience: 内容运营 / Skill 编排者
+  when:
+    trigger: 设计内容生成 Prompt 链 / 决定 RoleProfile 与 Persona 的调用顺序 / 评估"为什么内容像写岗位说明书"
+    context: 内容生成入口 / Prompt 模板设计 / 人设真实感复盘
+  what:
+    action_type: persona_roleprofile_call_chain
+    decision_or_action: |
+      错误动作 A：让 RoleProfile 直接作为说话身份对外生成内容（如导购 RoleProfile 直接出朋友圈文案）。
+      错误动作 B：让 Persona 不挂 RoleProfile 直接生成内容（如 styling_advisor 不引用 sales_associate 的岗位知识）。
+      正确动作：内容生成 = Persona（说话身份壳）调用 RoleProfile（岗位知识底座）；
+        Prompt 链顺序 = 先取 Persona 的 voice / topic_scope，再注入 RoleProfile 的岗位动作 / 术语 / 真实困境。
+      为什么错：A 会让内容过于专业岗位化，丢失人设统一性与品牌口吻；
+        B 会让人设悬空，没有岗位知识做底座 → 真实感缺失，读者一眼看穿。
+      如何纠正：所有内容生成入口必须显式校验"Persona 已绑定至少 1 个 RoleProfile"，否则拦截。
+      掌握检查：抽样 10 条已生成内容，能否同时识别出说话身份（Persona）与岗位知识来源（RoleProfile）。
+  result:
+    success_pattern: |
+      Persona 提供统一口吻，RoleProfile 提供岗位真实性锚点；
+      内容既有人设辨识度又有岗位真实感，读者感受到"是某个具体岗位的人在说话"。
+    flip_pattern: |
+      RoleProfile 直接对外 → 内容像岗位说明书，缺人设温度；
+      Persona 不挂 RoleProfile → 内容像通用 KOL，没有真实岗位知识，读者觉得"假"。
+  underlying_mechanism: |
+    内容真实性 = 说话身份的统一性 × 岗位知识的具体性，两者必须在同一条内容里同时成立；
+    Persona 锁前者，RoleProfile 锁后者，缺一即失真。
+  boundary:
+    applicable_when: 任何内容生成入口、Prompt 设计、人设真实感复盘
+    not_applicable_when: |
+      纯品牌叙事（FounderProfile 主导）→ 走品牌唯一层链路，不强制挂通用 RoleProfile；
+      纯产品参数文案 → 不走 Persona/RoleProfile 路径。
+  alternative_path:
+    - 岗位知识尚未采集 → 标占位 RoleProfile，内容生成临时降级为 Persona-only 但需打标签
+    - 单条内容跨多岗位 → 主 RoleProfile + 副 RoleProfile，按权重融合
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md
+  source_anchor: 四、说明 + 六、6.2
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    RoleProfile（岗位画像）是具体岗位知识来源，不是"说话身份壳"。它的职责是为通用 Persona（人设）
+    提供岗位动作、术语、困境、真实性锚点和知识素材底座。
+    冷启动知识底座建设规划已明确：没有岗位知识，人设会空心。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐。Gate 2：rule + relation(Persona-spoken_by_role-RoleProfile, role=knowledge_base) +
+    semantic(roleprofile_role) 可反推"RoleProfile 是知识底座不是说话壳"。
+    Gate 3：跨品牌通用。Gate 4：content_generation 入口可调用校验绑定。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用的 Persona/RoleProfile 调用链原则，与笛语品牌专属表达无关。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+  field:
+    - {field_id: FD-RoleProfile-role_function, owner_type: RoleProfile, field_name: role_function, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-roleprofile-not-speaking-shell-function, owner_field: role_function, definition: "RoleProfile 职能：knowledge_base 知识底座（默认）/ speaking_shell 说话身份壳（禁止）"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-roleprofile-not-speaking-shell-function, value: knowledge_base, label: 知识底座（允许）, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-roleprofile-not-speaking-shell-function, value: speaking_shell, label: 说话身份壳（禁止）, ordinal: 2}
+  rule:
+    - {rule_id: RL-KP-training_unit-roleprofile-not-speaking-shell, rule_type: persona_roleprofile_call_chain, applicable_when: "设计内容生成 Prompt 链或评估人设真实感", success_scenario: "Persona 调用 RoleProfile，内容既有人设辨识度又有岗位真实感", flip_scenario: "RoleProfile 直接对外或 Persona 悬空，内容失真或像通用 KOL", alternative_boundary: "纯品牌叙事走 FounderProfile 链路；纯参数文案不走该路径"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-roleprofile-not-speaking-shell, source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md, source_anchor: 四、说明 + 六、6.2, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Persona-spoken_by_role-RoleProfile-callchain, source_type: Persona, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"role":"knowledge_base","direction":"persona_calls_roleprofile","required":true}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-roleprofile-not-speaking-shell, runtime_method: content_generation, input_types: ["Persona","RoleProfile"], output_types: ["PersonaRoleBindingValidation"]}

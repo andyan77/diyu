@@ -1,0 +1,79 @@
+pack_id: KP-product_attribute-content-type-north-star-process-trace
+granularity_layer: L2
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  ContentType `process_trace`（工艺溯源 / 生产工艺与原料追溯）的北极星是"我愿意相信你没有骗我"——
+  观众看完不是"知道工艺步骤"，而是对"这件衣服为什么值得被认真对待"产生**身体层面的理解**：
+  品质不是一句话，是一连串不能偷懒的动作。所有 process_trace 玩法是否成立按这条反推：
+  "车间走一遍配解说 / 工序说明书短视频 / 原料产地口号片 / 面料对比模板"判主流默认禁用，
+  反"走进工厂的宣传片"——**越精致越不透明**，手机时代的可信来自原生与可触达，不是豪华制作。
+
+scenario:
+  who:
+    primary_role: ContentType 玩法库构建者 / 内容生产 prompt 组装者
+    target_audience: process_trace 内容创作者 / AI 内容生成审核
+  when:
+    trigger: 新增一张 process_trace 玩法卡，或对一条工艺溯源内容做"是否符合 ContentType 北极星"判断
+    context: process_trace 是企业叙事类第 5 个；与 product_journey 的边界是"工艺可验证 vs 设计决策历程"
+  what:
+    action_type: content_type_north_star_anchor
+    decision_or_action: 用"我愿意相信你没有骗我 / 不能偷懒的动作"作为 process_trace 玩法是否成立的最终判定，且越精致越不透明的玩法判 C1
+  result:
+    success_pattern: 玩法呈现"只拍一个最难伪装的步骤 / 感官链条 / 证据链 5 个核验点 / 手部叙事 / 不可逆动作前的静止 / 被拦下的成衣 / 工艺侦探 / 夜班沉默 / ASMR 面料 / 微距纹理"等"举证式克制"叙事 → 进 C2/C3
+    flip_pattern: 玩法落到工厂参观 vlog / 步骤罗列 / 原料口号 / 面料对比模板 / 航拍滑轨炫设备 → 像企业宣传片，观众识别为"洗白式透明"
+  underlying_mechanism: |
+      工艺溯源最缺的是"人"和"可核验的证据"。"严格把控"反复说但不给具体证据 = 自找麻烦；
+      手机时代的可信来自原生、可触达，而非豪华制作。"knowing is the new owning"。
+  boundary:
+    applicable_when: 单 ContentType 内容创作判型 / process_trace 玩法库扩张时的卡片新增门禁
+    not_applicable_when: 与 product_journey 边界——讲设计决策历程 → product_journey；讲工艺物理验证 → process_trace
+  alternative_path:
+    - 同一动作（讲一条缝线）：讲"为什么这条缝线值这个价"= process_trace；讲"我们为什么把袖口改了 5 次"= product_journey
+
+evidence:
+  source_md: Q2-内容类型种子/process_trace-交付物-v0.1.md
+  source_anchor: §A 北极星 + §C1 主流默认禁用 4 张 + §E 红线 8 条 + 与 product_journey 边界
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    A. 北极星：观众看完不只是"知道工艺步骤"，而是"我愿意相信你没有骗我"——
+    对"这件衣服为什么值得被认真对待"产生身体层面的理解，
+    甚至觉得：原来品质不是一句话，是一连串不能偷懒的动作。
+    C1-3 备注：手机时代的可信往往来自"原生、可触达"，而非豪华制作。
+    E6：把溯源拍成广告大片——越精致越不透明。
+    最核心反套路：反"走进工厂的宣传片"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 标准四闸通过
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 元方法论——任意品牌做 process_trace 都需此北极星
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-north_star, owner_type: ContentType, field_name: north_star, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-content-type-north-star-process-trace-pt_north_star, owner_field: north_star, definition: "process_trace 北极星：我愿意相信你没有骗我 / 一连串不能偷懒的动作——主流禁用 4 类（工厂参观/步骤说明书/产地口号/面料对比模板）的判型锚点；反走进工厂的宣传片"}
+  rule:
+    - {rule_id: RL-KP-product_attribute-content-type-north-star-process-trace, rule_type: content_type_north_star_anchor, applicable_when: "新增 process_trace 玩法卡或审核工艺溯源内容时", success_scenario: "玩法呈现难伪装步骤 / 感官链条 / 证据链 / 手部叙事 / 不可逆动作前静止 / 被拦下成衣 / 工艺侦探 / 夜班沉默 / ASMR 面料 / 微距 → C2/C3", flip_scenario: "工厂参观 vlog / 步骤罗列 / 产地口号 / 面料对比模板 / 航拍炫设备 → 主流默认禁用", alternative_boundary: "与 product_journey 按设计决策 vs 工艺验证二选一"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-content-type-north-star-process-trace, source_md: Q2-内容类型种子/process_trace-交付物-v0.1.md, source_anchor: §A + §C1 + §E + 与 product_journey 边界, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-process_trace-pt1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"process_trace"}'}
+  value_set: []
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-product_attribute-content-type-north-star-process-trace, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypePlayCardEligibility}

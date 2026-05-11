@@ -1,0 +1,83 @@
+pack_id: KP-styling_rule-talent-showcase-micro-skill-hundred-reps
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  服装行业的才艺展示内容里，"丝巾系法 / 袖口卷法 / 衬衫下摆塞法 / 收腰 / 打结"等
+  "微技能"应该用"练一百次的痕迹"格式拍——前几次都怪、最后一次刚刚好——而不是直接给成品。
+  观众接住的不是"哦你会"，而是"哦你练过"。该格式打破"才艺=结果"的套路，
+  改成"才艺=控制力"，让服装的微技能从默认默认的"穿搭技巧"升级为可被认领的能力证据。
+
+scenario:
+  who:
+    primary_role: talent_showcase 内容创作者 / 服装行业的内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=talent_showcase + 服装行业子集选卡时）/ 门店一线
+  when:
+    trigger: 决定为某个"看似很小"的服装动作做才艺内容时（系法 / 卷法 / 塞法 / 打结）
+    context: 服装行业最容易被误判为"穿搭教程"的微技能，需用"重复 + 微差 + 失败保留"重新组织
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 用"重复同一动作多次 + 前几次保留笨拙 + 最后一次定格"作为分镜结构
+  result:
+    success_pattern: |-
+      固定机位 + 同一动作 4-6 次连续快切 + 前几次歪 / 太松 / 太紧 + 最后一次 slow-motion 收紧 + 字幕标记次数
+      → 观众接住"控制力"+"耐心"，记住"这个人真在做这件事"
+    flip_pattern: |-
+      只拍最终成品 / 只拍最优秀那一次 / 用 BGM 卡点把多次成品拼成炫技合集
+      → 退化为 C1-2 卡点混剪，观众只看到结果不看到练过
+  underlying_mechanism: |
+      微技能的稀缺性不在难度而在"被看见的练习痕迹"。同一动作的前几次失败构成"完成成本"叙事，
+      让观众相信能力的真实——这是 talent_showcase 北极星"能力有温度 / 值得追随"的具体落地。
+  boundary:
+    applicable_when: 服装行业里"看似很小但需控制"的动作（丝巾、袖口、下摆、收腰、打结、卷裤脚）/ 1 人 1 手机固定机位 / ≤4 小时
+    not_applicable_when: 不可视化的"判断力"才艺（如选衣眼光）→ 不适合微技能格式，应走"才艺即救场" / 不适合长技能（一次完整动作 >30 秒）
+  alternative_path:
+    - 微技能也可以反向走"才艺即救场"卡——把同一微技能放到帮朋友/家人改一身造型的场景里展示
+
+evidence:
+  source_md: Q2-内容类型种子/talent_showcase-交付物-v0.1.md
+  source_anchor: §C3 突破性玩法卡 #C3-2 "同一个动作，练一百次的痕迹" + §D 服装行业垂直机会"微技能打磨"
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-2：不只拍成品，而拍"某个小动作越来越准"的过程。你反复系同一条丝巾、反复把衬衫塞进裤腰、
+    反复把外套披上肩头，前几次都怪，最后一次刚刚好。观众从"哦你会"变成"哦你练过"——接住专业感和耐心。
+    分镜：第一次歪 / 第二次结太小 / 第三次太松 / 第四五六次连续快切 / 最后一次 slow-motion 收紧 + 字幕"第 17 次"。
+    打破"才艺=结果"，改成"才艺=控制力"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：who/when/what/success/flip/mechanism/boundary/alt 八要素全。
+    Gate 2：从 06_rule + 05_relation（compatible_with_content_type=talent_showcase）+ 09_call_mapping 可反推
+    "微技能用重复+失败保留格式 / 与卡点混剪的边界 / 适用与不适用条件"。
+    Gate 3：跨品牌通用——任何服装品牌的微技能展示都适用。
+    Gate 4：可被 content_generation 调用，按服装行业微技能子集生成玩法卡候选。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 服装行业通用的玩法格式规则，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-talent-showcase-micro-skill-hundred-reps, rule_type: content_play_card_anchor, applicable_when: "服装行业微技能（丝巾/袖口/下摆/收腰/打结/卷裤脚）的 talent_showcase 内容创作", success_scenario: "重复+失败保留+最后一次定格 → 观众接住控制力", flip_scenario: "只拍成品/卡点炫技 → 退化为 C1 默认禁用", alternative_boundary: "也可走才艺即救场卡"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-talent-showcase-micro-skill-hundred-reps, source_md: Q2-内容类型种子/talent_showcase-交付物-v0.1.md, source_anchor: §C3-2 + §D 微技能打磨, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-talent_showcase-ms1, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"talent_showcase","play_card":"C3-2"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-talent-showcase-micro-skill-hundred-reps, runtime_method: content_generation, input_types: ContentType+ApparelMicroSkill, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

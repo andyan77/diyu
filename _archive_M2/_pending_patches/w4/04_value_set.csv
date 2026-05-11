@@ -1,0 +1,33 @@
+VS-KP-product_attribute-persona-three-shell-coverage-persona_id,store_operator,门店经营者,1,domain_general,KP-product_attribute-persona-three-shell-coverage
+VS-KP-product_attribute-persona-three-shell-coverage-persona_id,styling_advisor,穿搭顾问,2,domain_general,KP-product_attribute-persona-three-shell-coverage
+VS-KP-product_attribute-persona-three-shell-coverage-persona_id,product_professional,商品专业者,3,domain_general,KP-product_attribute-persona-three-shell-coverage
+VS-KP-product_attribute-persona-shell-not-equal-role-kind,speaking_shell,说话身份壳,1,domain_general,KP-product_attribute-persona-shell-not-equal-role
+VS-KP-product_attribute-persona-shell-not-equal-role-kind,single_role,单一岗位（禁用）,2,domain_general,KP-product_attribute-persona-shell-not-equal-role
+VS-KP-training_unit-persona-anti-pattern-checklist-traps,chicken_soup,万能鸡汤号,1,domain_general,KP-training_unit-persona-anti-pattern-checklist
+VS-KP-training_unit-persona-anti-pattern-checklist-traps,pushy_sales,强推销售话术,2,domain_general,KP-training_unit-persona-anti-pattern-checklist
+VS-KP-training_unit-persona-anti-pattern-checklist-traps,spec_sheet,产品说明书堆砌,3,domain_general,KP-training_unit-persona-anti-pattern-checklist
+VS-KP-training_unit-persona-anti-pattern-checklist-traps,monotone_positive,单边正能量,4,domain_general,KP-training_unit-persona-anti-pattern-checklist
+VS-KP-training_unit-collect-real-action-before-script-priority_chain,real_action,真实动作,1,domain_general,KP-training_unit-collect-real-action-before-script
+VS-KP-training_unit-collect-real-action-before-script-priority_chain,real_judgment,真实判断,2,domain_general,KP-training_unit-collect-real-action-before-script
+VS-KP-training_unit-collect-real-action-before-script-priority_chain,real_difficulty,真实困境,3,domain_general,KP-training_unit-collect-real-action-before-script
+VS-KP-training_unit-collect-real-action-before-script-priority_chain,real_script,真实话术,4,domain_general,KP-training_unit-collect-real-action-before-script
+VS-KP-training_unit-collect-real-action-before-script-priority_chain,real_emotion,真实情绪,5,domain_general,KP-training_unit-collect-real-action-before-script
+VS-KP-training_unit-collect-real-action-before-script-priority_chain,summary_expression,总结性表达,6,domain_general,KP-training_unit-collect-real-action-before-script
+VS-KP-training_unit-evidence-shape-four-types-shape,oral,口述类（访谈/复盘/对话记录）,1,domain_general,KP-training_unit-evidence-shape-four-types
+VS-KP-training_unit-evidence-shape-four-types-shape,action,动作类（视频/照片/现场步骤记录）,2,domain_general,KP-training_unit-evidence-shape-four-types
+VS-KP-training_unit-evidence-shape-four-types-shape,document,文档类（SOP/工艺单/培训资料/表格/清单）,3,domain_general,KP-training_unit-evidence-shape-four-types
+VS-KP-training_unit-evidence-shape-four-types-shape,physical,物证类（样衣/吊牌/货架/退货单/调货记录）,4,domain_general,KP-training_unit-evidence-shape-four-types
+VS-KP-training_unit-collect-failure-not-only-success-failure_question,did_what_wrong,做砸过什么,1,domain_general,KP-training_unit-collect-failure-not-only-success
+VS-KP-training_unit-collect-failure-not-only-success-failure_question,most_afraid_of,最怕什么,2,domain_general,KP-training_unit-collect-failure-not-only-success
+VS-KP-training_unit-collect-failure-not-only-success-failure_question,most_stuck_at,最常卡在哪,3,domain_general,KP-training_unit-collect-failure-not-only-success
+VS-KP-training_unit-collect-failure-not-only-success-failure_question,never_say_what,哪一句最不该说,4,domain_general,KP-training_unit-collect-failure-not-only-success
+VS-KP-training_unit-collect-failure-not-only-success-failure_question,judgment_mistake,哪种判断最易失手,5,domain_general,KP-training_unit-collect-failure-not-only-success
+VS-KP-training_unit-role-material-five-kinds-minimum-material_kind,daily_action_list,岗位日常动作清单,1,domain_general,KP-training_unit-role-material-five-kinds-minimum
+VS-KP-training_unit-role-material-five-kinds-minimum-material_kind,judgment_or_experience_lines,岗位判断句/经验句,2,domain_general,KP-training_unit-role-material-five-kinds-minimum
+VS-KP-training_unit-role-material-five-kinds-minimum-material_kind,high_frequency_problem_and_failure_case,岗位高频问题与失败案例,3,domain_general,KP-training_unit-role-material-five-kinds-minimum
+VS-KP-training_unit-role-material-five-kinds-minimum-material_kind,typical_scenario_and_time_node,岗位典型场景与时间节点,4,domain_general,KP-training_unit-role-material-five-kinds-minimum
+VS-KP-training_unit-role-material-five-kinds-minimum-material_kind,signature_object_space_artifact,岗位特有物件/空间/证物,5,domain_general,KP-training_unit-role-material-five-kinds-minimum
+VS-KP-training_unit-role-material-five-kinds-minimum-material_kind,dialogue_fragment,岗位对话碎片（可选）,6,domain_general,KP-training_unit-role-material-five-kinds-minimum
+VS-KP-training_unit-role-material-five-kinds-minimum-material_kind,forbidden_or_boundary,岗位不能说/不该越界（可选）,7,domain_general,KP-training_unit-role-material-five-kinds-minimum
+VS-KP-training_unit-cold-start-role-priority-frontline-priority_phase,P0,P0 第一轮必须先拿到,1,domain_general,KP-training_unit-cold-start-role-priority-frontline
+VS-KP-training_unit-cold-start-role-priority-frontline-priority_phase,P1,P1 第二轮补齐,2,domain_general,KP-training_unit-cold-start-role-priority-frontline

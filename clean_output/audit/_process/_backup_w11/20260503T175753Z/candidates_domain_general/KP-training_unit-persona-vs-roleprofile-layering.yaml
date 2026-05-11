@@ -1,0 +1,94 @@
+pack_id: KP-training_unit-persona-vs-roleprofile-layering
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  冷启动阶段不要"一岗位一人设"——通用 Persona（人设）数应保持少量高频壳（≤3 套），
+  岗位真实感由 RoleProfile（岗位画像）补；把每个岗位都升格成独立 Persona
+  会让人设池稀释、Prompt 调用碎片化、且每套都缺岗位知识底座。
+
+scenario:
+  who:
+    primary_role: 知识工程负责人 / Persona 体系建模者
+    target_audience: Prompt / Skill / 内容运营
+  when:
+    trigger: 决定首批通用 Persona 数量 / 收到"再加一套人设吧"的需求 / 评估为什么人设感觉不真实
+    context: 冷启动阶段 / 多岗位入场 / 内容运营要求扩 Persona
+  what:
+    action_type: persona_count_governance
+    decision_or_action: |
+      错误动作：把每个岗位（店长 / 导购 / 仓库主管 / 设计师 / 样衣工 / 商品总监…）
+        都升格成独立通用 Persona，认为"岗位多 = 人设多"。
+      正确动作：通用 Persona 保持 ≤3 套高频壳（如 store_operator / styling_advisor / product_professional），
+        每个 Persona 下挂多个具体 RoleProfile 提供岗位动作、术语、困境、真实性锚点。
+      为什么错：Persona 是"对外可被反复调用的说话身份壳"，需要少量高频以保持调用稳定性；
+        岗位多但说话身份壳少，符合内容生产稳定性要求。
+      如何纠正：所有岗位级建模一律先尝试挂在已有 Persona 下作为 RoleProfile，
+        无法挂靠才进 skeleton_gap_register 等待裁决，不要直接升格 Persona。
+      掌握检查：通用 Persona 总数始终 ≤3，每个 Persona 至少有 1 个 RoleProfile 在其下。
+  result:
+    success_pattern: |
+      Persona 池稳定可复用，Prompt 调用模板统一，岗位真实感由 RoleProfile 补，
+      新增岗位只需挂接不需新建说话身份壳。
+    flip_pattern: |
+      Persona 数膨胀（>5 套），每套都缺岗位知识底座 → 内容空心；
+      Prompt 模板碎片化，运营不知道用哪套；同一岗位被两套 Persona 同时声称承接。
+  underlying_mechanism: |
+    Persona 是对外说话身份的"调用入口"，调用入口越少越稳；
+    RoleProfile 是知识素材底座，可任意密集而不破坏调用语义。
+  boundary:
+    applicable_when: 冷启动阶段 Persona 体系初建 / 评估是否新增通用 Persona
+    not_applicable_when: |
+      品牌成熟期 / 多品牌池阶段：可按业务需求扩 Persona，但仍需有岗位底座；
+      品牌唯一层（如 FounderProfile）按品牌唯一层规则单独处理，不计入 ≤3 上限。
+  alternative_path:
+    - 真出现新通用人设需求 → 先评估能否拆分到现有 Persona 内的新 RoleProfile
+    - 业务确实需要扩 Persona → 需同步配齐至少 1 个 RoleProfile 才能上线
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md
+  source_anchor: 六、6.1 为什么不是"一岗位一人设" + 四、说明
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    因为首批冷启动阶段，系统更需要的是少量高频、可持续、可被 Prompt / Skill / 运营反复调用的
+    通用人设壳，而不是一上来就把所有岗位都升格成独立 Persona。岗位本身的专业度和真实性，
+    应该由 RoleProfile（岗位画像）来补。这样既符合最佳工程实践，也更符合内容生产的稳定性要求。
+    岗位知识是人设真实感底座，这一点冷启动规划已经明确。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：8 要素齐。Gate 2：rule + value_set(persona_count_cap) + relation(Persona-spoken_by_role-RoleProfile) 可反推
+    "Persona ≤3、岗位走 RoleProfile"。Gate 3：跨品牌通用建模原则。Gate 4：content_generation 入口可调用校验 Persona 数。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 这是 Persona 体系建模的通用治理原则，与笛语品牌专属表达无关。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+    - {type_id: OT-RoleProfile, type_name: RoleProfile, supertype: domain_object}
+  field:
+    - {field_id: FD-Persona-persona_count_cap, owner_type: Persona, field_name: persona_count_cap, data_type: int}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-persona-vs-roleprofile-layering-cap, owner_field: persona_count_cap, definition: "冷启动阶段通用 Persona 数量上限：默认 3，超出需评审"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-persona-vs-roleprofile-layering-cold_start_cap, value: "3", label: 冷启动通用 Persona 上限, ordinal: 1}
+  rule:
+    - {rule_id: RL-KP-training_unit-persona-vs-roleprofile-layering, rule_type: persona_count_governance, applicable_when: "冷启动阶段决定通用 Persona 数量或收到扩 Persona 需求", success_scenario: "Persona ≤3 稳定可复用，新岗位走 RoleProfile，调用入口稳定", flip_scenario: "Persona 池膨胀且每套缺岗位底座，内容空心 + 调用碎片化", alternative_boundary: "成熟期可扩，但需同步配齐 RoleProfile 才能上线"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-persona-vs-roleprofile-layering, source_md: Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md, source_anchor: 六、6.1 + 四、说明, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Persona-spoken_by_role-RoleProfile-layering, source_type: Persona, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"cardinality":"1_persona_to_many_roleprofiles","layering":"persona_is_speaking_shell_roleprofile_is_knowledge_base"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-training_unit-persona-vs-roleprofile-layering, runtime_method: content_generation, input_types: ["Persona","RoleProfile"], output_types: ["PersonaCountValidation"]}

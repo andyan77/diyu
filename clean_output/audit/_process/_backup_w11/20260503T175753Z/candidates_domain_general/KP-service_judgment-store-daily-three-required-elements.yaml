@@ -1,0 +1,92 @@
+pack_id: KP-service_judgment-store-daily-three-required-elements
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  判定一条内容是否归 ContentType `store_daily`（门店日常）必须三选二命中以下要素：
+  ① 画面≥50% 时间出现门店可辨识空间（货架/镜子/试衣间/收银台/门口/后仓/吊牌墙）；
+  ② 衣架/面料/吊牌/蒸汽熨斗/镜子/纸袋等门店特有物件出现≥3 次；
+  ③ 至少包含一个真实零售运营动作（补货/熨烫/折叠/点钞/陈列/接待/打包/盘点）。
+  只命中 1 个或 0 个 → 应归 personal_vlog 或 daily_fragment。这条三选二门禁
+  把 store_daily 与"人作为叙事主体"的 personal_vlog 与"门店空间作为主体"的 store_daily
+  硬边界化，避免门店空间内拍的个人 vlog 误归。
+
+scenario:
+  who:
+    primary_role: ContentType 内容审核 / 玩法库构建者 / 内容路由 router
+    target_audience: store_daily 内容创作者 / 双角色（引流向 + 接客向）下游消费方
+  when:
+    trigger: 一条门店内拍的内容判型——是 store_daily 还是 personal_vlog/daily_fragment？
+    context: store_daily 是"两者均可类"的双角色 ContentType（引流引擎 + 库存接客流水线）
+  what:
+    action_type: content_type_routing_gate
+    decision_or_action: 跑三选二硬边界自检；命中≥2 则归 store_daily，否则路由到 personal_vlog/daily_fragment
+  result:
+    success_pattern: |-
+      内容同时满足"店铺空间≥50%占比 + 门店特有物件≥3 + 1 个零售运营动作"中的任意 2 项
+      → 正确归入 store_daily 玩法库消费
+    flip_pattern: |-
+      只命中 1 个或 0 个就强行归 store_daily → 与 personal_vlog 玩法库交叉污染；
+      或在门店内拍的个人情绪流被错路到 store_daily 接客向消费 → 双角色场景错配
+  underlying_mechanism: |
+      store_daily 的叙事重心是"门店这个空间"（秩序/节奏/运营纪律），
+      不是"门店内的某个人"——三要素正是"空间 + 物件 + 运营动作"三轴，缺一元就不构成"门店主体"。
+  boundary:
+    applicable_when: 一条门店相关内容路由判型 / 玩法卡新增审核 / store_daily ContentType 招牌守护
+    not_applicable_when: 老板出镜但叙事重心是"老板这个人" → 归 founder_ip 不走本三选二
+  alternative_path:
+    - 老板出镜时的归属：观众记住"这家店" → store_daily；记住"这老板" → founder_ip
+
+evidence:
+  source_md: Q2-内容类型种子/store_daily-交付物-v0.1.md
+  source_anchor: 本文件与 batch 1/2 的关键差异 §1 + §3
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    硬边界三要素自检（三选二必达）：
+    ① 店铺空间——画面中至少有 50% 时间出现门店可辨识空间；
+    ② 商品道具——服装门店特有物件至少出现 3 次以上；
+    ③ 员工工作节点——至少包含一个真实零售运营动作。
+    三选二必达 → 归 store_daily ; 只命中一个或零个 → 应归 personal_vlog 或 daily_fragment。
+    和 founder_ip 的区别：即使老板本人出镜，只要观众记住的是"这家店"而不是"这个老板"，就归 store_daily。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：可反推"三轴硬边界 / 三选二 / 与 personal_vlog 区分 / 与 founder_ip 区分"四条核心语义。
+    Gate 3：跨品牌通用——任意品牌门店内容路由都可用此三轴。
+    Gate 4：可被 content_generation 与 platform_adaptation 调用做 ContentType 路由。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: ContentType 路由判型——任意品牌门店内容路由都需此三要素门禁
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+  field:
+    - {field_id: FD-ContentType-routing_gate, owner_type: ContentType, field_name: routing_gate, data_type: composite}
+  semantic:
+    - {semantic_id: SM-KP-service_judgment-store-daily-three-required-elements-three_axis, owner_field: routing_gate, definition: "store_daily 三选二硬边界：店铺空间≥50% / 门店物件≥3 次 / 真实零售运营动作≥1"}
+  value_set:
+    - {value_set_id: VS-KP-service_judgment-store-daily-three-required-elements-axis, value: store_space_50pct, label: "店铺空间画面占比≥50%", ordinal: 1}
+    - {value_set_id: VS-KP-service_judgment-store-daily-three-required-elements-axis, value: store_props_3plus, label: "门店特有物件出现≥3 次", ordinal: 2}
+    - {value_set_id: VS-KP-service_judgment-store-daily-three-required-elements-axis, value: retail_action_1plus, label: "真实零售运营动作≥1", ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-service_judgment-store-daily-three-required-elements, rule_type: content_type_routing_gate, applicable_when: "门店相关内容判型时", success_scenario: "三轴中≥2 命中 → 归 store_daily", flip_scenario: "≤1 命中却强归 store_daily → 与 personal_vlog/daily_fragment 玩法库污染", alternative_boundary: "老板出镜按叙事重心二选一（store vs founder_ip）"}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-store-daily-three-required-elements, source_md: Q2-内容类型种子/store_daily-交付物-v0.1.md, source_anchor: 本文件与 batch 1/2 的关键差异 §1 + §3, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-ContentType-compatible_with_content_type-store_daily-sd1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"store_daily"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-service_judgment-store-daily-three-required-elements, runtime_method: content_generation, input_types: ContentType, output_types: ContentTypeRoutingDecision}
+    - {mapping_id: CM-platform_adaptation-KP-service_judgment-store-daily-three-required-elements, runtime_method: platform_adaptation, input_types: ContentType, output_types: ContentTypeRoutingDecision}

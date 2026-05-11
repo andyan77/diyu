@@ -1,0 +1,89 @@
+pack_id: KP-training_unit-try-on-guidance-one-main-one-backup
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  试穿引导一轮只能给"1 个主方案 + 1 个备选"，并且必须先解决顾客最担心的那一点再让她试；
+  把 3-5 件一股脑塞进试衣间会造成信息过载，试穿质量直接塌——顾客不会买，也说不清为什么不买。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: 新人 / 一线导购
+  when:
+    trigger: 顾客准备进试衣间 / 在镜前犹豫多件之间
+    context: 任意品类 / 任意客流
+  what:
+    action_type: try_on_guidance_one_main_one_backup
+    decision_or_action: |
+      错误动作：拿 3-5 件一股脑塞进试衣间。
+      正确动作：先在镜前 30 秒内识别顾客最担心的一点（场合 / 身型 / 颜色 / 面料），
+        正面回应这一点，再给她"1 个主方案 + 1 个备选"两件进试衣间。
+      为什么错：信息过载 → 顾客试穿时无法形成清晰对比，注意力被打散，试穿质量塌掉。
+      如何纠正：每轮试穿前刻意压到"主+备"两件，不超出。
+      掌握检查：试穿后顾客能说出"这件为什么适合 / 不适合"，
+        而不是"都还行""我再看看"。
+  result:
+    success_pattern: |
+      顾客在试衣间能形成清晰对比，主方案被认真感受；
+      她能口头复述选择理由，导购据此推进下一轮或直接收单。
+    flip_pattern: |
+      一次塞 3-5 件，顾客出来只说"都还可以"或"再看看"；
+      导购无法定位她真正的不满意点，整段接客失焦，进入礼貌敷衍。
+  underlying_mechanism: |
+      试穿是高强度信息处理过程：身体感受 + 镜中视觉 + 场景投射同时进行；
+      候选项越多 → 单件被感受到的深度越浅 → 决策信号越弱。
+      "主+备"二选一是工作记忆容量内可正确比较的最大粒度。
+  boundary:
+    applicable_when: 任何品类的现场试穿引导
+    not_applicable_when: |
+      顾客明确要求"我自己挑几件试" → 尊重她的节奏，仅提供咨询；
+      促销期顾客明确以扫货模式进店 → 改为先收件后筛选的路径。
+  alternative_path:
+    - 顾客同时纠结 3 件 → 引导她先比较其中 2 件，淘汰掉再加第 3 件
+    - 主方案在试穿后被否 → 用本规则记录的"为什么否"反推下一轮主+备
+    - 顾客对备选更感兴趣 → 立即把备选升为主方案，重新搭一个新备选
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 五、首批高频接客场景 · C2 try_on_guidance
+  source_type: explicit_business_decision
+  inference_level: direct_quote
+  evidence_quote: |
+    C2 try_on_guidance（试穿引导）
+    正确动作：先解决顾客最担心的一点再让她试
+    错误动作：拿 3-5 件一股脑塞进试衣间
+    为什么错：信息过载，试穿质量会塌
+    怎么纠正：一轮只推 1 个主方案 + 1 个备选
+    学会判定：试穿后顾客能说出"这件为什么适合/不适合"
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 8 要素齐全；rule + relation 可反推；通用接客技巧；可被 store_training 调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用试穿引导原则。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field: []
+  semantic: []
+  value_set: []
+  rule:
+    - {rule_id: RL-KP-training_unit-try-on-guidance-one-main-one-backup, rule_type: try_on_guidance_policy, applicable_when: "顾客进试衣间前 30 秒", success_scenario: "先答主担忧再给主+备 2 件，顾客能清楚说出适合或不适合理由", flip_scenario: "塞 3-5 件进试衣间，顾客出来只说都还行或再看看，决策信号丢失", alternative_boundary: "顾客明确自助试穿 → 尊重；促销扫货模式 → 改为先收件后筛"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-try-on-guidance-one-main-one-backup, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 五、C2 try_on_guidance, source_type: explicit_business_decision, inference_level: direct_quote}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm05, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["sales_associate"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-try-on-guidance-one-main-one-backup, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["TrainingScript"]}

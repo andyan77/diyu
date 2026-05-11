@@ -1,0 +1,5 @@
+FD-InventoryState-match_status,InventoryState,match_status,enum,,,domain_general,KP-inventory_rescue-match-result-output-shape
+FD-InventoryState-decision_mode,InventoryState,decision_mode,enum,,,domain_general,KP-inventory_rescue-match-result-output-shape
+FD-InventoryState-display_permission_level,InventoryState,display_permission_level,enum,,,domain_general,KP-inventory_rescue-match-result-output-shape
+FD-InventoryState-sensing_layer,InventoryState,sensing_layer,enum,,,domain_general,KP-inventory_rescue-shallow-vs-deep-sensing
+FD-InventoryState-rescue_disposition,InventoryState,rescue_disposition,enum,,,domain_general,KP-inventory_rescue-state-catalog-six-states

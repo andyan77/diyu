@@ -1,0 +1,73 @@
+pack_id: KP-service_judgment-budget-controlled
+granularity_layer: L1
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"预算就这些，帮我挑最值的"时，导购必须先问她要的是"一件主力"还是"两件组合"，是看单价还是看利用率，再推第一套；
+  预算客要的是确定性而不是更多选项——库存断码可救，但救法是把"穿出去几次"拉回话题中央，绝不能靠"再加一件"凑预算。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: budget_controlled（预算控制型）顾客
+  when:
+    trigger: 顾客原话"预算就这些，你帮我挑最值的"
+    context: 月初/换季/促销窗口高频；顾客自带价格锚点
+  what:
+    action_type: budget_axis_first
+    decision_or_action: |
+      第一步：必须先问 2 件事——一件主力 vs 两件组合；看单价 vs 看利用率。
+      第二步：按选定的轴推第一套，不要在两轴之间摇摆。
+      第三步：第二、三套是"确定性强化"——再加证据（场景/搭配/利用率），不要再加 SKU。
+      第四步：库存断 → 把"穿出去几次"拉回中央；可救但禁加件数。
+  result:
+    success_pattern: 顾客在预算内带走 1-2 件并对"值"有清晰说法，复购信任建立
+    flip_pattern: 用"再加一件就更划算"的话术，顾客感觉被推销超预算，反而退回原本想买的
+  underlying_mechanism: |
+      预算客买的是"花得明白"而不是"买得多"；
+      不锁轴 = 给她更多选项 = 增加决策成本，违背她对确定性的需求；
+      加件凑预算 = 用件数稀释了她的"值"标准。
+  boundary:
+    applicable_when: 顾客明确说出预算或价格上限的接客
+    not_applicable_when: 顾客虽问价但没设上限 → 走 commute_mainstay 或 weekend_social
+  alternative_path:
+    - 单件主力断码 → 同价位带同功能位替；不退到组合路径
+    - 顾客摇摆主力 vs 组合 → 用"上次复购数据"或"利用率比较"帮她锁
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、9. budget_controlled + 三、1）卡在第二套 + 三、5）必须先问再推
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："预算就这些，你帮我挑最值的。"
+    店员第一反应：先问预算是买一件主力，还是买两件组合；是看单价，还是看利用率。
+    最容易卡住：第二套、第三套。顾客要的是确定性，不是更多选项。
+    库存不理想怎么转向：可以救。但不能一直加件数，必须把重点拉回"穿出去几次"。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；可派生 store_training（do_dont_contrast）与 inventory_rescue。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用预算接客判断。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-service_judgment-budget-controlled}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-budget-controlled}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-budget-controlled}
+    - {mapping_id: CM-outfit_recommendation-KP-service_judgment-budget-controlled}

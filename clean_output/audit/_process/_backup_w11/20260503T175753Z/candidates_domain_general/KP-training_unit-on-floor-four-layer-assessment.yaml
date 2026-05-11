@@ -1,0 +1,100 @@
+pack_id: KP-training_unit-on-floor-four-layer-assessment
+schema_version: candidate_v1
+pack_type: training_unit
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  现场验收必须分四层做：A 动作复现（重做一次，不给提示）/ B 情境应答（30 秒判断+1 分钟方案）/
+  C 正误辨识（看图/视频/录音指出错处与最小修正）/ D 神秘顾客复盘（看解释是否诚实清楚）；
+  做"背题考试"等于没验收，员工说得出但做不出，培训是否真生效完全无从判断。
+
+scenario:
+  who:
+    primary_role: 店长（验收主导） / 区域培训
+    target_audience: 已完成首批培训的员工
+  when:
+    trigger: 培训单元完成 / 新人入职满 4 周 / 季度复评
+    context: 真实门店场景，不在会议室也不在 PPT 里
+  what:
+    action_type: on_floor_four_layer_assessment
+    decision_or_action: |
+      错误动作：让员工背知识点 / 做选择题 / 看完视频签字。
+      正确动作：按培训单元类型选层做现场验收——
+        标准动作类→A 层（直接重做，看顺序/手法/成品达标）；
+        判断力类→B 层（口头给情境，30 秒判断 + 1 分钟方案）；
+        纠错类→C 层（给 2 张搭配图 / 2 段陈列视频 / 2 段接客录音，
+          员工指出哪错、错哪、最小修正动作）；
+        接客与库存救场→D 层（低强度神秘顾客模拟 + 复盘是否诚实清楚）。
+      为什么错：背题验证不了真实场景调用力；
+        培训完成度高但执行率低的根因往往就是验收做错了层。
+      如何纠正：把培训单元打 skill_type 标签后映射到对应层做验收。
+      掌握检查：员工能在对应层全部通过；通不过的项立即触发再训练或单元改型。
+  result:
+    success_pattern: |
+      培训完成率与现场执行率两条曲线终于对得上；
+      不通过的项被精准定位，再训练有的放矢。
+    flip_pattern: |
+      只看签到 / 答题 / 完成率，员工"过了"但门店实际没改善；
+      高级别误判（如假冒同款替代）继续发生，培训系统失去公信力。
+  underlying_mechanism: |
+      四层各自对应一种记忆通道：动作记忆 / 情境记忆 / 辨识记忆 / 关系记忆；
+      错层验收 = 用错通道测试 = 测不出真实掌握度。
+  boundary:
+    applicable_when: 任何培训单元的验收
+    not_applicable_when: |
+      合规与法律培训（必须有书面记录）→ 增加书面项但不替代四层；
+      远程门店无法现场验收 → 用视频回看 + 远程模拟覆盖 A/B/C 层，D 层须有线下机会再补做。
+  alternative_path:
+    - 单元同时含动作+判断 → 拆成两段，分别用 A 层与 B 层
+    - 现场验收时间紧 → 优先 D 层（神秘顾客）覆盖最关键场景
+    - 不通过的项 → 用 error_replay 复盘 + 1 周后重测，未通过升级到单元改型
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md
+  source_anchor: 十一、培训完成后，现场怎么验收 · A/B/C/D 四层
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    现场验收不做"背题考试"，做 4 层。
+    A 层 action_replay_check（动作复现检查）适合标准动作类。
+    B 层 scenario_response_check（情境应答检查）适合判断力类。
+    C 层 do_dont_spotting（正误辨识检查）适合纠错训练。
+    D 层 mystery_shopper_reflection（神秘顾客式复盘）适合接客和库存救场。
+    通过标准：关键动作无漏项 / 能先判断顾虑再给方案 / 能指出具体错误点 / 没有把替代款说成原款。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1 8 要素齐全。Gate 2 rule + value_set(layer) + relation 可反推四层映射与通过标准。
+    Gate 3 通用。Gate 4 store_training 可调用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用现场验收协议。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field:
+    - {field_id: FD-TrainingMaterial-assessment_method, owner_type: TrainingMaterial, field_name: assessment_method, data_type: enum}
+  semantic:
+    - {semantic_id: SM-KP-training_unit-on-floor-four-layer-assessment-layer, owner_field: assessment_method, definition: "现场验收四层：A 动作复现 / B 情境应答 / C 正误辨识 / D 神秘顾客复盘"}
+  value_set:
+    - {value_set_id: VS-KP-training_unit-on-floor-four-layer-assessment-layer, value: action_replay_check, label: A 动作复现, ordinal: 1}
+    - {value_set_id: VS-KP-training_unit-on-floor-four-layer-assessment-layer, value: scenario_response_check, label: B 情境应答, ordinal: 2}
+    - {value_set_id: VS-KP-training_unit-on-floor-four-layer-assessment-layer, value: do_dont_spotting, label: C 正误辨识, ordinal: 3}
+    - {value_set_id: VS-KP-training_unit-on-floor-four-layer-assessment-layer, value: mystery_shopper_reflection, label: D 神秘顾客复盘, ordinal: 4}
+  rule:
+    - {rule_id: RL-KP-training_unit-on-floor-four-layer-assessment, rule_type: assessment_layer_mapping, applicable_when: "培训单元完成 / 新人入职满 4 周 / 季度复评", success_scenario: "按 skill_type 选层验收，培训完成与现场执行两条曲线对齐", flip_scenario: "做背题/答题/签到，员工过了但门店实际没改善，培训系统失公信力", alternative_boundary: "合规法律加书面项不替代四层；远程门店用视频补 A/B/C，D 层须线下补做"}
+  evidence:
+    - {evidence_id: EV-KP-training_unit-on-floor-four-layer-assessment, source_md: Q7Q12-搭配陈列业务包/培训与纠错包.md, source_anchor: 十一、on_floor_assessment_protocol, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-TrainingMaterial-spoken_by_role-RoleProfile-tm10, source_type: TrainingMaterial, target_type: RoleProfile, relation_kind: spoken_by_role, properties_json: '{"roles":["store_manager"],"role_layer":"frontline"}'}
+  lifecycle: []
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-training_unit-on-floor-four-layer-assessment, runtime_method: store_training, input_types: ["TrainingMaterial"], output_types: ["AssessmentProtocol"]}

@@ -1,0 +1,97 @@
+pack_id: KP-product_attribute-persona-three-shell-coverage
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  冷启动阶段三套通用 Persona 的视角分工正式冻结为：store_operator（门店经营者）承接门店经营秩序 /
+  带队复盘 / 前后场协同视角；styling_advisor（穿搭顾问）承接前台接客 / 试穿建议 / 顾客体感翻译视角；
+  product_professional（商品专业者）承接设计 / 打样 / 工艺 / 面料 / 版型 / 商品判断视角。
+  三套合并必须能覆盖"经营秩序 + 前台接客 + 商品专业"三类内容生产视角，少于三套则视角缺位，
+  多于三套需走 Persona 数量上限评审（见 KP-training_unit-persona-vs-roleprofile-layering）。
+
+scenario:
+  who:
+    primary_role: 知识工程 / Persona 字典维护者
+    target_audience: 内容生成 / Prompt 组装 / 内容运营
+  when:
+    trigger: 冷启动阶段确定通用 Persona 集合 / 评估某类内容是否有人设承接
+    context: Q4 冷启动 P0；与"通用 Persona ≤3"的数量纪律配套
+  what:
+    action_type: persona_three_shell_coverage_check
+    decision_or_action: |
+      为系统配齐三套且仅三套通用 Persona，分别承接三类视角；
+      新内容上线前必须能映射到三套之一的承接面，否则要么内容偏离首批范围、要么需走扩 Persona 评审。
+  result:
+    success_pattern: |
+      任意一条首批内容（门店日常 / 每日穿搭 / 工艺溯源 / 产品测评 / 培训物料 …）
+      都能在三套 Persona 里找到主承接，Prompt 组装无视角空洞；
+      运营提"再加一套人设"时可先检查是否能挂回三套之一。
+    flip_pattern: |
+      只配两套（缺商品专业视角）→ 工艺溯源 / 产品历程类内容只能假装由穿搭顾问写，专业纹理崩；
+      配五套（拆出"店长 / 导购 / 设计师"独立 Persona）→ 调用碎片化、岗位真实感反而稀释。
+  underlying_mechanism: |
+    三套 Persona 是按"内容承接视角"切，不是按"岗位"切——
+    经营秩序 / 前台接客 / 商品专业是服装零售内容生产的三大不可省略视角，
+    岗位真实感由 RoleProfile 补。三套是当前冷启动经过 Q4 裁决的最小覆盖集。
+  boundary:
+    applicable_when: 冷启动阶段确定通用 Persona 集合 / 评估覆盖完整性
+    not_applicable_when: |
+      品牌唯一层 FounderProfile（独立壳，不计入三套）；
+      品牌成熟期可按业务扩 Persona，但仍须保留三套基础视角。
+  alternative_path:
+    - 出现内容找不到承接 Persona → 先评估能否挂到现有三套之一的 RoleProfile
+    - 确实需要扩第四套 → 须同步配齐 ≥1 个 RoleProfile 才能上线（见 layering pack）
+
+evidence:
+  source_md: Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md
+  source_anchor: 卡片 1/2/3 元数据 + 本稿结论
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    三套通用 Persona（人设）首批卡片，候选 v0.1 先冻结为：
+    store_operator（门店经营者）— 门店经营、秩序维护、带队复盘、后场协同
+    styling_advisor（穿搭顾问）— 前台接客、试穿建议、搭配判断、顾客体感翻译
+    product_professional（商品专业者）— 设计、打样、工艺、面料、版型、商品判断与专业叙事
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 01_object_type(Persona) + 04_value_set(三套 persona_id) + 06_rule(三视角覆盖纪律) 可反推
+    "三套覆盖经营秩序 / 前台接客 / 商品专业三视角"核心语义。
+    Gate 3：服装零售三类视角的最小覆盖集，跨品牌可复用。
+    Gate 4：可被 content_generation 前置视角校验消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 Persona 视角分工与覆盖纪律，是 Schema 元规则中"通用 Persona 字典最小集"的具体冻结，不含笛语专属内容
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-Persona, type_name: Persona, supertype: domain_object}
+  field:
+    - {field_id: FD-Persona-persona_id, owner_type: Persona, field_name: persona_id, data_type: string}
+    - {field_id: FD-Persona-display_name, owner_type: Persona, field_name: display_name, data_type: string}
+    - {field_id: FD-Persona-cold_start_positioning, owner_type: Persona, field_name: cold_start_positioning, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-persona-three-shell-coverage-store_operator, owner_field: cold_start_positioning, definition: "store_operator：门店经营、秩序维护、带队复盘、后场协同的主视角"}
+    - {semantic_id: SM-KP-product_attribute-persona-three-shell-coverage-styling_advisor, owner_field: cold_start_positioning, definition: "styling_advisor：前台接客、试穿建议、搭配判断、顾客体感翻译的主视角"}
+    - {semantic_id: SM-KP-product_attribute-persona-three-shell-coverage-product_professional, owner_field: cold_start_positioning, definition: "product_professional：设计、打样、工艺、面料、版型、商品判断与专业叙事的主视角"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-persona-three-shell-coverage-persona_id, value: store_operator, label: 门店经营者, ordinal: 1}
+    - {value_set_id: VS-KP-product_attribute-persona-three-shell-coverage-persona_id, value: styling_advisor, label: 穿搭顾问, ordinal: 2}
+    - {value_set_id: VS-KP-product_attribute-persona-three-shell-coverage-persona_id, value: product_professional, label: 商品专业者, ordinal: 3}
+  rule:
+    - {rule_id: RL-KP-product_attribute-persona-three-shell-coverage, rule_type: persona_three_shell_coverage_check, applicable_when: "冷启动阶段确定通用 Persona 集合或评估某类内容是否有承接", success_scenario: "三套覆盖三类视角无空洞，新内容能映射到三套之一", flip_scenario: "少于三套→视角缺位；多于三套→调用碎片化", alternative_boundary: "FounderProfile 不计入；扩 Persona 须同步配齐 RoleProfile"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-persona-three-shell-coverage, source_md: Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md, source_anchor: 卡片1/2/3 元数据 + 本稿结论, source_type: explicit_business_decision, inference_level: low}
+  relation: []
+  lifecycle: []
+  call_mapping: []

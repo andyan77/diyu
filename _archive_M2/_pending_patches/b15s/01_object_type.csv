@@ -1,0 +1,16 @@
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-clothing-as-emotional-medium-stance
+OT-ContentType,ContentType,domain_object,domain_general,KP-product_attribute-content-type-three-tier-maturity
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-concrete-action-over-adjective
+OT-TrainingMaterial,TrainingMaterial,domain_object,domain_general,KP-training_unit-concrete-action-over-adjective
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-content-template-saturation-anti-pattern
+OT-TrainingMaterial,TrainingMaterial,domain_object,domain_general,KP-training_unit-content-template-saturation-anti-pattern
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-kuleshov-context-driven-emotion-edit
+OT-TrainingMaterial,TrainingMaterial,domain_object,domain_general,KP-training_unit-kuleshov-context-driven-emotion-edit
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-objection-clearing-over-selling-points
+OT-TrainingMaterial,TrainingMaterial,domain_object,domain_general,KP-training_unit-objection-clearing-over-selling-points
+OT-CustomerScenario,CustomerScenario,domain_object,domain_general,KP-training_unit-objection-clearing-over-selling-points
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-relational-witness-over-monologue
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-silence-as-pattern-interrupt
+OT-TrainingMaterial,TrainingMaterial,domain_object,domain_general,KP-training_unit-silence-as-pattern-interrupt
+OT-ContentType,ContentType,domain_object,domain_general,KP-training_unit-tactile-cue-language-online-compensation
+OT-FabricKnowledge,FabricKnowledge,domain_object,domain_general,KP-training_unit-tactile-cue-language-online-compensation

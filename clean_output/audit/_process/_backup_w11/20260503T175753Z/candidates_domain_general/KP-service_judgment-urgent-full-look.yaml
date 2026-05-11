@@ -1,0 +1,74 @@
+pack_id: KP-service_judgment-urgent-full-look
+schema_version: candidate_v1
+pack_type: service_judgment
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  顾客说"后天有事，给我配一身能直接穿出去"时，导购第一动作不是抓款，而是先问场合/对象/天气/时长/想要正式还是松一点；
+  第一套只是"能去"，决定成交的是第二套——第二套必须解决"像不像她自己"，否则三套都白搭。
+
+scenario:
+  who:
+    primary_role: 门店导购
+    target_audience: urgent_full_look（应急一身型）顾客
+  when:
+    trigger: 顾客原话"后天/下周有事，你给我配一身能直接穿出去"
+    context: 婚礼/见客户/同学聚会/拍照等带明确场合与时间锁的接客
+  what:
+    action_type: scenario_first_then_set
+    decision_or_action: |
+      第一步：先问 5 件事——场合、对象、天气、时长、想正式还是松。
+      第二步：第一套保"能去"（不出错的安全套）。
+      第三步：第二套必须切到"像不像她自己"，第三套兜底。
+      第四步：主件断码 → 直接告知不能救，不许气质硬转。
+  result:
+    success_pattern: 第二套打中本人气质，顾客整套带走或带主件；信任在场合上锁定
+    flip_pattern: 上来就抓款配套，第一套"能去"但第二套塌方，顾客觉得"都还行但都不像我"，最后空手走
+  underlying_mechanism: |
+      应急客的瓶颈不是没货，是"她带回去要被人看见"；
+      第一套是任务交付，第二套才是身份匹配；不分层就会用第一套的逻辑硬推到底。
+  boundary:
+    applicable_when: 任何带明确场合与时间锁的应急接客
+    not_applicable_when: 顾客本人就是"随便穿"型（应转通勤主力路径）
+  alternative_path:
+    - 主件断码且气质无替代 → 转告顾客"这套救不了"，引导改场合定位
+    - 时间极紧（当天要穿）→ 砍掉第三套，集中火力把第二套打透
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/门店接客场景包.md
+  source_anchor: 二、1. urgent_full_look + 三、1）卡在第二/第三套 + 三、3）断码不救
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    顾客最常见原话："后天有事，你给我配一身能直接穿出去的。"
+    店员第一反应：先问场合、对象、天气、时长、想显得正式还是松一点。
+    最容易卡住：第二套、第三套。第一套只是"能去"，第二套才决定"像不像她自己"。
+    库存不理想怎么转向：主件优先，辅件可替。外套/连衣裙/主上衣不断，鞋包配角可转。不许用完全不同气质硬转。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: 八要素齐全；可被 store_training 与 outfit_recommendation 双路调用；跨女装零售门店通用。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用接客判断顺序，不含笛语专属表达。
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-CustomerScenario, type_name: CustomerScenario, supertype: domain_object}
+  field:
+    - {field_id: FD-CustomerScenario-trigger_phrase, owner_type: CustomerScenario, field_name: trigger_phrase, data_type: string}
+    - {field_id: FD-CustomerScenario-first_judgment, owner_type: CustomerScenario, field_name: first_judgment, data_type: string}
+  rule:
+    - {rule_id: RL-KP-service_judgment-urgent-full-look}
+  evidence:
+    - {evidence_id: EV-KP-service_judgment-urgent-full-look}
+  call_mapping:
+    - {mapping_id: CM-store_training-KP-service_judgment-urgent-full-look}
+    - {mapping_id: CM-outfit_recommendation-KP-service_judgment-urgent-full-look}

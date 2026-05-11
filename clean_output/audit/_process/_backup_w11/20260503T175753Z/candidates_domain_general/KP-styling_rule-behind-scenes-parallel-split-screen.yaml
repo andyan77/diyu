@@ -1,0 +1,91 @@
+pack_id: KP-styling_rule-behind-scenes-parallel-split-screen
+schema_version: candidate_v1
+pack_type: styling_rule
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  behind_the_scenes 内容里，"同一秒的两面 / 平行世界 BTS"应该用最朴素的左右分屏剪辑——
+  左边放最终看起来很顺的那 1 秒（模特优雅转身 / 顾客在镜头里笑 / 补光柔美），
+  右边放这 1 秒画面外发生了什么（有人蹲地拉裙摆 / 店员伸手接住快掉的展示牌 /
+  有人举手机当补光喊"左边一点"）。要点是"同步并置"而非"前后切换"——
+  与 event_documentary C3-3 的"错位展示（台前半个+后台完整）"明确分流。
+  画面内优雅 vs 画面外救火的反差天然成立，让观众**同时**看见品牌的体面和体面背后的笨拙努力。
+
+scenario:
+  who:
+    primary_role: behind_the_scenes 内容创作者 / 服装品牌内容主理人
+    target_audience: AI 内容生产组装者（按 ContentType=behind_the_scenes 选卡时）
+  when:
+    trigger: 拍摄日 / 上新日 / 门店内容现场——决定为某场拍摄做 BTS 时
+    context: BTS 易翻车点之一是只剪 NG 笑场（C1-1 默认禁用）；分屏并置是反差类 BTS 的低成本高效率玩法
+  what:
+    action_type: content_play_card_anchor
+    decision_or_action: 用剪映/CapCut 最简单的双屏功能 + 1-2 人辅助拍画面外侧镜头，按"同步时刻"剪
+  result:
+    success_pattern: |-
+      0-5 秒模特转身 vs 蹲地拉裙摆 → 5-12 秒补光柔美 vs 有人举手机当补光 →
+      12-18 秒顾客笑 vs 店员接快掉的展示牌 → 25-30 秒定格"左边体面/右边笨拙"
+      → 调用共享引擎 #2 认知反转 → 进 C3 突破档
+    flip_pattern: |-
+      做成"前后切换 / 错位展示"（先 5 秒台前再 5 秒后台）→ 退化为 event_documentary C3-3 的范畴，
+      丢失"同时看见"的核心张力；或拍成"幕后纯狼狈无台前对照"→ 退化为 C1 NG 集锦
+  underlying_mechanism: |
+      BTS 真正的护城河不是"曝光狼狈"而是"同时呈现体面与笨拙"。同步并置让观众
+      在一帧里完成认知反转——"所谓好看，是很多普通人一起托出来的"——
+      这是 BTS 区别于 event_documentary（错位展示）和正片预热（teaser）的关键剪辑语法。
+  boundary:
+    applicable_when: 服装拍摄 / 上新 / 门店内容 / 1-2 人配合 / 剪映双屏 / 预算 0-30 元 / 4 小时内
+    not_applicable_when: 后台是事件一部分（开业 / 大促）→ event_documentary C3-3 错位展示 / 没有真实"画面外救火"素材时强行分屏 → 沦为表演
+  alternative_path:
+    - 与 C2-1 "今天差点出什么事"配合：本卡走"同步反差"，C2-1 走"问题→解决"叙事弧
+    - 与 event_documentary C3-3 "错位展示"形成互补：服装行业可两个都做，但单条只选一种语法
+
+evidence:
+  source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md
+  source_anchor: §C3-2 同一秒的两面 / 平行世界 BTS + 备注（与 event_documentary C3-3 区分）
+  source_type: explicit_play_card
+  inference_level: low
+  evidence_quote: |
+    C3-2：剪映里做最简单的分屏：左边放最终看起来很顺的那 1 秒；右边放这 1 秒外面发生了什么。
+    比如左边是模特优雅转身，右边是有人蹲在地上帮忙拉裙摆、有人举手机当补光、有人喊"等一下风来了"。
+    不是在"曝光狼狈"，而是在让观众同时看见品牌的体面和体面背后的笨拙努力——
+    接住"所谓好看，是很多普通人一起托出来的"。
+    服装拍摄、上新、门店内容都特别适合做这个——"画面内优雅/画面外救火"的反差天然强。
+    备注：与 event_documentary C3-3 "后台手忙脚乱 vs 台前只拍半个结果" 的区别：
+    event 版是错位展示（台前半个+后台完整），本玩法是同步并置（分屏同时呈现）。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 06_rule + 05_relation（compatible_with_content_type=behind_the_scenes）+ 09_call_mapping
+    可反推"BTS 用左右同步分屏 / 与 event_documentary 错位展示的边界 / 共享引擎 #2 认知反转"。
+    Gate 3：跨品牌通用——任何品牌 BTS 都可用此分屏语法。
+    Gate 4：可被 content_generation 调用，按"同步反差时刻清单"生成分镜候选。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用 BTS 玩法格式规则，不含笛语专属调性
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type:
+    - {type_id: OT-ContentType, type_name: ContentType, supertype: domain_object}
+    - {type_id: OT-StylingRule, type_name: StylingRule, supertype: domain_object}
+  rule:
+    - {rule_id: RL-KP-styling_rule-behind-scenes-parallel-split-screen, rule_type: content_play_card_anchor, applicable_when: "behind_the_scenes 拍摄/上新/门店现场 + 1-2 人 + 剪映双屏", success_scenario: "左右同步并置（体面 vs 救火）→ 调用共享引擎 #2 认知反转 → C3 突破档", flip_scenario: "做成前后切换 → 退化为 event_documentary C3-3 / 无真实画面外素材强行分屏 → 表演化", alternative_boundary: "后台为事件服务 → event_documentary 错位展示版本"}
+  evidence:
+    - {evidence_id: EV-KP-styling_rule-behind-scenes-parallel-split-screen, source_md: Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md, source_anchor: §C3-2, source_type: explicit_play_card, inference_level: low}
+  relation:
+    - {relation_id: RE-StylingRule-compatible_with_content_type-behind_the_scenes-bts3, source_type: StylingRule, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{"content_type_id":"behind_the_scenes","play_card":"C3-2","shared_engine":"#2_cognitive_reversal"}'}
+  call_mapping:
+    - {mapping_id: CM-content_generation-KP-styling_rule-behind-scenes-parallel-split-screen, runtime_method: content_generation, input_types: ContentType+SyncContrastMomentCatalog, output_types: PlayCardScript}
+  field: []
+  semantic: []
+  value_set: []
+  lifecycle: []

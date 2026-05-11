@@ -1,0 +1,92 @@
+pack_id: KP-product_attribute-display-only-fields
+schema_version: candidate_v1
+pack_type: product_attribute
+brand_layer: domain_general
+state: drafted
+
+knowledge_assertion: >-
+  fabric_story / craft_story / designer_note / care_instruction / selling_points_copy / model_reference
+  这 6 个字段保留，但首轮**不**进入即时搭配 / 陈列主判断，仅供 training_generate（培训生成）/
+  详情页 / 销售话术使用；混入决策维度会污染推荐与陈列分组。
+
+scenario:
+  who:
+    primary_role: Attribute 字典维护者 / 推荐引擎设计者
+    target_audience: 搭配 / 陈列 / 培训三个模块的下游消费者
+  when:
+    trigger: 搭配推荐或陈列分组时遇到这 6 个字段
+    context: 冷启动 P0；与 KP-product_attribute-decision-level-hard-vs-high 配套（区分决策字段与展示字段）
+  what:
+    action_type: display_only_field_isolation
+    decision_or_action: 这 6 个字段在 attribute_dictionary.decision_level 标 display_only，引擎在搭配/陈列查询时跳过
+  result:
+    success_pattern: |
+      推荐引擎只用决策字段算搭配，速度与命中率不被故事性字段干扰；
+      详情页和培训话术能完整调用 fabric_story / craft_story 做内容生成；
+      展示字段独立成层，不与决策字段混存。
+    flip_pattern: |
+      用 fabric_story 做陈列分组 → 顾客看到的是"故事感"而非商品关系，无法形成选择路径；
+      把 selling_points_copy 当属性参与推荐 → 同一商品因话术差异被算成不同结果。
+  underlying_mechanism: |
+      字段角色不同：决策字段负责"算"，展示字段负责"讲"。
+      混层会让推荐引擎的输入空间被无业务杠杆的文本撑大，且让陈列从"信息架构"退化为"内容秀"。
+  boundary:
+    applicable_when: 这 6 个具名字段
+    not_applicable_when: 决策字段（详见 KP-product_attribute-decision-level-hard-vs-high 的 hard 6 + high 6）
+  alternative_path:
+    - 培训内容需要这些字段 → 通过 supports_training relation 调取，不进推荐
+    - 详情页文案需要 → 通过 mapped_to_runtime 的 content_generation 调取
+
+evidence:
+  source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md
+  source_anchor: 6.6 哪些字段只是展示字段不进入首轮决策
+  source_type: explicit_business_decision
+  inference_level: low
+  evidence_quote: |
+    以下字段保留，但首轮不进入即时搭配 / 陈列主判断：
+    fabric_story / craft_story / designer_note / care_instruction / selling_points_copy / model_reference
+    这些主要给 training_generate（培训生成）、详情页、销售话术用。
+
+gate_self_check:
+  gate_1_closed_scenario: pass
+  gate_2_reverse_infer: pass
+  gate_3_rule_generalizable: pass
+  gate_4_production_feasible: pass
+  notes: |
+    Gate 1：八要素齐全。
+    Gate 2：从 9 表（6 个 field + display_only value_set + 隔离 rule + supports_training relation）可反推"6 字段清单 / 不进推荐 / 仅供培训详情页话术"三条核心语义。
+    Gate 3：通用字段角色分层方法。
+    Gate 4：可被 outfit_recommendation（跳过）与 store_training / content_generation（调取）协同消费。
+
+brand_layer_review:
+  decision_suggestion: domain_general
+  rationale: 通用字段角色分层方法
+  faye_review_required: false
+  splittable_components: []
+
+nine_table_projection:
+  object_type: []
+  field:
+    - {field_id: FD-Product-fabric_story, owner_type: Product, field_name: fabric_story, data_type: text}
+    - {field_id: FD-Product-craft_story, owner_type: Product, field_name: craft_story, data_type: text}
+    - {field_id: FD-Product-designer_note, owner_type: Product, field_name: designer_note, data_type: text}
+    - {field_id: FD-Product-care_instruction, owner_type: Product, field_name: care_instruction, data_type: text}
+    - {field_id: FD-Product-selling_points_copy, owner_type: Product, field_name: selling_points_copy, data_type: text}
+    - {field_id: FD-Product-model_reference, owner_type: Product, field_name: model_reference, data_type: string}
+  semantic:
+    - {semantic_id: SM-KP-product_attribute-display-only-fields-display_only, owner_field: decision_level, definition: "decision_level=display_only：字段保留但不进入搭配/陈列主判断，仅供培训生成/详情页/销售话术"}
+  value_set:
+    - {value_set_id: VS-KP-product_attribute-display-only-fields-display_fields, value: fabric_story, label: 面料故事}
+    - {value_set_id: VS-KP-product_attribute-display-only-fields-display_fields, value: craft_story, label: 工艺故事}
+    - {value_set_id: VS-KP-product_attribute-display-only-fields-display_fields, value: designer_note, label: 设计说明}
+    - {value_set_id: VS-KP-product_attribute-display-only-fields-display_fields, value: care_instruction, label: 洗护说明}
+    - {value_set_id: VS-KP-product_attribute-display-only-fields-display_fields, value: selling_points_copy, label: 卖点文案}
+    - {value_set_id: VS-KP-product_attribute-display-only-fields-display_fields, value: model_reference, label: 模特参考}
+  rule:
+    - {rule_id: RL-KP-product_attribute-display-only-fields, rule_type: display_only_field_isolation, applicable_when: "搭配推荐或陈列分组时遇到 6 个展示字段", success_scenario: "决策字段与展示字段分层各司其职", flip_scenario: "用 fabric_story 做陈列分组→变内容秀；selling_points_copy 进推荐→同商品被算成不同结果", alternative_boundary: "培训→supports_training 调取；详情页→content_generation 调取"}
+  evidence:
+    - {evidence_id: EV-KP-product_attribute-display-only-fields, source_md: Q7Q12-搭配陈列业务包/商品与属性基础包.md, source_anchor: 6.6, source_type: explicit_business_decision, inference_level: low}
+  relation:
+    - {relation_id: RE-Product-supports_training-TrainingMaterial-displayfields01, source_type: Product, target_type: TrainingMaterial, relation_kind: supports_training, properties_json: '{"via_fields":["fabric_story","craft_story","designer_note","care_instruction","selling_points_copy","model_reference"]}'}
+  lifecycle: []
+  call_mapping: []

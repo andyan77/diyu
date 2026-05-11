@@ -1,0 +1,146 @@
+{
+  "total_input_md": 51,
+  "directly_processed": 43,
+  "resolved_via_5class_register": 8,
+  "closed_total": 51,
+  "unprocessed": 0,
+  "raw_coverage_pct": 84.3,
+  "closure_rate_pct": 100.0,
+  "five_class_distribution": {
+    "cross_source_reference": 1,
+    "meta_non_business": 3,
+    "unprocessable": 4
+  },
+  "directly_processed_md": [
+    "Q-brand-seeds/brandtone_diyu_001.md",
+    "Q-brand-seeds/ctype_founder_ip.md",
+    "Q-brand-seeds/ctype_process_trace.md",
+    "Q-brand-seeds/ctype_store_daily.md",
+    "Q-brand-seeds/persona_founder_demo.md",
+    "Q-brand-seeds/persona_franchise_owner_demo.md",
+    "Q-brand-seeds/persona_sample_maker_demo.md",
+    "Q2-内容类型种子/_shared-narrative-engines-v0.1.md",
+    "Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md",
+    "Q2-内容类型种子/daily_fragment-交付物-v0.1.md",
+    "Q2-内容类型种子/emotion_expression-交付物-v0.1.md",
+    "Q2-内容类型种子/event_documentary-交付物-v0.1.md",
+    "Q2-内容类型种子/founder_ip-交付物-v0.1.md",
+    "Q2-内容类型种子/humor_content-交付物-v0.1.md",
+    "Q2-内容类型种子/knowledge_sharing-交付物-v0.1.md",
+    "Q2-内容类型种子/lifestyle_expression-交付物-v0.1.md",
+    "Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md",
+    "Q2-内容类型种子/personal_vlog-交付物-v0.1.md",
+    "Q2-内容类型种子/process_trace-交付物-v0.1.md",
+    "Q2-内容类型种子/product_copy_general-交付物-v0.1.md",
+    "Q2-内容类型种子/product_journey-交付物-v0.1.md",
+    "Q2-内容类型种子/product_review-交付物-v0.1.md",
+    "Q2-内容类型种子/role_work_vlog-交付物-v0.1.md",
+    "Q2-内容类型种子/store_daily-交付物-v0.1.md",
+    "Q2-内容类型种子/talent_showcase-交付物-v0.1.md",
+    "Q2-内容类型种子/training_material-交付物-v0.1.md",
+    "Q2-内容类型种子/企业叙事类GPT5.4.md",
+    "Q2-内容类型种子/通用类.md",
+    "Q2-内容类型种子/通用类compass.md",
+    "Q2-内容类型种子/通用类deep-research-report.md",
+    "Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md",
+    "Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md",
+    "Q4-人设种子/phase-3-Q4-参数级填充清单.md",
+    "Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md",
+    "Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md",
+    "Q7Q12-搭配陈列业务包/商品与属性基础包.md",
+    "Q7Q12-搭配陈列业务包/培训与纠错包.md",
+    "Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md",
+    "Q7Q12-搭配陈列业务包/库存与替代包.md",
+    "Q7Q12-搭配陈列业务包/搭配规则包.md",
+    "Q7Q12-搭配陈列业务包/门店接客场景包.md",
+    "Q7Q12-搭配陈列业务包/陈列方法包.md",
+    "Q7Q12-搭配陈列业务包/面料工艺品质判断包.md"
+  ],
+  "resolved_via_register_md": [
+    "Q2-内容类型种子/CLAUDE.md",
+    "Q2-内容类型种子/GPT5.4.md",
+    "Q2-内容类型种子/_index.md",
+    "Q2-内容类型种子/compass_artifact_wf-6a00fe44-74d6-4f0c-b6c9-c3e309071f66_text_markdown.md",
+    "Q2-内容类型种子/企业叙事类compass_artifact.md",
+    "Q2-内容类型种子/企业叙事类deep-research-report.md",
+    "Q2-内容类型种子/深度研究.md",
+    "Q4-人设种子/_index.md"
+  ],
+  "unprocessed_md": [],
+  "register_detail": {
+    "Q2-内容类型种子/CLAUDE.md": {
+      "classification": "meta_non_business",
+      "resolved_by": "system_meta_non_business_v1"
+    },
+    "Q2-内容类型种子/_index.md": {
+      "classification": "meta_non_business",
+      "resolved_by": "system_meta_non_business_v1"
+    },
+    "Q4-人设种子/_index.md": {
+      "classification": "meta_non_business",
+      "resolved_by": "system_meta_non_business_v1"
+    },
+    "Q2-内容类型种子/compass_artifact_wf-6a00fe44-74d6-4f0c-b6c9-c3e309071f66_text_markdown.md": {
+      "classification": "unprocessable",
+      "resolved_by": "UP-tcb17-003"
+    },
+    "Q2-内容类型种子/企业叙事类compass_artifact.md": {
+      "classification": "unprocessable",
+      "resolved_by": "UP-tcb16-001;UP-tcb16-002"
+    },
+    "Q2-内容类型种子/企业叙事类deep-research-report.md": {
+      "classification": "unprocessable",
+      "resolved_by": "UP-tcb16-003"
+    },
+    "Q2-内容类型种子/深度研究.md": {
+      "classification": "unprocessable",
+      "resolved_by": "UP-tcb17-001;UP-tcb14-b3-002"
+    },
+    "Q2-内容类型种子/GPT5.4.md": {
+      "classification": "cross_source_reference",
+      "resolved_by": "KP-training_unit-enterprise-narrative-object-witness-over-talking-head; KP-training_unit-enterprise-narrative-anti-ai-tone; KP-training_unit-enterprise-narrative-north-star-first; KP-product_attribute-enterprise-narrative-six-section-shell"
+    }
+  },
+  "knowledge_point_coverage": {
+    "total_units": 1729,
+    "covered": 406,
+    "uncovered": 839,
+    "exempt_meta_non_business": 244,
+    "exempt_short_section": 240,
+    "business_total": 1245,
+    "coverage_pct": 32.6
+  },
+  "chapter_adjudication": {
+    "total_units": 1729,
+    "covered_by_pack": 406,
+    "unprocessable": 484,
+    "duplicate_or_redundant": 9,
+    "pending_decision": 830,
+    "pending_priority": {
+      "high": 433,
+      "medium": 272,
+      "low": 125
+    },
+    "non_pending_total": 899,
+    "business_total": 1245,
+    "chapter_adjudication_pct": 33.3
+  },
+  "layer_distribution": {
+    "source_unit_final_status": {
+      "unprocessable": 658,
+      "extract_l1": 454,
+      "extract_l2": 329,
+      "defer_l3_to_runtime_asset": 128,
+      "duplicate": 9
+    },
+    "pack_final_layer": {
+      "L1": 141,
+      "L3": 24,
+      "L2": 29
+    },
+    "business_total": 1245,
+    "l1_pct": 36.5,
+    "l2_pct": 26.4,
+    "l3_pct": 10.3
+  }
+}

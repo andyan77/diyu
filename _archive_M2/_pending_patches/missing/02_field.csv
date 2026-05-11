@@ -1,0 +1,13 @@
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-behind-scenes
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-daily-fragment
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-outfit-of-the-day
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-personal-vlog
+FD-ContentType-north_star,ContentType,north_star,string,,,domain_general,KP-product_attribute-content-type-north-star-role-work-vlog
+FD-ContentType-north_star,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-mainstream_played_out,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-advanced_play,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-breakthrough_play,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-industry_vertical_lift,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-forbidden_plays,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-production_difficulty,,,,,,domain_general,KP-product_attribute-enterprise-narrative-six-section-shell
+FD-ContentType-routing_gate,ContentType,routing_gate,composite,,,domain_general,KP-service_judgment-store-daily-three-required-elements
