@@ -2,9 +2,9 @@ task_id,phase,depends_on,s_gates,plan_sections,writes_clean_output,status
 KS-S0-001,S0,,S0,"§12 S0;§A2.1",true,done
 KS-S0-002,S0,KS-S0-001,S0,"§12 S0;§A2.2",true,done
 KS-S0-003,S0,,S0,"§A2.4",true,done
-KS-S0-004,S0,KS-S0-003,S0,"§A2.5;§8",true,not_started
+KS-S0-004,S0,KS-S0-003,S0,"§A2.5;§8",true,done
 KS-S0-005,S0,,S0,"§3.2;§A2.6",false,done
-KS-S0-006,S0,KS-S0-001,S0,"§2;§A2",true,not_started
+KS-S0-006,S0,KS-S0-001,S0,"§2;§A2",true,done
 KS-SCHEMA-001,Schema,KS-S0-006,,"§3;§2",false,not_started
 KS-SCHEMA-002,Schema,KS-S0-006,,"§4",false,not_started
 KS-SCHEMA-003,Schema,KS-S0-006,,"§5",false,not_started
