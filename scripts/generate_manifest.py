@@ -76,15 +76,33 @@ def collect_files() -> list[Path]:
 
 
 def build_manifest() -> dict:
+    """
+    KS-S0-006 §1 / §4 字段契约：
+      - entries 每行包含 path + sha256 + size + mtime（§1 完整性）
+      - manifest_hash 只对 {path, sha256, size} 三元组的稳定序列化做 sha256
+        —— mtime 是文件系统元数据，不同 checkout 必然不同；若纳入 hash 会
+        让 §6 "任改 1 byte 才 fail" 的语义被破坏（mtime 漂就误报）。
+    """
     entries = []
+    hash_payload = []
     for p in collect_files():
+        rel = str(p.relative_to(ROOT))
+        sz = p.stat().st_size
+        sha = sha256_of(p)
+        mtime_iso = datetime.datetime.fromtimestamp(p.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
         entries.append({
-            "path": str(p.relative_to(ROOT)),
-            "size": p.stat().st_size,
-            "sha256": sha256_of(p),
+            "path": rel,
+            "size": sz,
+            "sha256": sha,
+            "mtime": mtime_iso,
         })
-    # 序列化（稳定排序）后算顶层 hash
-    serialized = json.dumps(entries, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        hash_payload.append({
+            "path": rel,
+            "size": sz,
+            "sha256": sha,
+        })
+    # 序列化（稳定排序）后算顶层 hash · 仅含 path/size/sha256 三元组
+    serialized = json.dumps(hash_payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     manifest_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
     return {
         "manifest_hash": manifest_hash,

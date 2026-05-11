@@ -47,9 +47,12 @@ gates pass/total: 26/27（含 G6 deprecated）
 
 ## 4. manifest hash
 
-待 KS-S0-006 执行后填入 / pending KS-S0-006:
-- `source_manifest_hash`: <待生成>
-- 当次 `manifest.json`: `clean_output/manifest.json`（已有，待重生成）
+KS-S0-006 已执行 / completed:
+- `source_manifest_hash`: `4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0`
+- 产物路径 / artifact: `clean_output/audit/source_manifest.json`（223 entries · path + sha256 + size + mtime）
+- 当次 Phase 1 `manifest.json`: `clean_output/manifest.json`（候选 summary + signatures，由 `clean_output/scripts/build_manifest.py` 维护）
+- hash 计算契约：只对 `{path, sha256, size}` 三元组做 sha256；mtime 仅作元数据展示，**不进入 hash**（避免 git checkout 时间漂移误报）
+- 回填日期 / backfilled at: 2026-05-12
 
 ## 5. 9 表 CSV 改动核验 / 9-table unchanged verification
 
