@@ -30,10 +30,10 @@ status: not_started
 - KS-SCHEMA-005、KS-S0-005
 
 ## 3. 输入契约
-- 读：`clean_output/registers/content_type_canonical.csv`、candidates 中的 content_type 字段、9 表
+- 读：`knowledge_serving/control/content_type_canonical.csv`、candidates 中的 content_type 字段、9 表
 - 不读：knowledge_serving 写入侧
 
-- **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从本仓 `clean_output/` 与 `knowledge_serving/schema/` 派生。
+- **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从 README §7.1 白名单输入派生（含本卡 §3 上方列出的具体路径，例如 `clean_output/candidates/`、`clean_output/nine_tables/`、`clean_output/audit/`、`knowledge_serving/schema/`、`knowledge_serving/control/content_type_canonical.csv` 等）。
 
 ## 4. 执行步骤
 1. 加载 canonical map

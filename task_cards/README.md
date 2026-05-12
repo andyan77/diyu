@@ -175,7 +175,12 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 >
 > 完整 ECS 数据 4 分区图见 [`KS-DIFY-ECS-011`](KS-DIFY-ECS-011.md) §0.1；PG 映射 / 迁移 / 回灌方案留给 `KS-DIFY-ECS-003` 或后续单独立的映射卡处理。
 >
-> **校验脚本 / verifier**：`scripts/validate_w3_input_whitelist.py` —— 检查 W3 卡正文含禁止读取声明、`files_touched` 不含禁止路径、README §7.1 章节存在；W3 起跑前必跑。
+> **校验脚本 / verifier**：`scripts/validate_w3_input_whitelist.py` —— 两层守门：
+> - **Tier-1（强约束）**：11 张 W3 编译卡（KS-COMPILER-001/002/004..012）正文必须含 "W3+ 输入白名单硬约束" + "禁止读取 ECS PG" + "README §7.1" 三个 token
+> - **Tier-2（路径守门）**：W3-W14 全部卡 frontmatter `files_touched` 不得含 ECS 备份路径 / 历史临时目录 / PG `knowledge.*` 表名 / `clean_output/` 写入侧（例外：KS-DIFY-ECS-002/003 已显式授权）
+> - **C3**：README §7.1 章节存在
+>
+> W3 起跑前必跑；W4-W14 任一卡新增 / 修改 frontmatter 后也必须跑。
 
 **波次推进规则**：
 
