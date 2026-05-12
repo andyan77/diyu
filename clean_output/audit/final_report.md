@@ -1,7 +1,7 @@
 # 最终报告 · final_report
 
-> 自动生成于 2026-05-12 18:55:30 · 由 `scripts/render_final_report.py` 从 audit_status.json + 磁盘真相渲染
-> audit_status 时间戳与本报告时间戳同步：2026-05-12 18:55:30
+> 自动生成于 2026-05-12 23:46:22 · 由 `scripts/render_final_report.py` 从 audit_status.json + 磁盘真相渲染
+> audit_status 时间戳与本报告时间戳同步：2026-05-12 23:46:22
 
 ## 1 · 27 道硬门成绩
 

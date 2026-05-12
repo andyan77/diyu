@@ -14,6 +14,10 @@ ALLOWED_TOP_DIRS = {
     "unprocessable_register", "storage", "audit", "templates", "scripts", "schema",
     # W12 三层资产旁路（B-lite 决议下不进 9 表，进独立目录）
     "play_cards", "runtime_assets",
+    # post-audit finding #5 · 源 MD 真源补录（43 minimum, 用户裁决）
+    # 把 9 表 evidence 实际引用的源 MD 物理纳入真源边界，
+    # 让 W5 S5 反查可以严格走 Path("clean_output/<source_md>").is_file()
+    "Q2-内容类型种子", "Q4-人设种子", "Q7Q12-搭配陈列业务包", "Q-brand-seeds",
 }
 ALLOWED_TOP_FILES = {"README.md", "manifest.json", "checksums.sha256"}
 
@@ -52,6 +56,8 @@ ALLOWED_AUDIT_TOP = {
     "qdrant_health_KS-S0-004.json",        # KS-S0-004 Qdrant 健康检查 CI artifact
     "source_manifest.json",                # KS-S0-006 source_manifest_hash 产物 / Phase 2 真源冻结快照
     "known_risk_accepted_2026-05-12.md",   # 已知风险接受记录 / known risk accepted log
+    # post-audit finding #5 · 源 MD 真源补录一次性日志（与 key_rotation_log 同类，永久记录）
+    "ingest_source_md.log",
 }
 
 

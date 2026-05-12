@@ -599,7 +599,16 @@ def check_s4_granularity_integrity(views: dict[str, list[dict[str, str]]]) -> di
 
 
 def check_s5_evidence_linkage(views: dict[str, list[dict[str, str]]]) -> dict[str, Any]:
-    """S5: evidence_view 每行 source_md（多文件聚合解析后）所有段都 REPO_ROOT 下真实存在."""
+    """S5: evidence_view 每行 source_md（多文件聚合解析后）所有段都在
+    REPO_ROOT/clean_output 下真实存在。
+
+    post-audit finding #5（真源补录后口径）:
+      锚点 = REPO_ROOT / "clean_output" / <source_md>，**不**允许漂移到 REPO_ROOT。
+      源 MD 已通过 scripts/ingest_source_md_to_clean_output.py 物理纳入
+      clean_output/Q*/，43 minimum 范围；anchor 走 clean_output 是真源边界要求。
+      历史漂移：早先 W3 KS-COMPILER-007 透传 9 表 repo-root-relative 路径，
+      W5 第一版校验器漂移到 REPO_ROOT 锚点匹配数据 = "drift normalization" 反模式。
+    """
     rows = views.get("evidence_view", [])
     # finding #2
     if not rows:
@@ -613,6 +622,7 @@ def check_s5_evidence_linkage(views: dict[str, list[dict[str, str]]]) -> dict[st
         }
     violations: list[str] = []
     checked = len(rows)
+    anchor = REPO_ROOT / "clean_output"
     for idx, row in enumerate(rows):
         sm = row.get("source_md") or ""
         parts = _resolve_source_md_parts(sm)
@@ -620,10 +630,11 @@ def check_s5_evidence_linkage(views: dict[str, list[dict[str, str]]]) -> dict[st
             violations.append(f"evidence_view[{idx}] source_md 空 / empty")
             continue
         for p in parts:
-            full = REPO_ROOT / p
+            full = anchor / p
             if not full.is_file():
                 violations.append(
-                    f"evidence_view[{idx}] source_md 段缺失 / missing segment: {p!r} (raw={sm!r})"
+                    f"evidence_view[{idx}] source_md 段缺失 / missing segment under "
+                    f"clean_output/: {p!r} (raw={sm!r})"
                 )
     return {
         "name": "S5 evidence_linkage",

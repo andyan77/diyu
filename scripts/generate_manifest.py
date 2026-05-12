@@ -50,6 +50,12 @@ WHITELIST_PATTERNS = [
     ("schema", "**/*.json"),
     ("domain_skeleton", "**/*"),
     ("registers", "**/*"),  # 若未来引入
+    # post-audit finding #5: 源 MD 真源补录（43 minimum, 仅 9 表 evidence 实际引用）
+    # 见 scripts/ingest_source_md_to_clean_output.py + clean_output/audit/ingest_source_md.log
+    ("Q2-内容类型种子", "**/*.md"),
+    ("Q4-人设种子", "**/*.md"),
+    ("Q7Q12-搭配陈列业务包", "**/*.md"),
+    ("Q-brand-seeds", "**/*.md"),
 ]
 
 EXCLUDED_TOP = {"audit", "storage", "scripts", "unprocessable_register"}

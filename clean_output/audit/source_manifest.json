@@ -1,9 +1,267 @@
 {
-  "manifest_hash": "4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0",
-  "generated_at": "2026-05-12 02:17:25",
+  "manifest_hash": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2",
+  "generated_at": "2026-05-12 23:41:00",
   "task_card": "KS-S0-006",
-  "entry_count": 223,
+  "entry_count": 266,
   "entries": [
+    {
+      "path": "clean_output/Q-brand-seeds/brandtone_diyu_001.md",
+      "size": 10042,
+      "sha256": "85a8256f80463e22151352f56bc06468c81b71f54f0a1a38b2026c04c0bbac49",
+      "mtime": "2026-05-04 10:25:37"
+    },
+    {
+      "path": "clean_output/Q-brand-seeds/ctype_founder_ip.md",
+      "size": 9337,
+      "sha256": "0eab00edbd4349bbcfb4bf982085267f79a921738031c75b5ab957568c2c5bbb",
+      "mtime": "2026-05-04 10:25:37"
+    },
+    {
+      "path": "clean_output/Q-brand-seeds/ctype_process_trace.md",
+      "size": 9688,
+      "sha256": "ecd325b87b675be7608d425fcf140dd9b76fba66dfae29df2efa8719f5e3ebce",
+      "mtime": "2026-05-04 10:25:37"
+    },
+    {
+      "path": "clean_output/Q-brand-seeds/ctype_store_daily.md",
+      "size": 10003,
+      "sha256": "11cf131574dfe7b2df86307d4e31f0206777a0969515fa7d1b7a9774980d5ef0",
+      "mtime": "2026-05-04 10:25:37"
+    },
+    {
+      "path": "clean_output/Q-brand-seeds/persona_founder_demo.md",
+      "size": 7877,
+      "sha256": "418f29f4f60b0e50367bcd485f874df486d2217d530e751e68c3c886e961893f",
+      "mtime": "2026-05-04 10:25:37"
+    },
+    {
+      "path": "clean_output/Q-brand-seeds/persona_franchise_owner_demo.md",
+      "size": 8064,
+      "sha256": "6430982e98289b2018ceae20c049a402414c38fe72267f61821b19b8d3a15b2f",
+      "mtime": "2026-05-04 10:25:37"
+    },
+    {
+      "path": "clean_output/Q-brand-seeds/persona_sample_maker_demo.md",
+      "size": 7517,
+      "sha256": "daaf81eb076ecf4357119243fcf78813a83fa6e2ade6f94f7850992f10eb1c95",
+      "mtime": "2026-05-04 10:25:37"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/_shared-narrative-engines-v0.1.md",
+      "size": 75416,
+      "sha256": "176b9961ffaa21cae242b1e9fbbff466a8c1df6fbef73c1ebaded639ac2b9313",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md",
+      "size": 39236,
+      "sha256": "d2ff3159ffd0d5e8adaac8f240bb3006af46d361d277bae3befb0829f9ca53e3",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/daily_fragment-交付物-v0.1.md",
+      "size": 26757,
+      "sha256": "0dbb5de03f8019faa24dbfdcbfd62642d78a67db5c7de753a39c940d15ea8536",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/emotion_expression-交付物-v0.1.md",
+      "size": 52449,
+      "sha256": "45c9052b69504dab8d50e45643ad410abdf4f790901ccc8645227bb6eb2aad97",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/event_documentary-交付物-v0.1.md",
+      "size": 35738,
+      "sha256": "749e06b1c4098c9fafd5729c05f4a6fbfd5d93467dae8d292e970a88a1a1f04d",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/founder_ip-交付物-v0.1.md",
+      "size": 45087,
+      "sha256": "e4b664bce30e1caaa93b197118bdd8af9acf9b3b56002cf64219d9844a2ec535",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/humor_content-交付物-v0.1.md",
+      "size": 25987,
+      "sha256": "7bd33008eb184b2be9b7003ee754a4b9eb2873dacb61d83b516e031263d27cd8",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/knowledge_sharing-交付物-v0.1.md",
+      "size": 25932,
+      "sha256": "6fd7dd139787912eb2ce50a1ff47da90a71225ee5e4fc78568c1e5c0bafcefa1",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/lifestyle_expression-交付物-v0.1.md",
+      "size": 28273,
+      "sha256": "0d7ea37e8291065b7ee3ea402ee457cd8e7ea244fff3ad690b3e1891686607e0",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md",
+      "size": 27762,
+      "sha256": "1fba74c3f7b485d05148b12ca3fa6498cea36f8de88d8ae698dacd62770ad82a",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/personal_vlog-交付物-v0.1.md",
+      "size": 34604,
+      "sha256": "afea8b619ef158095b4baebbca65f1b5482e585208dc0ecf96903be29f5165f4",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/process_trace-交付物-v0.1.md",
+      "size": 40387,
+      "sha256": "2c6c87170c4e4aff7f4990f5989ca67f2da60cca3cbd36a48f2509d706a6a740",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/product_copy_general-交付物-v0.1.md",
+      "size": 49185,
+      "sha256": "3bc73cfece85402d64f9a9d7971a7e064e72001fe0ecf8dc89140847e589bbd4",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/product_journey-交付物-v0.1.md",
+      "size": 36609,
+      "sha256": "f4b19cce281c21cf639a0c8bd206fede686ad49e189833d44a0d152cdb99b509",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/product_review-交付物-v0.1.md",
+      "size": 44435,
+      "sha256": "2a9a1c94e7f74aabb586adbd30ad1f662d4745926b50361af043af78bcc8fd41",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/role_work_vlog-交付物-v0.1.md",
+      "size": 31455,
+      "sha256": "4fd46df36542ecdf384cbfcf757a42954724adf18ef63636a4a35e8612c3c070",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/store_daily-交付物-v0.1.md",
+      "size": 47029,
+      "sha256": "fc726f958aa687bb2f28e8ff820b11f8619c1e79ded8a994580554e8ec88ce73",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/talent_showcase-交付物-v0.1.md",
+      "size": 25249,
+      "sha256": "57b6190b1a8ebb8ddcecba3cbd99ffac1c1707a8810cff4a6e35c4f8a3a0933a",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/training_material-交付物-v0.1.md",
+      "size": 72639,
+      "sha256": "caea9d22f24e3d5bf3d465fa71f19098943ca0be43917a44d11e36b1609de745",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/企业叙事类GPT5.4.md",
+      "size": 59689,
+      "sha256": "7fa0fd4d8b1bee05b05ddbb8e6d45a35a74ee45d6c5a7ec0bd3471718f5e971e",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/通用类.md",
+      "size": 41274,
+      "sha256": "4bce64794eba8dcc862c25e0082aac9ede2ad279ff745158957193e0658b7af1",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/通用类compass.md",
+      "size": 36129,
+      "sha256": "6ab3ede34f860f98b08d2f069e79663c9cdf82f8d124a47f394f2ca93ca75ac3",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q2-内容类型种子/通用类deep-research-report.md",
+      "size": 50488,
+      "sha256": "a6952e8f5ca0871e7e7f1c07588d12281c7a8be411d6cf90640b57e3dada60eb",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md",
+      "size": 28001,
+      "sha256": "0b07a28ac88e93feb6dd336cc2e1a099930775296f00e7eece7049bce1c5ca5b",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md",
+      "size": 21432,
+      "sha256": "f996f6b10845dbe34337b11a03c154f6c912353e2ff4c95627743f2194405651",
+      "mtime": "2026-04-24 14:29:12"
+    },
+    {
+      "path": "clean_output/Q4-人设种子/phase-3-Q4-参数级填充清单.md",
+      "size": 27346,
+      "sha256": "76b9343e663c4ee811f35afdd137f4a23793629d55c8d02e508e59079e60243f",
+      "mtime": "2026-04-25 00:38:32"
+    },
+    {
+      "path": "clean_output/Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md",
+      "size": 15993,
+      "sha256": "8f344ce76f640d8bf6e1d6946ea153068586dc62f85ee50fc95296303d28f6b4",
+      "mtime": "2026-04-25 00:37:35"
+    },
+    {
+      "path": "clean_output/Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md",
+      "size": 21773,
+      "sha256": "b6fdbcee0397a98d38b3acc3a93d9dc4905420e8fd32568c87c0ba1c391455e5",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q7Q12-搭配陈列业务包/商品与属性基础包.md",
+      "size": 8303,
+      "sha256": "4e930bdc218719359ed9b095673c2c1652480ca9ea8ba31cdf74f6fe69309336",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q7Q12-搭配陈列业务包/培训与纠错包.md",
+      "size": 13862,
+      "sha256": "38edf09aa8a010d80469931e310b4aac0ed84cae5f229d3f6c28fd99a57fdb5f",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md",
+      "size": 14402,
+      "sha256": "c25d1915c3c532efc1936c2444bdab242eb67f28524a845bda7029e5b96ade94",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q7Q12-搭配陈列业务包/库存与替代包.md",
+      "size": 14417,
+      "sha256": "0b1fcdd56ebe0a9aa311e41dd7bace1153e19d65992a08f0a971791edc9c1c6f",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q7Q12-搭配陈列业务包/搭配规则包.md",
+      "size": 18101,
+      "sha256": "b60274fbef118bc7a3136dfdbe89da75e100b989c5f44e4bcb7219ccfa8e19cd",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q7Q12-搭配陈列业务包/门店接客场景包.md",
+      "size": 7544,
+      "sha256": "3143d4c9d4a88641c6edd648b934571660aedfc03bebbbea686db9470be7fd28",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q7Q12-搭配陈列业务包/陈列方法包.md",
+      "size": 7647,
+      "sha256": "f1b40fd829a236571e8d83020f1520ecae3020742039ee7026961d2653e8c089",
+      "mtime": "2026-04-23 19:08:41"
+    },
+    {
+      "path": "clean_output/Q7Q12-搭配陈列业务包/面料工艺品质判断包.md",
+      "size": 15099,
+      "sha256": "69107c1791324b7f4a7f20551130691c41e9c5fc0a728a183a8b23f773ad916c",
+      "mtime": "2026-04-23 19:08:41"
+    },
     {
       "path": "clean_output/candidates/brand_faye/KP-product_attribute-faye-brand-tone-core.yaml",
       "size": 6076,

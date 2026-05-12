@@ -288,6 +288,38 @@ def test_s7_fail_missing_in_frm(tmp_path):
     assert "outfit_of_the_day" in text
 
 
+# ---------- S5 锚点真源修复（post-audit finding #5） ----------
+
+def test_s5_anchor_under_clean_output_root_201_hits(tmp_path):
+    """post-audit #5: 真源补录后，S5 锚点必须是 REPO_ROOT/clean_output；
+    真实 evidence_view 201 行必须在 clean_output 锚点下 .is_file() 全 True。
+
+    红线: 不允许漂移到 REPO_ROOT（那是 'drift normalization' 反模式）。
+    """
+    import csv as _csv
+    rows = list(_csv.DictReader(open(REAL_VIEWS / "evidence_view.csv", encoding="utf-8")))
+    assert len(rows) == 201, f"前置：真 evidence_view 必须 201 行，实测 {len(rows)}"
+
+    views, ctl, rpt = _stage_real(tmp_path)
+    r = _run(["--gate", "S5"] + _common_args(views, ctl, rpt))
+    assert r.returncode == 0, (
+        f"S5 在 clean_output 锚点下必须 201/201 pass；"
+        f"若 fail 说明 ingest 未完成 / 锚点未迁移。\nreport:\n{rpt.read_text()}"
+    )
+    text = rpt.read_text(encoding="utf-8")
+    assert "[S5 evidence_linkage]" in text
+    assert "status: pass" in text
+    assert "checked_rows: 201" in text
+
+    # 二次断言：源码层确认 S5 锚点指向 clean_output，不允许 REPO_ROOT 直锚
+    src = SCRIPT.read_text(encoding="utf-8")
+    s5_block = src[src.index("def check_s5_evidence_linkage"): src.index("def check_s6")]
+    assert 'REPO_ROOT / "clean_output"' in s5_block or "REPO_ROOT/'clean_output'" in s5_block, (
+        "S5 必须显式锚定 REPO_ROOT/clean_output；"
+        "禁止 'REPO_ROOT / p' 直锚（drift normalization 反模式）"
+    )
+
+
 # ---------- S5 多文件聚合（A 方案细测）----------
 
 def test_s5_multi_file_aggregation_resolved(tmp_path):

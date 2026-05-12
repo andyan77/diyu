@@ -92,6 +92,22 @@ clean_output/
   README.md           本文件
 ```
 
+### 源 MD 快照（W5 post-audit finding #5 真源补录）
+
+```
+clean_output/
+  Q2-内容类型种子/      内容类型种子 MD 快照（被 9 表 evidence 引用的子集，幂等 sha256 校验）
+  Q4-人设种子/          人设种子 MD 快照
+  Q7Q12-搭配陈列业务包/  搭配陈列业务包 MD 快照
+  Q-brand-seeds/        品牌种子 MD 快照
+```
+
+口径：43 minimum（仅 `nine_tables/07_evidence.csv` 实际引用的 43 个 MD；
+未引用的 8 个 meta / index / AI 研究产物不纳入真源——见 `audit/ingest_source_md.log`）。
+落盘脚本：`scripts/ingest_source_md_to_clean_output.py`（幂等，sha256 一致 skip）。
+目的：让 W5 S5 evidence_linkage 反查走严格口径 `Path("clean_output/<source_md>").is_file() == True`，
+不允许漂移到 REPO_ROOT 锚点（drift normalization 反模式）。
+
 ### 工程扩展（prompt §2 之外但必要）
 
 ```
