@@ -13,7 +13,7 @@ plan_sections:
   - "§A1"
 writes_clean_output: false
 ci_commands:
-  - bash -c 'source scripts/load_env.sh && python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging'
+  - bash -c 'source scripts/load_env.sh && python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging --allow-diff --signoff faye'
 status: done
 ---
 
@@ -85,11 +85,17 @@ status: done
 
 ## 8. CI 门禁
 ```
-command: bash -c 'source scripts/load_env.sh && python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging'
+command: bash -c 'source scripts/load_env.sh && python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging --allow-diff --signoff faye'
 note:    ci_command 自带 env 加载（W1 教训：净化的 env -i shell 也能 reproducible）
-pass:    status in {"aligned"} 或 {schema_misalignment / row_diff} 且 reconcile.json 已诚实揭示并经人工 --signoff
+         --allow-diff --signoff faye 是已被人工接受的 schema_misalignment
+         （faye 于 2026-05-12 裁决：见 task_cards/README.md §7.1 "W3+ serving 输入白名单"
+         的硬约束；PG 不进 serving 信任链，下游处理由 KS-DIFY-ECS-003 接力）
+pass:    exit 0；status 仍为 schema_misalignment（与签字时一致）
+artifact: knowledge_serving/audit/reconcile_KS-DIFY-ECS-002.json（含 human_signoff 字段）
+warning: 若 status 升级为 row_diff（即 ECS PG 与本仓出现表名 overlap）→ 当前 signoff 失效，必须撤
+         掉 ci_command 里的 --allow-diff --signoff faye 并重新人工评审；脚本不会自动检测这种"签字
+         漂移"——这是 reviewer 的职责。
 failure_means: 两端关系未诚实登记，禁止灌 PG / 禁止下游 serving
-artifact: knowledge_serving/audit/reconcile_KS-DIFY-ECS-002.json
 ```
 
 ## 9. CD / 环境验证

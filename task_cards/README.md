@@ -154,6 +154,25 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 | **W14** | 1 | **S1-S13 上线总回归** | KS-PROD-001 | ⬜ not_started |
 | **合计** | **57** | — | — | **15/57 done = 26.3%** |
 
+## 7.1 W3+ serving 输入白名单（**最高优先 · 不可违反 · 跨 W3-W14 全部卡**）
+
+> **裁决日期 / decided**：2026-05-12 · **裁决人 / decided by**：faye
+>
+> **背景**：W2 KS-DIFY-ECS-002 实测 ECS PG `knowledge.*`（9 张：brand_tone / global_knowledge / role_profile 等）与本仓 `clean_output/nine_tables/*.csv`（9 张：01_object_type ~ 09_call_mapping）**表名 0 重合**，是 schema_misalignment 而非 row diff（reconcile 证据：`knowledge_serving/audit/reconcile_KS-DIFY-ECS-002.json`，含 `human_signoff: faye`）。该 PG 暂不进入 serving 信任链。
+>
+> **从 W3 起，除 `KS-DIFY-ECS-002`（对账，已收口）和 `KS-DIFY-ECS-003`（serving views 回灌 PG）明确授权外，所有 serving 编译 / 校验 / 召回 / 向量构建 / Dify 编排任务禁止读取以下数据源**：
+>
+> - ❌ ECS PG `knowledge.*` schema 任何表（legacy runtime data，未对账）
+> - ❌ `/data/clean_output.bak_*`（ECS 上的 timestamped backup，仅供回滚）
+> - ❌ `/tmp/itr*`、ECS 上历史压缩包、任何旧工作区残留
+> - ❌ Qdrant 上 payload 缺 `compile_run_id` + `source_manifest_hash` 的旧 collection
+>
+> **当前可信输入仅限**：
+> - ✅ 本仓 `clean_output/`（真源 / source of truth）
+> - ✅ ECS `/data/clean_output/`（部署副本 / one-way mirror，与本地 sha256 全等）
+>
+> 完整 ECS 数据 4 分区图见 [`KS-DIFY-ECS-011`](KS-DIFY-ECS-011.md) §0.1；PG 映射 / 迁移 / 回灌方案留给 `KS-DIFY-ECS-003` 或后续单独立的映射卡处理。
+
 **波次推进规则**：
 
 1. **同波次并行 / 跨波次串行**：W_n 内任意卡可并发开工；W_{n+1} 必须等 W_n **全部 done** 才能起跑（DAG 严格约束）。
