@@ -748,7 +748,7 @@ S13 llm_assist_boundary
 - 当前仓库未见 `knowledge_serving/`，所以本方案属于下一层 serving 工程，不是已有实现。
 - W12 对抗测试当前有 1 项基线漂移：旧脚本仍期待 `06_rule=194 / 07_evidence=194`，但当前最终报告是 `201 / 201`。
 - `knowledge.db` 是旧物理库，未同步当前 7 条 `brand_faye`；S0 必须在"重建后保留"与"废弃并移出 serving 信任链"之间二选一，不能继续作为隐含真源。
-- ECS 侧抽取 → 入库 ETL 尚未完成，Qdrant 记录为 unhealthy，需要上线前排查。
+- 本仓 → ECS 的 serving 回灌 ETL 尚未完成（**方向：本地 clean_output/ 是真源，ECS 是部署副本；不存在 ECS→本地 ingest 路径**），Qdrant 记录为 unhealthy，需要上线前排查。
 
 ## A2. 必须先做的 S0 收口
 
