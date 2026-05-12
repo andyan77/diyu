@@ -14,7 +14,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/validate_serving_governance.py --all
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-013 · 治理校验器（S1-S7 总闸）
@@ -34,7 +34,10 @@ status: not_started
 
 ## 4. 执行步骤
 1. 加载所有 view csv，schema 校验
-2. S1：每行有 source_pack_id 且能反查 clean_output
+2. S1：每行有 source_pack_id（**plan §12 原文：必须有 source_pack_id**），按 view 类型分层反查：
+   - **5 个真候选 view**（`pack_view` / `play_card_view` / `runtime_asset_view` / `brand_overlay_view` / `evidence_view`）：`source_pack_id` 必须能反查 `clean_output/candidates/**/*.yaml`
+   - **2 个合成 view**（`content_type_view` 用 `CT-<canonical>` / `generation_recipe_view` 用 `RECIPE-<ct>-<fmt>-<plat>`）：synthetic ID 是 W3/W4 编译器设计，**只校验非空**，不反查 candidates
+   - **`content_type_view.source_pack_ids`（复数）**：若非空，每个元素必须能反查 candidates（W6+ 内容回灌后该列才有值；当前 18 行全 `[]` 跳过反查）
 3. S2：gate_status 默认 active；非 active 必须显式声明 include 模式
 4. S3：brand_layer ∈ 枚举；overlay_view 不含 domain_general
 5. S4：L1/L2/L3 不混填
@@ -81,7 +84,7 @@ artifact: validate_serving_governance.report
 > 阻断项：任一 S 门静默通过；LLM 调用。
 
 ## 11. DoD
-- [ ] 校验器入 git
-- [ ] CI pass
-- [ ] 7 个恶意 fixture 全部 fail-closed
-- [ ] 审查员 pass
+- [x] 校验器入 git
+- [x] CI pass
+- [x] 7 个恶意 fixture 全部 fail-closed
+- [x] 审查员 pass

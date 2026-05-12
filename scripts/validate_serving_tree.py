@@ -131,17 +131,26 @@ EXPECTED_FILES_W4 = {
     "tests/test_brief.py",
 }
 
+# W5 已落白名单 / W5-landed allowlist
+# W5 KS-COMPILER-013 · 治理总闸 S1-S7（只读跨表校验器 + ≥14 case 测试）
+# 注：audit/validate_serving_governance.report 不在白名单（CI artifact，运行时产物）
+EXPECTED_FILES_W5 = {
+    "scripts/validate_serving_governance.py",                  # KS-COMPILER-013
+    "scripts/tests/test_validate_serving_governance.py",       # 14+ case 测试
+}
+
 # 空目录占位 / placeholder for empty subdirs（git 不跟踪空目录）
 # 注：scripts/ 与 audit/ 已被 W3 实文件填充，无须 .gitkeep
 GITKEEP_DIRS = {"vector_payloads", "logs"}
 EXPECTED_GITKEEPS = {f"{d}/.gitkeep" for d in GITKEEP_DIRS}
 
-# 全部允许文件 = §11 + W0/W1 + W3 + W4 白名单 + .gitkeep 占位
+# 全部允许文件 = §11 + W0/W1 + W3 + W4 + W5 白名单 + .gitkeep 占位
 ALLOWED_FILES = (
     EXPECTED_FILES_PLAN
     | EXPECTED_FILES_PRE_EXISTING
     | EXPECTED_FILES_W3
     | EXPECTED_FILES_W4
+    | EXPECTED_FILES_W5
     | EXPECTED_GITKEEPS
 )
 
@@ -200,12 +209,13 @@ def main() -> int:
 
 def _report(errors: list[str]) -> int:
     if not errors:
-        print("[OK] knowledge_serving/ 与 §11 + W0/W1 + W3 + W4 白名单完全一致")
+        print("[OK] knowledge_serving/ 与 §11 + W0/W1 + W3 + W4 + W5 白名单完全一致")
         print(f"     根目录 / root: {SERVING}")
         print(f"     §11 期望文件数: {len(EXPECTED_FILES_PLAN)}")
         print(f"     W0/W1 白名单数: {len(EXPECTED_FILES_PRE_EXISTING)}")
         print(f"     W3 白名单数: {len(EXPECTED_FILES_W3)}")
         print(f"     W4 白名单数: {len(EXPECTED_FILES_W4)}")
+        print(f"     W5 白名单数: {len(EXPECTED_FILES_W5)}")
         print(f"     .gitkeep 占位数: {len(EXPECTED_GITKEEPS)}")
         return 0
     print("[FAIL] knowledge_serving/ 校验未通过 / validation failed:")
