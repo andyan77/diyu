@@ -140,6 +140,7 @@ artifact: knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json
 - [x] CSV 治理三联缺列负样本（删 `pack_view.compile_run_id` 实测）fail-closed
 - [x] `knowledge.*` 拦截负样本 fail-closed
 - [x] staging apply pass — 2026-05-13 实测：`--env staging --apply` exit 0；`post_verify_status=pass`；12/12 表行数对齐（pack=201 / ct=18 / recipe=18 / play=29 / runtime=24 / overlay=7 / evidence=201 / tenant=2 / frm=19 / retrieval=18 / merge=8 / bundle_log=0）
+- [x] prod apply pass — 2026-05-13 实测：`--env prod --apply --signoff faye --model-policy-version mp_20260512_002` exit 0；`post_verify_status=pass`；audit 双签落 `human_signoff={signed_by:faye, signed_at:2026-05-12T18:27:13Z}` + `model_policy_version=mp_20260512_002`；prod 闸门 negative 路径（缺 signoff / 缺 model_policy_version）已在前轮 fail-closed 实测
 - [x] ECS 端独立旁路验证 — `pg_class` + `obj_description` 直接回读，12 张表 `COMMENT ON TABLE` 全部含 `compile_run_id=5b5e5fc1f6199ec6;source_manifest_hash=b3967bca…adfc2;view_schema_version=3c0863a75967;task_card=KS-DIFY-ECS-003`
 - [x] 审查员 finding 1/2/3 全部闭环（治理列硬门 / spec 对齐 4 policy 表口径 / 状态收口）
 - [x] 卡片状态与 `dag.csv` 同步 `done`

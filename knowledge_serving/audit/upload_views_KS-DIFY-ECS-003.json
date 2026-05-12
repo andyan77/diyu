@@ -1,9 +1,9 @@
 {
   "task_card": "KS-DIFY-ECS-003",
-  "run_id": "4e0016c4-c81f-4e43-ab77-904f109d6928",
-  "run_at": "2026-05-12T18:19:20Z",
-  "env": "staging",
-  "mode": "dry_run",
+  "run_id": "b3a15813-b4c9-44bd-8d59-e7ad093d4704",
+  "run_at": "2026-05-12T18:27:13Z",
+  "env": "prod",
+  "mode": "apply",
   "target_schema": "serving",
   "partition_reference": "KS-DIFY-ECS-011 §0.1 row 3→new serving.* (NOT legacy knowledge.*)",
   "prerequisite_gate": {
@@ -41,8 +41,61 @@
   "ddl_table_count": 12,
   "ddl_byte_size": 8994,
   "ddl_sha256": "4b0f9ea236991c4d918ff7782b40385b54a7b4fe6493cbc902f4d677e1bbf441",
-  "human_signoff": null,
-  "model_policy_version": null,
+  "human_signoff": {
+    "signed_by": "faye",
+    "signed_at": "2026-05-12T18:27:13Z"
+  },
+  "model_policy_version": "mp_20260512_002",
   "read_only_legacy_guarantee": "脚本拒绝任何引用 knowledge.* 的 SQL；只写 serving.*",
-  "ddl_preview_path": "knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.ddl.sql"
+  "post_verify": {
+    "serving.pack_view": {
+      "expected": 201,
+      "actual": 201
+    },
+    "serving.content_type_view": {
+      "expected": 18,
+      "actual": 18
+    },
+    "serving.generation_recipe_view": {
+      "expected": 18,
+      "actual": 18
+    },
+    "serving.play_card_view": {
+      "expected": 29,
+      "actual": 29
+    },
+    "serving.runtime_asset_view": {
+      "expected": 24,
+      "actual": 24
+    },
+    "serving.brand_overlay_view": {
+      "expected": 7,
+      "actual": 7
+    },
+    "serving.evidence_view": {
+      "expected": 201,
+      "actual": 201
+    },
+    "serving.tenant_scope_registry": {
+      "expected": 2,
+      "actual": 2
+    },
+    "serving.field_requirement_matrix": {
+      "expected": 19,
+      "actual": 19
+    },
+    "serving.retrieval_policy_view": {
+      "expected": 18,
+      "actual": 18
+    },
+    "serving.merge_precedence_policy": {
+      "expected": 8,
+      "actual": 8
+    },
+    "serving.context_bundle_log": {
+      "expected": 0,
+      "actual": 0
+    }
+  },
+  "post_verify_status": "pass"
 }
