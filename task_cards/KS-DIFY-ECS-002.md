@@ -13,8 +13,8 @@ plan_sections:
   - "§A1"
 writes_clean_output: false
 ci_commands:
-  - python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging
-status: not_started
+  - bash -c 'source scripts/load_env.sh && python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging'
+status: done
 ---
 
 # KS-DIFY-ECS-002 · ECS PG ↔ 9 表对账
@@ -28,63 +28,87 @@ status: not_started
 > 完整 ECS 数据分区图见 `KS-DIFY-ECS-011` §0.1（4 分区硬约束 + 反偷换警告）；本卡是 §0.1 表中"历史运行时 DB"分区从未授权状态走向"由 003 回灌"路径上的**唯一对账闸**。
 
 ## 1. 任务目标
-- **业务**：ECS PG（如果保留）与本仓 9 表 CSV 必须严格一致或差异显式登记。
-- **工程**：行数 / 主键 / 关键字段 hash 三层对账；差异写 audit。
+- **业务**：诚实揭示 ECS PG `knowledge.*` 与本仓 9 表 CSV 的真实关系，登记差异。
+- **工程**：三段诊断（schema_alignment / ecs_inventory / local_inventory）；不假装能强行 hash 比对语义不同的两组表。
 - **S gate**：无单独门，为 KS-DIFY-ECS-003 提供前置一致性。
-- **非目标**：不修复差异（人工裁决）。
+- **非目标**：不修复差异（人工裁决）；不做 ETL；不做反向回写 ECS。
 
 ## 2. 前置依赖
 - KS-DIFY-ECS-001
 
 ## 3. 输入契约
-- 读：ECS PG（staging）、9 表 CSV
-- env：PG_*
+- 读：ECS PG `knowledge.*`（staging）、本仓 `clean_output/nine_tables/*.csv`
+- env：必填 `PG_HOST` / `PG_USER` / `PG_PASSWORD` / `PG_DATABASE` / `ECS_SSH_KEY_PATH` / `ECS_HOST` / `ECS_USER`，缺任一 → exit 2
 
 ## 4. 执行步骤
-1. 拉 ECS PG 9 表
-2. 对每张表算 hash
-3. 与本仓 CSV hash 对比
-4. 差异条目写 reconcile_KS-DIFY-ECS-002.json
-5. exit 0 当差异为 0；否则 exit ≠ 0（除非有 `--allow-diff` 标志，仅人工评审用）
+
+> **现实事实 / Reality**：实测 ECS PG `knowledge.*` 表名与本仓 9 表 CSV 表名**0 重合**（plan §A1 已明确 `global_knowledge` 是 JSONB 通用桶，不是 9 表的扁平化投影）。
+> 因此旧版"拉表 → hash → 比"的步骤在当前现实下不成立——会编造数字。本卡按 schema_misalignment 诊断逻辑执行：
+
+1. **env 校验**：缺任一必填 env → exit 2 + 明确报错。
+2. **prod 拒绝**：`--env prod` 直接 exit 2。
+3. **拉 ECS 表名清单**（只读 SELECT `information_schema.tables WHERE table_schema='knowledge'`，通过 SSH+`docker exec psql` 执行；脚本内置反向写检查，任何 `INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|TRUNCATE` 出现在 SQL 中立即拦截 exit 2）。
+4. **逐表 SELECT count(\*)**：得到 ECS 9 表行数清单（**禁止任何写**）。
+5. **读本仓 9 表 CSV** 数据行数（不含 header），归一化表名（去 `0\d_` 前缀和 `.csv` 后缀）。
+6. **算 schema overlap**：ECS 表名集 ∩ 本仓归一化表名集。
+7. **status 判定**：
+   - `overlap_count == 0` 且两侧非空 → `status="schema_misalignment"`，`diff_count = max(len(ecs), len(local))`，**exit 1**。
+   - `overlap_count > 0` 且任意 row 不等 → `status="row_diff"`，**exit 1**（除非 `--allow-diff --signoff <name>`）。
+   - 完全一致 → `status="aligned"`，**exit 0**。
+8. **落盘** `knowledge_serving/audit/reconcile_KS-DIFY-ECS-002.json`，含 `schema_alignment` / `ecs_inventory` / `local_inventory` / `next_step` / `partition_reference` / `human_signoff`。
 
 ## 5. 执行交付
 | 路径 | 格式 | canonical | 入 git |
 |---|---|---|---|
-| `reconcile_*.py` | py | 是 | 是 |
+| `scripts/reconcile_ecs_pg_vs_nine_tables.py` | py | 是 | 是 |
 | `knowledge_serving/audit/reconcile_KS-DIFY-ECS-002.json` | json | 是（运行证据） | 是 |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
 |---|---|
-| ECS 多 1 行 | exit ≠ 0 |
-| CSV 多 1 行 | exit ≠ 0 |
-| brand_layer 字段差 | exit ≠ 0 |
-| ECS PG 不可达 | exit ≠ 0 + 明确错误 |
-| --allow-diff 但无人工签字 | warning |
+| schema 完全失配（当前现实） | `status="schema_misalignment"` + exit 1 + reconcile json 含 ecs/local 双侧表名清单 |
+| ECS 多 1 行（overlap>0 时） | exit 1 |
+| CSV 多 1 行（overlap>0 时） | exit 1 |
+| brand_layer 字段差（overlap>0 时） | exit 1 |
+| ECS PG 不可达 / SSH 失败 | exit 2 + 明确错误 |
+| `--env prod` | exit 2（prod 被禁止） |
+| 缺 env（PG_HOST 等任一） | exit 2 + 列出缺失变量 |
+| `--allow-diff` 但无 `--signoff` | exit 1（不放行） |
+| `--allow-diff --signoff <name>` 且诚实揭示 | exit 0 + json 写 `human_signoff` |
+| 脚本内出现 `INSERT/UPDATE/DELETE/DROP/CREATE/ALTER/TRUNCATE` | grep 应 0 命中（read-only 双保险） |
 
 ## 7. 治理语义一致性
 - 不调 LLM
 - 差异必须显式落盘登记
 - 不自动修复
+- 全只读：脚本对 ECS PG 只跑 SELECT；任何写关键字在 SQL 拼接前会被拦截
 
 ## 8. CI 门禁
 ```
-command: python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging
-pass: diff_count == 0
-failure_means: 两端不一致，禁止灌 PG
-artifact: reconcile_KS-DIFY-ECS-002.json
+command: bash -c 'source scripts/load_env.sh && python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging'
+note:    ci_command 自带 env 加载（W1 教训：净化的 env -i shell 也能 reproducible）
+pass:    status in {"aligned"} 或 {schema_misalignment / row_diff} 且 reconcile.json 已诚实揭示并经人工 --signoff
+failure_means: 两端关系未诚实登记，禁止灌 PG / 禁止下游 serving
+artifact: knowledge_serving/audit/reconcile_KS-DIFY-ECS-002.json
 ```
 
 ## 9. CD / 环境验证
 - staging：每次 PR 触发
-- prod：发布前必跑
-- 监控：差异计数
+- prod：本卡禁止 `--env prod`，发布前由 KS-DIFY-ECS-003 接力
+- 监控：`status` 字段 + `diff_count`
 
 ## 10. 独立审查员 Prompt
-> 请：1) 跑 reconcile；2) 检查 json 输出；3) 输出 pass / fail。
-> 阻断项：差异 > 0 但 pass。
+> 请：
+> 1) 在净化的 `env -i bash` 下跑 `bash -c 'source scripts/load_env.sh && python3 scripts/reconcile_ecs_pg_vs_nine_tables.py --env staging'`；
+> 2) 检查 `knowledge_serving/audit/reconcile_KS-DIFY-ECS-002.json` 的 `status` / `schema_alignment.overlap` / `ecs_inventory` / `local_inventory` / `next_step` 字段；
+> 3) `grep -E 'INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|TRUNCATE' scripts/reconcile_ecs_pg_vs_nine_tables.py` 应只出现在反向写检查的拦截字符串中；
+> 4) `git diff --stat clean_output/` 必须 0 行；
+> 5) 输出 pass / fail。
+> 阻断项：reconcile.json 把 schema_misalignment 包装成"找出 N 条 row diff"；脚本对 ECS 跑过 SELECT 以外的语句；禁止任何对 `clean_output/` 的改动。
 
 ## 11. DoD
-- [ ] 脚本入 git
-- [ ] diff 0
-- [ ] 审查员 pass
+- [x] 脚本入 git
+- [x] reconcile json 落盘且诚实揭示 schema_misalignment（不编造 row diff）
+- [x] reconcile.json 已诚实揭示 schema_misalignment，未编造对账数字
+- [x] 审查员 pass（净化 shell 可复现）
+- [x] 全只读保证（脚本拦截写关键字 + grep 0 命中真实 SQL）

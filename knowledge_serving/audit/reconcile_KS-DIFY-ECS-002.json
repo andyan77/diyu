@@ -1,0 +1,62 @@
+{
+  "task_card": "KS-DIFY-ECS-002",
+  "run_id": "74c6d69b-d240-40c4-828f-5a5ac214eab5",
+  "run_at": "2026-05-12T05:20:03Z",
+  "env": "staging",
+  "ecs_host": "8.217.175.36",
+  "pg_database": "diyu_brand_faye",
+  "status": "schema_misalignment",
+  "diff_count": 9,
+  "schema_alignment": {
+    "ecs_tables": [
+      "brand_tone",
+      "compliance_rule",
+      "content_blueprint",
+      "content_type",
+      "enterprise_narrative_example",
+      "global_knowledge",
+      "narrative_arc",
+      "persona",
+      "role_profile"
+    ],
+    "local_tables": [
+      "call_mapping",
+      "evidence",
+      "field",
+      "lifecycle",
+      "object_type",
+      "relation",
+      "rule",
+      "semantic",
+      "value_set"
+    ],
+    "overlap": [],
+    "overlap_count": 0
+  },
+  "ecs_inventory": {
+    "brand_tone": 1,
+    "compliance_rule": 0,
+    "content_blueprint": 45,
+    "content_type": 3,
+    "enterprise_narrative_example": 0,
+    "global_knowledge": 1394,
+    "narrative_arc": 0,
+    "persona": 0,
+    "role_profile": 8
+  },
+  "local_inventory": {
+    "01_object_type.csv": 18,
+    "02_field.csv": 98,
+    "03_semantic.csv": 163,
+    "04_value_set.csv": 604,
+    "05_relation.csv": 173,
+    "06_rule.csv": 201,
+    "07_evidence.csv": 201,
+    "08_lifecycle.csv": 1,
+    "09_call_mapping.csv": 243
+  },
+  "next_step": "下游 KS-DIFY-ECS-003（W6 回灌）必须先解决 schema 映射；当前 ECS PG knowledge.* 不能直接作为 serving 输入（对应 KS-DIFY-ECS-011 §0.1 第 3 行 legacy_runtime_db.consumable=null 的约束）",
+  "partition_reference": "see KS-DIFY-ECS-011 §0.1 row 3 (legacy_runtime_db, consumable=null)",
+  "read_only_guarantee": "本脚本只跑 SELECT；任何 INSERT/UPDATE/DELETE/DROP/CREATE/ALTER/TRUNCATE 在执行前会被拦截。",
+  "human_signoff": null
+}

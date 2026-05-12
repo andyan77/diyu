@@ -112,8 +112,12 @@ def main() -> int:
         errors.append(f"[MISS] 缺文件 / missing file: knowledge_serving/{f}")
 
     # 多文件 / extras（不在 §11 + W0/W1 + .gitkeep 白名单）
+    # 例外 / exemption: audit/ 是 runtime 证据目录，下游卡按需写
+    # reconcile_*.json / *_audit.json 等运行证据；不视为 skeleton 多余文件
     extra_files = actual_files - ALLOWED_FILES
     for f in sorted(extra_files):
+        if f.startswith("audit/"):
+            continue  # audit/ 内容由下游卡按需追加 runtime 证据，不参与骨架校验
         errors.append(
             f"[EXTRA] 多文件 / unexpected file: knowledge_serving/{f} "
             f"(不在 §11 期望、不在 W0/W1 白名单、不是 .gitkeep)"
