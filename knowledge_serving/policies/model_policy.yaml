@@ -13,7 +13,15 @@
 #   - llm_assist: qwen-plus（性价比型 / cost-effective）
 # ============================================================
 
-model_policy_version: "mp_20260512_001"
+model_policy_version: "mp_20260512_002"
+# ============================================================
+# 用户裁决 / user decision (2026-05-12, W4 pre-flight):
+#   intent_classification / content_type_routing 从 allowed_tasks
+#   移到 forbidden_tasks。运行时 content_type / intent 必须由
+#   Dify 开始节点 / API 显式入参提供，中间件只做 alias→canonical
+#   确定性映射；缺失 / 不识别走 needs_review，禁止 LLM 兜底。
+#   影响卡：KS-RETRIEVAL-002 / KS-PROD-003 / KS-DIFY-ECS-008。
+# ============================================================
 
 # ============================================================
 # embedding / 向量化模型
@@ -65,8 +73,6 @@ llm_assist:
     api_key_env: DEEPSEEK_API_KEY
   # 允许做的任务 / allowed tasks
   allowed_tasks:
-    - intent_classification          # 意图分类辅助
-    - content_type_routing           # 内容类型路由辅助
     - quality_check                  # 质量自检
     - semantic_guardrail_judge       # 语义 guardrail 辅助判断
   # 禁止做的任务 / forbidden tasks（S13 hard boundary）
@@ -77,6 +83,8 @@ llm_assist:
     - merge_precedence_decision      # 合并优先级不可由 LLM 决策
     - evidence_fabrication           # 不可编造证据
     - final_generation               # 中间件内不做最终成稿
+    - intent_classification          # 意图必须由 Dify 开始节点 / API 显式给
+    - content_type_routing           # content_type 必须由 Dify 开始节点 / API 显式给
 
 # ============================================================
 # 最终内容生成 / final content generation

@@ -34,10 +34,11 @@ status: not_started
 - 读：§10 节点清单、API openapi.yaml
 
 ## 4. 执行步骤
-1. 10 节点：租户识别 / 意图分类 / ContentType 路由 / business brief 检查 / 调用 retrieve_context / 判断 fallback_status / LLM 生成 / Guardrail / 输出 + evidence / 写日志
+1. 10 节点：租户识别 / **(开始节点必填) intent + content_type 收集 → canonical 校验** / business brief 检查 / 调用 retrieve_context / 判断 fallback_status / LLM 生成 / Guardrail / 输出 + evidence / 写日志
+   - **2026-05-12 用户裁决**：`intent` 与 `content_type` 必须由 Dify **开始节点表单字段**显式提供；中间件只做确定性 alias→canonical 映射。**禁止**用 LLM 判断节点 / Agent 节点替代这一步。
 2. 写 chatflow.dsl
-3. Agent 节点限制：仅 ContentType 辅助 / 重排辅助 / 自检
-4. validator 检查：无 Agent 直查 9 表；无绕 tenant filter；无 hard 缺字段下成稿
+3. Agent 节点限制：仅重排辅助 / 自检 / guardrail 辅助；**不得**做 intent 分类、content_type 路由、品牌推断、降级裁决、合并裁决
+4. validator 检查：无 Agent 直查 9 表；无绕 tenant filter；无 hard 缺字段下成稿；**无 LLM/Agent 节点出现在 intent / content_type 路由位置**
 
 ## 5. 执行交付
 | 路径 | 格式 | canonical | 入 git |
@@ -53,12 +54,14 @@ status: not_started
 | 缺 guardrail 节点 | fail |
 | 节点顺序错乱 | fail |
 | LLM 生成节点在 fallback 判断前 | fail |
+| LLM / Agent 节点出现在 intent 或 content_type 路由位置 | fail（input-first 红线）|
 | 日志节点缺 | fail |
 
 ## 7. 治理语义一致性
 - Agent 限制严格（§10）
 - 不绕 tenant filter
 - 不调 LLM 做治理判断
+- **intent / content_type 节点禁止用 LLM 判断节点实现**——必须是 Dify 开始节点表单字段 + 确定性映射（2026-05-12 用户裁决，与 KS-RETRIEVAL-002 + KS-POLICY-005 forbidden_tasks 三处对齐）
 
 ## 8. CI 门禁
 ```

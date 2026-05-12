@@ -8,7 +8,7 @@ validate_model_policy.py · KS-POLICY-005 校验器
   M3  embedding.rebuild_required_when_changed == true（S12 硬要求）
   M4  rerank.enabled 为 bool；启用时 model 非空
   M5  rerank.fallback_when_unavailable 非空（rerank 不可用必须有降级）
-  M6  llm_assist.forbidden_tasks 必含 6 类（S13 硬边界）
+  M6  llm_assist.forbidden_tasks 必含 8 类（S13 硬边界，2026-05-12 由 6 扩到 8）
   M7  llm_assist 启用时 primary.model 非空
   M8  api_key_env 引用的环境变量是否已在 .env / shell 中设置（warning 级）
 
@@ -35,6 +35,8 @@ REQUIRED_FORBIDDEN = {
     "merge_precedence_decision",
     "evidence_fabrication",
     "final_generation",
+    "intent_classification",
+    "content_type_routing",
 }
 
 errors: list[str] = []

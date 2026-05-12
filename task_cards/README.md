@@ -79,7 +79,7 @@ status: not_started               # not_started / in_progress / blocked / done
 | R5 | 任何"当前状态"判断前必须重新核验（`git status` / `git log`） | KS-S0-001 强制 |
 | R6 | `compile_run_id / source_manifest_hash / view_schema_version` 全链路存在 | KS-COMPILER-013 校验器 enforce |
 | R7 | 跨租户 0 串味 | KS-PROD-002 跨租户回归 enforce |
-| R8 | LLM assist 不得做 6 类禁止任务（§9.1） | KS-PROD-003 边界回归 enforce |
+| R8 | LLM assist 不得做 8 类禁止任务（§9.1，2026-05-12 由 6 扩到 8，新增 intent_classification / content_type_routing） | KS-PROD-003 边界回归 enforce |
 
 ## 6. 任务卡语义对齐自检
 

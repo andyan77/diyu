@@ -415,9 +415,11 @@ retrieve_context(
 
 2. `intent_classifier`
    判断用户要做内容生成、质检、策略建议、培训、接客话术等。
+   **2026-05-12 用户裁决（input-first / no-LLM）**：`intent` 必须由 Dify 开始节点 / API 显式入参提供（`intent_hint`）；中间件只做枚举校验。**禁止**调 LLM 推断、**禁止**从 user_query 关键词猜。缺失或非法 → 返回 `needs_review`，由前端补字段。
 
 3. `content_type_router`
    映射到 canonical ContentType。
+   **2026-05-12 用户裁决（input-first / no-LLM）**：`content_type` 必须由 Dify 开始节点 / API 显式入参提供（`content_type_hint`，可为别名 alias 或 canonical id）；中间件只做 alias→canonical 的确定性映射 + canonical 集合校验。**禁止**调 LLM 路由。别名未知 → 返回 `needs_review`，**不**返回兜底 content_type。
 
 4. `business_brief_checker`
    检查商品事实、活动事实、平台目标是否足够。
@@ -564,8 +566,6 @@ llm_assist:
   model: ""
   model_version: ""
   allowed_tasks:
-    - intent_classification
-    - content_type_routing
     - quality_check
     - semantic_guardrail_judge
   forbidden_tasks:
@@ -575,7 +575,11 @@ llm_assist:
     - merge_precedence_decision
     - evidence_fabrication
     - final_generation
+    - intent_classification        # 2026-05-12 用户裁决：intent 必须由 Dify 开始节点 / API 显式入参
+    - content_type_routing         # 2026-05-12 用户裁决：content_type 必须由 Dify 开始节点 / API 显式入参
 ```
+
+> **2026-05-12 用户裁决说明**：旧版 `allowed_tasks` 含 `intent_classification` / `content_type_routing`；考虑到 Dify 开始节点已让用户填这两个字段，中间件再用 LLM "猜一次" 属于 scope drift（范围漂移） + overengineering（过度工程化）。两项已移到 `forbidden_tasks`，由 S12（model_policy 守门）+ S13（LLM boundary 回归）双层守门。影响卡：KS-RETRIEVAL-002 / KS-PROD-003 / KS-DIFY-ECS-008 / KS-POLICY-005。
 
 ### 9.2 硬边界
 
@@ -621,7 +625,6 @@ Chatflow nodes:
 
 Agent node 只允许：
 
-- 辅助判断 ContentType
 - 辅助重排召回结果
 - 辅助质量自检
 
@@ -630,6 +633,7 @@ Agent node 只允许：
 - Agent 直接自由查 9 表
 - Agent 自行绕过 tenant filter
 - Agent 自行决定硬品牌字段缺失时继续成稿
+- Agent 辅助判断 ContentType 或 intent（2026-05-12 用户裁决：必须由 Dify 开始节点 / API 显式入参，中间件只做确定性 alias→canonical 映射）
 
 ---
 
@@ -731,7 +735,7 @@ S12 model_policy_declared
   embedding / rerank / llm_assist 必须在 model_policy.yaml 显式声明；embedding 变更必须触发 qdrant_chunks 重建
 
 S13 llm_assist_boundary
-  LLM assist 不得执行 tenant_scope_resolution / brand_layer_override / fallback_policy_decision / merge_precedence_decision / final_generation
+  LLM assist 不得执行 8 类禁止任务：tenant_scope_resolution / brand_layer_override / fallback_policy_decision / merge_precedence_decision / evidence_fabrication / final_generation / intent_classification / content_type_routing（后两项 2026-05-12 用户裁决新增）
 ```
 
 ---

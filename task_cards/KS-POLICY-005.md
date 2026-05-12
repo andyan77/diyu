@@ -32,8 +32,8 @@ status: done
 - 读：plan §9.1
 
 ## 4. 执行步骤
-1. 写 yaml：model_policy_version、embedding（provider/model/version/dimension/rebuild_required_when_changed=true）、rerank（含 fallback_when_unavailable）、llm_assist（含 allowed_tasks / forbidden_tasks 6 项）
-2. 实现 validate_model_policy：6 项 forbidden_tasks 必含；rebuild_required_when_changed 默认 true
+1. 写 yaml：model_policy_version、embedding（provider/model/version/dimension/rebuild_required_when_changed=true）、rerank（含 fallback_when_unavailable）、llm_assist（含 allowed_tasks / forbidden_tasks 8 项，2026-05-12 由 6 扩到 8）
+2. 实现 validate_model_policy：8 项 forbidden_tasks 必含；rebuild_required_when_changed 默认 true
 
 ## 5. 执行交付
 | 路径 | 格式 | canonical | 入 git |
@@ -51,14 +51,14 @@ status: done
 | model_policy_version 缺 | fail |
 
 ## 7. 治理语义一致性
-- §9.1 forbidden_tasks 6 项必须全列：tenant_scope_resolution / brand_layer_override / fallback_policy_decision / merge_precedence_decision / evidence_fabrication / final_generation
+- §9.1 forbidden_tasks 8 项必须全列：tenant_scope_resolution / brand_layer_override / fallback_policy_decision / merge_precedence_decision / evidence_fabrication / final_generation / intent_classification / content_type_routing（后两项 2026-05-12 用户裁决新增）
 - embedding 变更触发重建（KS-DIFY-ECS-004 配合）
 - 不调 LLM 来产 yaml
 
 ## 8. CI 门禁
 ```
 command: python3 scripts/validate_model_policy.py
-pass: 6 项 forbidden_tasks 齐 + rebuild_required=true
+pass: 8 项 forbidden_tasks 齐 + rebuild_required=true
 artifact: model_policy.yaml
 ```
 
@@ -67,7 +67,7 @@ artifact: model_policy.yaml
 - prod 切换前必须 bump model_policy_version
 
 ## 10. 独立审查员 Prompt
-> 请：1) 跑 validator；2) 6 项 forbidden_tasks 全在；3) rebuild flag=true；4) 输出 pass / fail。
+> 请：1) 跑 validator；2) 8 项 forbidden_tasks 全在（含 intent_classification / content_type_routing）；3) rebuild flag=true；4) 输出 pass / fail。
 > 阻断项：任一 forbidden_task 缺；rebuild=false。
 
 ## 11. DoD
