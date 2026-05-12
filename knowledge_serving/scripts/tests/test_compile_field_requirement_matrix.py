@@ -3,11 +3,11 @@
 覆盖 §6 对抗性 + §7 治理 + §10 审查员关键点：
 - §4.2 四条样例规则必须在 csv 内
   product_review.brand_tone(soft), store_daily.team_persona(soft),
-  founder_ip.founder_profile(hard), brand_manifesto.brand_values(hard)
+  founder_ip.founder_profile(hard), founder_ip.brand_values(hard)
 - required_level / fallback_action 非枚举失败
 - hard 行未填 block_reason 失败
 - 重复 (content_type, field_key) 失败
-- 18 类未覆盖 → warning，不阻断（但 --strict 可升级）
+- 严格闭环：frm.content_type 集合必须 == canonical 18 类（不允许 extra）
 - 不调 LLM；幂等
 """
 from __future__ import annotations
@@ -54,13 +54,13 @@ def test_four_sample_rules_present(mod, tmp_path):
     assert ("product_review", "brand_tone") in keys
     assert ("store_daily", "team_persona") in keys
     assert ("founder_ip", "founder_profile") in keys
-    assert ("brand_manifesto", "brand_values") in keys
+    assert ("founder_ip", "brand_values") in keys
     # 检查 4 条样例级别
     by_key = {(r["content_type"], r["field_key"]): r for r in rows}
     assert by_key[("product_review", "brand_tone")]["required_level"] == "soft"
     assert by_key[("store_daily", "team_persona")]["required_level"] == "soft"
     assert by_key[("founder_ip", "founder_profile")]["required_level"] == "hard"
-    assert by_key[("brand_manifesto", "brand_values")]["required_level"] == "hard"
+    assert by_key[("founder_ip", "brand_values")]["required_level"] == "hard"
 
 
 def test_columns_match_schema(mod, tmp_path):
@@ -74,16 +74,23 @@ def test_columns_match_schema(mod, tmp_path):
     ]
 
 
-def test_18_canonical_types_all_covered(mod, tmp_path):
-    """S7 全覆盖：每个 canonical content_type 至少 1 行。"""
+def test_18_canonical_types_strict_closure(mod, tmp_path):
+    """S7 严格闭环：frm.content_type 集合必须 == canonical 18 类，不允许 extra。
+
+    历史漂移 / historical drift: plan §4.2 早期用 `brand_manifesto.brand_values`
+    作示例，被 W3 卡片误抄进 frm。W5-prep 已消除；本测试守护严格闭环，防止
+    未注册 canonical id 再次混入。
+    """
     out = tmp_path / "m.csv"
     mod.compile_field_requirement_matrix(rules=None, output_csv=out, log_path=tmp_path/"m.log")
     rows = list(csv.DictReader(out.open(encoding="utf-8")))
     covered = {r["content_type"] for r in rows}
     canonical_path = REPO_ROOT / "knowledge_serving" / "control" / "content_type_canonical.csv"
     canonical = {r["canonical_content_type_id"] for r in csv.DictReader(canonical_path.open(encoding="utf-8"))}
-    # 至少 18 类全覆盖（brand_manifesto 是 §4.2 引入的额外类，可以多覆盖）
-    assert canonical.issubset(covered), f"未覆盖 canonical types: {canonical - covered}"
+    missing = canonical - covered
+    extra = covered - canonical
+    assert not missing, f"未覆盖 canonical types: {missing}"
+    assert not extra, f"frm 含未注册 canonical id（疑似漂移）: {extra}"
 
 
 # ---------- adversarial ----------

@@ -60,10 +60,10 @@ DEFAULT_RULES: list[dict[str, Any]] = [
         "block_reason": "founder_ip 必须基于具体创始人画像，缺失则阻断成稿",
     },
     {
-        "content_type": "brand_manifesto", "field_key": "brand_values",
+        "content_type": "founder_ip", "field_key": "brand_values",
         "required_level": "hard", "fallback_action": "block_brand_output",
         "ask_user_question": "",
-        "block_reason": "brand_manifesto 必须基于品牌价值观，缺失则阻断成稿",
+        "block_reason": "founder_ip 缺品牌价值观时阻断创始人化成稿",
     },
     # 其余 17 类 canonical content_type 至少 1 行（S7 全覆盖）
     {

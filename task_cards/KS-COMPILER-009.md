@@ -36,9 +36,13 @@ status: done
 - **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从 README §7.1 白名单输入派生（含本卡 §3 上方列出的具体路径，例如 `clean_output/candidates/`、`clean_output/nine_tables/`、`clean_output/audit/`、`knowledge_serving/schema/`、`knowledge_serving/control/content_type_canonical.csv` 等）。
 
 ## 4. 执行步骤
-1. 至少落 §4.2 四条规则：product_review.brand_tone(soft), store_daily.team_persona(soft), founder_ip.founder_profile(hard), brand_manifesto.brand_values(hard)
+1. 至少落 §4.2 四条典型规则（content_type 必须 ∈ KS-S0-005 canonical 18 类）：
+   product_review.brand_tone(soft), store_daily.team_persona(soft),
+   founder_ip.founder_profile(hard), founder_ip.brand_values(hard)
 2. 扩展到 18 类 × 关键字段
 3. 写 csv
+4. **严格闭环 / strict closure**：frm 的 content_type 集合 **必须** == canonical 18 类
+   （不允许任何 extra；S7 总闸由 KS-COMPILER-013 守门）
 
 ## 5. 执行交付
 | 路径 | 格式 | canonical | 入 git |

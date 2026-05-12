@@ -290,7 +290,7 @@ block_reason
 product_review.brand_tone        soft  → 可降级通用语气
 store_daily.team_persona         soft  → 可用通用门店人设
 founder_ip.founder_profile       hard  → 不可编造创始人内容
-brand_manifesto.brand_values     hard  → 阻断品牌化成稿
+founder_ip.brand_values          hard  → 缺品牌价值观时阻断创始人化成稿
 ```
 
 ### 4.3 retrieval_policy_view

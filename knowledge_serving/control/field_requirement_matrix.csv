@@ -1,9 +1,9 @@
 content_type,field_key,required_level,fallback_action,ask_user_question,block_reason
 behind_the_scenes,process_detail,soft,use_domain_general,缺幕后细节，是否用通用工艺说明？,
-brand_manifesto,brand_values,hard,block_brand_output,,brand_manifesto 必须基于品牌价值观，缺失则阻断成稿
 daily_fragment,scene_anchor,none,neutral_tone,,
 emotion_expression,tone_constraint,soft,neutral_tone,,
 event_documentary,event_anchor,hard,block_brand_output,,事件纪实必须基于具体事件，缺失则阻断
+founder_ip,brand_values,hard,block_brand_output,,founder_ip 缺品牌价值观时阻断创始人化成稿
 founder_ip,founder_profile,hard,block_brand_output,,founder_ip 必须基于具体创始人画像，缺失则阻断成稿
 humor_content,tone_constraint,soft,neutral_tone,,
 knowledge_sharing,knowledge_pack,hard,block_brand_output,,知识分享必须有可追溯知识包，缺失则阻断
