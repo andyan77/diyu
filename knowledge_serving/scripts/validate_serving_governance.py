@@ -36,8 +36,37 @@ from _common import (  # noqa: E402
     REPO_ROOT,
     REVIEW_STATUS_ENUM,
     TRACEABILITY_ENUM,
+    build_view_validator,
+    derive_compile_run_id,
+    derive_view_schema_version,
     load_manifest_hash,
+    validate_row,
 )
+
+# 共享 schema 路径（preflight + #3 governance ID 重算所需）
+DEFAULT_SERVING_SCHEMA_PATH = REPO_ROOT / "knowledge_serving" / "schema" / "serving_views.schema.json"
+DEFAULT_CONTROL_SCHEMA_PATH = REPO_ROOT / "knowledge_serving" / "schema" / "control_tables.schema.json"
+
+# View name → schema $defs 内的定义名（1:1 同名）
+VIEW_SCHEMA_DEFS = {
+    "pack_view": "pack_view",
+    "content_type_view": "content_type_view",
+    "play_card_view": "play_card_view",
+    "runtime_asset_view": "runtime_asset_view",
+    "brand_overlay_view": "brand_overlay_view",
+    "evidence_view": "evidence_view",
+    "generation_recipe_view": "generation_recipe_view",
+}
+
+# Control table → schema $defs 内的定义名（control_tables.schema.json 当前不带 governance_common_fields，
+# 因此 control 不通过 build_view_validator 走 view-级 allOf；走原始 $defs 节点直接校验）
+CONTROL_SCHEMA_DEFS = {
+    "field_requirement_matrix": "field_requirement_matrix",
+    "retrieval_policy_view": "retrieval_policy_view",
+    "merge_precedence_policy": "merge_precedence_policy",
+    "tenant_scope_registry": "tenant_scope_registry",
+    "context_bundle_log": "context_bundle_log",
+}
 
 DEFAULT_MANIFEST_PATH = REPO_ROOT / "clean_output" / "audit" / "source_manifest.json"
 DEFAULT_REPORT_PATH = DEFAULT_AUDIT_DIR / "validate_serving_governance.report"
@@ -148,11 +177,204 @@ def _validate_governance_row(row: dict[str, str], view_name: str, row_idx: int) 
     return violations
 
 
+# ---------- preflight schema 校验（post-audit finding #1） ----------
+
+def _coerce_cell(value: str, prop_schema: dict[str, Any]) -> Any:
+    """根据 schema 字段类型把 csv string cell 转回原 type。
+
+    schema 校验用 jsonschema，type=array/object/boolean/integer/number 期望 native；
+    csv 全是字符串，必须先反序列化再校验，否则会出 spurious type 错。
+    """
+    t = prop_schema.get("type")
+    if isinstance(t, list):
+        t = next((x for x in t if x != "null"), t[0] if t else None)
+    if value == "":
+        if t == "array":
+            return []
+        if t == "object":
+            return {}
+        return value  # 空字符串交给 schema enum/minLength 等约束兜底
+    if t in ("array", "object"):
+        try:
+            return json.loads(value)
+        except (json.JSONDecodeError, ValueError):
+            return value  # 让 schema 报 type mismatch
+    if t == "boolean":
+        if value == "true":
+            return True
+        if value == "false":
+            return False
+        return value
+    if t == "integer":
+        try:
+            return int(value)
+        except ValueError:
+            return value
+    if t == "number":
+        try:
+            return float(value)
+        except ValueError:
+            return value
+    return value
+
+
+def _typed_row(raw_row: dict[str, str], schema_doc: dict[str, Any], def_name: str) -> dict[str, Any]:
+    """从 csv str → schema-typed dict。governance_common_fields 自动合并。"""
+    defs = schema_doc.get("$defs", {}) or {}
+    target_def = defs.get(def_name, {})
+    gcf = defs.get("governance_common_fields", {}) if "governance_common_fields" in defs else {}
+    all_props: dict[str, Any] = {}
+    all_props.update(gcf.get("properties", {}) or {})
+    all_props.update(target_def.get("properties", {}) or {})
+    typed: dict[str, Any] = {}
+    for k, v in raw_row.items():
+        ps = all_props.get(k)
+        if ps is None:
+            typed[k] = v
+        else:
+            typed[k] = _coerce_cell(v, ps)
+    return typed
+
+
+def _validate_against_def(schema_doc: dict[str, Any], def_name: str, has_governance: bool):
+    """构造一个独立 Validator：control 表无 governance；view 表合并 governance_common_fields."""
+    from jsonschema import Draft202012Validator
+    if has_governance:
+        return build_view_validator(schema_doc, def_name)
+    return Draft202012Validator({
+        "$schema": schema_doc["$schema"],
+        "$defs": schema_doc["$defs"],
+        "$ref": f"#/$defs/{def_name}",
+    })
+
+
+def check_preflight_schema(
+    views: dict[str, list[dict[str, str]]],
+    controls: dict[str, list[dict[str, str]]],
+    serving_schema_path: Path = DEFAULT_SERVING_SCHEMA_PATH,
+    control_schema_path: Path = DEFAULT_CONTROL_SCHEMA_PATH,
+) -> dict[str, Any]:
+    """preflight schema_validation: 逐行 jsonschema 校验 7 view + 5 control。
+
+    finding #1 守门：必填列缺失 / 类型错 / 枚举越界都必须在此 fail-closed，
+    不允许下游 S1-S7 在结构坏的产物上"绿"。
+    """
+    violations: list[str] = []
+    checked = 0
+    try:
+        serving_schema = json.loads(serving_schema_path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError) as exc:
+        return {
+            "name": "preflight schema_validation",
+            "status": "fail",
+            "checked_rows": 0,
+            "violations": [f"serving schema load failed: {exc}"],
+        }
+    try:
+        control_schema = json.loads(control_schema_path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError) as exc:
+        return {
+            "name": "preflight schema_validation",
+            "status": "fail",
+            "checked_rows": 0,
+            "violations": [f"control schema load failed: {exc}"],
+        }
+
+    for view_name in VIEW_NAMES:
+        rows = views.get(view_name, [])
+        if not rows:
+            continue
+        try:
+            validator = _validate_against_def(serving_schema, VIEW_SCHEMA_DEFS[view_name], has_governance=True)
+        except KeyError as exc:
+            violations.append(f"{view_name}: schema $def 缺失 / missing def: {exc}")
+            continue
+        for i, raw in enumerate(rows):
+            typed = _typed_row(raw, serving_schema, VIEW_SCHEMA_DEFS[view_name])
+            errs = validate_row(validator, typed)
+            checked += 1
+            for e in errs:
+                violations.append(f"{view_name}[{i}]: {e}")
+
+    for ctl_name, def_name in CONTROL_SCHEMA_DEFS.items():
+        rows = controls.get(ctl_name, [])
+        if not rows:
+            continue
+        try:
+            validator = _validate_against_def(control_schema, def_name, has_governance=False)
+        except KeyError as exc:
+            violations.append(f"{ctl_name}: schema $def 缺失: {exc}")
+            continue
+        for i, raw in enumerate(rows):
+            typed = _typed_row(raw, control_schema, def_name)
+            errs = validate_row(validator, typed)
+            checked += 1
+            for e in errs:
+                violations.append(f"{ctl_name}[{i}]: {e}")
+
+    # 报告列表上限：避免 100+ 错误压垮 report 可读性，超过 50 截断并标 truncated
+    truncated = False
+    if len(violations) > 50:
+        truncated = True
+        violations = violations[:50] + [f"... (truncated, total={len(violations)})"]
+
+    return {
+        "name": "preflight schema_validation",
+        "status": "fail" if violations else "pass",
+        "checked_rows": checked,
+        "violations": violations,
+        "truncated": truncated,
+    }
+
+
 # ---------- 7 道门 / 7 gates ----------
+
+def _empty_input_fail(gate_name: str, missing_inputs: list[str]) -> dict[str, Any] | None:
+    """post-audit finding #2: 空输入禁止静默 pass。
+
+    每 S 门入口检查"必需输入是否非空"；任一必需输入为空 → 立即 fail-closed，
+    不进入后续 per-row 检查（per-row 在 0 行下会 trivially 通过造成假绿）。
+    返回 None 表示输入完整可继续；返回 dict 表示已 fail，调用者直接 return。
+    """
+    if missing_inputs:
+        return {
+            "name": gate_name,
+            "status": "fail",
+            "checked_rows": 0,
+            "violations": [
+                f"empty input: {v} (任务卡 §6 / post-audit #2: 禁止静默 pass)"
+                for v in missing_inputs
+            ],
+        }
+    return None
+
+
+def _expected_governance_ids(
+    manifest_path: Path,
+    serving_schema_path: Path = DEFAULT_SERVING_SCHEMA_PATH,
+) -> dict[str, str] | None:
+    """post-audit finding #3: 重算 governance 链路 IDs，用于行级一致性比对。
+
+    返回 {source_manifest_hash, view_schema_version, compile_run_id}；
+    若 manifest 或 schema 缺失 / 解析失败 → 返回 None，由调用者把"无法重算"视为 S1 fail-closed。
+    """
+    try:
+        mh = load_manifest_hash(manifest_path)
+        vsv = derive_view_schema_version(serving_schema_path)
+        crid = derive_compile_run_id(mh, vsv)
+    except Exception:
+        return None
+    return {
+        "source_manifest_hash": mh,
+        "view_schema_version": vsv,
+        "compile_run_id": crid,
+    }
+
 
 def check_s1_source_traceability(
     views: dict[str, list[dict[str, str]]],
     candidate_pack_ids: set[str],
+    expected_ids: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """S1 source_traceability · 分层语义 / tiered semantics.
 
@@ -162,11 +384,38 @@ def check_s1_source_traceability(
         免反查；额外强校验前缀（CT- / RECIPE-）防漂移
     额外门：content_type_view.source_pack_ids（复数列）若非空，每元素必须能反查；空 list 跳过。
     """
+    # finding #2: 空输入禁止静默 pass（S1 需要全 7 view 至少各 1 行）
+    missing = [v for v in VIEW_NAMES if not views.get(v)]
+    if missing:
+        empty = _empty_input_fail("S1 source_traceability", missing)
+        if empty is not None:
+            empty.update({
+                "resolved_views_checked": 0,
+                "synthetic_views_checked": 0,
+                "plural_refs_checked": 0,
+            })
+            return empty
+
+    # finding #3: 若无法重算 expected_ids → S1 fail-closed（manifest/schema 缺失等价 ID 不可信）
+    if expected_ids is None:
+        return {
+            "name": "S1 source_traceability",
+            "status": "fail",
+            "checked_rows": 0,
+            "resolved_views_checked": 0,
+            "synthetic_views_checked": 0,
+            "plural_refs_checked": 0,
+            "violations": [
+                "expected governance IDs unavailable (manifest or schema missing) — fail-closed"
+            ],
+        }
+
     violations: list[str] = []
     checked = 0
     resolved_checked = 0
     synthetic_checked = 0
     plural_refs_checked = 0
+    id_mismatches = 0
 
     for view_name in VIEW_NAMES:
         rows = views.get(view_name, [])
@@ -174,6 +423,18 @@ def check_s1_source_traceability(
             checked += 1
             # 跨门 governance 检查
             violations.extend(_validate_governance_row(row, view_name, idx))
+
+            # finding #3: 治理链路 3 个 IDs 与重算值逐行比对
+            for id_col in ("source_manifest_hash", "view_schema_version", "compile_run_id"):
+                actual = (row.get(id_col) or "").strip()
+                expected = expected_ids[id_col]
+                if actual and actual != expected:
+                    id_mismatches += 1
+                    violations.append(
+                        f"{view_name}[{idx}] {id_col} mismatch / governance ID mismatch: "
+                        f"row={actual!r} expected={expected!r}"
+                    )
+
             pid = (row.get("source_pack_id") or "").strip()
             if not pid:
                 violations.append(f"{view_name}[{idx}] empty source_pack_id")
@@ -238,12 +499,20 @@ def check_s1_source_traceability(
         "resolved_views_checked": resolved_checked,
         "synthetic_views_checked": synthetic_checked,
         "plural_refs_checked": plural_refs_checked,
+        "id_mismatches": id_mismatches,
         "violations": violations,
     }
 
 
 def check_s2_gate_filter(views: dict[str, list[dict[str, str]]]) -> dict[str, Any]:
     """S2: 默认池只允许 gate_status=active；non-active 必须 review_status ∈ {approved, pending_review}."""
+    # finding #2: 空输入禁止静默 pass
+    missing = [v for v in VIEW_NAMES if not views.get(v)]
+    if missing:
+        empty = _empty_input_fail("S2 gate_filter", missing)
+        if empty is not None:
+            empty["gate_status_distribution"] = {}
+            return empty
     violations: list[str] = []
     checked = 0
     dist: dict[str, dict[str, int]] = {}
@@ -276,6 +545,12 @@ def check_s2_gate_filter(views: dict[str, list[dict[str, str]]]) -> dict[str, An
 
 def check_s3_brand_layer_scope(views: dict[str, list[dict[str, str]]]) -> dict[str, Any]:
     """S3: brand_layer ∈ BRAND_LAYER_RE；brand_overlay_view 严禁 domain_general."""
+    # finding #2
+    missing = [v for v in VIEW_NAMES if not views.get(v)]
+    if missing:
+        empty = _empty_input_fail("S3 brand_layer_scope", missing)
+        if empty is not None:
+            return empty
     violations: list[str] = []
     checked = 0
     for view_name in VIEW_NAMES:
@@ -300,6 +575,12 @@ def check_s3_brand_layer_scope(views: dict[str, list[dict[str, str]]]) -> dict[s
 
 def check_s4_granularity_integrity(views: dict[str, list[dict[str, str]]]) -> dict[str, Any]:
     """S4: granularity_layer ∈ {L1,L2,L3}；空值视为 fail."""
+    # finding #2
+    missing = [v for v in VIEW_NAMES if not views.get(v)]
+    if missing:
+        empty = _empty_input_fail("S4 granularity_integrity", missing)
+        if empty is not None:
+            return empty
     violations: list[str] = []
     checked = 0
     for view_name in VIEW_NAMES:
@@ -319,8 +600,18 @@ def check_s4_granularity_integrity(views: dict[str, list[dict[str, str]]]) -> di
 
 def check_s5_evidence_linkage(views: dict[str, list[dict[str, str]]]) -> dict[str, Any]:
     """S5: evidence_view 每行 source_md（多文件聚合解析后）所有段都 REPO_ROOT 下真实存在."""
-    violations: list[str] = []
     rows = views.get("evidence_view", [])
+    # finding #2
+    if not rows:
+        return {
+            "name": "S5 evidence_linkage",
+            "status": "fail",
+            "checked_rows": 0,
+            "violations": [
+                "empty input: evidence_view (任务卡 §6 / post-audit #2: 禁止静默 pass)"
+            ],
+        }
+    violations: list[str] = []
     checked = len(rows)
     for idx, row in enumerate(rows):
         sm = row.get("source_md") or ""
@@ -344,8 +635,18 @@ def check_s5_evidence_linkage(views: dict[str, list[dict[str, str]]]) -> dict[st
 
 def check_s6_play_card_completeness(views: dict[str, list[dict[str, str]]]) -> dict[str, Any]:
     """S6: play_card_view 每行 completeness_status 非空."""
-    violations: list[str] = []
     rows = views.get("play_card_view", [])
+    # finding #2
+    if not rows:
+        return {
+            "name": "S6 play_card_completeness",
+            "status": "fail",
+            "checked_rows": 0,
+            "violations": [
+                "empty input: play_card_view (任务卡 §6 / post-audit #2: 禁止静默 pass)"
+            ],
+        }
+    violations: list[str] = []
     checked = len(rows)
     for idx, row in enumerate(rows):
         cs = (row.get("completeness_status") or "").strip()
@@ -395,24 +696,55 @@ def run_gates(
     views_dir: Path,
     control_dir: Path,
     candidates_root: Path,
+    manifest_path: Path = DEFAULT_MANIFEST_PATH,
+    run_preflight: bool = True,
 ) -> tuple[list[dict[str, Any]], int]:
-    """跑选中的门，返回 (results, exit_code_hint)."""
+    """跑选中的门，返回 (results, exit_code_hint).
+
+    preflight schema_validation 在 S1-S7 之前跑一次（覆盖 7 view + 5 control），
+    failure 不阻断 S1-S7 继续跑（让 report 信息完整），但 final exit 非 0。
+    """
     # 1. 加载 7 view csv（任一缺失 → 抛）
     views: dict[str, list[dict[str, str]]] = {}
     for v in VIEW_NAMES:
         views[v] = _read_csv(views_dir / f"{v}.csv")
 
-    # 2. 加载 control（仅 S7 用到，但 fail-closed 早读早抛）
-    frm_rows = _read_csv(control_dir / "field_requirement_matrix.csv")
-    canonical_rows = _read_csv(control_dir / "content_type_canonical.csv")
+    # 2. 加载 control（preflight + S7 都用；fail-closed 早读早抛）
+    control_data: dict[str, list[dict[str, str]]] = {}
+    for ctl_name in (
+        "field_requirement_matrix",
+        "content_type_canonical",
+        "retrieval_policy_view",
+        "merge_precedence_policy",
+        "tenant_scope_registry",
+        "context_bundle_log",
+    ):
+        ctl_path = control_dir / f"{ctl_name}.csv"
+        if ctl_path.exists():
+            control_data[ctl_name] = _read_csv(ctl_path)
+        else:
+            control_data[ctl_name] = []
+    frm_rows = control_data.get("field_requirement_matrix", [])
+    canonical_rows = control_data.get("content_type_canonical", [])
 
     # 3. 建 candidate pack_id 索引
     pack_index = _build_candidate_index(candidates_root)
 
+    # 4. 重算 expected governance IDs（finding #3）
+    expected_ids = _expected_governance_ids(manifest_path)
+
     results: list[dict[str, Any]] = []
+    # preflight first（post-audit finding #1）
+    if run_preflight:
+        preflight = check_preflight_schema(
+            views=views,
+            controls=control_data,
+        )
+        results.append(preflight)
+
     for g in selected:
         if g == "S1":
-            results.append(check_s1_source_traceability(views, pack_index))
+            results.append(check_s1_source_traceability(views, pack_index, expected_ids))
         elif g == "S2":
             results.append(check_s2_gate_filter(views))
         elif g == "S3":
@@ -450,11 +782,15 @@ def write_report(
             lines.append(f"resolved_views_checked: {r['resolved_views_checked']}")
             lines.append(f"synthetic_views_checked: {r['synthetic_views_checked']}")
             lines.append(f"plural_refs_checked: {r['plural_refs_checked']}")
+        if "id_mismatches" in r:
+            lines.append(f"id_mismatches: {r['id_mismatches']}")
         if "gate_status_distribution" in r:
             lines.append(f"gate_status_distribution: {r['gate_status_distribution']}")
         if "canonical_count" in r:
             lines.append(f"canonical_count: {r['canonical_count']}")
             lines.append(f"frm_count: {r['frm_count']}")
+        if r.get("truncated"):
+            lines.append("truncated: true")
         vs = r.get("violations") or []
         if vs:
             lines.append("violations:")

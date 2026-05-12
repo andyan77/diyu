@@ -192,13 +192,22 @@ def compile_field_requirement_matrix(
 
     sorted_rows = sorted(rows, key=lambda r: (r["content_type"], r["field_key"]))
 
-    # S7 全覆盖 warning（仅在 default-rules 路径检查 canonical 18 类）
+    # post-audit finding #4: 源头守门 / source-level strict closure to canonical.
+    # 任何 content_type ∉ canonical_content_type_id 集合必须在编译器立即 fail-closed，
+    # 不允许依赖 W5 S7 后置兜底。历史 brand_manifesto 漂移就是因为这层守门缺失被诱导进 frm。
     canonical_uncovered: list[str] = []
-    if rules is None and CANONICAL_CSV.exists():
-        covered = {r["content_type"] for r in sorted_rows}
+    if CANONICAL_CSV.exists():
         with CANONICAL_CSV.open(encoding="utf-8") as fh:
             canonical = {row["canonical_content_type_id"] for row in csv.DictReader(fh)}
-        canonical_uncovered = sorted(canonical - covered)
+        rule_types = {r["content_type"] for r in sorted_rows}
+        extra = sorted(rule_types - canonical)
+        if extra:
+            raise CompileError(
+                "content_type not registered in canonical 18 / 未注册 canonical id: "
+                f"{extra} — source-level guard rejects rules referencing unregistered "
+                f"canonical_content_type_id (see KS-COMPILER-013 finding #4)"
+            )
+        canonical_uncovered = sorted(canonical - rule_types)
         if canonical_uncovered:
             print(f"[WARN] canonical 未覆盖 / uncovered: {canonical_uncovered}", file=sys.stderr)
 

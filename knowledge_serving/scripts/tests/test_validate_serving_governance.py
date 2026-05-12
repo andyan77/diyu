@@ -107,7 +107,9 @@ def test_all_real_data_pass(tmp_path):
     text = rpt.read_text(encoding="utf-8")
     for g in ["S1", "S2", "S3", "S4", "S5", "S6", "S7"]:
         assert f"[{g} " in text
-    assert text.count("status: pass") == 7
+    # 8 pass: preflight schema_validation + S1-S7
+    assert "[preflight schema_validation]" in text
+    assert text.count("status: pass") == 8
 
 
 def test_s5_real_data_pass_strict_count(tmp_path):
@@ -344,12 +346,99 @@ def test_empty_csvs_all_fail(tmp_path):
     r = _run(["--all"] + _common_args(views, ctl, rpt))
     assert r.returncode == 2
     text = rpt.read_text(encoding="utf-8")
-    # S1-S6 应该全是 pass（没有行就没有 violations）但 S7 必 fail；
-    # 任务卡 §6 明确要求"全空 csv → 不静默 pass"——这里靠 S7 兜底
-    # （S1-S6 在 0 行时 trivially 通过；唯一硬覆盖度门是 S7）
-    assert "[S7 fallback_policy_coverage]" in text
-    # 找 S7 段并断言 fail
-    s7_idx = text.index("[S7 fallback_policy_coverage]")
-    s7_block = text[s7_idx: s7_idx + 600]
-    assert "status: fail" in s7_block
-    # 至少一个门 fail（exit=2 已保）+ S7 必 fail（防静默）
+    # 任务卡 §6 + completion_audit finding #2 硬要求：空输入下 S1-S6 不允许静默 pass。
+    # 每门必须有最小行数 / 输入完整性检查；全空时 7 门全 fail。
+    for gate in ("S1 source_traceability", "S2 gate_filter", "S3 brand_layer_scope",
+                 "S4 granularity_integrity", "S5 evidence_linkage",
+                 "S6 play_card_completeness", "S7 fallback_policy_coverage"):
+        idx = text.index(f"[{gate}]")
+        block = text[idx: idx + 600]
+        assert "status: fail" in block, f"{gate} 必须 fail（空输入禁止静默 pass）"
+
+
+# ---------- completion_audit findings #1 / #3 ----------
+
+def test_preflight_schema_catches_missing_required_column(tmp_path):
+    """finding #1: 删除 pack_view 的 pack_id 必填列后，--all 必须 exit 非 0 + preflight fail。"""
+    views, ctl, rpt = _stage_real(tmp_path)
+    src = views / "pack_view.csv"
+    with src.open("r", encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        rows = list(reader)
+        original_cols = list(reader.fieldnames or [])
+    assert "pack_id" in original_cols, "前置：真数据 pack_view 必须含 pack_id 列"
+    mutated_cols = [c for c in original_cols if c != "pack_id"]
+    with src.open("w", encoding="utf-8", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=mutated_cols, lineterminator="\n")
+        w.writeheader()
+        for r in rows:
+            w.writerow({c: r.get(c, "") for c in mutated_cols})
+    r = _run(["--all"] + _common_args(views, ctl, rpt))
+    assert r.returncode != 0, "schema 缺必填列必须 fail-closed，不允许 exit 0"
+    text = rpt.read_text(encoding="utf-8")
+    assert "[preflight schema_validation]" in text, "report 必须含 preflight schema_validation 段"
+    idx = text.index("[preflight schema_validation]")
+    block = text[idx: idx + 1200]
+    assert "status: fail" in block
+    assert "pack_id" in block, "preflight 必须报缺 pack_id"
+
+
+def test_s1_governance_id_tamper_fails(tmp_path):
+    """finding #3: 篡改某行 compile_run_id / source_manifest_hash / view_schema_version → S1 fail。"""
+    views, ctl, rpt = _stage_real(tmp_path)
+    src = views / "pack_view.csv"
+
+    def mutate(rows, fieldnames):
+        if rows:
+            rows[0]["compile_run_id"] = "BAD_HASH_TAMPER"
+            rows[0]["source_manifest_hash"] = "BAD_MANIFEST_TAMPER"
+            rows[0]["view_schema_version"] = "BAD_VER_TAMPER"
+
+    _rewrite_csv(src, mutate)
+    r = _run(["--gate", "S1"] + _common_args(views, ctl, rpt))
+    assert r.returncode != 0, "篡改 governance ID 必须 fail-closed"
+    text = rpt.read_text(encoding="utf-8")
+    idx = text.index("[S1 source_traceability]")
+    block = text[idx: idx + 2000]
+    assert "status: fail" in block
+    # 至少一种 ID 失配 violation
+    assert any(kw in block for kw in (
+        "compile_run_id mismatch", "source_manifest_hash mismatch",
+        "view_schema_version mismatch", "governance ID mismatch"
+    )), f"S1 violations 必须含 governance ID 失配描述，实际:\n{block}"
+
+
+# ---------- completion_audit finding #4 (frm 源头硬校验) ----------
+
+def test_compile_frm_rejects_non_canonical_content_type(tmp_path):
+    """finding #4: compile_field_requirement_matrix 拒绝任何 content_type ∉ canonical 18 类。
+
+    历史漂移 brand_manifesto 进 frm 的反模式必须在编译器源头 fail-closed，
+    不能只靠 W5 S7 后置兜底。
+    """
+    import importlib.util
+    frm_script = REPO_ROOT / "knowledge_serving" / "scripts" / "compile_field_requirement_matrix.py"
+    if str(frm_script.parent) not in sys.path:
+        sys.path.insert(0, str(frm_script.parent))
+    spec = importlib.util.spec_from_file_location("compile_field_requirement_matrix", frm_script)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    bad_rule = {
+        "content_type": "brand_manifesto",
+        "field_key": "brand_values",
+        "required_level": "hard",
+        "fallback_action": "block_brand_output",
+        "ask_user_question": "",
+        "block_reason": "should be rejected at compiler source",
+    }
+    custom_rules = list(mod.DEFAULT_RULES) + [bad_rule]
+    with pytest.raises(mod.CompileError) as exc:
+        mod.compile_field_requirement_matrix(
+            rules=custom_rules,
+            output_csv=tmp_path / "x.csv",
+            log_path=tmp_path / "x.log",
+        )
+    msg = str(exc.value)
+    assert "brand_manifesto" in msg
+    assert any(kw in msg for kw in ("canonical", "not registered", "未注册"))
