@@ -1,7 +1,7 @@
 # Knowledge Serving · 任务卡总册 v1
 
 > 来源：`knowledge_serving_plan_v1.1.md`
-> 卡数：56 · DAG 闭合 · 每张卡可独立实施 / 验证 / CI 阻断
+> 卡数：57 · DAG 闭合 · 每张卡可独立实施 / 验证 / CI 阻断
 > 落盘日期：2026-05-11
 
 ## 1. 目录
@@ -11,7 +11,7 @@ task_cards/
   README.md                       # 本文件（索引 + 规则）
   dag.csv                         # 机器可读 DAG（CI 消费）
   validate_task_cards.py          # 元校验器：卡片语义对齐自检
-  KS-S0-001.md ... KS-PROD-003.md # 56 张任务卡
+  KS-S0-001.md ... KS-PROD-003.md # 57 张任务卡
 ```
 
 ## 2. 阶段编号
@@ -138,7 +138,7 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 | Wave | 卡数 | 阻塞下一波的关键产物 | 卡片清单 | 状态 |
 |---|---|---|---|---|
 | **W0** | 7 | clean_output 真源基线 + manifest hash + LLM 边界 model_policy | KS-S0-001..006, KS-POLICY-005 | ✅ **done (7/7)** |
-| **W1** | 5 | 4 份 JSON schema + ECS 容器骨架 | KS-SCHEMA-001..004, KS-DIFY-ECS-001 | ⬜ not_started |
+| **W1** | 6 | 4 份 JSON schema + ECS 镜像 verify/push 对偶 | KS-SCHEMA-001..004, KS-DIFY-ECS-001/011 | ⬜ not_started |
 | **W2** | 2 | serving 目录骨架 + ECS Compose 联调 | KS-SCHEMA-005, KS-DIFY-ECS-002 | ⬜ not_started |
 | **W3** | 11 | 7 view + 4 control（除 view_pack_overlay 与 P1 总闸） | KS-COMPILER-001/002/004/005/006/007/008/009/010/011/012 | ⬜ not_started |
 | **W4** | 6 | overlay view + 2 policy（fallback/merge） + 3 召回起点 | KS-COMPILER-003, KS-POLICY-003/004, KS-RETRIEVAL-001/002/003 | ⬜ not_started |
@@ -152,7 +152,7 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 | **W12** | 2 | guardrail 集成 + 跨租户回归 | KS-DIFY-ECS-008, KS-PROD-002 | ⬜ not_started |
 | **W13** | 1 | **CI/CD 流水线总闸（S0-S13 全绿）** | KS-CD-001 | ⬜ not_started |
 | **W14** | 1 | **S1-S13 上线总回归** | KS-PROD-001 | ⬜ not_started |
-| **合计** | **56** | — | — | **7/56 done = 12.5%** |
+| **合计** | **57** | — | — | **7/57 done = 12.3%** |
 
 **波次推进规则**：
 
