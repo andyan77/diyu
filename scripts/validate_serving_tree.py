@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""validate_serving_tree.py — KS-SCHEMA-005 校验脚本 / serving tree validator.
+"""validate_serving_tree.py — serving tree 目录纯净度校验 / purity gate.
 
 校验 knowledge_serving/ 实际目录树是否与 knowledge_serving_plan_v1.1.md §11
-+ W0/W1 已落白名单完全一致。
++ W0/W1 + W3 已落白名单完全一致。每个新波次落盘新文件时必须同步扩白名单。
 
 退出码 / exit codes:
   0 = 完全一致 / fully aligned
@@ -70,14 +70,53 @@ EXPECTED_FILES_PRE_EXISTING = {
     "policies/qdrant_fallback.yaml",         # W0 KS-S0-006
 }
 
+# W3 已落白名单 / W3-landed allowlist
+# W3 group A：6 view 编译器 + 共享基础设施 + 测试套（KS-COMPILER-001/002/004/005/006/007）
+# W3 group B：5 control 编译器 + lint + 测试套（KS-COMPILER-008/009/010/011/012）
+EXPECTED_FILES_W3 = {
+    "scripts/_common.py",                            # 共享治理基础设施 / shared compile-time helpers
+    # group A: 6 view compilers
+    "scripts/compile_pack_view.py",                  # KS-COMPILER-001
+    "scripts/compile_content_type_view.py",          # KS-COMPILER-002
+    "scripts/compile_play_card_view.py",             # KS-COMPILER-004
+    "scripts/compile_runtime_asset_view.py",         # KS-COMPILER-005
+    "scripts/compile_brand_overlay_view.py",         # KS-COMPILER-006
+    "scripts/compile_evidence_view.py",              # KS-COMPILER-007
+    # group B: 5 control compilers + 1 lint
+    "scripts/compile_tenant_scope_registry.py",      # KS-COMPILER-008
+    "scripts/compile_field_requirement_matrix.py",   # KS-COMPILER-009
+    "scripts/compile_retrieval_policy_view.py",      # KS-COMPILER-010
+    "scripts/compile_merge_precedence_policy.py",    # KS-COMPILER-011
+    "scripts/lint_no_duplicate_log.sh",              # KS-COMPILER-012
+    # group A tests
+    "scripts/tests/test_compile_pack_view.py",
+    "scripts/tests/test_compile_content_type_view.py",
+    "scripts/tests/test_compile_play_card_view.py",
+    "scripts/tests/test_compile_runtime_asset_view.py",
+    "scripts/tests/test_compile_brand_overlay_view.py",
+    "scripts/tests/test_compile_evidence_view.py",
+    # group B tests
+    "scripts/tests/test_compile_tenant_scope_registry.py",
+    "scripts/tests/test_compile_field_requirement_matrix.py",
+    "scripts/tests/test_compile_retrieval_policy_view.py",
+    "scripts/tests/test_compile_merge_precedence_policy.py",
+    "scripts/tests/test_lint_no_duplicate_log.py",
+}
+
 # 空目录占位 / placeholder for empty subdirs（git 不跟踪空目录）
-GITKEEP_DIRS = {"vector_payloads", "logs", "scripts", "audit"}
+# 注：scripts/ 与 audit/ 已被 W3 实文件填充，无须 .gitkeep
+GITKEEP_DIRS = {"vector_payloads", "logs"}
 EXPECTED_GITKEEPS = {f"{d}/.gitkeep" for d in GITKEEP_DIRS}
 
-# 全部允许文件 = §11 + W0/W1 白名单 + .gitkeep 占位
-ALLOWED_FILES = EXPECTED_FILES_PLAN | EXPECTED_FILES_PRE_EXISTING | EXPECTED_GITKEEPS
+# 全部允许文件 = §11 + W0/W1 + W3 白名单 + .gitkeep 占位
+ALLOWED_FILES = (
+    EXPECTED_FILES_PLAN
+    | EXPECTED_FILES_PRE_EXISTING
+    | EXPECTED_FILES_W3
+    | EXPECTED_GITKEEPS
+)
 
-# 必须存在的文件 = §11 + W0/W1 + .gitkeep 占位（缺一即 fail）
+# 必须存在的文件 = §11 + W0/W1 + W3 + .gitkeep 占位（缺一即 fail）
 REQUIRED_FILES = ALLOWED_FILES
 
 
@@ -100,11 +139,15 @@ def main() -> int:
         errors.append(f"[EXTRA] 多子目录 / unexpected dir: knowledge_serving/{d}/")
 
     # 3) 文件清单 / file inventory（递归）
+    # 排除 Python 运行时缓存：__pycache__/ / .pyc / .pyo（非 git 跟踪）
     actual_files: set[str] = set()
     for p in SERVING.rglob("*"):
-        if p.is_file():
-            rel = p.relative_to(SERVING).as_posix()
-            actual_files.add(rel)
+        if not p.is_file():
+            continue
+        rel = p.relative_to(SERVING).as_posix()
+        if "__pycache__/" in rel or rel.endswith((".pyc", ".pyo")):
+            continue
+        actual_files.add(rel)
 
     # 缺文件 / missing
     missing_files = REQUIRED_FILES - actual_files
@@ -128,10 +171,11 @@ def main() -> int:
 
 def _report(errors: list[str]) -> int:
     if not errors:
-        print("[OK] knowledge_serving/ 与 §11 + W0/W1 白名单完全一致")
+        print("[OK] knowledge_serving/ 与 §11 + W0/W1 + W3 白名单完全一致")
         print(f"     根目录 / root: {SERVING}")
         print(f"     §11 期望文件数: {len(EXPECTED_FILES_PLAN)}")
         print(f"     W0/W1 白名单数: {len(EXPECTED_FILES_PRE_EXISTING)}")
+        print(f"     W3 白名单数: {len(EXPECTED_FILES_W3)}")
         print(f"     .gitkeep 占位数: {len(EXPECTED_GITKEEPS)}")
         return 0
     print("[FAIL] knowledge_serving/ 校验未通过 / validation failed:")

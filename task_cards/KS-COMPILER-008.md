@@ -8,13 +8,14 @@ files_touched:
   - knowledge_serving/control/tenant_scope_registry.csv
 artifacts:
   - knowledge_serving/control/tenant_scope_registry.csv
+  - knowledge_serving/audit/tenant_scope_registry.compile.log
 s_gates: []
 plan_sections:
   - "§4.1"
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_tenant_scope_registry.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-008 · tenant_scope_registry 编译

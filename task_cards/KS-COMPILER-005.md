@@ -8,13 +8,14 @@ files_touched:
   - knowledge_serving/views/runtime_asset_view.csv
 artifacts:
   - knowledge_serving/views/runtime_asset_view.csv
+  - knowledge_serving/audit/runtime_asset_view.compile.log
 s_gates: [S1]
 plan_sections:
   - "§3.5"
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_runtime_asset_view.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-005 · runtime_asset_view 编译

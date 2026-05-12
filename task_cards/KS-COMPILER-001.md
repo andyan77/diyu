@@ -15,7 +15,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_pack_view.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-001 · pack_view 编译
@@ -36,7 +36,15 @@ status: not_started
 - **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从 README §7.1 白名单输入派生（含本卡 §3 上方列出的具体路径，例如 `clean_output/candidates/`、`clean_output/nine_tables/`、`clean_output/audit/`、`knowledge_serving/schema/`、`knowledge_serving/control/content_type_canonical.csv` 等）。
 
 ## 4. 执行步骤
-1. 加载 candidates；过滤 `gate_status=active`（默认）
+1. 加载 candidates；按下表派生 `gate_status` 并过滤（默认仅保留 `active`）：
+
+   | brand_layer | active 判定 / active criteria |
+   |---|---|
+   | `domain_general` | `gate_1/2/3/4` 必须**全** `pass`（gate_3_rule_generalizable=pass 是通用层硬要求） |
+   | `brand_<name>`（如 `brand_faye`）| `gate_1/2/4` 必须 `pass`；**`gate_3_rule_generalizable` 允许 `partial`** —— 品牌专属知识按定义就不期望跨品牌可泛化，partial 是正确语义而非降级 |
+   | `needs_review` | 同 `brand_<name>` 规则（partial 允许） |
+
+   **为什么 brand 包要放宽 gate_3**：CLAUDE.md 多租户红线已明：`brand_<name>` 范围限定为"品牌调性 + 创始人画像"等**故意非通用**内容，对它们要求 gate_3=pass 等于让品牌包永远进不了 serving。租户隔离由 retrieval 层 `allowed_layers` 过滤承担，不应该靠 compile 滤掉品牌包。
 2. 注入 governance_common_fields（compile_run_id 来自 manifest hash 派生）
 3. brand_layer 透传，禁止脚本内推断
 4. content_type 映射到 canonical id（KS-S0-005）
@@ -61,6 +69,8 @@ status: not_started
 | inactive pack 误入 | 默认过滤；--include-inactive 才入 |
 | 跨租户污染样本 | brand_a / brand_b 行各自独立 |
 | 同输入幂等 | sha256 一致 |
+| brand_`<name>` + gate_3=partial 默认 active | 行存在；gate_status=active；brand_faye 行数 > 0 |
+| domain_general + gate_3=partial | 默认过滤（视为 draft）；--include-inactive 才入 |
 
 ## 7. 治理语义一致性
 - clean_output 0 写

@@ -1,1 +1,20 @@
 content_type,field_key,required_level,fallback_action,ask_user_question,block_reason
+behind_the_scenes,process_detail,soft,use_domain_general,缺幕后细节，是否用通用工艺说明？,
+brand_manifesto,brand_values,hard,block_brand_output,,brand_manifesto 必须基于品牌价值观，缺失则阻断成稿
+daily_fragment,scene_anchor,none,neutral_tone,,
+emotion_expression,tone_constraint,soft,neutral_tone,,
+event_documentary,event_anchor,hard,block_brand_output,,事件纪实必须基于具体事件，缺失则阻断
+founder_ip,founder_profile,hard,block_brand_output,,founder_ip 必须基于具体创始人画像，缺失则阻断成稿
+humor_content,tone_constraint,soft,neutral_tone,,
+knowledge_sharing,knowledge_pack,hard,block_brand_output,,知识分享必须有可追溯知识包，缺失则阻断
+lifestyle_expression,brand_tone,soft,neutral_tone,,
+outfit_of_the_day,outfit_pack,hard,block_brand_output,,OOTD 必须基于具体单品/搭配，缺失则阻断
+personal_vlog,persona,soft,use_domain_general,,
+process_trace,process_anchor,hard,block_brand_output,,过程记录必须基于具体过程节点，缺失则阻断
+product_copy_general,product_pack,hard,block_brand_output,,商品文案必须基于具体 SKU/品类，缺失则阻断
+product_journey,product_origin,hard,block_brand_output,,商品溯源必须基于真实来源/工艺，缺失则阻断
+product_review,brand_tone,soft,neutral_tone,是否使用品牌专属语气？,
+role_work_vlog,role_profile,soft,use_domain_general,缺角色画像，是否用通用岗位画像?,
+store_daily,team_persona,soft,use_domain_general,缺门店团队人设，是否用通用门店人设？,
+talent_showcase,talent_anchor,soft,neutral_tone,,
+training_material,training_anchor,hard,block_brand_output,,培训素材必须基于具体岗位/制度条目，缺失则阻断

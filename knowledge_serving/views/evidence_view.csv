@@ -1,1 +1,955 @@
 source_pack_id,brand_layer,granularity_layer,gate_status,source_table_refs,evidence_ids,traceability_status,default_call_pool,review_status,compile_run_id,source_manifest_hash,view_schema_version,chunk_text_hash,evidence_id,source_md,source_anchor,evidence_quote,source_type,inference_level,trace_quality,line_no,adjudication_status
+KP-craft_quality-brushing-napping-aging-speed,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-craft_quality-brushing-napping-aging-speed""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,982142d1b28787e485706360759d744a36cb48fa222f5a2d2f50f0e5d7141d9e,EV-KP-craft_quality-brushing-napping-aging-speed,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,五、5. 磨毛 / 拉毛 / 起绒 / 防起球,"这组正式定义为""第一触感与老化速度工艺""。
+很多单品上手很讨喜，但三次之后就显旧，问题往往不在设计，而在表层处理和摩擦位耐受。
+凡是卖点写""软、糯、绒、暖、亲肤""的单品，都要同步判断背包位、腋下、袖口、内侧会不会先起毛、起球、发旧。",explicit_business_decision,direct_quote,high,0,approved
+KP-craft_quality-dye-fastness-daily-risk,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-craft_quality-dye-fastness-daily-risk""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,d63ae7547a07138c2ae52d798bb272b982835ae9a0deb543f34f402085fddddc,EV-KP-craft_quality-dye-fastness-daily-risk,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,五、4. 染整 / 色牢度,"这组正式定义为""日常使用风险工艺""。
+不是只有深色才要看色牢度，浅深拼接、浅色内搭、包带摩擦、汗液摩擦都要看。
+凡是顾客会长期背包、贴身穿、或者浅深叠穿的单品，都必须把褪色 / 沾色风险前置说明。",explicit_business_decision,direct_quote,high,0,approved
+KP-craft_quality-fusing-lamination-silhouette-gate,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-craft_quality-fusing-lamination-silhouette-gate""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,cfac09de52711a16242617154e3f2a099c0de471e542979cca5465b855f1f1fb,EV-KP-craft_quality-fusing-lamination-silhouette-gate,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,五、3. 粘合衬 / 贴合 / 复合,"这组正式定义为""轮廓成立工艺""。
+领口、门襟、驳头、裤头、袖山，一旦衬用错或贴合不稳，陈列时还能撑，穿几次就可能翻边、起泡、脱层。
+凡是要用""挺、立、利落、骨架感""做卖点的单品，都要先过这组判断。",explicit_business_decision,direct_quote,high,0,approved
+KP-craft_quality-pleat-topstitch-pattern-match-care,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-craft_quality-pleat-topstitch-pattern-match-care""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,638d4d81a86d97531299de8ffeb9c418f2a95c6a993713c0e8376e66ce3dc949,EV-KP-craft_quality-pleat-topstitch-pattern-match-care,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,五、6. 压褶 / 明线 / 对条对格 / 细节收口,"这组正式定义为""讲究感工艺""。
+它最直接决定陈列是不是高级、近看是不是用心。
+百褶稳不稳、线迹直不直、格纹对不对、滚边净不净，顾客不一定会说术语，但一定会据此把衣服归类成""讲究""还是""将就""。
+凡是要卖""做工感、品质感、工艺感""的单品，这组必须先看。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-craft_quality-preshrink-wash-set-after-sale-front,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-craft_quality-preshrink-wash-set-after-sale-front""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,775d1dd5e0282dc659e671cc5a2d0f4f0eca1ec71f7d28f454a4a50b827b058c,EV-KP-craft_quality-preshrink-wash-set-after-sale-front,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,五、1. 预缩 / 水洗 / 定型,"这组正式定义为""售后前置工艺""。
+它直接决定一件衣服洗后会不会缩、歪、扭、变短，决定裤线、裙摆、袖长会不会洗一次就走样。
+门店说这件""耐穿、稳定、好打理""之前，必须先判断预缩、水洗和定型是否成立。
+CottonWorks 明确指出 shrinkage 受面料结构、湿处理、整理以及成衣制造过程共同影响。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-craft_quality-sewing-stitch-pucker-near-eye,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-craft_quality-sewing-stitch-pucker-near-eye""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,041a5ba57ef9b6ee3a937c21f818300c6cdfff625879f4035bba2becf49fb187,EV-KP-craft_quality-sewing-stitch-pucker-near-eye,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,五、2. 缝制质量,"这组正式定义为""近看质感工艺""。
+顾客不一定会说 seam puckering 这个词，但她一定能看出""这件怎么有点抽、歪、鼓、皱""。
+Coats 对 seam puckering 的说明很清楚：它不只是线的问题，
+还和 fabric structure、seam construction、thread / needle size 以及 feeding problems 有关。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-craft_quality-store-risk-discipline-evidence-first,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-craft_quality-store-risk-discipline-evidence-first""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,5fe16aff114646cf5ced728ffec3086043e8cc43f40bb175c397ceeb72a527ea,EV-KP-craft_quality-store-risk-discipline-evidence-first,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,七、门店统一口径,"能不能机洗，看洗护标，不看感觉。
+会不会缩水，看预缩 / 水洗 / 定型，不看""摸起来稳不稳""。
+会不会起皱，看纤维、织法、整理，不看它挂着时平不平。
+会不会透，看颜色、厚度、织法、光线，不看静态陈列。
+会不会起球，看摩擦场景，不只看材质名。
+会不会勾丝，看表面精细度和使用场景，不只看价格。
+会不会显廉价，看面料表情、缝制、收口、光泽控制，不看营销词。
+会不会翻车，看顾客穿着习惯和容忍度，不看镜前第一眼。",explicit_business_decision,direct_quote,high,0,approved
+KP-display_rule-attribute-driven-display,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-display_rule-attribute-driven-display""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,2b263114a8e2762803d10f4deb79f516f59473bdd2aa25f7547247206565f094,EV-KP-display_rule-attribute-driven-display,Q7Q12-搭配陈列业务包/商品与属性基础包.md,6.5,"最直接影响陈列的是：color / Collection / Category / length / fit / season / pattern / occasion。
+公开零售陈列指南也强调，视觉陈列的核心就是用分组、颜色、焦点位、人体模特/人台组合
+帮助顾客快速理解商品关系、降低选择负担；颜色分组和焦点单品尤其直接影响转化。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-display_rule-display-first-then-speak,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-display_rule-display-first-then-speak""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,f56a066689c5e94ad7336cfc8f986851bf2d97fb76fc5733696b83fe162c6fbb,EV-KP-display_rule-display-first-then-speak,Q7Q12-搭配陈列业务包/门店接客场景包.md,三、4）适合先陈列后开口的场景正式冻结,"4）适合先陈列后开口的场景，正式冻结为 4 类
+ready_made_full_set（现成成套型）
+new_item_cannot_style（新款不会搭型）
+weekend_social（周末社交型）
+看中门口模特 / 成套位再开口的顾客",explicit_business_decision,direct_quote,high,0,approved
+KP-display_rule-folded-display-purpose,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-display_rule-folded-display-purpose""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,385e68124da89a07a21f8cccd4f799fc76826e4404161be6563a8ca56b4d1ca9,EV-KP-display_rule-folded-display-purpose,Q7Q12-搭配陈列业务包/陈列方法包.md,二、5. folded_display + 三、5）适合培训新人 + 培训形态：俯拍 / Do/Don't / before-after,"业务目标：让顾客看见面料、顺手上手、顺手加购。
+最容易犯的错：叠太高；尺码混叠；没有打开样件；只求齐，不求顾客敢碰。
+什么叫""看着高级但卖不动""：像买手店桌面，但顾客不敢抽、不知道展开后长什么样。
+培训层级：首批重点给新人训练。最适合俯拍操作台、Do/Don't、before/after。
+仓库培训真源也已把折叠、挂装、陈列 before/after、错误 vs 正确作为高价值训练形态。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-display_rule-front-hanging-purpose,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-display_rule-front-hanging-purpose""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,0e00592bd6c311e8528dc7b4b64a15d5da5f72670b3a4883b67d7ade1521326e,EV-KP-display_rule-front-hanging-purpose,Q7Q12-搭配陈列业务包/陈列方法包.md,二、3. front_hanging_display + 三、5）适合培训新人,"业务目标：让顾客一眼看懂今天主推哪件，快速产生拿取动作。
+最容易犯的错：一排都是重点；颜色、风格、长度乱；挂的是没货样子款。
+什么叫""看着高级但卖不动""：色序很顺，但没有第一主款，顾客看完还是不知道先试哪件。
+培训层级：首批重点给新人训练。最适合 Do/Don't 对照和日常复盘。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-display_rule-full-look-no-broken-size,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-display_rule-full-look-no-broken-size""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c1e967e729f2bdcd49b1cafb38030461820423e688b6cdc1f6dcdddec07ab9b2,EV-KP-display_rule-full-look-no-broken-size,Q7Q12-搭配陈列业务包/陈列方法包.md,二、6. full_look_display + 三、2)/3) + 四、联动,"适合库存状态：full_look_ready / new_arrival_complete / core_push_deep_stock。
+不适合库存状态：broken_size_partial / clearance_tail_stock / 主件或关键辅件断码的伪成套状态。
+最容易犯的错：套得太满；主件不清；辅件比主件抢；没有第二套替代；建立在断码货上。
+什么叫""看着高级但卖不动""：编辑感很强，现实感很弱；少一件就散，顾客带不走。
+window_display、mannequin_display、full_look_display 必须过库存校验，不得用断码伪成套。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-display_rule-mannequin-display-purpose,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-display_rule-mannequin-display-purpose""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,d2e6ac6005a23660b2ff10f85d838a80345af42035d8c2902ad690f52e99d82d,EV-KP-display_rule-mannequin-display-purpose,Q7Q12-搭配陈列业务包/陈列方法包.md,二、2. mannequin_display + 四、联动（必须回指 StylingRule、过库存校验）,"业务目标：把单品变成可想象的穿着结果，提升试穿率和整套带走率。
+最容易犯的错：模特穿得像大片，不像门店；主件有货，配件没货；层次过重，现实里穿不了。
+培训层级：新人学单模特标准搭法；店长 / 老手学多模特故事线和替换逻辑。
+mannequin_display 与 full_look_display 必须回指 StylingRule，不得凭审美硬搭。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-display_rule-side-hanging-purpose,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-display_rule-side-hanging-purpose""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,68c3e475e0f78226779b1047d5420a7f4b5753a5244645142c2d1a3595870bcf,EV-KP-display_rule-side-hanging-purpose,Q7Q12-搭配陈列业务包/陈列方法包.md,二、4. side_hanging_display + 三、5）适合培训新人,"业务目标：承接颜色、尺码、版型选择，支持顾客连续浏览和补选。
+最容易犯的错：像仓库，不像卖场；挂得太满；尺码和颜色顺序乱；季节混挂。
+什么叫""看着高级但卖不动""：整杆颜色很顺，但顾客不敢翻、不愿拿，一摸就乱，乱了没人恢复。
+培训层级：首批给新人训练。它是日常维护基本功。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-display_rule-window-display-purpose,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-display_rule-window-display-purpose""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,3163b653418e6fbf468b250a39c6f41fe62b6a464bd285037fdeb4f7a7e9d7e9,EV-KP-display_rule-window-display-purpose,Q7Q12-搭配陈列业务包/陈列方法包.md,二、1. window_display + 三、1）拦人 + 四、库存校验联动,"业务目标：拦人、定调、拉进店。
+适合库存状态：new_arrival_complete / core_push_deep_stock / full_look_ready。
+最容易犯的错：店外好看、店内拿不齐；一窗塞太多；道具比货重；季节和店内货不一致。
+培训层级：新人只学单主题、单焦点；店长 / 老手才负责橱窗节奏和换窗。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-chiffon-organza-layering-tool,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-chiffon-organza-layering-tool""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,dd5b126cf72a23164cb50ec700ba0c43e8f97438a720097383f92d10c2583328,EV-KP-fabric_property-chiffon-organza-layering-tool,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,四、7. 雪纺 / 欧根纱 / 轻透材,"这类更适合做层次工具，不适合默认按""主面料安全款""去卖。
+最容易误导的是把它当成""显瘦遮肉""单穿主力。
+正式风险提示冻结为：透感、静电、勾丝、挂纱、缝口起皱；
+精细轻薄材质本身就更容易出现 seam puckering 问题。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-composition-only-no-scenario-bound,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-composition-only-no-scenario-bound""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9e354337f2f4940214f9547b9e50b42671b42c366ab14cf99248ee4b449c7fb9,EV-KP-fabric_property-composition-only-no-scenario-bound,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,六、误判 6,"正式纠偏：成分只是起点，真正决定成交的是场景、动作、出汗、久坐、洗护、摩擦。
+落盘对象：Product（商品）、product_review（产品测评）。",explicit_business_decision,direct_quote,high,0,approved
+KP-fabric_property-cotton-knit-familiar-trap,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-cotton-knit-familiar-trap""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,816c9a2912d403db35bfc1693b67c9174c202a890e394044e3d8dae9ebff22e0,EV-KP-fabric_property-cotton-knit-familiar-trap,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,四、1. 棉针织 / 棉弹类,"最容易误导顾客的点有三条：纯棉不等于不透；纯棉不等于不变形；纯棉也不等于穿久了还保持领口利落。
+正式风险提示冻结为：领口松、下摆卷、白浅色透、汗后贴身、机洗后回缩、针织类更容易出现尺寸波动。
+CottonWorks 也明确指出 shrinkage（缩水）会影响 fit（合体感）、seam puckering（缝口起皱）、skew（扭斜）以及面辅料关系。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-denim-twill-mirror-not-truth,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-denim-twill-mirror-not-truth""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,26c31770acc01e65d1f79cd145eba858a6b4d04d3261f425ef281f5aa18423ce,EV-KP-fabric_property-denim-twill-mirror-not-truth,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,四、6. 牛仔 / 斜纹重棉类,"这类最典型的特点是镜前立得住、陈列也有型，但真正的成交判断不该只看镜前。
+最容易误导的是""显瘦有精神""就直接推，忽略久坐、蹲起、闷热、掉色和回缩。
+正式风险提示冻结为：腰腹压迫、膝盖鼓包、裆部紧、深色掉色、未经充分预洗时存在回缩和扭斜风险。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-gloss-not-equal-luxe,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-gloss-not-equal-luxe""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,628ca3cb892f7f28527ec3f853249885843c7f9afad5cc24a20ecdf7e5e37298,EV-KP-fabric_property-gloss-not-equal-luxe,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,六、误判 4,"正式纠偏：光泽会同步放大体表痕迹、褶印、贴肉和廉价感；不是所有光泽都显贵。
+落盘对象：StylingRule（搭配规则）、Product（商品）。",explicit_business_decision,direct_quote,high,0,approved
+KP-fabric_property-heavy-not-equal-quality,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-heavy-not-equal-quality""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,3f574d20966e6158473711ab54158a6e913c5547276d0fa08a5865ce763a4045,EV-KP-fabric_property-heavy-not-equal-quality,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,六、误判 2,"正式纠偏：重可能只是厚、闷、压身；质感要看表面、回弹、结构、缝制和使用后的稳定性。
+落盘对象：Product（商品）、TrainingMaterial（培训材料）。",explicit_business_decision,direct_quote,high,0,approved
+KP-fabric_property-linen-natural-creases,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-linen-natural-creases""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,63119adc15b0822e6607ea70a7fea78a101ee1cc0df15e0a16f4aa25a45ca556,EV-KP-fabric_property-linen-natural-creases,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,四、首批 FabricKnowledge 正式冻结清单 · 2. 亚麻 / 棉麻类,"这类真正卖的不是""精致""，而是""干爽、空气感、松弛感""。
+最容易误导的是把它讲成""高级且全天不皱""。正式口径应改成：
+它的高级感，很大一部分恰恰来自自然折痕和纤维表情。
+正式风险提示冻结为：肘部、臀部、坐位、前门襟容易出褶；
+版型越直、越薄、越浅色，越要把透感和皱感提前说清。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-polyester-nylon-functional-no-blanket,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-polyester-nylon-functional-no-blanket""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,8b9f8bf1ba0f33d6e3c17cc7b7259a8477690af6926933ce5133c2395924049f,EV-KP-fabric_property-polyester-nylon-functional-no-blanket,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,四、8. 涤纶 / 锦纶 / 功能化纤类,"这类不能用""化纤""一刀切。它真正的分水岭在纱线、织法、后整理和用途。
+最容易误导的是只讲""好打理""，不讲闷、静电、摩擦发亮、面料噪音。
+正式风险提示冻结为：静电、热感、发亮、摩擦位先老、表面起毛、里外层手感落差大。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-pure-cotton-not-zero-risk,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-pure-cotton-not-zero-risk""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,b112646507e6478ea931671036a56256161ca7296378bcee4d2c0b00158a22d4,EV-KP-fabric_property-pure-cotton-not-zero-risk,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,六、误判 5,"正式纠偏：纯棉也会透、会卷、会缩、会变形；针织棉更要看领口、下摆和洗后稳定性。
+落盘对象：FabricKnowledge（面料知识）、TrainingMaterial（培训材料）。",explicit_business_decision,direct_quote,high,0,approved
+KP-fabric_property-silk-acetate-satin-honest-fabric,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-silk-acetate-satin-honest-fabric""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,eb167147cf09ee4522a459b7b221e9218b9d7fc4555363276745636a40602a7a,EV-KP-fabric_property-silk-acetate-satin-honest-fabric,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,四、4. 真丝 / 醋酸 / 缎面类,"这类不是""显贵万能牌""，而是""对穿着状态很诚实""的面料。
+最容易误导的是只卖光泽，不讲暴露感。
+正式风险提示冻结为：勾丝、水痕、压痕、静电、浅色透、局部发白、体表痕迹明显；
+这类面料推荐时必须同步判断顾客对""痕迹暴露""的容忍度。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-soft-not-equal-premium,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-soft-not-equal-premium""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,749455c87fbf3889ba44f8f0e72493f191db9468ce9128b3574500e7be881a80,EV-KP-fabric_property-soft-not-equal-premium,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,六、误判 1,"正式纠偏：软只说明触感，不说明轮廓成立。软垂类面料要同步判断贴肉、挂长、暴露体表痕迹风险。
+落盘对象：StylingRule（搭配规则）、TrainingMaterial（培训材料）。",explicit_business_decision,direct_quote,high,0,approved
+KP-fabric_property-viscose-modal-tencel-mirror-win,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-viscose-modal-tencel-mirror-win""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,6192947c82ac73de42fd11942a0fb158becfa2683a2a774958137460c46ef2bd,EV-KP-fabric_property-viscose-modal-tencel-mirror-win,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,四、3. 粘胶 / 莫代尔 / 天丝类,"这类最容易在镜前赢，但也最容易在穿后暴露问题。
+最容易误导的是把""软垂""说成""修形""。很多时候它只是顺着身体线条走，不会帮顾客藏掉她在意的位置。
+正式风险提示冻结为：贴肉、挂长、缝位变形、薄款暴露体表痕迹、浅色透、久穿后局部发亮。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-wool-cashmere-care-claim-bound,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-wool-cashmere-care-claim-bound""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,42fe54733f45cbcd7016d06cb7c8438c1e3cd3f5253484e0b2b798c37c9d505a,EV-KP-fabric_property-wool-cashmere-care-claim-bound,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,四、5. 羊毛 / 羊绒 / 毛混类,"最容易误导的是""含毛=高级""""羊绒=永远不起球""""毛类=都要手洗""。
+正式风险提示冻结为：摩擦位起球、包带处先老、局部起毛、毡缩、刺痒、肩肘膝鼓包。
+能否机洗必须看洗护标；Woolmark 明确说明，只有洗护声明允许机洗的 wool garment 才可安全机洗。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-fabric_property-wrinkle-not-equal-low-grade,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-fabric_property-wrinkle-not-equal-low-grade""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c25d44110e26d83310ef5f5d669b2a0da0b4ee911763bf1a1dae43132d108b74,EV-KP-fabric_property-wrinkle-not-equal-low-grade,Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,六、误判 3,"正式纠偏：有些皱是材质特性，不是低级；关键是顾客是否接受这种表情，以及场景是否允许。
+落盘对象：FabricKnowledge（面料知识）、TrainingMaterial（培训材料）。",explicit_business_decision,direct_quote,high,0,approved
+KP-inventory_rescue-can-rescue-scenarios,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-can-rescue-scenarios""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,4d5386d9594f07d280cac9ff86586311a7020f092bd7afe00765e6f784333d10,EV-KP-inventory_rescue-can-rescue-scenarios,Q7Q12-搭配陈列业务包/门店接客场景包.md,三、2）断码时还能救的场景正式冻结,"2）断码时还能救的场景，正式冻结为 5 类
+commute_mainstay（通勤主力型）
+weekend_social（周末社交型）
+functional_gap_fill（功能补位型）
+new_item_cannot_style（新款不会搭型）
+repeat_purchase_replenish（复购补货型）",explicit_business_decision,direct_quote,high,0,approved
+KP-inventory_rescue-customer-priority-six-axes,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-customer-priority-six-axes""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,7011e15b21b407bb7b051c8498784f06c51ef6f9ca8dac3b9aa0b44414205510,EV-KP-inventory_rescue-customer-priority-six-axes,Q7Q12-搭配陈列业务包/库存与替代包.md,五、5.1 接客优先级,"5.1 接客优先级
+wearability（能不能穿）→ occasion_fit（场景能不能成立）→ silhouette_match（廓形像不像）
+→ color_family_match（色群近不近）→ price_band_match（价带稳不稳）→ fabric_detail_match（面料细节像不像）
+解释：先保顾客""今天能不能用""，再保""像不像原来那件""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-inventory_rescue-display-priority-five-axes,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-display-priority-five-axes""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,d71a37851b00f3cc28d66268ed03cc7b1e48b9d5df8cfafde86d3a7d4ee7428b,EV-KP-inventory_rescue-display-priority-five-axes,Q7Q12-搭配陈列业务包/库存与替代包.md,五、5.2 陈列优先级,"5.2 陈列优先级
+story_theme_match（主题是否仍成立）→ color_story_match（色群叙事是否仍成立）
+→ silhouette_layer_match（层次是否还成立）→ sellable_depth（可售深度够不够）
+→ price_band_match（价带是否协调）
+解释：陈列先保画面逻辑，再保卖货深度。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-inventory_rescue-hard-block-five-conditions,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-hard-block-five-conditions""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,2aef0cc51604dd03f1941c954854ff7fc800681c0626c4eb0bb10b73eaa3f014,EV-KP-inventory_rescue-hard-block-five-conditions,Q7Q12-搭配陈列业务包/库存与替代包.md,四、4.1 hard_block H1-H5,"4.1 hard_block（硬拦截）
+H1 size_unwearable（尺码不可穿）顾客核心尺码缺失，且品类高版型敏感
+H2 inventory_stale（库存事实过期）last_sync 过旧，无法确认实际可售
+H3 set_promise_broken（成套承诺失效）内容、陈列或导购在卖""整套感""，但关键件缺失
+H4 color_mandatory_missing（强锚定颜色缺失）颜色本身就是成交条件
+H5 trust_damage_substitution（替代会明显伤信任）替代后核心体感、廓形、场景已经变了还假装差不多",explicit_business_decision,paraphrase_low,low,0,approved
+KP-inventory_rescue-match-result-output-shape,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-match-result-output-shape""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,bfdce93397ac5d68fff3b765d708904ff050a5dfd811c9f64b97ce69973aacf0,EV-KP-inventory_rescue-match-result-output-shape,Q7Q12-搭配陈列业务包/库存与替代包.md,十一、inventory_match_result + 状态枚举,"inventory_match_result（库存匹配结果）每次运行 inventory_match 至少输出：
+match_status / inventory_state_id / decision_mode / hard_block_reason /
+recommended_substitution_path / display_permission_level / training_trigger_list /
+customer_explanation_hint
+状态枚举建议：direct_match / soft_substitute / redirect_required / hard_blocked",explicit_business_decision,paraphrase_low,low,0,approved
+KP-inventory_rescue-no-rescue-scenarios,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-no-rescue-scenarios""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,5e974e3dfd2306aa05b718668024b5f0bdd242c4cb0814d15b771bf5d754b643,EV-KP-inventory_rescue-no-rescue-scenarios,Q7Q12-搭配陈列业务包/门店接客场景包.md,三、3）断码时不该硬救的场景正式冻结,"3）断码时不该硬救的场景，正式冻结为 3 类
+shape_correction（显瘦修身型）
+comfort_sensitive（体感敏感型）
+urgent_full_look（应急一身型） 中主件断码的情况",explicit_business_decision,direct_quote,high,0,approved
+KP-inventory_rescue-shallow-vs-deep-sensing,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-shallow-vs-deep-sensing""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,387254d72dce44d7a4f6a8d89297381ec14cf473e902f09ec82132a50abfcac2,EV-KP-inventory_rescue-shallow-vs-deep-sensing,Q7Q12-搭配陈列业务包/库存与替代包.md,七、inventory_sensing_boundary,"7.1 shallow_inventory_sensing：有货/无货 / 大概数量 / 最近同步时间。
+能力上限：只能做""过滤""，做不了""前线动作指导""。
+7.2 deep_inventory_sensing：哪个颜色断 / 哪个尺码断 / 核心成交码 / fit_sensitivity /
+还能不能做主陈列 / rescue 还是 redirect / 是否触发培训 / 替代路径会不会伤信任。
+能力目标：从""库存过滤器""升级为""前线判断器""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-inventory_rescue-soft-substitute-four-paths,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-soft-substitute-four-paths""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,e738969abcd8107911d6813b87a229c6f9b11188a54bf90b7b8f403a857c1958,EV-KP-inventory_rescue-soft-substitute-four-paths,Q7Q12-搭配陈列业务包/库存与替代包.md,四、4.2 soft_substitute R1-R4,"4.2 soft_substitute（软替代）
+R1 same_sku_other_color（同款异色）最优软替代
+R2 near_color_family（近色群替代）适合非强颜色锚定需求
+R3 same_occasion_same_silhouette（同场景同廓形异款）高质量转向型替代
+R4 same_item_new_pairing_piece（单品不变，搭配件替换）适合""主角单品仍成立""的情况",explicit_business_decision,paraphrase_low,low,0,approved
+KP-inventory_rescue-state-catalog-six-states,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-state-catalog-six-states""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,8b947febaa702d78976c2480dfdeeb903528f807d48fc4a03df282df1349251c,EV-KP-inventory_rescue-state-catalog-six-states,Q7Q12-搭配陈列业务包/库存与替代包.md,三、inventory_state_catalog S1-S6 + 十四、A,"inventory_state_catalog（库存状态清单）
+S1 size_complete（尺码齐全）/ S2 size_broken（断码）/ S3 color_broken（断色）/
+S4 single_size_tail（单码尾货）/ S5 single_item_only（只有单品，凑不成套）/
+S6 alternate_not_same_sku（有替代款但不是同款）
+每条都给出：定义 / 推荐 / 陈列 / 替代深度 / 话术模式 / 直接放弃。
+本包正式派生 3 张清单：A. inventory_state_catalog（库存状态清单）首批 6 条。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-inventory_rescue-three-sentence-discipline,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-inventory_rescue-three-sentence-discipline""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,e1569463feec651f5add268233cd884afcec8c30c13247f8175f5df4eb2fe3c1,EV-KP-inventory_rescue-three-sentence-discipline,Q7Q12-搭配陈列业务包/库存与替代包.md,十三、13.1 + 13.2,"13.1 三句话纪律
+第一句，先讲事实，不先讲神话。
+第二句，能救场就救场，不能救场就转向。
+第三句，转向不了就放弃，不拿信任换一单。
+13.2 三个禁止
+禁止把断码款继续当""全员适推款""
+禁止把替代款说成原款
+禁止为了去库存，让顾客替门店承担不合适",explicit_business_decision,direct_quote,high,0,approved
+KP-product_attribute-collection-cold-start-scope,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-collection-cold-start-scope""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,357fa8a7ec85bbf474e2412751a130be7c5d50f910d4a16aca5214d765df41b0,EV-KP-product_attribute-collection-cold-start-scope,Q7Q12-搭配陈列业务包/商品与属性基础包.md,6.7,"Collection（系列）先只承担三件事：主题归组 / 成组陈列 / 培训时的""这一组为什么一起卖""。
+本轮不把 Collection 直接升成搭配硬约束。
+只有当品牌后续明确""系列成套优先""时，再进入更强约束。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-compat-matrix-truth-source-layering,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-compat-matrix-truth-source-layering""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,4c0d4042626381bf8c287ed761a2c85aaa5298c723801e0a4a0f44a8c82ec56a,EV-KP-product_attribute-compat-matrix-truth-source-layering,Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md,§1.1 + §1.2 + §9.1,"一层真源 + 一层派生视图。
+真源层：(:Persona)-[:COMPATIBLE_WITH {support, risk, reason}]->(:ContentType)
+平台维度：承接 Q3 (:System)-[:SUPPORTS_PLATFORM {tier}]->(:PlatformTone / :PrivateOutletChannel)，
+不新建 ContentType × Platform 或 Persona × Platform 关系边。
+派生视图层：Persona × ContentType × Platform/Channel，由真源层 + Q3 真源临时组合计算，不写入图谱。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-compatibility-derived-view-combination-formula,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-compatibility-derived-view-combination-formula""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,568725311f0ef430fca61913116c42c5ce0f7235faca291d10710c2abe92fc3c,EV-KP-product_attribute-compatibility-derived-view-combination-formula,Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md,§6.1 + §6.2 + §6.3 + §七,"support=now × tier=P0_native → 默认可用
+support=now × tier=P1_light_adapt → 补充配置后可用
+support=enhanced × tier=P0_native → 补充配置后可用
+support=enhanced × tier=P1_light_adapt → 补充配置后可用
+support=custom × 任意 tier → 品牌级 / 特殊场景
+support=unsupported × 任意 tier → 不建议
+任意 support × tier=P2_cross_post_only → 补充配置后可用（转发提示）
+任意 support × tier=deferred → 不建议（系统未支持）
+最终展示档的风险位继承真源层的 risk。
+示例 2：product_professional × humor_content × 抖音 → 即使平台 tier=P0_native，
+因 support=custom → 品牌级/特殊场景；风险继承为 high；问题不在平台而在角色错位。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-compatibility-edge-support-risk-reason-shell,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-compatibility-edge-support-risk-reason-shell""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,f4bf3985829b1e573e45e85160ee3ac79e28e3b84e7738b9f0b42939c378f91b,EV-KP-product_attribute-compatibility-edge-support-risk-reason-shell,Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md,§2.1 + §2.2 + §2.3 + §9.2,"support: now | enhanced | custom | unsupported
+risk: low | medium | high
+reason: string，可选（当 support != ""now"" 时建议说明原因）
+now=默认可用 / enhanced=补充配置后可用 / custom=品牌级 / 特殊场景 / unsupported=不建议
+low=常规风险可默认放行 / medium=表达偏差或风格偏移建议提示 / high=品牌/真实性/平台错位风险高不应默认放行",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-compatibility-matrix-two-layer-truth-source,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-compatibility-matrix-two-layer-truth-source""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,7c959c599757535881ec22d24802e1bd56c8105196ab0853b6bfb876f83ee35b,EV-KP-product_attribute-compatibility-matrix-two-layer-truth-source,Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md,§1.1 + §1.2 + §9.1,"一层真源 + 一层派生视图。
+真源层：(:Persona)-[:COMPATIBLE_WITH {support, risk, reason}]->(:ContentType)。
+平台维度：承接 Q3 (:System)-[:SUPPORTS_PLATFORM {tier}]->(:PlatformTone / :PrivateOutletChannel)，
+不新建 ContentType × Platform 或 Persona × Platform 关系边。
+派生视图层：Persona × ContentType × Platform/Channel，由真源层 + Q3 真源临时组合计算，不写入图谱。
+把 ContentType × Platform 直接做成真源关系边有 4 个问题：维护成本高（18 × 10 = 180 条边）、
+容易不一致、难以增量扩展、违反渐进纪律。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-compatible-with-edge-properties,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-compatible-with-edge-properties""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,cc8b781b98ec92deb4884a3e9bf8a5e3bb26c440512fe5a80f17e988ff0cd908,EV-KP-product_attribute-compatible-with-edge-properties,Q4-人设种子/phase-3-Q4-参数级填充清单.md,八 · 字段口径,字段口径 | support = now | enhanced | custom | unsupported / risk = low | medium | high / reason = string,explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-behind-scenes,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-behind-scenes""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c8db21f690e6db417956a4d90feb3301463eaedf211dd6975f616da188c85d9d,EV-KP-product_attribute-content-type-north-star-behind-scenes,Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md,§A 北极星 + §C1 + §E 红线,"A. 北极星：观众看完心里产生""原来你们也会手忙脚乱、也会临时救火、也会笑场，
+但正因为这样我更喜欢你们""的亲近感——""这家公司愿意把不完美给我看""。
+compass：从""拍摄花絮""到""治愈系 ASMR 补货日""——幕后即内容，不是正片附属品。
+E7：只展示光鲜一面，缺乏真实的运营困难和情感波动。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-daily-fragment,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-daily-fragment""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,4da41396e6291428d5ce94480fb8573a0f9dde05e19786554eb805f67e8ba89d,EV-KP-product_attribute-content-type-north-star-daily-fragment,Q2-内容类型种子/daily_fragment-交付物-v0.1.md,§A + §C1 + §E + §F,"A. 北极星：观众看完会觉得""原来普通生活不是没内容，是没人会这样看""——
+产生""这就是我的生活""式共鸣，情绪被轻轻托住。
+E7：剪映""一键成片""让所有人的碎片看起来一模一样。
+F 核心判断：碎片有没有灵魂，全看创作者有没有观察到""微小但有意味""的瞬间——
+""选择逻辑""必须由人决定，否则必然模板化。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-emotion-expression,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-emotion-expression""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,def5831190d4d528c33d7714173ab1a83aed2ee94d70cd58d35f5dbd53568b6d,EV-KP-product_attribute-content-type-north-star-emotion-expression,Q2-内容类型种子/emotion_expression-交付物-v0.1.md,§A + §C1 + §B5,"A. 北极星：观众看完后，心里不是""这句话真会写""，而是""这感觉你居然也知道""——
+不是一个结论被砸下来，而是一个没说出口的感受被轻轻接住。我被看见了，
+我愿意把自己的情绪也放出来（点赞 / 评论 / 转发 / 收藏），我对这个人 / 这个品牌产生了更深层的情感连接。
+通用类compass：情绪资产（Emotional assets）—— 情绪共鸣内容矩阵是品牌留存与溢价的底层设计。
+C1-2 备注：Barnum effect（巴纳姆效应）——""模糊的情绪陈述让所有人都觉得是在说自己""是典型 AI 批量生产陷阱。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-founder-ip,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-founder-ip""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,8cb7a4e84aed9f43922b8f03614bd860b0284919812828f0ff06c4abdc6aa14c,EV-KP-product_attribute-content-type-north-star-founder-ip,Q2-内容类型种子/founder_ip-交付物-v0.1.md,§A 北极星 + §C1 + §E 红线 + 差异点对比,"A. 北极星：观众看完后心里不是""这老板在卖货""，而是""这个人有判断、有代价、有性格，
+我开始相信这家公司是由一个真实的人在做真实的事，我愿意把信任先预支给他、再预支给他的牌子""。
+C1 主流玩法在服装行业 founder_ip 场景下危害尤其大——不仅无效，还会反向伤害品牌（定价敏感+精英感警惕）。
+E1：把创始人拍成""上帝视角导师""——一开口就是行业大词、人生哲学、品牌使命，没有任何具体物件、具体代价。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-knowledge-sharing,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-knowledge-sharing""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,0123a410bf37feb7dca1b09cfd34fadc058359eed84c959d13b5d0fb5197183a,EV-KP-product_attribute-content-type-north-star-knowledge-sharing,Q2-内容类型种子/knowledge_sharing-交付物-v0.1.md,§A + §C1 + §E + §D,"A. 北极星：观众看完不只是""我听懂了""，而是""我终于被一个真实懂的人讲明白了，
+并且把你归类为可信、讲得清楚、愿意讲真话的人""。
+compass：算法在奖励""有灵魂的内容""而非""有套路的内容""；知识分享最核心的区别是有没有""为什么是你来讲""。
+B9：知识不是""老师在讲""而是""事故在发言""；知识长在手上（身体掌握 ≠ 嘴上念）。
+E1：3 个技巧教会你…… 但没有任何现场证据。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-outfit-of-the-day,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-outfit-of-the-day""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,51183f01ed171d9411e85eaafd91d6b13ee88a362b972f955e2d0d175f6038ff,EV-KP-product_attribute-content-type-north-star-outfit-of-the-day,Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md,§A + §C1 + §D + §E + §F,"A. 北极星：不只是""这套衣服好看""，而是""我明白这套穿搭在表达什么，
+我能想象自己穿上以后的状态""——对审美和品牌建立长期记忆。
+F 核心判断：OOTD 最核心的""今天为什么这样穿""，只能从真实生活里长出来。
+与试点版差异：商业化风险最高——OOTD 是最容易滑向""硬广 / 种草""的 ContentType。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-personal-vlog,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-personal-vlog""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,664914ebf7c01c23f8c9a147449f0e25fdbf6fb0d687d3e6d16411aa2b5e9ca0,EV-KP-product_attribute-content-type-north-star-personal-vlog,Q2-内容类型种子/personal_vlog-交付物-v0.1.md,§A + §B5 + 与 daily_fragment 差异,"A. 北极星：观众看完不是""我知道你今天干了什么""，而是""我陪这个人过了一小段真实生活，
+对他产生真实好感与信任，愿意继续跟着他""。
+compass_artifact：算法在奖励""有灵魂的内容""而非""有套路的内容""；
+观众接收的应该是""你这个人""，不是""通用漂亮""。
+daily_fragment 差异点：personal_vlog 有""一天的连续感""，daily_fragment 是""不连续的瞬间集合""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-process-trace,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-process-trace""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,495192c84d5c5bcd08277338ce1626efb68f6c404467067ebac2a89f74e6fdfd,EV-KP-product_attribute-content-type-north-star-process-trace,Q2-内容类型种子/process_trace-交付物-v0.1.md,§A + §C1 + §E + 与 product_journey 边界,"A. 北极星：观众看完不只是""知道工艺步骤""，而是""我愿意相信你没有骗我""——
+对""这件衣服为什么值得被认真对待""产生身体层面的理解，
+甚至觉得：原来品质不是一句话，是一连串不能偷懒的动作。
+C1-3 备注：手机时代的可信往往来自""原生、可触达""，而非豪华制作。
+E6：把溯源拍成广告大片——越精致越不透明。
+最核心反套路：反""走进工厂的宣传片""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-product-copy-general,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-product-copy-general""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,0a2a5484538a07758a096794f98aaa5bb96911acc6c2d65cf109a3eafd45adf3,EV-KP-product_attribute-content-type-north-star-product-copy-general,Q2-内容类型种子/product_copy_general-交付物-v0.1.md,§A + §C1 + §E + α 改良版专章,"A. 北极星：观众看完后，不是""知道这件衣服的参数""，而是
+""在脑子里提前穿过一次、犹豫过一次、相信过一次""——文字和视觉一起把 ta 带进了一个
+具体的身体感受和使用时刻，ta 愿意把它加入自己的生活。
+特殊形态标记：本 CT 是文案型 ContentType，不是视频型——玩法卡的「30 秒分镜参考」字段按 α 改良版语义扩展，读作「文案执行骨架」。
+compass §3：AI 工具正在放大模板问题——以规模生产""高端大气上档次""通用文案——。
+F 核心判断：禁止生成命中 §E 任一条的文案——这是用负面清单约束 AI 的典型用法。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-product-journey,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-product-journey""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,294130f44dc41ac7b071bbe6b950bcc46e5ee61708cf4c5187742609f0415ba7,EV-KP-product_attribute-content-type-north-star-product-journey,Q2-内容类型种子/product_journey-交付物-v0.1.md,§A + §C1 + §E + 与 process_trace 边界,"A. 北极星：观众看完不是""这是一件突然出现在货架上的衣服""，而是
+""这是一段被反复推敲、被试错、被等待过的东西——我理解它为什么长这样，并愿意为这个价值付费""。
+最核心反套路：反""从草图到成品的爽片""。独占价值：差一点做成别的样子——判断轨迹。
+compass：从""线性流水账""到""一粒纽扣的旅程""——微物叙事比全景叙事更有冲击力。
+C3-1 备注：把产品从""灵感结果""还原成""带冲突的选择过程""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-product-review,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-product-review""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,10aacbd2e74c8834f70bc29787c7c20e367c198b063095f74b7440a20bdeb64e,EV-KP-product_attribute-content-type-north-star-product-review,Q2-内容类型种子/product_review-交付物-v0.1.md,§A 北极星 + §C1 + §双角色标签机制,"A. 北极星：观众看完后，不是""知道这件衣服有什么参数""，而是
+""我已经在脑子里提前穿过一次、犹豫过一次、相信过一次""——
+风险已经看清、信任已经建立、购买决策的心理阻力已经被消解。
+通用类deep-research-report.md：我已经把风险看清了 / 值不值 / 怎么买最不踩坑 / 我也愿意相信这个人。
+C1 全档默认禁用：转圈念优缺点 / 7 秒换装快剪 / 开箱即结论。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-role-work-vlog,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-role-work-vlog""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,0ed22d3089e87c3d7c53104096d22f389514098f092e4aa417ad5511f25ca918,EV-KP-product_attribute-content-type-north-star-role-work-vlog,Q2-内容类型种子/role_work_vlog-交付物-v0.1.md,§A + 与 founder_ip 边界 + §B5,"A. 北极星：观众看完不只是""知道这个岗位在干嘛""，而是对这个岗位产生尊重、
+对品牌产生体感信任，甚至开始觉得""原来一件衣服背后站着的是一群有手感和判断的人""。
+与 founder_ip 边界：观众记住的是""这个老板真会犹豫、真会扛"" → founder_ip；
+观众记住的是""版师/主理人这个岗位到底怎么改版"" → role_work_vlog。
+对 role_work_vlog 的含义：观众要接住的是""岗位的智力和手感""，不是""这个人的人格""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-talent-showcase,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-talent-showcase""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,a0c9d56693766b6da2d3ab51c672985c2f56430712a17b9534535f4f9ed48cf7,EV-KP-product_attribute-content-type-north-star-talent-showcase,Q2-内容类型种子/talent_showcase-交付物-v0.1.md,§A + §C1 + §E,"A. 北极星：观众看完不只是""你很厉害""，而是""你的能力有个性、有温度、能留下你这个人""——
+感到能力可信、可持续，并愿意把你当作""值得追随的人""。
+compass：从""技术炫耀""到""世界观构建""。
+E3：把才艺拍成炫耀，观众只会敬而远之。
+E4：只给炫技不给人格——观众很快滑走。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-north-star-training-material,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-content-type-north-star-training-material""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9328229d03d7e3e17dfa909919a5fd5032183a736baac36fdd530023144a03fa,EV-KP-product_attribute-content-type-north-star-training-material,Q2-内容类型种子/training_material-交付物-v0.1.md,§A + §⚠️ 兵团向口径 + §C1,"A. 北极星：员工 / 加盟商看完后，不是""觉得讲得不错""，而是""下次真碰到场景时，
+脑子里会自动跳出正确动作""——我不困 / 我知道下一班 / 下一单怎么做 / 我能记住关键点 /
+我愿意照做。
+通用类compass：90% of training content is forgotten within 6 months——培训的真实问题不是
+""员工不认真""，而是""内容本身不可调用""。
+§4 兵团向 3 个核心原则：① 看懂 ≠ 会做 ② 先做判断再给答案 ③ 微学习 + 即时资源。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-core-category-7-plus-3,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-core-category-7-plus-3""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,ab0d66b1f7753c80b08350409eb4dc5b32e26f4aebf70f184373d9946657d8b3,EV-KP-product_attribute-core-category-7-plus-3,Q7Q12-搭配陈列业务包/商品与属性基础包.md,6.1,"首批正式冻结为 7 个主母类 + 3 个扩展母类。
+7 个主母类：tops_base / shirts_blouses / knitwear / outerwear / bottoms / dresses / sets
+3 个扩展母类：shoes / bags / accessories
+这套切法的好处是：门店最高频接客、试衣间救场、陈列分区、培训演示都能用；
+同时不会一上来把库做得又散又重。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-decision-level-hard-vs-high,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-decision-level-hard-vs-high""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,b0332b8bd9c7a8338c0bd3e170fad891d48903b27130652e38be6c76769ed9ba,EV-KP-product_attribute-decision-level-hard-vs-high,Q7Q12-搭配陈列业务包/商品与属性基础包.md,6.4,"硬改搭配结论的属性：fit / length / material / color / occasion / season。
+这些一变，整套推荐通常要重算。
+高频改搭配结论的属性：neckline / sleeve_length / waistline / rise / pattern / layer_role。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-display-only-fields,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-display-only-fields""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,154f06189d6ed507d6f490279883e7851240cd8984758b1bf657cde861defef5,EV-KP-product_attribute-display-only-fields,Q7Q12-搭配陈列业务包/商品与属性基础包.md,6.6,"以下字段保留，但首轮不进入即时搭配 / 陈列主判断：
+fabric_story / craft_story / designer_note / care_instruction / selling_points_copy / model_reference
+这些主要给 training_generate（培训生成）、详情页、销售话术用。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-engine-card-vs-play-card-shell,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-engine-card-vs-play-card-shell""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,206ae1f7108ac0e5742edc49138eb7d238a271b269cbc2f385894607b8feecd6,EV-KP-product_attribute-engine-card-vs-play-card-shell,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,与 13 份 ContentType 交付物的关键差异点,"玩法卡：10 字段（档位/定义/北极星/元素/分镜/服装钩子/可行性/AI/来源/备注）
+引擎卡：10 字段（出处/原理/为什么高级/降维执行/分镜/服装适配/可调用ContentType/可行性/AI/备注）
+""玩法是具体的、属于某个 ContentType 的；引擎是抽象的、可被多个 ContentType 复用的""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-enterprise-narrative-six-section-shell,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-enterprise-narrative-six-section-shell""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,2728b1fa3ec04ba94004b87e4c63600c7b4b8bd277859adbd146befa30b2cf8c,EV-KP-product_attribute-enterprise-narrative-six-section-shell,Q2-内容类型种子/企业叙事类GPT5.4.md,全文 6 个一级章节（founder_ip / role_work_vlog / event_documentary / product_journey / process_trace / behind_the_scenes）共享的固定子章节结构,"每一类（如 founder_ip 第 1 节）都包含：
+""**北极星：** ……"" + ""### 主流玩法（已被用烂）"" + ""### 进阶玩法（少数高手在用）"" + ""### 突破性玩法（还没人这么干，但可能成立）""
++ ""### 服装行业垂直加成"" + ""### 一定不行的玩法"" + ""### 制作难度判断""
+6 个一级章节结构完全一致，证明这是企业叙事内容生产的固定字段壳。",structural_pattern,paraphrase_low,low,0,approved
+KP-product_attribute-faye-brand-tone-core,brand_faye,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-faye-brand-tone-core""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,0baaa230c5056529976caa5c61d6559f70fc563cc8d6410082a952b8e594d6fc,EV-KP-product_attribute-faye-brand-tone-core,Q-brand-seeds/brandtone_diyu_001.md,§core_voice + §emotional_boundary + §vocabulary + §sentence_patterns,"笛语（DIYU）personality_tags：浪漫有诗意 / 有生活方式感 / 温柔但有主张 /
+重真实表达 / 重审美与品质。tone_axis：formal_to_warm=72，rational_to_emotional=64，
+restrained_to_passionate=58。forbidden_emotions：廉价煽动、强刺激叫卖、空洞鸡血、
+攻击性贬低、盲目崇拜式鼓动。intensity_cap：可以表达真实情绪与态度，
+但不得进入喊口号、强煽动、强推销的状态。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-faye-persona-founder,brand_faye,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-faye-persona-founder""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c1b24f38cdb4ea35bb9dede2be453c48f9e04ba3f34cb839fed9a21a3f448e1b,EV-KP-product_attribute-faye-persona-founder,Q-brand-seeds/persona_founder_demo.md,§emotional_spectrum + §authenticity_anchors + §topic_scope + §speaking_habits,"persona_id: persona_founder_demo · role_type: brand_founder · 36-42 岁 · 二线城市 ·
+life_archetype：白天在样衣架和面料桌之间来回做判断，晚上回家还会盯着孩子上身的松紧、
+领口和安全细节反复想第二天要不要改。authenticity_anchors 7 条：孩子试穿后会不会自己去
+扯领口或拽裤腰 / 她会顺手摸衣服内侧缝份不只看表面 / 晚上回家吃饭时还会把白天没定下来的
+颜色放在脑子里比 / 她会记得某个顾客说过""这件孩子不愿意脱"" / 她手机相册里混着样衣细节图、
+孩子日常照和路上随手拍的生活片段 / 家里人会嫌她买菜时都在想面料和颜色 / 她对""安全感""
+的理解不是口号，而是拉链、纽扣、内里、触感这些看得见的细节。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-faye-persona-franchise-owner,brand_faye,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-faye-persona-franchise-owner""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,6391ee75d63a6301a068c5fece00ed60501373996e97adb75b6f3fcce1477515,EV-KP-product_attribute-faye-persona-franchise-owner,Q-brand-seeds/persona_franchise_owner_demo.md,§emotional_spectrum + §authenticity_anchors + §topic_scope + §speaking_habits,"persona_id: persona_franchise_owner_demo · role_type: franchise_owner · 30-43 岁 · 三线/县城核心商圈 ·
+life_archetype：白天在店里接顾客、找尺码、发朋友圈、盯销售，傍晚一边回家长群消息一边记
+今天哪位顾客试了五件最后买走一件，晚上还惦记明天门口橱窗要怎么换。
+authenticity_anchors 7 条 + filler_words：你先上身看看 / 我跟你说句实在话 / 别急，慢慢来。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-faye-persona-sample-maker,brand_faye,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-faye-persona-sample-maker""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,99918dff3a2184abba701572488cf46f559ac8a3ed2ee2dc59536be325ac01c6,EV-KP-product_attribute-faye-persona-sample-maker,Q-brand-seeds/persona_sample_maker_demo.md,§emotional_spectrum + §authenticity_anchors + §topic_scope + §speaking_habits,"persona_id: persona_sample_maker_demo · role_type: store_staff · 38-48 岁 · 二线至三线 ·
+life_archetype：白天坐在缝纫机前改袖口、收腰线、盯针脚，晚上回到家还会下意识摸一摸自己
+衣服的走线，心里嘀咕这地方其实还能更顺。authenticity_anchors 7 条 + filler_words：
+这地方不对 / 你别光看表面 / 要上身才知道。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-no-forced-merge,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-no-forced-merge""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9e96f1d64fef155a43a1eefb415eb92d7ec9df13586c0056829174a7e5b939dc,EV-KP-product_attribute-no-forced-merge,Q7Q12-搭配陈列业务包/商品与属性基础包.md,6.3 明确不得强收,"明确不得强收的口径：
+卡其（khaki）≠ 驼色（camel）
+真丝（silk）≠ 醋酸（acetate）
+修身（slim_fit）≠ 合体（regular_fit）
+短款（cropped）≠ 常规偏短（regular_short）",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-pcg-five-voice-archetypes,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-pcg-five-voice-archetypes""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,7f6e095d56a8efba41d0f56a9f517e032091491b69dbf173449f13d5c29a89c0,EV-KP-product_attribute-pcg-five-voice-archetypes,Q2-内容类型种子/product_copy_general-交付物-v0.1.md,§B8 + §G G2 + §D,"B8 声音原型（voice archetypes）—— 来自 compass 的关键概念：
+主理人叙事体（""我做这件衣服时在想..."" 第一人称 / 有创始人性格）
+诗意留白体（NEIWAI 风 / 高留白 + 克制比喻）
+工艺叙述体（远家 YUANJIA 风 / 技术术语 + 朴素表达）
+反讽诚实体（Fashion Brand Company / Reformation 风 / 把缺点先说出口）
+判断同盟体（Patagonia ""Don't Buy This Jacket"" 风 / 反向命令 + 价值观）
+G2 用户裁决：5 种声音原型矩阵升级为共享层 §H.3 5 Voice Archetypes Matrix 跨 CT 文案/旁白/口播声音设计资产。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-persona-field-fill-state,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-persona-field-fill-state""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,d53aadf1f00c1fbad60ca6a1ec031fa2c5af46a7b59e8427d0fe4f0b68801580,EV-KP-product_attribute-persona-field-fill-state,Q4-人设种子/phase-3-Q4-参数级填充清单.md,三、字段层参数清单 + 八、总表,"本稿要做的不是再提新想法，而是把 Q4 当前所有参数拆成三类：
+已冻结（Frozen）— 本轮 Q4 已正式冻结，下游可直接消费
+候选待填（Candidate）— 已给出最小可用值，等品牌素材或下一份产物补
+待补证 / 待后续 Q 承接（Pending）— 等 Q19/Q20/Q21/Q22 或 Q3 真源回填",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-persona-shell-not-equal-role,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-persona-shell-not-equal-role""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,bbc184688ba5a489475355c901fd67d799e3f86ecfd7e6a90770b060837cdf3c,EV-KP-product_attribute-persona-shell-not-equal-role,Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md,卡片 1/2/3 §1 + §2.1,"store_operator（门店经营者）不是""店长岗位本身""，而是一个围绕门店经营与执行秩序的通用说话身份壳。
+styling_advisor（穿搭顾问）不是""会卖货的人""，而是一个把商品语言翻译成顾客体感语言的通用说话身份壳。
+product_professional（商品专业者）不是""讲专业术语的人""，而是一个把产品为什么成立、为什么不成立讲清楚的通用说话身份壳。
+[role_type] 由于 store_operator 是通用 Persona 壳，不宜硬填成单一岗位；冷启动阶段由其挂接岗位共同支撑。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-persona-six-field-shell,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-persona-six-field-shell""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,a1d34d3de4e28b3cde8ce9b09a26184495c2400bb95383b932d95dffb59e9ac6,EV-KP-product_attribute-persona-six-field-shell,Q4-人设种子/phase-3-Q4-参数级填充清单.md,三、字段层参数清单,"Persona（人设）的正式字段壳已由 phase-3-内容生产核心思想落盘方案.md:215-263 定义：
+role_type（岗位类型）/ life_archetype（生活原型）/ emotional_spectrum（情绪光谱）/
+authenticity_anchors（真实性锚点）/ topic_scope（话题边界）/ typical_scenarios（典型场景）。
+本 §三 各表的字段值参考 phase-3-Q4-三套通用Persona首批卡片.md §2。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-persona-three-shell-coverage,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-persona-three-shell-coverage""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,b78bd8486b6ce67a81f28d47e9dc9547337fcab309a657ea6091a74843e81925,EV-KP-product_attribute-persona-three-shell-coverage,Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md,卡片1/2/3 元数据 + 本稿结论,"三套通用 Persona（人设）首批卡片，候选 v0.1 先冻结为：
+store_operator（门店经营者）— 门店经营、秩序维护、带队复盘、后场协同
+styling_advisor（穿搭顾问）— 前台接客、试穿建议、搭配判断、顾客体感翻译
+product_professional（商品专业者）— 设计、打样、工艺、面料、版型、商品判断与专业叙事",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,17eecf3b60253f23c87624b989c8ff0b48aec31b75ceaeffe8d1775da884d0c2,EV-KP-product_attribute-platform-tone-vs-private-outlet-channel-parallel,Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md,§1.3 + §3.3,"1.3：公域分发位（有算法分发）→ PlatformTone / 私域出口位（无算法分发，靠强关系链）→ PrivateOutletChannel；
+""平台""是描述性统称，不是新引入的实体类型，不写入图谱。具体对象仍以 Q3 真源中的 PlatformTone / PrivateOutletChannel 两个并列实体为准。
+3.3：在服装零售实际场景里，sales_associate 挂接 styling_advisor 以后，最核心的分发战场之一不是只有公域平台，
+而是：朋友圈 / 微信群 / 私信触达 / 一对一转发；如果 Q4 兼容矩阵只覆盖公域平台，就会把导购这条最强转化链路从系统视野里漏掉，
+导致 Step 3 种子数据准备与真实业务错位。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-play-card-scenario-tag-three-values,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-play-card-scenario-tag-three-values""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,45c23145b4c03b796e54e2692f837f27f7c4647b594d32967b31964f7f8f321c,EV-KP-product_attribute-play-card-scenario-tag-three-values,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,§H.2 β 适用场景标签,"三种取值：lead_generation（引流 / 第一层吸引消费者）/ customer_service（接客 / 第二层服务进店顾客）/ both（两者通用）
+作用：为每张玩法卡（C1/C2/C3）标注其""业务层归属""，AI 生成时按当前业务场景筛选玩法
+退化案例：training_material 9 张 C2/C3 全标 customer_service —— 因受众是员工 / 这是合理退化 / 不视为字段冗余
+维护原则：取值枚举只在本节定义 / 单 CT 不发明新取值 / 新增取值需走""共享层升级流程""",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-play-card-tier-three-values,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-play-card-tier-three-values""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,1bdd996b9979afdd3290d0ce5f0cbe9b3bfdf25a7f86aa6c93e31728ad045392,EV-KP-product_attribute-play-card-tier-three-values,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,§J.1 玩法分级标准,"instant：单次拍摄、单条 ≤ 4 小时即可完成 / 1 人 + 手机 + ≤ 200 元 + ≤ 4 小时（基线）/ 默认调用池
+long_term：需要跨天/跨周/跨月素材积累，单次拍摄合规但系列需要长期运营 / 默认调用池 + 元数据标""长期""
+brand_tier：多人协作 / 跨地点采集 / 品牌预算超出个人创作基线 / 不在基线内 / 不进入默认调用池 / 仅在用户主动选择""品牌模式""时调用",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-shared-6-decision-dims,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-shared-6-decision-dims""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,ca9d1bb277e3612f2d3d7ef985ce24ef8e67e2385848498c177ed6e772a325f0,EV-KP-product_attribute-shared-6-decision-dims,Q7Q12-搭配陈列业务包/商品与属性基础包.md,6.2,"冷启动统一要求：每个母类至少挂 6 个共用核心维度
+color / material / fit / length / season / occasion
+这是本轮硬冻结口径。
+（后续 10 个母类各列出共用 6 维度 + 1-3 个母类专属维度）",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-storyboard-30s-dual-decoding,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-storyboard-30s-dual-decoding""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,285ff241f04d691b6bb88729c0369888c5ef96486ac0f42c799bf8f5c5dbc8da,EV-KP-product_attribute-storyboard-30s-dual-decoding,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,§J.3 字段语义映射标准,"视频型 CT 读法（默认）：0-5 秒 / 5-10 秒 / 10-22 秒 / 22-30 秒 四段分镜内容（画面 / 声音 / 动作序列）
+文案型 CT 读法（例外）：文案执行骨架四段式 —— ① 钩子标题 / ② 正文节奏 / ③ 视觉分层 / ④ CTA 或留白
+实现层（Skill 层 / AI prompt 组装）解码提示：读字段前按 ContentType.production_mode + ContentType.output_format（视频 / 文案）分支；视频型走分镜解析器；文案型走文案骨架解析器；两套解析器共享字段名，解码逻辑在 Skill 层分叉",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-synonym-convergence,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-synonym-convergence""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,5db9f3a8c0fd2f48fb0da4c8e82032062e68604e63298209e0d02268cf0e9e34,EV-KP-product_attribute-synonym-convergence,Q7Q12-搭配陈列业务包/商品与属性基础包.md,6.3,"品类叫法统一：帽衫/连帽卫衣→hoodie；套头卫衣/圆领卫衣→sweatshirt；
+针织开衫/毛衣开衫→cardigan；小西装/西装外套→blazer；
+宽腿裤/阔腿裤→wide_leg_pants；直脚裤/直筒裤→straight_pants；
+A 摆裙/A 字裙→a_line_skirt；打底衫/内搭上衣/基础内搭→base_layer_top。
+属性叫法统一：米白/象牙白/奶油白→off_white；小高领/半高领→mock_neck；
+廓形宽松/oversize/超宽松→oversized；H 版/H 型/直身→h_line。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-product_attribute-troop-facing-register-five-fields,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-product_attribute-troop-facing-register-five-fields""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,f27cd6e47078ef702eb7b76227969124bda51695a3deed63dc5f0958ac53dccd,EV-KP-product_attribute-troop-facing-register-five-fields,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,§H.5 兵团向口径,"类型：ContentType 受众切换口径 (audience register switching protocol)
+5 字段映射：北极星 (north_star) / 服装行业钩子 (apparel_hook) / 实拍可行性 (shooting_feasibility) / 红线 (red_lines) / AI 辅助边界 (ai_boundary) —— 这 5 个字段在""兵团向""语境下读法与""消费者向""不同
+作用：当 ContentType 受众是""内部员工 / 学员 / 加盟商""而非""消费者""时，5 字段语义自动切换
+可扩展性裁决：用户 2026-04-14 裁决：可扩展到其他内部培训类 CT —— 未来若有 internal_culture / franchise_onboarding 等内部向 ContentType，可直接套用本口径
+维护原则：5 字段语义切换规则在本节登记 / 实际 5 字段值仍写在各 CT 文件",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-budget-controlled,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-budget-controlled""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,5440ad9eb966e820ca55e148b7963d2b27cb853464095c522d2b1496c42f291d,EV-KP-service_judgment-budget-controlled,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、9. budget_controlled + 三、1）卡在第二套 + 三、5）必须先问再推,"顾客最常见原话：""预算就这些，你帮我挑最值的。""
+店员第一反应：先问预算是买一件主力，还是买两件组合；是看单价，还是看利用率。
+最容易卡住：第二套、第三套。顾客要的是确定性，不是更多选项。
+库存不理想怎么转向：可以救。但不能一直加件数，必须把重点拉回""穿出去几次""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-comfort-sensitive-trigger,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-comfort-sensitive-trigger""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,dca2ddf9a5eb0d635463d23083af7e052122698ed02ffe3d3a93ff45c0f18983,EV-KP-service_judgment-comfort-sensitive-trigger,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、10 类进店目的 · 8. comfort_sensitive,"顾客最常见原话：""这个会不会扎 / 热 / 透 / 勒 / 掉？""
+店员第一反应：先确认她介意的是触感、温度、透度、弹性、静电还是内搭难度。
+最容易卡住：不是卡第二套，是卡信任。体感没讲透，后面推几套都白搭。
+库存不理想怎么转向：原则上不硬救。同类面料、同类结构、同类体感问题，不能换个颜色就继续推。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-commute-mainstay,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-commute-mainstay""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,131e6c621b429b1cbff1285e64711944081758de190a1bb7334eb3abf9c8543b,EV-KP-service_judgment-commute-mainstay,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、2. commute_mainstay + 三、2）断码可救,"顾客最常见原话：""我想找一套平时上班最常穿的。""
+店员第一反应：先问通勤方式、办公室温度、要不要开会、平时更在意利落还是舒服。
+最容易卡住：第二套。顾客容易觉得""都能穿，但没理由买""。
+库存不理想怎么转向：可以救。核心保功能：耐穿、好搭、不出错。颜色和细节可以灵活替。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-derivation-formula-eight-row,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-derivation-formula-eight-row""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,cb2356b7f9ca90a69924f414fe8b55c7f99ee50f639b3e90b5830ec89eb13359,EV-KP-service_judgment-derivation-formula-eight-row,Q4-人设种子/phase-3-Q4-参数级填充清单.md,5.2 + 5.3,"support = now × tier = P0_native → 默认可用
+support = now × tier = P1_light_adapt → 补充配置后可用
+support = enhanced × tier = P0_native → 补充配置后可用
+support = enhanced × tier = P1_light_adapt → 补充配置后可用
+support = custom × 任意 tier → 品牌级 / 特殊场景
+support = unsupported × 任意 tier → 不建议
+任意 support × tier = P2_cross_post_only → 补充配置后可用（转发提示）
+任意 support × tier = deferred → 不建议（系统未支持）",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-derived-view-risk-inherits-from-source-edge,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-derived-view-risk-inherits-from-source-edge""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,b716899a11262252979d2f84f827297dd4879f2a5767ee44d73e996407683cd8,EV-KP-service_judgment-derived-view-risk-inherits-from-source-edge,Q4-人设种子/phase-3-Q4-Persona-ContentType-Platform兼容矩阵.md,§6.1 第4步 + §6.3 示例2,"6.1 派生公式（冻结建议）第 4 步：最终展示档的风险位继承真源层的 risk。
+6.3 示例 2：风险来自人设 × 内容组合，平台无法挽救 ——
+product_professional × humor_content = support: custom, risk: high；
+抖音 = tier: P0_native；派生结果：即使平台 tier=P0_native，因为 support=custom → 品牌级 / 特殊场景；
+风险继承为 high。业务解释：问题不在平台，而在""专业人设 × 幽默表达""的角色错位风险。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-frontline-cover-public-and-private,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-frontline-cover-public-and-private""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,f727dcb464c3846162bc2eaa2cbf79d9bad1ef8048fe159fb7c7c5a43d874a6e,EV-KP-service_judgment-frontline-cover-public-and-private,Q4-人设种子/phase-3-Q4-参数级填充清单.md,5.4,凡首批与导购 / 门店经营强相关的内容线，其派生视图必须同时覆盖公域分发位与私域出口位，不得只做公域 — 已冻结,explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-functional-gap-fill,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-functional-gap-fill""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,25f25c7d5b7287ec505458e3a39c23cf6d825f89ff242857c4c3a0e0300f3f33,EV-KP-service_judgment-functional-gap-fill,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、6. functional_gap_fill + 三、2）断码可救 + 三、5）必须先问再推,"顾客最常见原话：""我家里都有，就缺一件外套/裤子/内搭。""
+店员第一反应：先问她家里已有的主色、主版型、最常穿去哪里。
+最容易卡住：不是卡第二套，而是卡""利用率有没有讲透""。
+库存不理想怎么转向：最容易救。因为买的是功能位，不是唯一款。只要能补全衣柜缺口，就能转。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-greeting-master-principles,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-greeting-master-principles""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,24e2ec1a006037634a82855ee3e5d5aa13530d0c030d659832e908930660ba8b,EV-KP-service_judgment-greeting-master-principles,Q7Q12-搭配陈列业务包/门店接客场景包.md,一、2）接客总原则正式冻结,"2）接客总原则正式冻结
+先判任务，再推货。
+先问顾虑，再给第一套。
+第一套是开门，第二套才是成交，第三套是兜底。
+断码能不能救，先看场景，不先看嘴。",explicit_business_decision,direct_quote,high,0,approved
+KP-service_judgment-must-ask-first,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-must-ask-first""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,6e2965492ec9f2959f6ced69b404d375c648c921a7a8411b965689ecbaddd13e,EV-KP-service_judgment-must-ask-first,Q7Q12-搭配陈列业务包/门店接客场景包.md,三、5）必须先问再推的场景正式冻结,"5）必须先问再推的场景，正式冻结为 6 类
+urgent_full_look（应急一身型）
+shape_correction（显瘦修身型）
+comfort_sensitive（体感敏感型）
+budget_controlled（预算控制型）
+functional_gap_fill（功能补位型）
+repeat_purchase_replenish（复购补货型）",explicit_business_decision,direct_quote,high,0,approved
+KP-service_judgment-new-item-cannot-style,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-new-item-cannot-style""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,6711b011c28be3915ae101311353f528a5d36ee4de7de9953c30d5a7ee4fb45d,EV-KP-service_judgment-new-item-cannot-style,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、7. new_item_cannot_style + 三、2）断码可救 + 三、4）先陈列后开口,"顾客最常见原话：""这件我喜欢，但我不知道怎么搭。""
+店员第一反应：必须先给两条路：一条保守穿法，一条出彩穿法。
+最容易卡住：第二套、第三套。第一套只是""能搭""，第二套才决定""买回去会不会穿""。
+库存不理想怎么转向：可救。关键不是守住原配件，是守住使用路径：上班怎么穿，周末怎么穿，换鞋怎么变。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-platform-derivation-not-source,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-platform-derivation-not-source""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,5b6d2d0eee7ccf1127e03ab03d7bf9cd2658d03a2d374aeb0b2ee44b2ef12d77,EV-KP-service_judgment-platform-derivation-not-source,Q4-人设种子/phase-3-Q4-参数级填充清单.md,五 + 范围约束,"派生视图不是真源、不写入图谱，由真源层 + Q3 真源临时组合计算得出。
+平台维度承接 Q3 (:System)-[:SUPPORTS_PLATFORM {tier}]->(:PlatformTone / :PrivateOutletChannel)，不新建 ContentType × Platform 关系边。
+不引入 DistributionTarget 或类似的新实体类型——""平台""只在叙述层做统称。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-private-outlet-needs-sales-associate-base,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-private-outlet-needs-sales-associate-base""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,903ce11d62a89baca1947bb200258ae749c33735fe0b9c1507b60795d888e3f5,EV-KP-service_judgment-private-outlet-needs-sales-associate-base,Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md,六、6.2,"如果不补，styling_advisor（穿搭顾问）这套人设会缺岗位底座，导致它虽然名字成立，
+但真实感和专业度来源不清。更重要的是：对服装零售业务，门店导购的朋友圈是出货主战场——
+导购人设如果没有对应的岗位知识底座，私域内容生成就会空心。这在 Q3 新增 PrivateOutletChannel
+（私域出口位）之后变得尤其致命。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-product-review-concerns-clearance-on-spot,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-product-review-concerns-clearance-on-spot""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,becf8120b4b8c684c89336360a1a7e7db8de94599a8d15772fed8479deede76d,EV-KP-service_judgment-product-review-concerns-clearance-on-spot,Q2-内容类型种子/product_review-交付物-v0.1.md,§C3-2 + 备注 + 北极星 + B5,"C3-2：整条视频只讲犹豫点——这件白衬衫我本来怕透 / 这条裤子我本来怕显胯 / 这件针织我本来怕扎。
+每个""怕""都给一个小测试：窗边逆光看透不透 / 侧身站着看胯 / 手臂贴脸颊看扎不扎。
+前 20 秒都没有说""好""，只是一直验证""原来没我想的那么糟""。
+最后留一句""如果你和我怕的是同几件事，这件可以进试衣间""。
+备注·接客场景的专属用法：店员站在店内顾客旁边，拿出同款现场做 3 个顾虑测试——
+顾客""我怕这个肩太硬""→ 店员让她侧身在镜前看 2 秒 → 真实反馈。
+。
+服装钩子：消费者真正卡住的就是透/勒/皱/闷/短/显壮/难搭——服装独有的""心理阻力图谱""。",explicit_play_card,paraphrase_low,low,0,approved
+KP-service_judgment-product-review-concerns-clearance-on-spot-faye-positioning,needs_review,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-product-review-concerns-clearance-on-spot-faye-positioning""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,119d1e264213ecc1c5251a0cd56df84fbecf442ccaf569862f2dd57c01c21683,EV-KP-service_judgment-product-review-concerns-clearance-on-spot-faye-positioning,Q2-内容类型种子/product_review-交付物-v0.1.md,§C3-2 备注,"备注·接客场景的专属用法：店员站在店内顾客旁边，拿出同款现场做 3 个顾虑测试——
+顾客""我怕这个肩太硬""→ 店员让她侧身在镜前看 2 秒 → 真实反馈。
+这是笛语在接客场景下最强的转化工具。",explicit_play_card,paraphrase_low,low,0,approved
+KP-service_judgment-product-review-tactile-court-three-piece-compare,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-product-review-tactile-court-three-piece-compare""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,e59b307408317af8fa573eb134d0d5a3b4853399b80d9c06e6985ca28522ec80,EV-KP-service_judgment-product-review-tactile-court-three-piece-compare,Q2-内容类型种子/product_review-交付物-v0.1.md,§C3-3 + 备注 + 共享引擎 #11,"C3-3：镜头固定在桌面俯拍，整条视频几乎不说话——只有衣料摩擦/拉伸/扣子碰撞/拉链""咔哒""声。
+你像""法官""一样把同类三件衣服摆成三份""证据""：同为白 T / 同为卫衣 / 同为西装裤。
+三段测试（回弹/抬手/贴麦声音）后给一句裁决：""如果你讨厌起球，今天只选 2 号""。
+服装钩子：服装在这里是""声音媒介+触觉媒介""——最适合讲面料/工艺/辅料差异
+（尤其是""看起来差不多但价格差很大""的品类）。
+备注·接客场景最强用法：店内两个犹豫的客人选两件相似品，店员现场做 30 秒触感法庭——
+声音和触感胜过一切口播，这是店内最强转化工具。
+调用共享引擎 #11 ASMR 感官沉浸。",explicit_play_card,paraphrase_low,low,0,approved
+KP-service_judgment-ready-made-full-set,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-ready-made-full-set""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,8ccbbab8ba79666576adadc722373045ff693faa31bc9fff213bf9cd35050b28,EV-KP-service_judgment-ready-made-full-set,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、5. ready_made_full_set + 三、4）先陈列后开口 + 三、1）卡在第二套,"顾客最常见原话：""你直接给我搭一套，我不想自己想。""
+店员第一反应：先判断她要的是省心、速度，还是她确实不会搭。
+最容易卡住：第二套。第一套只解决""现成""，第二套才解决""值不值得整套带走""。
+库存不理想怎么转向：可救，但必须保整体感觉。不是一件一件乱换，是保留同一气质和同一使用场景。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-repeat-purchase-replenish,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-repeat-purchase-replenish""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,d70db873cea4487a76f206a77241581f44bc3a65fd805e3567e458d3beaf2103,EV-KP-service_judgment-repeat-purchase-replenish,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、10. repeat_purchase_replenish + 三、2）断码可救 + 三、5）必须先问再推,"顾客最常见原话：""我上次买那条裤子挺好穿的，再给我拿一条类似的。""
+店员第一反应：先问她上次满意的是版型、长度、面料、颜色，还是穿着场景。
+最容易卡住：第二套。顾客会拿旧款做对照，容错很低。
+库存不理想怎么转向：可救，但只能在同逻辑下替。不能拿""差不多""糊弄老客。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-second-third-set-blocker,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-second-third-set-blocker""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,b046e22b73d395dd985fa2f7a8821d62f962d92b544fad188edd2780170e95c7,EV-KP-service_judgment-second-third-set-blocker,Q7Q12-搭配陈列业务包/门店接客场景包.md,三、1）最容易卡在第二/第三套推荐的场景正式冻结,"1）最容易卡在第二套 / 第三套推荐的场景，正式冻结为 5 类
+urgent_full_look（应急一身型）
+shape_correction（显瘦修身型）
+ready_made_full_set（现成成套型）
+new_item_cannot_style（新款不会搭型）
+budget_controlled（预算控制型）",explicit_business_decision,direct_quote,high,0,approved
+KP-service_judgment-shape-correction,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-shape-correction""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,62ef46ef92c04a7d6dec8e2a8fcee80e43ecd5f370b88fd33c792db20dd2ec97,EV-KP-service_judgment-shape-correction,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、4. shape_correction + 三、3）断码不救,"顾客最常见原话：""我胯大/肩宽/腿粗，你给我找个修一点的。""
+店员第一反应：先定位她最在意的身体部位，再确认她能接受的松量、长度、腰线和露肤点。
+最容易卡住：第二套、第三套最容易翻车。因为她不是在买衣服，是在买安全感。
+库存不理想怎么转向：原则上不硬救。关键版型、关键长度、关键落肩不对，话术再好都不能救。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-store-daily-three-required-elements,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-store-daily-three-required-elements""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,d9da8add21c36d9a7f851da01c32e820172e718267a67abcb9eb518865fe7588,EV-KP-service_judgment-store-daily-three-required-elements,Q2-内容类型种子/store_daily-交付物-v0.1.md,本文件与 batch 1/2 的关键差异 §1 + §3,"硬边界三要素自检（三选二必达）：
+① 店铺空间——画面中至少有 50% 时间出现门店可辨识空间；
+② 商品道具——服装门店特有物件至少出现 3 次以上；
+③ 员工工作节点——至少包含一个真实零售运营动作。
+三选二必达 → 归 store_daily ; 只命中一个或零个 → 应归 personal_vlog 或 daily_fragment。
+和 founder_ip 的区别：即使老板本人出镜，只要观众记住的是""这家店""而不是""这个老板""，就归 store_daily。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-urgent-full-look,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-urgent-full-look""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,cc186543cb6a798d26439cae23e84a7cb52606b718ed6d3fed4d82d25d4d6334,EV-KP-service_judgment-urgent-full-look,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、1. urgent_full_look + 三、1）卡在第二/第三套 + 三、3）断码不救,"顾客最常见原话：""后天有事，你给我配一身能直接穿出去的。""
+店员第一反应：先问场合、对象、天气、时长、想显得正式还是松一点。
+最容易卡住：第二套、第三套。第一套只是""能去""，第二套才决定""像不像她自己""。
+库存不理想怎么转向：主件优先，辅件可替。外套/连衣裙/主上衣不断，鞋包配角可转。不许用完全不同气质硬转。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-service_judgment-weekend-social,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-service_judgment-weekend-social""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,3b4ef776bc52cde7796b0507ac74f1fc92d2fc7c756b25b7065811a6461316c1,EV-KP-service_judgment-weekend-social,Q7Q12-搭配陈列业务包/门店接客场景包.md,二、3. weekend_social + 三、4）先陈列后开口,"顾客最常见原话：""周末出去吃饭、逛街、拍照，想穿得有点感觉。""
+店员第一反应：先问是见朋友、见对象、见家人，想要松弛、精致还是显气色。
+最容易卡住：第二套、第三套。因为顾客买的不是实用，是状态感。
+库存不理想怎么转向：可救，但只能同气质转。不能从松弛感硬转商务感。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-styling_rule-behind-scenes-invisible-completion-cost,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-behind-scenes-invisible-completion-cost""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,1e6ebc230ec24a71f132b8264a150a830d79fc1613a82d882b9daa39ad035fe0,EV-KP-styling_rule-behind-scenes-invisible-completion-cost,Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md,§C2-2 + §A,"C2-2：比如谁在熨衣服、谁在捡地上的胶带、谁在搬箱子、谁在重新别吊牌、谁在把试衣间弄干净、
+谁在拍摄结束后把衣服一件件装回袋子。
+因为你把""看不见的完成成本""拍出来了，观众自然会尊重；真正有效的 BTS 往往不是更漂亮，
+而是更接近""现实中的完成成本""。
+备注：品牌 BTS 内容越来越被当成独立内容线，而非附属品。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-behind-scenes-parallel-split-screen,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-behind-scenes-parallel-split-screen""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,3648dc777364e738c2caba97a6ed92c62de0e50ebd24f5e070ce4a9b3b3ea994,EV-KP-styling_rule-behind-scenes-parallel-split-screen,Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md,§C3-2,"C3-2：剪映里做最简单的分屏：左边放最终看起来很顺的那 1 秒；右边放这 1 秒外面发生了什么。
+比如左边是模特优雅转身，右边是有人蹲在地上帮忙拉裙摆、有人举手机当补光、有人喊""等一下风来了""。
+不是在""曝光狼狈""，而是在让观众同时看见品牌的体面和体面背后的笨拙努力——
+接住""所谓好看，是很多普通人一起托出来的""。
+服装拍摄、上新、门店内容都特别适合做这个——""画面内优雅/画面外救火""的反差天然强。
+备注：与 event_documentary C3-3 ""后台手忙脚乱 vs 台前只拍半个结果"" 的区别：
+event 版是错位展示（台前半个+后台完整），本玩法是同步并置（分屏同时呈现）。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-behind-scenes-store-soundprint,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-behind-scenes-store-soundprint""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9a1995f63f71713272927c9450f20eacc63e0840b168da26a80e80520b68e388,EV-KP-styling_rule-behind-scenes-store-soundprint,Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md,§C3-4,"C3-4：全片不靠画面热闹，只用""店的声音""：卷帘门、门铃、衣架、扫码、剪吊牌、熨烫蒸汽、
+纸袋摩擦、试衣间门、拉链、关灯。画面只给极近景，像在听一座小型装置艺术。
+服装行业声音密度高且独特——声纹能变成品牌识别资产。
+备注：本卡聚焦空间声纹而非工作动作 / 材质本身。ASMR 家族 7 entries 跨 6 个 ContentType。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-color-echo,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-color-echo""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,230672e626273ecd96a99140dc4b01b09b14142332c8c8539ffaedcbd5dd4b34,EV-KP-styling_rule-color-echo,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 05 + 6.2,"一身颜色至少有两处呼应，不让某个颜色孤零零悬着。
+呼应会显完整，也更利于做陈列分组。公开零售陈列指南也把颜色分组和焦点组织视为最直接的视觉销售工具。
+works_in：鞋包呼应、上衣配饰呼应、内搭下装轻呼应。
+fails_in：全身只有一处亮色，其他完全断开。
+原本同色替代时，可在同温度 / 同明度内微调；不能冷暖乱跳。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-daily-fragment-fixed-corner-time-fold,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-daily-fragment-fixed-corner-time-fold""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,73f5f5244846ed9379b261d5df0823d3b01ff634d3e21b024a2885b83070d025,EV-KP-styling_rule-daily-fragment-fixed-corner-time-fold,Q2-内容类型种子/daily_fragment-交付物-v0.1.md,§C3-1,"C3-1：手机放在同一个角度，连续 5-7 天拍某个固定时刻：回家推门进来的 5 秒、
+店里开灯前的 10 秒、晚上脱鞋坐下的 6 秒。没有""大事""，但每天动作、穿着、包的摆放、
+表情、进门速度都不一样。
+服装会自然成为时间变化的证据：同一个人这几天为什么穿得更松、更紧、更轻、更硬。
+打破""碎片必须多地点、多画面、多切换""的套路。
+🏷️ 玩法分级：long_term —— 需 5-7 天连续素材 / 单次拍摄合规 / 系列需长期运营。
+与 personal_vlog 差别：连续性——前者有""一天的连续感""，daily_fragment 是""不连续的瞬间集合""。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-daily-fragment-no-face-traces,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-daily-fragment-no-face-traces""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,1e54a105754336c4c21fb6d151ba723110bf1e8c5b83518eeb78234abb5affce,EV-KP-styling_rule-daily-fragment-no-face-traces,Q2-内容类型种子/daily_fragment-交付物-v0.1.md,§C3-2,"C3-2：整条内容不拍脸，只拍生活留下的痕迹：椅背上的外套、刚摘下的耳环、收银台边的一杯水、
+试衣间地上的纸袋、回家后放下的钥匙、洗过的衬衫在窗边滴水。
+观众不会觉得""信息不足""，反而更想靠近，因为人是通过痕迹出现的——接住一种更私密、更可信的存在感。
+服装天然是最容易留下痕迹的物件：衣架上的空位、刚脱下的针织、试穿留下的褶皱。
+打破""日常碎片必须有自拍和本人出镜""的套路。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-daily-fragment-sensory-sort-not-time,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-daily-fragment-sensory-sort-not-time""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,02abbb14c4694ca98b152c6898734f844bf55cc71abcc42a75e343915c005d65,EV-KP-styling_rule-daily-fragment-sensory-sort-not-time,Q2-内容类型种子/daily_fragment-交付物-v0.1.md,§C3-3,"C3-3：从""今天最软的东西""开始：袖口、蒸汽、头发、傍晚光；
+然后是""今天最吵的东西""：拉链、地铁、店门、手机震动；最后是""今天终于安静的那一秒""。
+观众接住的是体感，而不是行程。
+服装钩子：布料本来就有触感和声音，非常适合做体感排序。
+打破""碎片内容一定是时间顺序""的套路。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-daily-fragment-single-chair-time-fold,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-daily-fragment-single-chair-time-fold""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,a272ae299719264b861f3674522f8891e0103561c60f77dd7f5af9f021a3608c,EV-KP-styling_rule-daily-fragment-single-chair-time-fold,Q2-内容类型种子/daily_fragment-交付物-v0.1.md,§C3-5,"C3-5：手机固定拍一把椅子或店里的试衣凳。早上椅子上是一件外套；中午是一杯喝到一半的咖啡；
+傍晚是一只购物袋；夜里是一盏小灯照着空椅子。每次出现你都只露出手：把东西放下、停两秒、又拿走。
+观众不会看到你的行程，但会在脑子里补完""你的一天""——接住""我也有一把椅子装着我的一天""。
+服装钩子：服装作为""情绪载体""出现（外套 = 出门的勇气）——极适合做品牌的温柔叙事。
+打破""碎片必须多地点""，用单地点做时间结构。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-emotion-expression-clothes-as-emotion-vessel,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-emotion-expression-clothes-as-emotion-vessel""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,a55c7d3684db71d130f5cb829000673a30afb71a9db770af0d95c77cf207ea41,EV-KP-styling_rule-emotion-expression-clothes-as-emotion-vessel,Q2-内容类型种子/emotion_expression-交付物-v0.1.md,§C3-1 + §A + §D,"C3-1：镜头从回家开始。主角一句话不说，只是把外套从肩上慢慢脱下来 / 搭在椅背上 /
+过一会儿又拿起来抱在怀里坐着。背景只有电饭煲跳闸声 / 楼下车声 / 微信提示音但不看。
+字幕极少，只在最后出现一行：""今天没有崩溃，只是一直没空掉下来。""
+这时候那件衣服不是商品也不是穿搭，而是""今天所有没被接住的情绪容器""。
+服装行业钩子⭐⭐⭐⭐⭐：服装是情绪载体而非主角商品——这是服装行业独占的""让衣服替主人活着""的叙事空间。
+§D：❌ ""这件针织很温柔"" → ✅ ""有些人会把外套留在你椅背上""。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-face-brightness,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-face-brightness""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c7a1e91869e668199354bffe30dd2b41f9b429a5fdb00037d544657153153920,EV-KP-styling_rule-face-brightness,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 09 + 6.3,"离脸最近那一层，优先解决气色，不优先解决时髦。
+顾客最直观的反馈首先是""脸色好不好""""我显不显老""。
+works_in：围巾、内搭、领口、耳饰提亮。
+fails_in：整体比例都对，但近脸颜色发灰发黄。
+上装缺货时，可优先替换近脸提亮件，不必整套推翻。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-formality-consistency,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-formality-consistency""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,33348256fc9c7b25e39fde3e16aa661a7d9e95426031172920691bb07957e055,EV-KP-styling_rule-formality-consistency,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 10 + 6.2,"正式场合下，单品正式度尽量统一。
+场合错位是最容易让顾客说不出哪里怪、但就是不买的原因。
+works_in：西装 + 皮鞋 / 乐福鞋，衬衫 + 西裤，结构连衣裙 + 干净外套。
+fails_in：套装配过于休闲鞋，礼服感上衣配破洞牛仔。
+正式裤断码，只能换同级正式度单品。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-looks-good-but-unsellable,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-looks-good-but-unsellable""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,abeced1a5267f4b59c7480d93f4f5c69bad99ed665fbc944779eacedae98b432,EV-KP-styling_rule-looks-good-but-unsellable,Q7Q12-搭配陈列业务包/搭配规则包.md,6.6,"all_oversized_look：拍照有风格，门店里大多数顾客会觉得自己变壮。
+flat_neutral_look：Lookbook 好看，试衣间容易被说""没精神""。
+double_statement_look：内容里时髦，零售里容易""用力过猛""。
+fragmented_leg_line_look：低腰 + 裤长 / 裙长截断 + 脚口再截断，最容易显短。
+luxury_overstack_look：皮草配缎裙配闪鞋配大耳环，远看成立，近看日常没法卖。
+formal_casual_mismatch_look：上半身很正式，下半身 / 配件明显太休闲。
+theme_without_problem_solution_display：墙面漂亮，但导购接客时无法说清""这组解决什么问题""，转化率通常差。
+陈列不是单纯做美，而是要降低顾客理解成本、快速建立焦点、帮助顾客想象自己穿上后的样子。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-menswear-belt-shoe,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-menswear-belt-shoe""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,3919e09f51b8617c040e3414ba27b90eac80a23b0db6fd458660dab80f3b1561,EV-KP-styling_rule-menswear-belt-shoe,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 11 + 6.2 + 6.4 反转五,"男装正式穿着里，腰带与鞋的颜色、皮质感、正式度要尽量一致。
+works_in：黑鞋黑带、棕鞋棕带、光泽与正式度相近。
+fails_in：黑皮鞋配浅棕编织带；正装鞋配明显牛仔休闲带。
+鞋没货，优先找同色同正式度鞋；不是先换整套西装。
+男装人台必须鞋、腰带、包一起配完整。
+会反转的规则五：在休闲、球鞋、工装、无腰带场景可放松；只要进入 formal dressing，这条重新生效。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-neutral-plus-accent,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-neutral-plus-accent""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,da5710e06982037ac5a781c266e7987998c402e76e021a1f25bbdcead443dd8b,EV-KP-styling_rule-neutral-plus-accent,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 06 + 6.3 + 6.4 反转三,"顾客怕出错、第一次成交、主推通勤时，先用中性色打底，再加一处提气。
+works_in：米白 / 灰 / 驼 / 藏青打底，丝巾 / 鞋 / 包 / 内搭提气。
+fails_in：全身都灰、都米，但没有材质层次。
+提气色断货，可把提气点转移到配饰，不要硬改主上装。
+会反转的规则三：节庆、活动、潮流年轻客群允许高饱和、多彩直接上身；但要先判断顾客承受力。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-old-sample-as-error-archive,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-old-sample-as-error-archive""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9dab255cb2817ece6f1973c2a1afc59f28df97b7df9018c46557d1e6e9500b87,EV-KP-styling_rule-old-sample-as-error-archive,Q2-内容类型种子/founder_ip-交付物-v0.1.md,§C3-1 + §B9 + §D,"C3-1 服装行业钩子：⭐⭐⭐⭐ 服装行业独占优势——服装是唯一能做这种玩法的行业，
+因为""旧样衣""本身就是人格化错误档案。别的行业没有这种具象的""失败物件""。
+备注：打破""老板一定要往前讲、往上讲、往成功讲""的套路——它往后看、往错看、往羞耻感里看。
+B9：旧样衣 = 人格化错误档案 / 老板过去版本的尸检报告。
+§D 三个未被开发角度 1：""身体化判断的人""——他/她对衣服的下意识动作，本身就是人格内容。
+别的行业的 founder 内容很容易停在抽象理念，服装行业却天然拥有可拍的证据链。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-styling_rule-one-focus,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-one-focus""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c00e50188d474ea80330a62f55b080714c31922c2237535ce7014ceb1c67913f,EV-KP-styling_rule-one-focus,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 04 + 6.2,"一套里只留一个主角：颜色主角、版型主角、材质主角、设计主角，四选一。
+零售穿搭不是造型比赛；哪里都厉害，最后往往哪里都不好卖。
+works_in：亮色外套 + 基础内搭；设计感上衣 + 干净下装。
+fails_in：亮片上衣 + 花裙 + 金属鞋 + 大耳环。
+主角断货时，替代保留""主角功能""，其他单品继续降噪。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-ootd-clothes-remember-today,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-ootd-clothes-remember-today""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,7d5dece507ea8303051d38cd5a3c56e6da096e8f66206bd90ce3911416e317c4,EV-KP-styling_rule-ootd-clothes-remember-today,Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md,§C3-3,"C3-3：从拍""穿上它""改成拍""它怎么被今天留下痕迹""：早上平整的裤线到下午坐久后的褶皱；
+刚出门时笔挺的衬衫到晚上领口松掉一点；包带在肩上压出的痕迹；牛仔裤膝盖处的弯曲。
+最后把衣服挂起来，OOTD 才真正完整。
+服装行业钩子⭐⭐⭐：对服装品牌极有杀伤力——天然把""耐看、耐穿、会呼吸""这类隐性价值拍出来。
+打破""OOTD 只拍穿上那一刻""的套路。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-ootd-micro-suspense-decision-chain,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-ootd-micro-suspense-decision-chain""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,1d24b3d1b1d80e203fb6e549ca0cd7b475c1adcf9b86a87b1c544f862f558100,EV-KP-styling_rule-ootd-micro-suspense-decision-chain,Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md,§C3-4 + §C1-3,"C3-4：开头 2 秒只露出袖口，上面有一粒很小的线头。字幕：""今天我为什么换了三次衣服？""（不解释）。
+手机震动 → 你换成第二套；店里镜前发现第二套会走光 → 换第三套。
+全片不说""显瘦显高""，只让观众跟着你解决真实问题。
+服装钩子：品牌卖点被转译为""解决场景问题""（不走光 / 好活动 / 不闷热）——比参数更有说服力。
+打破""穿搭=展示""，把穿搭拍成""决策过程""。
+C1-3 备注：抖音巨量引擎 2024 报告——一旦系统化就意味着烂大街。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-ootd-route-fitness-not-display,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-ootd-route-fitness-not-display""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,733c4ce2689325f009c8e83eae02c1930561155577882fc81dafaaaa7530404e,EV-KP-styling_rule-ootd-route-fitness-not-display,Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md,§C3-1 + §E3/E4 + §D,"C3-1：不是站镜前展示，而是跟着这套衣服走完整条路线：早上骑车为什么外套要能挡风、
+进店为什么要能卷袖子、下午试衣时为什么鞋子不能太累、晚上和朋友见面为什么把头发放下后这套突然更松。
+服装行业最该狠狠干的一条路——把 OOTD 从""展示搭配""升级成""展示生活适配""。
+E3：用""显瘦/高级/氛围感""这种空词顶替真正的体感和场景。
+E4：满屏 SKU 字幕、像报菜名。
+服装行业最大的未开发空间，不是继续卷""搭配公式""，而是把穿搭拍成：路线、功能、身份、关系、时间痕迹。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-pcg-moment-over-category,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-pcg-moment-over-category""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,6817be1d1e6a5e08d831fcdf4f4e05a02621e73244ef71b404ed9b804030f8de,EV-KP-styling_rule-pcg-moment-over-category,Q2-内容类型种子/product_copy_general-交付物-v0.1.md,§C3-1 + §G G3 + §C3-4,"C3-1 一句话定义：整张海报或详情页首屏，不写""亚麻衬衫""，而写
+""下午 5:40，下楼拿外卖时你懒得换衣服，也不想看起来像刚睡醒""。
+服装行业钩子：⭐⭐⭐⭐⭐ 服装是最适合按""时刻""卖的品类——
+服装服务的是人进入社会场景的瞬间 / 其他品类没有这种""时刻 - 商品""的天然绑定。
+备注：打破""先给品类名再给卖点的电商惯性 / 先给生活入口再给产品解释""。
+G3 用户裁决：接客场景首屏允许""延迟揭示""作为一种表达叙事形式 / 不强制首屏必须给品类名。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-styling_rule-premium-item-neutralization,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-premium-item-neutralization""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,0ca8d85fba46d0f34ec4ef1bf53b0c624d1dab9702f8cf9dc024fc9b938a9b3c,EV-KP-styling_rule-premium-item-neutralization,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 08 + 6.3 + 6.4 反转四,"皮草、亮片、绸缎、重工外套等贵气单品，要配基础休闲件降压。
+仓库已直接把这条作为规则样例写进抽取协议，原理是""用基础款休闲单品搭配奢华单品，降低视觉压迫感""。
+works_in：皮草 + 牛仔，缎面半裙 + 针织，亮片上衣 + 西裤。
+fails_in：贵气单品再叠贵气单品。
+中和单品必须保留""哑光、基础、低压力""特征。
+会反转的规则四：晚宴、婚礼、典礼场景里，不一定要中和，反而可以顺着贵气走。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-process-trace-rejected-garment,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-process-trace-rejected-garment""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,dc39954717bfdda12d7df9eef225a3df5395f7adff9812ad3523959b252b14c9,EV-KP-styling_rule-process-trace-rejected-garment,Q2-内容类型种子/process_trace-交付物-v0.1.md,§C3-3 + §E5 + §B9,"C3-3 一句话定义：大多数品牌只愿意拍""合格品""，但真正能建立信任的，
+是拍那件被拦下来的衣服。
+北极星映射：认真不是把好的拿出来炫，而是把""不够好的""挡在外面——接住品牌的边界感。
+服装行业钩子：⭐⭐⭐⭐ 服装行业极适合用""被拒绝的成衣""做内容——观众很少被允许看到这个环节。
+备注：打破工艺内容永远只展示""漂亮流程""的套路，用淘汰建立信任。
+B9：被拦下的衣服 = 品牌的边界感（知道什么不该被卖出去）。
+E5：只展示完美流程，不展示任何被否决、被返工、被拦下的东西。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-styling_rule-process-trace-single-hard-fake-step,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-process-trace-single-hard-fake-step""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9b889fa43bfeea97233fc723fa7fbac7c98c6ca4cfa62ff4dff69b6d54eef906,EV-KP-styling_rule-process-trace-single-hard-fake-step,Q2-内容类型种子/process_trace-交付物-v0.1.md,§C2-1 + §D 角度 1,"C2-1 一句话定义：不试图拍全流程，而只拍一个最容易看出真假的节点。
+服装行业钩子：⭐⭐⭐⭐ 服装行业最适合做""难伪装步骤""——对花 / 缝线 / 回弹 / 肩线 / 收口都是品质差异集中爆发的节点。
+备注：compass 特别指出""knowing is the new owning""——年轻观众着迷的，
+不只是""知道在哪做""，而是""知道怎么做、为什么这样做""。
+§D 角度 1：最有爆相的方向不是全流程旅游片，而是对花、回弹、拦货、不可逆动作前的停顿——单点深拍比全流程更有说服力。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-styling_rule-product-journey-sample-version-tree,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-product-journey-sample-version-tree""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,af9e1903b5a0c780e295bc5d682f17dbe21310cbc4bdb67761cc41e398c74133,EV-KP-styling_rule-product-journey-sample-version-tree,Q2-内容类型种子/product_journey-交付物-v0.1.md,§C2-1 + §C3-1 + §B9 + §D,"C2-1 北极星映射：让产品从""灵感结果""变成""判断轨迹""——轨迹比结论更有说服力。
+服装行业钩子：⭐⭐⭐ 服装是最适合做""版本树""的行业——每次微调都肉眼可见。
+备注：Instagram 上 sample day / sample unboxing / founder diaries / from sketch to sample 都在证明
+观众愿意看""产品并不是一次做对""的过程。
+B9：样衣 = 判断轨迹 / 差一点做成别的样子。
+§D 角度 1：让观众看到差一点做成别的样子——这是其他行业很少能做的""判断轨迹""展示。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-styling_rule-product-journey-vs-process-trace-boundary,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-product-journey-vs-process-trace-boundary""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9e2e94de52ea20ac5aaec582003894d15f33d666be6452191d272f36b6203800,EV-KP-styling_rule-product-journey-vs-process-trace-boundary,Q2-内容类型种子/product_journey-交付物-v0.1.md,§与 process_trace 的边界,"product_journey（本文件）和 process_trace（工艺溯源）在服装行业容易混淆。边界如下：
+- 叙事重心：设计决策的历程 vs 生产工艺的可验证
+- 北极星：这件衣服不是突然出现在货架上的 vs 我愿意相信你没有骗我
+- 时间：从灵感到上市的完整判断链 vs 从原料到成衣的物理变化链
+- 关键证据：失败样衣 / 改版纸条 / 样衣对比 vs 面料测试 / 缝线特写 / 车间实况
+- 最核心反套路：反""从草图到成品的爽片"" vs 反""走进工厂的宣传片""
+生活化例子：讲""我们为什么把袖口改了 5 次""→ product_journey；
+讲""这块纯棉面料如何经过 3 次水洗仍不缩水""→ process_trace。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-styling_rule-proportion-split-37,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-proportion-split-37""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c07dcc6927a7a0099f1ea5acee52020410c1f075e01c12327af62f80a4fb1c59,EV-KP-styling_rule-proportion-split-37,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 01 + 6.2 + 6.4 反转二,"全身视觉分割优先做 3:7、4:6，避免 5:5。
+works_in：高腰裤 / 高腰裙、短上衣、塞衣角、短外套。
+fails_in：上衣卡胯、裙长停在小腿最粗处、裤长和鞋口双截断。
+会反转的规则二：proportion_split_rule —— 低腰复古、Y2K、模特感拍摄可以故意做下坠比例。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-silhouette-balance,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-silhouette-balance""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,ee1576753c2ec50a84edf3b2eda68bef5390dcd6c9dc2cdbb8fe73528038ece9,EV-KP-styling_rule-silhouette-balance,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 02 + 6.2 + 6.4 反转一,"一身最多只留一个量感重点，上宽下收，或上收下宽。
+works_in：宽针织配直筒裤，廓形西装配窄裙，阔腿裤配合体上衣。
+fails_in：宽卫衣 + 宽裤 + 厚底鞋。
+替代时先守住廓形角色，不先守颜色。
+会反转的规则一：高个、偏瘦、年轻、街头风、明确追求 oversize 时，可以上宽下宽；但它不适合作为门店安全盘默认推荐。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-single-problem-priority,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-single-problem-priority""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,919cef66f199407bab6bcb31998d45f298b004bed12c47afa7e74ae53b7e3ffe,EV-KP-styling_rule-single-problem-priority,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 12 + 6.2,"接客时一次先解决顾客一个核心顾虑，不同时解决五个问题。
+真正成交不是""卖点堆满""，而是""顾虑被减掉""。
+suitable_for：全部导购、全部门店。
+not_suitable_for：无。
+works_in：顾客说显胖，就先解决显胖；说难搭，就先解决难搭。
+fails_in：上来就说""显高显瘦显气质显贵显年轻""。
+原款缺货时，替代必须优先守住顾客最在意的那一个点。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-structure-drape,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-structure-drape""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,13a6baf52b3f5e486f50dc7e1b4264a56d50ade52e89e8c8f323ab0ebaa8d24e,EV-KP-styling_rule-structure-drape,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 07 + 6.3,"挺的配垂的，厚的配薄的，糯的配利落的。
+材质关系决定一套衣服的""质感""和""贵气感""，不只是谁和谁同色。
+works_in：挺括西装配垂感裙，毛绒外套配牛仔，真丝衬衫配西裤。
+fails_in：全身都软塌，或全身都硬挺。
+替代先守材质角色，再守颜色。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-substitution-priority-ladder,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-substitution-priority-ladder""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,94e9aa790d015b88edc50579882913e3ed87821731a247785f87c8e7b030ca84,EV-KP-styling_rule-substitution-priority-ladder,Q7Q12-搭配陈列业务包/搭配规则包.md,6.5,"第一优先：守 silhouette（廓形）。
+第二优先：守 formality_level（正式度）。
+第三优先：守 visual_weight（视觉重量），尤其贵价单品救场时，材质像不像，往往比颜色像不像更关键。
+第四优先：守 color_family（色系家族），可在同温度、同明度内微调；不能冷暖乱跳。
+明确判定""不能替代""的情况：廓形变了 / 正式度掉了 / 近脸颜色把气色打脏了 /
+材质从""贵感""换成""廉价反光""/ 量感从""修饰""变成""放大问题""。
+断码替代，不找""长得像""的，找""功能一样""的。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-styling_rule-talent-showcase-micro-skill-hundred-reps,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-talent-showcase-micro-skill-hundred-reps""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,795fdf772cb1358154c1d6e054f3b4daafb5081e17bafe28d051712dfe923e39,EV-KP-styling_rule-talent-showcase-micro-skill-hundred-reps,Q2-内容类型种子/talent_showcase-交付物-v0.1.md,§C3-2 + §D 微技能打磨,"C3-2：不只拍成品，而拍""某个小动作越来越准""的过程。你反复系同一条丝巾、反复把衬衫塞进裤腰、
+反复把外套披上肩头，前几次都怪，最后一次刚刚好。观众从""哦你会""变成""哦你练过""——接住专业感和耐心。
+分镜：第一次歪 / 第二次结太小 / 第三次太松 / 第四五六次连续快切 / 最后一次 slow-motion 收紧 + 字幕""第 17 次""。
+打破""才艺=结果""，改成""才艺=控制力""。",explicit_play_card,paraphrase_low,low,0,approved
+KP-styling_rule-waistline-anchor,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-styling_rule-waistline-anchor""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,40043ec29c3f04390a6d5af44d742cee839e7c0f2e5502aac3417a4eb4ee2cbf,EV-KP-styling_rule-waistline-anchor,Q7Q12-搭配陈列业务包/搭配规则包.md,6.1 规则 03 + 6.2,"只要顾客诉求是显高、显瘦、显精神，先找腰线。
+门店里大部分""不够精神""不是颜色错，是腰线没出来。
+works_in：高腰下装、短外套、半塞衣角、腰带辅助。
+fails_in：长上衣全盖、低腰下装、宽松直筒裙无收束。
+高腰断码时，可用腰带 / 短外套 / 内外层次制造假腰线；不能直接用无腰线替代。",explicit_business_rule,paraphrase_low,low,0,approved
+KP-training_unit-ai-tone-banned-list-veto,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-ai-tone-banned-list-veto""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,b4eacf11ca54ae762f4e8fa79cab0d661a72971591bde1e6394927d880225731,EV-KP-training_unit-ai-tone-banned-list-veto,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,§H.1 α 层 9 种 AI 腔禁用清单,"类型：跨 ContentType 负面样板库
+覆盖范围：所有 18 个 ContentType 在 AI 生成时强制查表 / 优先级最高的""一票否决""层
+作用：AI 生成内容时，命中清单中任一条 → 直接拒绝输出，要求重写
+维护原则：清单条目只在共享层维护 / 单 CT 文件不复制清单内容 / 避免漂移
+使用方式：任何 ContentType 的 §F AI 辅助边界段在 v0.2 回写时引用本清单：参见共享层 H.1 α 清单",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-auto-trigger-rules,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-auto-trigger-rules""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,10480b53ac2e2c1ff5240fbbf63872780e27005cedfb982ff6bcddfc12606fce,EV-KP-training_unit-auto-trigger-rules,Q7Q12-搭配陈列业务包/培训与纠错包.md,十二、training_trigger_rules,"满足以下任一条件，就应自动生成或推送对应 TrainingMaterial：
+同类搭配错误 3 次以上 / 同一陈列面 2 次以上被店长改回 / 断码救场连续失败 /
+同类退货理由连续出现 / 顾客高频问同一个问题，员工回答不一致 /
+同一门店同类库存救场转化率明显偏低。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-behind-scenes-near-disaster-narrative,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-behind-scenes-near-disaster-narrative""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,90cfc4cb10297ebf5d1beae205e475386921a8cdbd4b758ccae483674c8f38e4,EV-KP-training_unit-behind-scenes-near-disaster-narrative,Q2-内容类型种子/behind_the_scenes-交付物-v0.1.md,§C2-1 + §E5,"C2-1：不是把所有幕后碎片都塞进来，而是抓住一个差点翻车的点：
+光线不对、模特迟到、衣服没熨平、店里突然来客、拍到一半下雨。
+""有问题，才有戏""——幕后不是素材残渣，而是解决问题的过程。
+观众获得""参与感""，并理解品牌为什么这样呈现。
+E5 红线：""故意制造幕后冲突""来博眼球——会让观众觉得你在演戏。",explicit_play_card,paraphrase_low,low,0,approved
+KP-training_unit-body-shape-objection-structure-points,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-body-shape-objection-structure-points""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,43f9a5a2b790645857f5da74ca89bca87543992c8deffd99d06f809f1da113fc,EV-KP-training_unit-body-shape-objection-structure-points,Q7Q12-搭配陈列业务包/培训与纠错包.md,五、C3 body_shape_objection,"C3 body_shape_objection（身型顾虑应对）
+正确动作：用版型、比例、重心解释
+错误动作：空喊""显瘦""""显高""
+为什么错：没有证据，像套路
+怎么纠正：必须指出肩线、腰线、下摆、裤长哪个在起作用
+学会判定：员工能说出至少 2 个具体结构点",explicit_business_decision,direct_quote,high,0,approved
+KP-training_unit-cold-start-role-priority-frontline,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-cold-start-role-priority-frontline""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,02ae100936ed058992a3813b1ca4dfc45c1eea02b6ceef9286018115c6de538e,EV-KP-training_unit-cold-start-role-priority-frontline,Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md,四、4.1 + 4.2,"P0（第一轮必须先拿到）这 4 个岗位优先级最高：sales_associate / store_manager /
+designer / sample_worker。因为它们分别对应：前台接客转化 / 门店经营秩序 /
+设计判断 / 工艺落地。这 4 个岗位一旦有了最小素材包，三套通用 Persona 就都不会空转：
+styling_advisor ← sales_associate / store_operator ← store_manager /
+product_professional ← designer + sample_worker。
+P1（第二轮补齐）：warehouse_supervisor / design_director / merchandising_director。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-collect-failure-not-only-success,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-collect-failure-not-only-success""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,f5437e8cafbba18fcb582777a90963b9bc00d8e9848d961a2c448df350627525,EV-KP-training_unit-collect-failure-not-only-success,Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md,二、2.5,"如果素材全是""标准答案""和""成功案例""，系统会长出很重的 AI 味。
+岗位知识尤其应该主动收：做砸过什么 / 最怕什么 / 最常卡在哪 /
+哪一句最不该说 / 哪一种判断最容易失手。
+这类素材最容易生成真实的 authenticity_anchors（真实性锚点）和
+emotional_spectrum（情绪光谱）。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-collect-real-action-before-script,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-collect-real-action-before-script""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,bdd86556238a55b7cfa3dfbc0ba256d13c83515c79d2aeec239d3dad87b08702,EV-KP-training_unit-collect-real-action-before-script,Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md,二、2.1,"岗位知识素材优先级必须是：1. 真实动作 → 2. 真实判断 → 3. 真实困境 →
+4. 真实话术 → 5. 真实情绪 → 6. 再往后才是总结性表达。
+否则最容易采到一堆漂亮口号，最后填不出 authenticity_anchors（真实性锚点）
+与 typical_scenarios（典型场景）。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-color-hesitation-disambiguation,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-color-hesitation-disambiguation""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,bb54f073aac02ab6ac545dcd3b7481bc44382353cb2febea818260bb26a3600d,EV-KP-training_unit-color-hesitation-disambiguation,Q7Q12-搭配陈列业务包/培训与纠错包.md,五、C5 color_hesitation_handling,"C5 color_hesitation_handling（颜色犹豫处理）
+正确动作：先判断顾客是在怕难搭、怕显黑、怕不耐脏，还是怕不够正式
+错误动作：只说""这个颜色很显白""
+为什么错：颜色问题背后常常不是颜色，而是场景
+怎么纠正：先拆顾虑，再给近色群或替代场景
+学会判定：员工能区分""颜色审美问题""和""场景安全感问题""",explicit_business_decision,direct_quote,high,0,approved
+KP-training_unit-customer-first-look-judgment,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-customer-first-look-judgment""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,978ff210c6a5de09752925e0d9d722f3930822fd00af1983cb399dd7827aa810,EV-KP-training_unit-customer-first-look-judgment,Q7Q12-搭配陈列业务包/培训与纠错包.md,五、C1 first_look_judgment,"C1 first_look_judgment（第一眼判断顾客诉求）
+正确动作：先看顾客是在找场景、找问题解法，还是找某件具体衣服
+错误动作：一上来就报卖点、报价格、报面料
+为什么错：顾客还没感觉到""你懂我""
+怎么纠正：先问""今天是想解决什么场合""
+学会判定：员工能在 20 秒内判断顾客属于""场景型/单品型/体感型/价格型""",explicit_business_decision,direct_quote,high,0,approved
+KP-training_unit-designer-locate-defect-source,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-designer-locate-defect-source""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,84723d5c61e0020c1f6227a5fc859a11cba4a0046678ce3b0957f9c7e098405d,EV-KP-training_unit-designer-locate-defect-source,Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md,五、4. designer（设计师）,"设计师的手感不是""会想""，而是知道一件衣服的问题到底出在版型、面料还是细节。
+她要能判断：什么看起来好看但上身不成立，什么灵感适合品牌，什么必须砍掉。
+一件衣服的问题出在版型、面料还是细节；为什么要砍掉自己喜欢的方案；
+什么灵感属于品牌，什么不属于；设计逻辑什么时候会和商品逻辑冲突。
+新人最容易学歪：把""审美好""当成""设计成立""；把""灵感""当成""可落地""；
+把""改版多次""理解成不专业；把""坚持自我""理解成不听反馈。",explicit_role_skill_lock,paraphrase_low,low,0,approved
+KP-training_unit-emotion-expression-9-ai-tone-banlist,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-emotion-expression-9-ai-tone-banlist""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,ec5ac3c5771f182fd75d25a690cc524a0be0619d9c63926fcc9cdebe673a4fc7,EV-KP-training_unit-emotion-expression-9-ai-tone-banlist,Q2-内容类型种子/emotion_expression-交付物-v0.1.md,§E-α 9 种 AI 腔禁用清单 + §G G1,"使用方式：AI 在生成 emotion_expression 时，先做负面匹配——如果生成结果命中下面任一模式，必须重写而非微调
+本清单不是""建议避免""，而是 AI 生成 emotion_expression 时必须执行的硬约束——命中任一项则拒绝生成，要求重构
+G1 升共享层（横切 M6 无损并入）：已升级为共享层 §H.1 α-Layer 9 AI-Tone Banned List 跨 CT 负面样板库 / 优先级最高的""一票否决""层
+跨 CT 复用清单：humor_content / lifestyle_expression / daily_fragment / personal_vlog / founder_ip / behind_the_scenes",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-emotion-expression-truth-3-questions-prepublish,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-emotion-expression-truth-3-questions-prepublish""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9d3965ffbb316abd93e8cb3fdcea274d094ad0502cda0be7ce5d67126e72e649,EV-KP-training_unit-emotion-expression-truth-3-questions-prepublish,Q2-内容类型种子/emotion_expression-交付物-v0.1.md,§双层真实性防御 β + §G G2/G5,"β 层——「真实感三问自检」作为 C2/C3 每张玩法卡的必答项：告诉生产者""做对的要同时满足 3 个锚点""——正面锚定
+三问任一答'不' → 这条不应该作为 emotion_expression 发布。可以降级到 humor_content / lifestyle_expression / daily_fragment
+G2 仅在情绪敏感 CT 使用（不强制扩散）：β 真实感三问自检保留在本 CT 内部 / 不强制扩散到 product_copy_general 与 training_material
+G5 发布前 (Pre-Publish)：β 真实感三问自检在发布前作为最后一道校验 / 不放在生成前作为生成前置（避免降低创作效率）",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-engine-vs-play-by-cross-ct-test,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-engine-vs-play-by-cross-ct-test""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c5848449235d8a68772d554916019ef5754c4a3fb196b541cdf5ee6c370a2673,EV-KP-training_unit-engine-vs-play-by-cross-ct-test,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,本文件是什么 + §D 矩阵范围说明 + §I 候选引擎登记规则,"""玩法""是具体的、属于某个 ContentType 的（例如""衣椅倒叙日记""属于 personal_vlog）
+""引擎""是抽象的、可被多个 ContentType 复用的（例如""反讽对位叙事""可以用在 personal_vlog / humor_content / outfit_of_the_day / knowledge_sharing 等多个 ContentType 里）
+18 份 ContentType 的 ~130 张 C3 玩法卡中，只有约 35 张调用共享引擎（约 27% 覆盖率）/ 矩阵即使扩到 18 列也只能反映约 1/4 的玩法 / 73% 的 CT 独有玩法本就不在矩阵范围内
+候选引擎可以被 ContentType 玩法卡通过编号引用，但卡片化（10 字段引擎卡）延后到 v0.3。卡片化前的引用形式：调用候选引擎：#14（倒叙开门）— 待 v0.3 卡片化",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-enterprise-narrative-anti-ai-tone,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-enterprise-narrative-anti-ai-tone""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9d542966ba928f22bad87ed4814830196eb6a3fa30dfd1a1392fbb0e6704becb,EV-KP-training_unit-enterprise-narrative-anti-ai-tone,Q2-内容类型种子/企业叙事类GPT5.4.md,"6 类企业叙事各自的""主流玩法（已被用烂）""小节 + 各自的""为什么烂""标注","""为什么烂：观众接收到的是'结论'，不是'这个人'；像 PPT 口播，AI 最容易模仿。""（founder_ip 玩法 1）
+""为什么烂：只有任务，没有张力；只有'我很忙'，没有'我为什么这样做'。""（founder_ip 玩法 2）
+""为什么烂：太像客服升级版；观众感受到的是'应付质疑'，不是'人格魅力'。""（founder_ip 玩法 3）
+（process_trace / behind_the_scenes / product_journey 等章节的""主流玩法""小节均有同型""为什么烂""判断）",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-enterprise-narrative-north-star-first,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-enterprise-narrative-north-star-first""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,95c2cf2ea2cc21a04b0e78fed47d0c22bf60f6aeaf45d770097375e480585f55,EV-KP-training_unit-enterprise-narrative-north-star-first,Q2-内容类型种子/企业叙事类GPT5.4.md,"6 类企业叙事每一类章节开头的""**北极星：** ……""段落","founder_ip：""**北极星：** 观众看完后，心里不是'这老板在卖货'，而是'这个人有判断、有代价、有性格，我愿意先信他，再信他的牌子'。""
+role_work_vlog：""**北极星：** 观众看完后，不只是'知道这个岗位在干嘛'，而是对这个岗位产生尊重、对品牌产生体感信任……""
+（event_documentary / product_journey / process_trace / behind_the_scenes 章节开头均有同型北极星语句）",structural_pattern,paraphrase_low,low,0,approved
+KP-training_unit-enterprise-narrative-object-witness-over-talking-head,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-enterprise-narrative-object-witness-over-talking-head""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,bc92621b3b15fe78a2d1fc32ab11ff50374160f99599eef30d8a75e48cedacb2,EV-KP-training_unit-enterprise-narrative-object-witness-over-talking-head,Q2-内容类型种子/企业叙事类GPT5.4.md,founder_ip 突破玩法 1（旧样衣审判庭）+ behind_the_scenes 突破玩法 3（边角料主视角）+ process_trace 突破玩法（只拍手 / 一刀之前的静止 / 被拦下来的那一件）,"""镜头一开始不是拍老板本人，而是拍一件被压在柜子最底层的旧样衣……让观众先听到布料摩擦声、拉链声、衣架轻撞桌面的声音。""（founder_ip 突破玩法 1）
+""把幕后里最不起眼的东西当'主角'：别针、衣架、透明胶、蒸汽熨斗……让物件承担品牌气质。""（behind_the_scenes 突破玩法 3）
+""服装行业最大的机会，是把'美'的反面拍出来：蒸汽、皱褶、别针、搬箱、返袋、选图争执、临时救场。""",structural_pattern,paraphrase_low,low,0,approved
+KP-training_unit-error-first-then-correct-replay,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-error-first-then-correct-replay""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,e9b7d7b86ad0ed08730fcd54ecc43ccc914b3826cf1f17202788e876e6ccc53a,EV-KP-training_unit-error-first-then-correct-replay,Q2-内容类型种子/training_material-交付物-v0.1.md,§C3-1,"C3-1：视频一开头先给员工看一个小事故：顾客问""这个会不会显胯"" / 店员立刻回答""不会不会特别显瘦"" /
+顾客表情立刻冷掉。画面停住 / 字幕""问题不是你说错 / 是你说太快""。然后倒回去 / 重演第二遍：
+店员先问""你平时更在意胯还是腿型"" / 再根据回答推荐。
+员工接住的不是""背话术"" / 而是""判断顺序的重要性""——传统培训总想先给正确答案 /
+这个玩法先让员工感到错 / 再让正确动作进入记忆。
+学习机制：Error-driven learning + Desirable difficulty。",explicit_play_card,paraphrase_low,low,0,approved
+KP-training_unit-event-documentary-failure-perspective,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-event-documentary-failure-perspective""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,1a95506b56134a7c2aa9e1bc818504d55402e3e97f6fe0560dfa8801dadeffe3,EV-KP-training_unit-event-documentary-failure-perspective,Q2-内容类型种子/event_documentary-交付物-v0.1.md,§C C3-7 + §D 第 3 条,"不拍展会的光鲜场面，而拍无人问津的展位 / 首日零订单的焦虑 / 布展翻车的瞬间 / 大促备货后卖不动的仓库
+真实困难比虚假成功更有共鸣——观众接住的是""这家品牌真的在扛过""
+服装行业是少数""敢展示失败就能赢信任""的行业之一
+与 founder_ip C2-2 反向透明、role_work_vlog C3-2 岗位失误博物馆 共同构成""企业叙事类的失败叙事三件套""",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-event-documentary-long-term-tier-discipline,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-event-documentary-long-term-tier-discipline""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,fd9ac9e5f40adaa34b7f39812795cdbae1bede3008d9d11db1ee351bbce2a288,EV-KP-training_unit-event-documentary-long-term-tier-discipline,Q2-内容类型种子/event_documentary-交付物-v0.1.md,实拍可行性基线 + §C C3-6 玩法分级 long_term,"单条内容在 4 小时内，但整场事件可能跨越数日——素材采集阶段允许更长时间，剪辑成品必须收敛到单条 4 小时标准
+🏷️ 玩法分级 (v0.2 M3 / J.1)：long_term（长期型）—— 素材采集需 3 天 / 单条成片 ≤ 4 小时 / 进入默认调用池 / 元数据标""长期""
+这是企业叙事类里第 2 次使用""单条合规但素材采集跨天""的策略（第 1 次是 talent_showcase C3-7 的 100 天挑战）——归类为""长期积累型""",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-evidence-shape-four-types,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-evidence-shape-four-types""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,1ba2f9c374e6e174bf12b2183feef72d1d0d77a72fa7fe3444c8d1cf435040a6,EV-KP-training_unit-evidence-shape-four-types,Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md,二、2.4,"每条素材至少要标清它属于哪种证据形态：
+口述类：访谈、复盘、对话记录；
+动作类：视频、照片、现场步骤记录；
+文档类：SOP、工艺单、培训资料、表格、清单；
+物证类：样衣、吊牌、货架、退货单、纸条、调货记录。
+没有证据形态，只剩转述总结，可信度会大幅下降。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-fabric-touch-before-spec,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-fabric-touch-before-spec""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,911f6b90f03dba6d26cf8b94900477aeca69a2a722db8bf414d594b74e1f0a3a,EV-KP-training_unit-fabric-touch-before-spec,Q7Q12-搭配陈列业务包/培训与纠错包.md,五、C4 fabric_touch_explanation,"C4 fabric_touch_explanation（面料体感解释）
+正确动作：让顾客摸关键点再解释
+错误动作：只讲参数
+为什么错：服装很多成交靠体感，不靠术语
+怎么纠正：先触感，后参数
+学会判定：员工会用""摸袖口/摸里层/摸领口""做演示",explicit_business_decision,direct_quote,high,0,approved
+KP-training_unit-faye-ctype-founder-ip,brand_faye,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-faye-ctype-founder-ip""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c92c3c46d3b094997e94b6ae63a9c5238e66d4455f707a948e8273ec4440d57e,EV-KP-training_unit-faye-ctype-founder-ip,Q-brand-seeds/ctype_founder_ip.md,§required_knowledge + §output_structure + §typical_hooks + §typical_ctas + §example_references + §ab_variants_hint,"content_type_id: ctype_founder_ip · layer: enterprise_narrative · production_mode: human_first_llm_polish ·
+output_structure 三段：当下场景 110 字 / 判断与取舍 140 字 / 落回品牌价值 90 字 · length_range 180-500 ·
+typical_hooks：这件事如果不自己盯，我其实不放心 / 很多人只看到最后那件衣服，看不到我为什么在这里犹豫了很久 /
+我今天不想讲大道理，只想讲一个我最后没有妥协的细节 ·
+ab_variants_hint：A版偏'决策现场'，B版偏'关系戏'；同一主题禁止两版都写成创业感悟 ·
+platform_targets：xiaohongshu + wechat_official_account。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-faye-ctype-process-trace,brand_faye,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-faye-ctype-process-trace""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,1f3c2ee27d5f3ed040c7265eeb46466722d9025bdbc89c4cae689490f2a29ca7,EV-KP-training_unit-faye-ctype-process-trace,Q-brand-seeds/ctype_process_trace.md,§required_knowledge + §output_structure + §typical_hooks + §example_references + §ab_variants_hint,"content_type_id: ctype_process_trace · layer: enterprise_narrative · production_mode: llm_assist_human_edit ·
+output_structure 三段：起点场景 90 字 / 过程细节 170 字 / 价值升华 110 字 · length_range 180-600 ·
+typical_hooks：这一步平时看不见，但它决定了你拿到手里会不会放心 / 同样是一条拉链，贵和便宜的差别，
+不在广告词里，在这里 / 我今天不带你看全流程，只带你看5个能核验的点 ·
+ab_variants_hint：A版偏'证据链'，B版偏'感官化'，两版都要避免全流程流水账 ·
+platform_targets：xiaohongshu + douyin。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-faye-ctype-store-daily,brand_faye,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-faye-ctype-store-daily""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,10fa00a57eccf37af535e08467de9ae27ef80adbbe434c61f5f914b5eb2a6d04,EV-KP-training_unit-faye-ctype-store-daily,Q-brand-seeds/ctype_store_daily.md,§required_knowledge + §output_structure + §typical_hooks + §example_references + §ab_variants_hint,"content_type_id: ctype_store_daily · layer: traffic_acquisition · production_mode: llm_assist_human_edit ·
+output_structure 三段：门店瞬间 80 字 / 现场判断 110 字 / 余味落点 70 字 · length_range 100-400 ·
+typical_hooks：今天店里最让我记住的，不是卖了多少，是一个很小的瞬间 /
+她进门的时候什么都没说，我大概就知道她先不该试那一排 /
+门店日常真正难的，从来不是把货摆出来，而是把人接住 ·
+ab_variants_hint：A版偏'空间氛围'，B版偏'人物关系'；两版都不要把门店拍成促销货架扫拍 ·
+platform_targets：wechat_moments + douyin。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-founder-profile-brand-unique-layer,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-founder-profile-brand-unique-layer""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,499e8125f0adae5a29113549d50218d3f3d164775c15a0f01cd45e569c306263,EV-KP-training_unit-founder-profile-brand-unique-layer,Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md,一、1.1 + 二、2.1 + 六、6.3,"该层当前只包含 FounderProfile（创始人画像）。特点：每品牌有且仅有一份；不可复用；
+服务于 founder_ip（创始人 IP）这条内容线；不进入通用 Persona（人设）编号体系。
+FounderProfile（创始人画像）不是""第 4 套通用人设""，而是品牌唯一层。
+对象性质不同、权限边界不同、服务题材不同，不能为了表面对称而把它硬塞进通用 Persona 体系。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-founder-profile-soft-use-no-rename,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-founder-profile-soft-use-no-rename""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,8e38db14541abc80d258db74175536b6b9ccfeb803f8ed4c2c5cc77f681d84ba,EV-KP-training_unit-founder-profile-soft-use-no-rename,Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md,二、2.1 说明,"对于""没有明显创始人文化""的品牌（老板不愿出镜 / 加工厂转型品牌 / 多人合伙无单一创始人），
+按 Q1 §柔性使用的口径，允许不填 FounderProfile、不启用 founder_ip 题材——
+这是启用与否的问题，不是命名贴不贴的问题，不需要通过更名解决。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-greeting-format-lock,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-greeting-format-lock""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,8b58d3a912c2daca872eba56650577d442b97d8bf1f5612a7ee782fe4a480e1b,EV-KP-training_unit-greeting-format-lock,Q7Q12-搭配陈列业务包/门店接客场景包.md,四、TrainingMaterial 承接方式正式冻结,"围绕这 10 类接客场景，首批培训只做 4 种格式：
+branching_scenario（分支情境训练）
+do_dont_contrast（Do/Don't 对照）
+pre_shift_micro_coaching（班前微教练）
+error_replay（错误先发生再倒回重来）
+长视频一次讲完、统一话术灌输、PPT 录屏，默认禁用。
+培训目标不是""讲得不错""，而是员工下次真遇到场景时自动跳出正确动作。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-grounding-over-polish-default,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-grounding-over-polish-default""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,190d613a9273c2337e74f83e2adf19d335de83457b969823905324c8eab1d291,EV-KP-training_unit-grounding-over-polish-default,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,§E 趋势 1 + 趋势 4.2,"TikTok 2026 趋势报告明确指出 ""polished 内容正被 grounding 内容取代""
+55% 的社交用户更信任人类创作内容
+56% 用户频繁看到 ""AI slop"" 低质内容——品牌需要在效率和真实性之间找到平衡
+personal_vlog / lifestyle_expression / daily_fragment 的 C1 主流玩法（精致流水账 / 金句宣言）已全部被趋势判死
+2025 年最有效的服装品牌内容竞争力公式：""朴素设备 × 非凡视角 × 真实情感""",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-humor-content-brand-tone-gate-for-puppetry,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-humor-content-brand-tone-gate-for-puppetry""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,a61c5051c4403669252aac1055068d974a3e1f6327124d095bd0405ddf4db398,EV-KP-training_unit-humor-content-brand-tone-gate-for-puppetry,Q2-内容类型种子/humor_content-交付物-v0.1.md,§C C3-5 🎨 品牌调性提示 + §G G2/G3,"🎨 品牌调性提示 (v0.2 G2 用户裁决补)：适合调性：活泼 / 街头 / 年轻 / 童趣（Activate / Street / Young / Playful）；不适合调性：极简 / 高端定制 / 冷感（Minimal / Haute-Couture / Cold）—— AI 生成时按品牌 Persona 调性自动判断是否调用本卡
+G2 B. 保留 + 加品牌调性提示：已在 C3-5 卡片下方追加""🎨 品牌调性提示""行 / AI 生成时按品牌 Persona 自动判断
+G3 A. 不做品牌分级：自嘲方向对所有品牌开放 / 不在红线 §E 增加""高端品牌慎用""条款 / 由创作者自担风险",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-humor-content-clothing-as-persona-switch,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-humor-content-clothing-as-persona-switch""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,97f99d0d9533b4d681d9855032bae6153348ed89644535669c00f914ff66b6f5,EV-KP-training_unit-humor-content-clothing-as-persona-switch,Q2-内容类型种子/humor_content-交付物-v0.1.md,§C C3-2 + §D 第 2 条,"镜头固定，你站在门口，只通过加减一件外套、背包、鞋子、眼神和站姿，在 2 秒内切换成三个完全不同的人
+没有复杂特效，只要切点够准。笑点来自身份落差，而不是台词
+服装在这里不是美化，而是人格开关——服装行业做这种内容天生占优
+""服装作为人格开关""（C3-2）——一件外套切换三种社会身份，服装行业独占优势",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-knowledge-not-teacher-but-event,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-knowledge-not-teacher-but-event""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,4c3f57dbc85b446aa9ce365ebbcf83dee45e7b7da927647452834284c3cc650a,EV-KP-training_unit-knowledge-not-teacher-but-event,Q2-内容类型种子/knowledge_sharing-交付物-v0.1.md,§C3-1 + §B9 + §D,"C3-1 北极星映射：观众接住的是""啊，这个错误我也会犯""，于是愿意继续看——
+知识不是老师在讲，而是事故在发言。
+服装非常适合错误教学：错误搭配、错误面料认知、错误洗护、错误版型选择。
+打破""知识内容必须正确、完整、体面地铺陈""的套路。
+§D 角度 2：错误教学——服装行业错误案例（错搭/错洗护/错版型）库存极大。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-lifestyle-expression-old-defines-premium,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-lifestyle-expression-old-defines-premium""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c94f9e01f2ef2391e82393144c5ff1b73cb2603902568c650d1b0e9789965c75,EV-KP-training_unit-lifestyle-expression-old-defines-premium,Q2-内容类型种子/lifestyle_expression-交付物-v0.1.md,§C C3-5 + §D 第 3 条,"开场是把一件穿了很久的外套摊在桌上：袖口起球、内衬磨亮、口袋边缘有一条自己缝的线
+观众接住""高级不是更新，是陪伴""——对服装品牌会转化为""值得信赖的耐用与价值观""
+可自然引出""耐穿 / 可修补 / 售后 / 环保""而不尬——""repair / 旧物故事""叙事方向，降维到手机与个人生活的尺度
+这一条和反消费主义 / 长期主义品牌叙事同构，是极少数能直接引出""耐穿 / 可修补""卖点而不尬的玩法
+""以旧为高级""——反消费主义高级感是下一个窗口",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-lifestyle-expression-values-via-rejection,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-lifestyle-expression-values-via-rejection""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,157916034bf6ee93eb6ada82169ef147c745545b74393ffa8e1721f7bacce747,EV-KP-training_unit-lifestyle-expression-values-via-rejection,Q2-内容类型种子/lifestyle_expression-交付物-v0.1.md,§C C3-1 + §D 第 2 条,"不拍""我怎样生活""，而拍""我今天拒绝了什么""：拒绝在外面多待一会儿提前回家 / 拒绝外卖哪怕只煮一碗面 / 拒绝为了好看硬穿一双不舒服的鞋
+观众接住的是边界感、秩序感、自我尊重
+打破""生活方式靠购买和拥有来表达""的套路，改成靠选择和舍弃来表达
+服装是""价值观筛子""——舒适优先、场合优先、心情优先，各自代表不同生活方式
+把衣服当作价值观的行为接口——你怎么叠衣服、怎么修补、怎么在不同场景穿同一件基础款，都是比""口播主张""更可信的生活态度输出",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-merch-director-stylable-not-sellable,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-merch-director-stylable-not-sellable""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,610ae17e053b44725d485b497e0071131f5b572a462c5ed576ea104171fca194,EV-KP-training_unit-merch-director-stylable-not-sellable,Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md,五、7. merchandising_director（商品总监）,"商品总监的手感在于：把好看、能卖、可补、可推、适合门店，这几件事同时放在一张图上看。
+这个岗位不只看款，还看深浅、结构、上新节奏、动销、滞销、门店反馈。
+什么款该做深，什么款只能试水；为什么设计不错但经营上不成立；
+什么货适合门店，什么货适合线上；什么时候为门店让步，什么时候坚持商品逻辑。
+商品相关岗位最在意的搭配误区：搭得好看但卖不动；只顾单套出片，不顾货品结构；
+只顾模特效果，不顾普通顾客体感；只顾内容传播，不顾门店承接；只顾主推单品，不顾连带与价格带。",explicit_role_skill_lock,paraphrase_low,low,0,approved
+KP-training_unit-microlearning-not-long-course,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-microlearning-not-long-course""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,2827843be1cdf2575663f6349b8af9f0dd595fe33693e08184a2f35becd50794,EV-KP-training_unit-microlearning-not-long-course,Q7Q12-搭配陈列业务包/培训与纠错包.md,二、训练原则 2.1+2.5,"真源已经明确，培训要做成 microlearning（微学习）、just-in-time support（即时支持）、
+scenario-based（情境训练）、Do/Don't（正误对照），而不是长课。
+外部学习科学也长期支持 retrieval practice（提取练习） + spacing（间隔复现），
+比单次灌输更能留住记忆。
+培训完成的标志不是""看过""，而是""现场能复现""。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-on-floor-four-layer-assessment,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-on-floor-four-layer-assessment""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,da03494d9bf3afb2f89c6e21ec2f8355aeaf2f5fb7600b7c74bc8b4d692e30ad,EV-KP-training_unit-on-floor-four-layer-assessment,Q7Q12-搭配陈列业务包/培训与纠错包.md,十一、on_floor_assessment_protocol,"现场验收不做""背题考试""，做 4 层。
+A 层 action_replay_check（动作复现检查）适合标准动作类。
+B 层 scenario_response_check（情境应答检查）适合判断力类。
+C 层 do_dont_spotting（正误辨识检查）适合纠错训练。
+D 层 mystery_shopper_reflection（神秘顾客式复盘）适合接客和库存救场。
+通过标准：关键动作无漏项 / 能先判断顾虑再给方案 / 能指出具体错误点 / 没有把替代款说成原款。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-ootd-anti-hard-ad-discipline,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-ootd-anti-hard-ad-discipline""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,05d3be424e689696a3321a13a62457883386efbe9cefb4402bb5eebaa863f92a,EV-KP-training_unit-ootd-anti-hard-ad-discipline,Q2-内容类型种子/outfit_of_the_day-交付物-v0.1.md,§E3 + §E4 + §E6 + 与试点版差异 + 北极星,"E3：用""显瘦/高级/氛围感""这种空词顶替真正的体感和场景。
+E4：满屏 SKU 字幕、像报菜名。
+E6：把 OOTD 拍成赤裸硬广（强口播购买指令）。
+与试点版差异：商业化风险最高—OOTD 是最容易滑向""硬广 / 种草""的 ContentType，
+需要最强的红线约束。
+北极星：观众接住的不是 SKU，而是审美与品牌的长期记忆。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-persona-anti-pattern-checklist,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-persona-anti-pattern-checklist""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,3e07e258915f5c1ac0877a2a310b144b1f68f36488c4e2d6c679dadaa867cfd2,EV-KP-training_unit-persona-anti-pattern-checklist,Q4-人设种子/phase-3-Q4-三套通用Persona首批卡片.md,卡片 1/2/3 §4 最怕写成,"[store_operator] 写成万能门店鸡汤号 / 只有管理口号没有真实门店动作 / 只讲前台热闹不讲后场协同 / 只有正能量没有疲惫救火复盘
+[styling_advisor] 写成强推型销售话术号 / 只会夸不会排雷 / 只会说参数不会翻译成身体体感 / 像客服脚本不像一线导购
+[product_professional] 只剩术语堆砌没有真实判断 / 只有专业感没有失败疲惫返工 / 像产品说明书不像活人在说话 / 像品牌宣传片不像经历过现场的人",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-persona-vs-roleprofile-layering,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-persona-vs-roleprofile-layering""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,aecce3b1a295df5b537656359b025a86e6cabcc979780a29ad86d2f29aff2f4e,EV-KP-training_unit-persona-vs-roleprofile-layering,Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md,六、6.1 + 四、说明,"因为首批冷启动阶段，系统更需要的是少量高频、可持续、可被 Prompt / Skill / 运营反复调用的
+通用人设壳，而不是一上来就把所有岗位都升格成独立 Persona。岗位本身的专业度和真实性，
+应该由 RoleProfile（岗位画像）来补。这样既符合最佳工程实践，也更符合内容生产的稳定性要求。
+岗位知识是人设真实感底座，这一点冷启动规划已经明确。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-priority-by-impact-frequency-trust,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-priority-by-impact-frequency-trust""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,266bda188c03fc15637c7875421bbc908b66caaa7296437a44b60a9631ddf7cc,EV-KP-training_unit-priority-by-impact-frequency-trust,Q7Q12-搭配陈列业务包/培训与纠错包.md,二、2.2 + 九、priority_error_group,"优先顺序只看三件事：conversion_impact（对成交影响）、error_frequency（出错频率）、
+trust_damage（对信任伤害）。
+第一优先级，只抓会直接影响成交的 8 类：比例失衡 / 忽略身型 / 场景错配 /
+只卖单品不讲整套逻辑 / 陈列主角过多 / 挂装密度失控 / 陈列与库存深度不匹配 /
+替代款假装同款。这 8 类先练熟，门店成交会最先变化。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-process-trace-stop-the-bad-one-builds-trust,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-process-trace-stop-the-bad-one-builds-trust""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,dbe5336c570c1ed57bda4642f07b089228a2c6d6145d49e76b8f08d1a995dcd7,EV-KP-training_unit-process-trace-stop-the-bad-one-builds-trust,Q2-内容类型种子/process_trace-交付物-v0.1.md,§A + §C C3-3 + §C C1-1 反例,"""我愿意相信你没有骗我""
+大多数品牌只愿意拍""合格品""，但真正能建立信任的，是拍那件被拦下来的衣服
+认真不是把好的拿出来炫，而是把""不够好的""挡在外面——接住品牌的边界感
+最致命的是那句""严格把控""太空——在透明焦虑的行业里，""看似公开、实则空泛""的展示难以说服
+打破工艺内容永远只展示""漂亮流程""的套路，用淘汰建立信任",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-product-review-anti-filter-pledge,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-product-review-anti-filter-pledge""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,821daedeb3a43d5fdaafdb19fcd70409592cdce019b4098609bc12cdbfba215e,EV-KP-training_unit-product-review-anti-filter-pledge,Q2-内容类型种子/product_review-交付物-v0.1.md,§C2-1 + §C1-3 备注 + §B5,"C2-1 备注：""反滤镜宣言""是进阶测评的信任地基——
+原相机 / 自然光 / 不拉腿 / 不美颜四项自述一旦缺失，
+下面的所有体感测评都失去可信度。
+C1-3 备注：部分穿搭测评账号甚至在口播里反复强调""原相机 / 不拉腿 / 不美颜""——
+恰恰说明""造假""已是行业默认怀疑，对照表式测评最容易触发这种怀疑。
+C1-1 备注：Interface Fashion 报告——MCN 管理的测评博主造成严重内容同质化。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-product-review-fabric-detective-spec-party,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-product-review-fabric-detective-spec-party""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,61ed04dcd157b6b4894b6b05484c47aa90e17d6c0c8090d71736a5da50cc4bc8,EV-KP-training_unit-product-review-fabric-detective-spec-party,Q2-内容类型种子/product_review-交付物-v0.1.md,§C2-3 + 备注 + §D 角度二,"C2-3：不从""显瘦/百搭""入手，而从""你买到的到底是什么""入手——
+成分/织法/克重手感/易皱程度/起球风险/缩水风险。翻开洗标、讲面料成分、做揉搓回弹测试、讲工艺细节。
+把测评从""审美意见""切换到""信息服务""——降低了""你只是身材好所以好看""的反感点；
+科普表达更不怕""没口才""，更适配普通人。
+服装钩子：服装行业独占优势——服装是可被微观拆解的商品。
+备注：这个玩法对不擅长口播的创作者特别友好——术语可以写在字幕里，不需要镜头前滔滔不绝。
+§D 角度二：面料/工艺/辅料的微观叙事——把这些拍成可验证证据链是其他品类无法复制的内容护城河。",explicit_play_card,paraphrase_low,low,0,approved
+KP-training_unit-role-binding-frontline-priority,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-role-binding-frontline-priority""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,e09c892366a5ce37661deefe276f49727dcacb1a2e8660d18d7484cd1c050bd2,EV-KP-training_unit-role-binding-frontline-priority,Q7Q12-搭配陈列业务包/培训与纠错包.md,十三、role_profile_binding,"核心岗位：store_manager（门店店长）/ sales_associate（门店店员 / 导购）/
+warehouse_supervisor（仓库主管）。
+次级岗位：merchandising_director（商品总监）/ designer（设计师）/ sample_worker（样衣工）。
+理由很直接：首批训练最需要的人，不是总部 PPT 人，而是前线会接、会摆、会救场的人。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-role-material-five-kinds-minimum,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-role-material-five-kinds-minimum""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,bddbf6588233da7d756c8c98572042d9d3685234d63e59f20b87fd13a5f35740,EV-KP-training_unit-role-material-five-kinds-minimum,Q4-人设种子/phase-3-Q4-首批岗位知识素材清单.md,二、2.6 + 七、结论,"冷启动阶段，每个 RoleProfile（岗位画像）至少要准备以下 5 类素材：
+1. 岗位日常动作清单；2. 岗位判断句 / 经验句；3. 岗位高频问题与失败案例；
+4. 岗位典型场景与时间节点；5. 岗位特有物件 / 空间 / 证物。
+如果还能补到第 6、7 类，会更稳：6. 岗位对话碎片；7. 岗位不能说什么 / 不该越界什么。
+每岗最低要求：至少准备 5 类基础素材 + 至少拿到 3 个硬证据。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-role-profile-required-skills-binding,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-role-profile-required-skills-binding""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,4d0da501dcbec49291f30a7d7b949d686470c489ab9afa671f6e1ee14d485ba0,EV-KP-training_unit-role-profile-required-skills-binding,Q7Q12-搭配陈列业务包/陈列方法包.md & Q7Q12-搭配陈列业务包/面料工艺品质判断包.md,联动口径段 + 主落点冻结段,"DisplayGuide（陈列指南）与 StylingRule（搭配规则）、TrainingMaterial（培训材料）
+同属 MerchandisingSkill（陈列搭配技能），本包必须按这条联动口径执行。
+MerchandisingSkill（陈列搭配技能）已明确消费 Product（商品）、StylingRule（搭配规则）、
+TrainingMaterial（培训材料）这三类对象。",cross_source_consensus,paraphrase_low,low,0,approved
+KP-training_unit-roleprofile-not-speaking-shell,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-roleprofile-not-speaking-shell""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,4f2858b06a852b980f68e2ed6ecc5bcf9cb7915e4e421430240ff30a37ec73e6,EV-KP-training_unit-roleprofile-not-speaking-shell,Q4-人设种子/phase-3-Q4-首批Persona-RoleProfile清单.md,四、说明 + 六、6.2,"RoleProfile（岗位画像）是具体岗位知识来源，不是""说话身份壳""。它的职责是为通用 Persona（人设）
+提供岗位动作、术语、困境、真实性锚点和知识素材底座。
+冷启动知识底座建设规划已明确：没有岗位知识，人设会空心。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-sample-worker-rework-as-judgment,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-sample-worker-rework-as-judgment""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,4edc6148173c1b750a95b30f2613eb57e86a2ef0bfd07a41ae25c29a495345ad,EV-KP-training_unit-sample-worker-rework-as-judgment,Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md,五、5. sample_worker（样衣工）,"样衣工的手感最能把""专业""从嘴上拉回手上。
+这个岗位看的是：哪种设计一看就知道难做，哪一步最容易翻车，哪种缝法会让成衣质感直接掉下去。
+做出来和做得好是两回事；返工不是丢脸，是工艺判断的一部分；
+设计图能不能落地，要看手上动作能不能成立；线迹、裁片、返工痕迹都是证据，不是边角料。
+新人最容易学歪：只追求完成，不追求质感；只看图，不看工艺单；
+返工时只补表面，不补根因；以为快就是熟练。",explicit_role_skill_lock,paraphrase_low,low,0,approved
+KP-training_unit-shared-layer-registration-not-rewrite,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-shared-layer-registration-not-rewrite""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,60fa03c90c306e914e748e842b2da01e2c0af1912c06be353b3f77671d4d8caf,EV-KP-training_unit-shared-layer-registration-not-rewrite,Q2-内容类型种子/_shared-narrative-engines-v0.1.md,版本记录 v0.1.4 + v0.1.5 + G7/G8 落盘说明,"G7 选项 B 落盘（用户裁决执行）：仅登记回写，未触碰 batch 1 两份文件正文内容（用户明确要求""登记缺失 ≠ 内容扩写""）
+G8 落盘（batch 3 G4 立即同步原则执行）：仅登记 §F 接入——5 份 batch 3 文件正文已在落盘时直接写入""调用共享引擎""字段，本次仅完成总账登记
+本次同步未触碰 batch 3 五份文件正文——文件内的""调用共享引擎""字段已在落盘时直接写入，本次仅在共享层 §F 完成总账登记
+H 节维护原则（H.1 / H.3）：清单条目只在共享层维护 / 单 CT 文件不复制清单内容 / 避免漂移",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-sop-asmr-procedural-memory,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-sop-asmr-procedural-memory""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,9f4543163285e74e901109f48e77e15996605df16c6c68948b014bba14bd0395,EV-KP-training_unit-sop-asmr-procedural-memory,Q2-内容类型种子/training_material-交付物-v0.1.md,§C3-4,"C3-4：把""标准动作""拍成无口播的手部操作短片：蒸烫 / 折叠 / 装袋 / 贴标 / 封口。
+全程只有环境音与动作声 / 画面只在关键步骤出现 1-2 个字（例如""对齐""""放平""""封口""）。
+打破""培训必须讲很多""的惯性 / 改成""让手记住""。
+学习机制：Procedural memory + Sensory learning（程序性记忆 + 感官学习）——
+传统培训依赖陈述性记忆（背流程 / 背话术），本玩法切换到程序性记忆。",explicit_play_card,paraphrase_low,low,0,approved
+KP-training_unit-standard-action-vs-judgment-skill,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-standard-action-vs-judgment-skill""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,2ea2be0cc08bd208fc9da187aaa8f92fc67722b8994929a5c851c7e71805e5bf,EV-KP-training_unit-standard-action-vs-judgment-skill,Q7Q12-搭配陈列业务包/培训与纠错包.md,二、2.4 + 十、training_split_policy,"standard_action（标准动作）：可以拍成固定步骤；
+judgment_skill（判断力）：必须放到情境里练。
+适合教标准动作的内容：折叠 / 挂装 / 蒸烫 / 吊牌检查 / 主推位补货 / 模特基础成套 /
+试衣前递衣顺序 / 面料触感演示动作 / 尾货位陈列 / 班前会 40 秒提醒结构。
+必须教判断力的内容：顾客真正顾虑的判断 / 身型和比例判断 / 颜色顾虑背后的场景判断 /
+面料解释顺序 / 搭配重心判断 / 陈列主次判断 / 库存救场时该救还是该转 /
+替代距离是否过远 / 什么时候该直接放弃推荐 / 哪个错误最值得当场纠正。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-store-manager-rhythm-first,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-store-manager-rhythm-first""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,292062a1241b1d55be601262d6a5bb408e2c50f655dd55ebe05dc4961cede70b,EV-KP-training_unit-store-manager-rhythm-first,Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md,五、1. store_manager（门店店长）,"老店长不是先看""这件衣服漂不漂亮""，而是先看今天这家店的节奏顺不顺。
+先看货场有没有主次，再看店员有没有站位，再看顾客有没有停顿，最后看后场和库存能不能接住。
+这个岗位的核心不是会卖，而是让整家店不乱。
+老店长一眼先看四件事：顾客今天是来逛，还是来确认；高峰期该先稳团队，还是先冲销量；
+一家店""今天状态不对""最早从哪里冒出来；哪些话术 / 动作会让前台直接失手。",explicit_role_skill_lock,paraphrase_low,low,0,approved
+KP-training_unit-styling-error-top-priority-eight,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-styling-error-top-priority-eight""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,206968fffbb283cbb8e82c50f2f87aecdee28cce27ecad366c2e831d2369327c,EV-KP-training_unit-styling-error-top-priority-eight,Q7Q12-搭配陈列业务包/培训与纠错包.md,六/七/九,"第一优先级，只抓会直接影响成交的 8 类：
+wrong_proportion_balance（比例失衡）/ ignoring_body_shape（忽略身型）/
+wrong_scene_matching（场景错配）/ selling_single_piece_without_full_logic（只卖单品不讲整套逻辑）/
+too_many_main_items（陈列主角过多）/ wrong_hanging_density（挂装密度失控）/
+inventory_depth_mismatch（陈列与库存深度不匹配）/ fake_same_item_substitution（替代款假装同款）。
+这 8 类先练熟，门店成交会最先变化。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-substitution-honest-disclosure,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-substitution-honest-disclosure""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,71d68933decd8b3b87609b77aaa1f64616af89fa683cf42ccf97fd4ec0b5c02d,EV-KP-training_unit-substitution-honest-disclosure,Q7Q12-搭配陈列业务包/培训与纠错包.md,五、C8 + 八、I1-I8,"C8 inventory_rescue_at_counter（柜台前库存救场）
+正确动作：讲清是同款替代、近色替代，还是整套转向
+错误动作：把替代款说成原款
+为什么错：最伤信任
+怎么纠正：承认变化，再解释为什么仍成立
+学会判定：顾客能清楚知道""哪里变了，为什么还能买""
+I1 hide_stock_problem（隐瞒库存问题）/ I2 fake_same_item_substitution（把替代款假装同款）/
+I3 push_wrong_size_to_force_sale（硬推不合尺码）/ I4 color_substitution_without_reason（断色后乱换颜色）/
+I7 no_redirect_path（只有否定，没有转向）/ I8 redirect_too_far（转向过远）。",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-talent-showcase-rescue-not-show-off,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-talent-showcase-rescue-not-show-off""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,27392d1fe3218e1b42444674f1bd1d37da3f96b29e5a054436a69b23492a1b32,EV-KP-training_unit-talent-showcase-rescue-not-show-off,Q2-内容类型种子/talent_showcase-交付物-v0.1.md,§A + §C C3-1 + §B9,"观众看完不只是""你很厉害""，而是""你的能力有个性、有温度、能留下你这个人""——感到能力可信、可持续，并愿意把你当作""值得追随的人""
+不说""我会什么""，而拍""今天遇到一个小问题，我的才艺刚好派上用场""
+观众最后会自然得出结论：""这人真有两下子""——接住的是有用、有温度的能力
+打破""才艺展示必须正面炫技""的套路
+才艺作为社交媒介 ≠ 展示标签；才艺作为救场工具 ≠ 炫技；才艺作为关系外溢 ≠ 个人封闭",explicit_business_decision,paraphrase_low,low,0,approved
+KP-training_unit-try-on-guidance-one-main-one-backup,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-try-on-guidance-one-main-one-backup""]",full,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,e78e34e04a3b60e2b4a9ac2074d21e6715cc59c66545a56689200e27cb8b66c0,EV-KP-training_unit-try-on-guidance-one-main-one-backup,Q7Q12-搭配陈列业务包/培训与纠错包.md,五、C2 try_on_guidance,"C2 try_on_guidance（试穿引导）
+正确动作：先解决顾客最担心的一点再让她试
+错误动作：拿 3-5 件一股脑塞进试衣间
+为什么错：信息过载，试穿质量会塌
+怎么纠正：一轮只推 1 个主方案 + 1 个备选
+学会判定：试穿后顾客能说出""这件为什么适合/不适合""",explicit_business_decision,direct_quote,high,0,approved
+KP-training_unit-warehouse-supervisor-fact-not-promise,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-KP-training_unit-warehouse-supervisor-fact-not-promise""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,407af3029da426a10f055ac0685eec0da79db2e8db3cfffd478c18152882b2fb,EV-KP-training_unit-warehouse-supervisor-fact-not-promise,Q7Q12-搭配陈列业务包/岗位手感与一线判断包.md,五、2. warehouse_supervisor（仓库主管）,"仓库主管的手感不在""会整理""，而在能不能让前场承诺和后场事实对得上。
+仓库最怕前场怎么乱推：不看库存深度就承诺成套；断码当齐码卖；
+调货周期没确认就答应顾客；替代款按同款卖；前台卖法和后场实际货况脱节。
+不是库里""还有""就等于前台能卖；不是爆款都值得优先补深；
+不是速度永远压倒准确；不是临时救火就能替代稳定流程。",explicit_role_skill_lock,paraphrase_low,low,0,approved
+KP-product_attribute-clothing-as-emotional-medium-stance,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-clothing-as-emotional-medium-stance""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,344ab40377bd6dfcd2bb20867d41a3ddb8094e5bd92b2dc4988a1577688d8d52,EV-clothing-as-emotional-medium-stance,Q2-内容类型种子/通用类deep-research-report.md & 通用类.md & 通用类compass.md,"deep-research-report.md ""Clothing as emotional medium"" 章节 + 三份 md 的 5 类 ContentType 各章服装角色描述","deep-research-report.md：clothing is not the product being sold — it is the visual language through which human stories are told. The garment can function as identity marker, emotional carrier, relationship connector, temporal marker, and sensory experience.
+通用类compass.md（每节末""服装角色""小节）：服装在这里是""动作伙伴""/""被照料的对象""/""情绪语言本身""/""风险对象""/""价值观载体""……
+通用类.md：服装在这里同时是身份标签和身体容器，这正是服装类目最独特的地方。",cross_source_consensus,paraphrase_low,low,0,approved
+KP-training_unit-concrete-action-over-adjective,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-concrete-action-over-adjective""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,86895451bde4c12498201d17a38e99cafff917b046be0ce2c27fb44e3c717165,EV-concrete-action-over-adjective,Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md,"三份 md 的""具体场景替代泛泛夸赞""""感官动词写作""""体感测评""""触感型文案""","通用类.md：不是写""舒服""，而是写""坐一下午不会一直偷偷扯腰头""；不是写""适合秋冬""，而是写""早晚温差大的那两小时，它最有用""。Shopify 强调要写清楚顾客会在什么场景使用产品，避免""excellent quality""这类空泛表述。
+通用类compass.md：Journal of Consumer Research 研究指出在带货语境中使用感官语言会提升互动与购买意愿，其机制与""更真实/更像真的用过""相关。
+deep-research-report.md：The ""holy trinity"" of cliché: 显瘦, 百搭, 高级感. Template sentence structures are shared across WeChat 公众号 and training courses, creating industry-wide homogeneity.",cross_source_consensus,paraphrase_low,low,0,approved
+KP-training_unit-content-template-saturation-anti-pattern,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-content-template-saturation-anti-pattern""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,121a4756d390b9c2b2bd93509708e3c3de7bd0f33e92e7d54652b9f19c81ea0c,EV-content-template-saturation-anti-pattern,Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md,"三份 md 的""主流玩法（已被用烂）""全段","通用类.md：所有词都可替换，几乎任何一条都能套到另一件衣服上；AI 最容易复制的，就是这种""形容词堆叠 + 参数播报""。
+通用类compass.md：模板口播+同款BGM+同款剪辑，AI 最容易复刻；AI 工具现在正在放大模板问题。
+deep-research-report.md：The overused formats are overused precisely because they're easy to template — and AI makes templating even easier, accelerating homogeneity. The winning move is not to generate ""better"" versions of existing templates but to generate in multiple distinct creative voices.",cross_source_consensus,paraphrase_low,low,0,approved
+KP-product_attribute-content-type-three-tier-maturity,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-content-type-three-tier-maturity""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,c4e23196f6ce1907daef641fbcd78bdd2910e749a77bbb6bcdc237ec64617f11,EV-content-type-three-tier-maturity,Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md,"三份 md 的章节结构本身（每个 ContentType 都按""主流玩法-进阶玩法-突破性玩法""三段组织）","通用类.md（5 个 ContentType 全部）：主流玩法（已被用烂）/ 进阶玩法（少数高手在用）/ 突破性玩法（还没人这么干，但可能成立）三段式标题。
+通用类compass.md：主流玩法（已被用烂）/ 进阶玩法（少数高手在用）/ 突破性玩法（原创设想，可成立）。
+deep-research-report.md：from template-saturated mainstream (已被用烂) to documented advanced techniques (进阶) to executable breakthrough proposals (突破性).",structural_pattern,paraphrase_low,low,0,approved
+KP-training_unit-kuleshov-context-driven-emotion-edit,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-kuleshov-context-driven-emotion-edit""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,61c96c87fb7c9b659fe9fd53b1b4b61eaefeeea1e44264489fbdbb62377ef34e,EV-kuleshov-context-driven-emotion-edit,Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md,"三份 md 的""情绪盲测试穿""""同一张脸的三种结局""""情绪的剪辑学（Kuleshov/POV式情绪投射）""""rhythm disruption 错拍""","通用类compass.md：这种做法利用了电影研究里讨论的""剪辑上下文会改变观众对情绪的解读""的现象（Kuleshov effect）。同一张脸在不同情境镜头的夹击下，会被观众读出不同情绪。
+通用类compass.md：它用""结构""制造情绪，而不是用""表演""索取共情；更难被AI模板化。
+deep-research-report.md：Rhythm disruption (节奏打破): 翻转生对比，对比生反差，反差生情绪能量. The ""错拍"" fashion video: model freezes, hold for 3 full seconds…The disruption breaks the viewer out of autopilot scrolling.",cross_source_consensus,paraphrase_low,low,0,approved
+KP-training_unit-objection-clearing-over-selling-points,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-objection-clearing-over-selling-points""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,37a526c36d50d7403a2e39f0028b221f36a2becde488acf278b8d5aade96cb1b,EV-objection-clearing-over-selling-points,Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md,"三份 md 的""只拍犹豫不拍优点""""把详情页第一页写成反对意见清单""""反促销宣言""""反种草测评""""错误先发生再倒回去重来""","通用类.md：把详情页第一页写成反对意见清单：""怕白色太透。""""怕直筒裤坐下卡胯。""""怕针织上身两小时就热。"" 每句下面是一个很小的实拍证据图或 6 秒短动图——不再由品牌定义卖点，而是由用户的担忧来组织页面。服装购买的最大障碍从来不是""用户看不懂审美""，而是""用户怕踩雷""。
+通用类compass.md：用""不要买""开头：不适合谁、哪儿会翻车、你可能会后悔什么；最后才给替代买法。它把""信任""放在第一位：先把坏消息说干净。
+deep-research-report.md：Reformation uses subject lines like ""DRUNK ON A WEEKNIGHT"" and ""90% RECYCLED, 10% TERRIBLE."" The innovation spectrum…anti-copy, negative space.",cross_source_consensus,paraphrase_low,low,0,approved
+KP-training_unit-relational-witness-over-monologue,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-relational-witness-over-monologue""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,f834e84f6350f1d017ef7ced705dee2bceea06f2627e29b67198b06512af2b35,EV-relational-witness-over-monologue,Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md,"三份 md 的""关系型测评让第二个人来拆穿你""""门店视角的关系短片""""情绪不是悲伤是被关系轻轻扶了一下""""mom's official review""","通用类.md：单人测评容易像自说自话；第二个真实关系人的介入，会把""审美判断""变成""社会判断""。POV: my mom's official review of this haul 这类玩法之所以有效，是因为观众更信""家里人会怎么说""。
+通用类.md：今天来店里的人都不露脸，只留下""关系碎片""：一对母女的两只手在同一件外套上停了一下；店员蹲下帮顾客整理裤脚……门店像一个观察者。
+通用类.md：情绪不是悲伤，是被关系轻轻扶了一下；妈妈把外套搭到你椅背上、同事把你忘在店里的水杯递过来。",cross_source_consensus,paraphrase_low,low,0,approved
+KP-training_unit-silence-as-pattern-interrupt,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-silence-as-pattern-interrupt""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,de16e7f7683468c5d2a3ca1fe094e116b7984dc93872fc1b81c45e94da999309,EV-silence-as-pattern-interrupt,Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md,"三份 md 的""无口播触感测评""""门店无对白节奏片""""SOP ASMR""""沉默叙事""""白空间海报""","deep-research-report.md：Silence over soundtrack — ambient sound beats emotional music in creating genuine resonance. 85% of social media videos are watched without sound. Silent vloggers see up to 300% growth in views.
+通用类compass.md：低语/无语段落+物体声之所以可能成立，是因为营销研究者也注意到 unboxing 里常有几乎不说话、只录开箱声的片段。
+通用类.md：不讲话，不总结，不""安利""。只拍手捏布料、拉弹性、走路摩擦声…它把""测评""从语言搬到了感官。",cross_source_consensus,paraphrase_low,low,0,approved
+KP-training_unit-tactile-cue-language-online-compensation,domain_general,L1,active,"[""07_evidence.csv""]","[""EV-tactile-cue-language-online-compensation""]",weak,false,approved,f80c33f738be21eb,4b7f97ddfa4427ccb83a59c016a33622e3401b909ff1efd02c3820d8095460e0,3c0863a75967,561efba9386a9461325015f22eeb08076e70570a312735ecf28ad83b1abf9679,EV-tactile-cue-language-online-compensation,Q2-内容类型种子/通用类.md & 通用类compass.md & 通用类deep-research-report.md,"三份 md 的""触感型文案+触觉暗示画面""""感官动词写作""""触感法庭""""sound design as emotional architecture""","通用类.md：研究显示，在线零售里，带有触觉暗示的视觉语言能在一定程度上补偿""摸不到""的缺失，影响购买意愿。([PMC])
+通用类compass.md：Journal of Consumer Research 的研究指出，在带货语境中使用感官语言会提升互动与购买意愿；感官营销综述强调视觉、触觉想象、嗅觉/听觉线索都能影响广告效果与记忆。
+deep-research-report.md：Fashion stores have untapped ASMR potential: fabric being unrolled from a bolt, scissors cutting through silk, zipper sounds across different materials.",cross_source_consensus,paraphrase_low,low,0,approved

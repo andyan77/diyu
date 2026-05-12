@@ -1,1 +1,9 @@
 target_type,conflict_key,precedence_order,conflict_action,allow_override
+brand_overlay,brand_values,brand_faye > domain_general,block,false
+brand_overlay,forbidden_words,brand_faye > domain_general,append,false
+brand_overlay,founder_profile,brand_faye > domain_general,block,false
+brand_overlay,signature_phrases,brand_faye > domain_general,override,true
+brand_overlay,tagline,brand_faye > domain_general,needs_review,false
+brand_overlay,tone,brand_faye > domain_general,override,true
+persona,persona_role,brand_faye > domain_general,override,true
+persona,persona_voice,brand_faye > domain_general,override,true

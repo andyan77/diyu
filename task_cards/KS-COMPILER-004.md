@@ -15,7 +15,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_play_card_view.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-004 · play_card_view 编译

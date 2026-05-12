@@ -8,13 +8,14 @@ files_touched:
   - knowledge_serving/control/field_requirement_matrix.csv
 artifacts:
   - knowledge_serving/control/field_requirement_matrix.csv
+  - knowledge_serving/audit/field_requirement_matrix.compile.log
 s_gates: [S7]
 plan_sections:
   - "§4.2"
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_field_requirement_matrix.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-009 · field_requirement_matrix 编译

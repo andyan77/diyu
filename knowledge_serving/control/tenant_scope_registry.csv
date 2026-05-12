@@ -1,1 +1,3 @@
 tenant_id,api_key_id,brand_layer,allowed_layers,default_platforms,policy_level,enabled,environment
+tenant_demo,key_ref:tenant_demo,domain_general,"[""domain_general""]","[""xiaohongshu""]",demo,true,dev
+tenant_faye_main,key_ref:tenant_faye_main,brand_faye,"[""domain_general"", ""brand_faye""]","[""xiaohongshu"", ""wechat""]",standard,true,dev

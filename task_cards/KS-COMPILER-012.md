@@ -14,7 +14,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - bash knowledge_serving/scripts/lint_no_duplicate_log.sh
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-012 · context_bundle_log 唯一写入约束
@@ -35,7 +35,7 @@ status: not_started
 - **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从 README §7.1 白名单输入派生（含本卡 §3 上方列出的具体路径，例如 `clean_output/candidates/`、`clean_output/nine_tables/`、`clean_output/audit/`、`knowledge_serving/schema/`、`knowledge_serving/control/content_type_canonical.csv` 等）。
 
 ## 4. 执行步骤
-1. 写 `control/context_bundle_log.csv` 仅 header（24 字段对齐 §4.5）
+1. 写 `control/context_bundle_log.csv` 仅 header（28 字段对齐 §4.5）
 2. 写 `lint_no_duplicate_log.sh`：`find knowledge_serving/ -name context_bundle_log.csv` 必须只命中 control/ 路径
 3. 写 README 段：logs/ 不得放同名 csv
 
@@ -70,7 +70,7 @@ artifact: lint report
 不部署。
 
 ## 10. 独立审查员 Prompt
-> 请：1) `find knowledge_serving -name context_bundle_log.csv` 必须只 1 个；2) header 24 字段；3) 输出 pass / fail。
+> 请：1) `find knowledge_serving -name context_bundle_log.csv` 必须只 1 个；2) header 28 字段；3) 输出 pass / fail。
 > 阻断项：多个同名 csv；header 字段缺。
 
 ## 11. DoD

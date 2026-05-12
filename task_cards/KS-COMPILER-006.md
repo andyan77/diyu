@@ -8,13 +8,14 @@ files_touched:
   - knowledge_serving/views/brand_overlay_view.csv
 artifacts:
   - knowledge_serving/views/brand_overlay_view.csv
+  - knowledge_serving/audit/brand_overlay_view.compile.log
 s_gates: [S3]
 plan_sections:
   - "§3.6"
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_brand_overlay_view.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-006 · brand_overlay_view 编译

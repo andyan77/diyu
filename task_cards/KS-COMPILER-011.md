@@ -8,13 +8,14 @@ files_touched:
   - knowledge_serving/control/merge_precedence_policy.csv
 artifacts:
   - knowledge_serving/control/merge_precedence_policy.csv
+  - knowledge_serving/audit/merge_precedence_policy.compile.log
 s_gates: []
 plan_sections:
   - "§4.4"
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_merge_precedence_policy.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-011 · merge_precedence_policy 编译

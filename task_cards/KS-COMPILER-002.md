@@ -15,7 +15,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_content_type_view.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-002 · content_type_view 编译

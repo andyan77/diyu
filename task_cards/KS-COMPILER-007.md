@@ -8,13 +8,14 @@ files_touched:
   - knowledge_serving/views/evidence_view.csv
 artifacts:
   - knowledge_serving/views/evidence_view.csv
+  - knowledge_serving/audit/evidence_view.compile.log
 s_gates: [S5]
 plan_sections:
   - "§3.7"
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_evidence_view.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-007 · evidence_view 编译
