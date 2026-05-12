@@ -458,6 +458,125 @@ def test_t16_structured_filter_applied(tmp_path):
     assert ids == ["KP-a", "KP-c"]
 
 
+# ---------- T18 _meta.preflight_report_sha256 存在 + 稳定 + 随内容变 ----------
+
+def test_t18_preflight_report_sha256_present_and_stable(tmp_path):
+    mod = _load_module()
+    env = _make_env(tmp_path)
+    out = mod.structured_retrieve(
+        intent="generate", content_type="behind_the_scenes",
+        allowed_layers=["domain_general"],
+        views_root=env["views_root"], policy_path=env["policy_path"],
+        report_path=env["report_path"],
+    )
+    sha = out["_meta"]["preflight_report_sha256"]
+    assert isinstance(sha, str) and len(sha) == 64
+    assert re.fullmatch(r"[0-9a-f]{64}", sha)
+    # 同一报告调两次 → sha 相同
+    out2 = mod.structured_retrieve(
+        intent="generate", content_type="behind_the_scenes",
+        allowed_layers=["domain_general"],
+        views_root=env["views_root"], policy_path=env["policy_path"],
+        report_path=env["report_path"],
+    )
+    assert out2["_meta"]["preflight_report_sha256"] == sha
+
+
+def test_t19_preflight_report_sha256_changes_with_content(tmp_path):
+    mod = _load_module()
+    env_a = _make_env(tmp_path / "a", report=REPORT_GREEN)
+    env_b = _make_env(
+        tmp_path / "b",
+        report=REPORT_GREEN.replace("checked_rows: 0", "checked_rows: 1", 1),
+    )
+    out_a = mod.structured_retrieve(
+        intent="generate", content_type="behind_the_scenes",
+        allowed_layers=["domain_general"],
+        views_root=env_a["views_root"], policy_path=env_a["policy_path"],
+        report_path=env_a["report_path"],
+    )
+    out_b = mod.structured_retrieve(
+        intent="generate", content_type="behind_the_scenes",
+        allowed_layers=["domain_general"],
+        views_root=env_b["views_root"], policy_path=env_b["policy_path"],
+        report_path=env_b["report_path"],
+    )
+    assert out_a["_meta"]["preflight_report_sha256"] != out_b["_meta"]["preflight_report_sha256"]
+
+
+# ---------- T20 required view 命中 0 → empty_required_views 暴露事实，不 raise ----------
+
+def test_t20_empty_required_view_exposed_in_meta(tmp_path):
+    """W6 真实业务态：content_type_view.coverage_status 全 missing，policy 过滤后为空。
+    本卡 thin retrieval 不做 fallback 决策（属 KS-RETRIEVAL-007），但必须显式暴露。"""
+    mod = _load_module()
+    env = _make_env(
+        tmp_path,
+        pack_rows=[_pack_row("KP-a", "domain_general")],
+        # content_type_view 全部 coverage=missing
+        ct_rows=[
+            {
+                "source_pack_id": "CT-x",
+                "brand_layer": "domain_general",
+                "granularity_layer": "L1",
+                "gate_status": "active",
+                "content_type": "x",
+                "canonical_content_type_id": "x",
+            }
+        ],
+        policy_rows=[_default_policy(
+            structured_filters={"coverage_status": ["complete", "partial"]},
+            required=["pack_view", "content_type_view"],
+        )],
+    )
+    # ct_rows 没有 coverage_status 列 → per-view skip-if-missing → 不过滤掉
+    # 改用真实场景：ct schema 含 coverage_status 但值都是 missing
+    ct_header_with_cov = CT_HEADER + ["coverage_status"]
+    _write_csv(env["views_root"] / "content_type_view.csv", ct_header_with_cov, [
+        {**{"source_pack_id": "CT-x", "brand_layer": "domain_general",
+            "granularity_layer": "L1", "gate_status": "active",
+            "content_type": "x", "canonical_content_type_id": "x",
+            "coverage_status": "missing"}}
+    ])
+    out = mod.structured_retrieve(
+        intent="generate", content_type="behind_the_scenes",
+        allowed_layers=["domain_general"],
+        views_root=env["views_root"], policy_path=env["policy_path"],
+        report_path=env["report_path"],
+    )
+    # required: pack_view + content_type_view
+    assert out["pack_view"] == [{
+        **{"source_pack_id": "KP-a", "brand_layer": "domain_general",
+           "granularity_layer": "L1", "gate_status": "active",
+           "pack_id": "KP-a", "pack_type": "fixture",
+           "knowledge_title": "t", "knowledge_assertion": "a",
+           "coverage_status": "complete"}
+    }]
+    assert out["content_type_view"] == []  # missing 被 filter 掉
+    assert out["_meta"]["empty_required_views"] == ["content_type_view"]
+    assert out["_meta"]["required_views"] == ["content_type_view", "pack_view"]
+
+
+def test_t21_no_empty_when_all_required_hit(tmp_path):
+    mod = _load_module()
+    env = _make_env(
+        tmp_path,
+        pack_rows=[_pack_row("KP-a", "domain_general", coverage="complete")],
+        policy_rows=[_default_policy(
+            required=["pack_view"],  # 单 required view
+            optional=[],
+            structured_filters={"coverage_status": ["complete", "partial"]},
+        )],
+    )
+    out = mod.structured_retrieve(
+        intent="generate", content_type="behind_the_scenes",
+        allowed_layers=["domain_general"],
+        views_root=env["views_root"], policy_path=env["policy_path"],
+        report_path=env["report_path"],
+    )
+    assert out["_meta"]["empty_required_views"] == []
+
+
 # ---------- bonus: allowed_layers 格式校验 ----------
 
 def test_t17_invalid_allowed_layers_raises(tmp_path):

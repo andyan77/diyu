@@ -14,6 +14,7 @@ runtime_asset) 按租户允许 brand_layer + retrieval_policy_view 的 (intent, 
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import re
 import warnings
@@ -73,21 +74,29 @@ def _parse_gate_sections(text: str) -> dict[str, str]:
     return out
 
 
-def _assert_governance_report_green(report_path: Path | None = None) -> None:
-    """KS-COMPILER-013 治理报告 S1-S7 全 pass 才放行。fail-closed."""
+def _assert_governance_report_green(report_path: Path | None = None) -> str:
+    """KS-COMPILER-013 治理报告 S1-S7 全 pass 才放行。fail-closed.
+
+    Returns:
+        报告内容的 sha256（64 字符小写 hex），用于写入 _meta.preflight_report_sha256，
+        让下游 (KS-RETRIEVAL-007 fallback_decider / KS-DIFY-ECS-* replay) 可以追踪
+        本次召回所依赖的治理报告版本。
+    """
     path = Path(report_path) if report_path else DEFAULT_REPORT_PATH
     if not path.exists():
         raise RuntimeError(
             f"KS-COMPILER-013 治理报告缺失 ({path})，禁止结构化召回。"
             "先跑 python3 knowledge_serving/scripts/validate_serving_governance.py --all"
         )
-    sections = _parse_gate_sections(path.read_text())
+    raw = path.read_bytes()
+    sections = _parse_gate_sections(raw.decode("utf-8"))
     for gate in REQUIRED_GATES:
         status = sections.get(gate)
         if status != "pass":
             raise RuntimeError(
                 f"KS-COMPILER-013 {gate} 未通过 (status={status!r})，禁止结构化召回"
             )
+    return hashlib.sha256(raw).hexdigest()
 
 
 # ---------- helpers ----------
@@ -201,8 +210,8 @@ def structured_retrieve(
     Returns:
         {view_name: [rows...], "_meta": {...}}
     """
-    # preflight：KS-COMPILER-013 治理总闸
-    _assert_governance_report_green(report_path)
+    # preflight：KS-COMPILER-013 治理总闸（同时拿到报告 sha256 写入 _meta）
+    preflight_report_sha256 = _assert_governance_report_green(report_path)
 
     # 入参校验
     if not intent or not isinstance(intent, str):
@@ -226,6 +235,8 @@ def structured_retrieve(
     # 逐 view 加载 + 过滤 + 截断
     result: dict[str, list[dict]] = {v: [] for v in TARGET_VIEWS}
     views_root = Path(views_root)
+    required_set = {v for v in required if v in TARGET_VIEWS}
+    empty_required_views: list[str] = []
     for view_name in TARGET_VIEWS:
         if view_name not in target_set:
             continue
@@ -237,7 +248,13 @@ def structured_retrieve(
             structured_filters=structured_filters,
         )
         result[view_name] = filtered[:max_items]
+        if view_name in required_set and not result[view_name]:
+            empty_required_views.append(view_name)
 
+    # required view 命中 0 是真实业务事实（如 W6 阶段 content_type_view.coverage_status
+    # 全为 missing → policy 过滤后为空）。本卡是 thin retrieval，不做 fallback 决策（属
+    # KS-RETRIEVAL-007），但必须把空集事实显式暴露到 _meta，让下游 fallback_decider 据此
+    # 走 blocked_missing_required_brand_fields / domain_only 等降级路径，而不是静默掩盖。
     result["_meta"] = {
         "policy_row": policy,
         "allowed_layers": list(allowed_layers),
@@ -245,5 +262,8 @@ def structured_retrieve(
         "structured_filters": structured_filters,
         "max_items_per_view": max_items,
         "target_views": target_set,
+        "required_views": sorted(required_set),
+        "empty_required_views": empty_required_views,
+        "preflight_report_sha256": preflight_report_sha256,
     }
     return result
