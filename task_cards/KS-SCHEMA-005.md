@@ -20,7 +20,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 scripts/validate_serving_tree.py
-status: not_started
+status: done
 ---
 
 # KS-SCHEMA-005 · 目录骨架 + 空表头 + README
@@ -75,6 +75,10 @@ failure_means: 后续编译卡无目标
 artifact: scripts/validate_serving_tree.report
 ```
 
+> **note**：本脚本不依赖 env / 不读 `.env`，可直接 `python3 scripts/validate_serving_tree.py` 跑；**不需要** `source scripts/load_env.sh`，也不需要 ECS tunnel。在净化的 `env -i` shell 中可重复跑出同一结果（exit 0 = OK，1 = 缺/多文件，2 = fail-closed）。
+>
+> **W0/W1 已落白名单**：validator 把 `control/content_type_canonical.csv`（W0 KS-S0-007）与 `policies/qdrant_fallback.yaml`（W0 KS-S0-006）当作允许的 known-extras，不视为多文件错误；如果未来要重新对齐 §11，删掉这两条白名单即可。
+
 ## 9. CD / 环境验证
 不部署。
 
@@ -88,7 +92,7 @@ artifact: scripts/validate_serving_tree.report
 > 阻断项：目录缺；csv 有数据行；context_bundle_log.csv 重复落地。
 
 ## 11. DoD
-- [ ] 目录骨架落盘
-- [ ] 12 个 csv 仅 header
-- [ ] README 落盘
-- [ ] validator pass
+- [x] 目录骨架落盘（schema / views / control / policies / vector_payloads / logs / scripts / audit 共 8 子目录全部存在；空目录落 `.gitkeep`）
+- [x] 12 个 csv 仅 header（7 view + 5 control，均无数据行；字段全部一字不差派生自 schema）
+- [x] README 落盘（含"派生 / 真源 / 可删可重建"边界声明；含 context_bundle_log canonical 唯一位置声明；含子目录归属卡表；含 W0/W1 已落白名单说明）
+- [x] validator pass（净化 `env -i` shell 中 `python3 scripts/validate_serving_tree.py` exit 0；负向测试删除 pack_view.csv → exit 1 + 明确报缺；fail-closed 用 try/except + sys.exit(2) 兜底）

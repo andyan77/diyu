@@ -1,0 +1,1 @@
+intent,content_type,required_views,optional_views,structured_filters_json,vector_filters_json,max_items_per_view,rerank_strategy,merge_precedence_policy,timeout_ms
