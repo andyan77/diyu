@@ -100,5 +100,6 @@ artifacts:
 - [x] validator 落盘 `scripts/validate_policy_yaml.py`（F1a/F1b/F2-F7 全绿，runtime_verified）
 - [x] pytest 测试套件 `knowledge_serving/scripts/tests/test_validate_policy_yaml.py` 22/22 pass（含 baseline + F1b yamllint 坏样本注入 + 20 项 mutation）
 - [x] audit log 落盘 `knowledge_serving/audit/fallback_policy.audit.report`（yaml sha256 + 各门实测输出 + meta validator）
-- [x] 全量回归 `knowledge_serving/scripts/tests/` 既有测试零回归（KS-POLICY-002 14 个 fail 属同 W6 in-progress，非本卡引入）
-- [ ] 审查员 pass（待人工）
+- [x] 全量回归 `knowledge_serving/scripts/tests/` 210 passed（POLICY-002 已合入 commit 4c068d6 后零 fail）
+- [x] 独立审查员 **CONDITIONAL_PASS**（2026-05-13）— 7 条实测命令全绿（meta / yamllint / validator / pytest×2 / S7 gate / git ls-files）+ yaml sha256 `34c424557d5cd215` 与 audit.report 头一致；唯一 finding [GOV-MEDIUM] 属 W5 残留 `clean_output/` 工作树噪声，**不在本卡 scope**，已通过 commit 0255727 严格隔离（仅纳入 6 个本卡 artifact，未触碰 `clean_output/`）
+- 运行时执行（fallback_decider）非本卡范围 → 归 [KS-RETRIEVAL-007](KS-RETRIEVAL-007.md)（W8，当前 not_started）
