@@ -1,1 +1,424 @@
-# 占位 / placeholder — 由 W4+ POLICY-* 卡填充。
+# ============================================================
+# retrieval_policy.yaml · 召回策略 / retrieval policy
+# ============================================================
+# 任务卡 / task card: KS-POLICY-004
+# canonical csv: knowledge_serving/control/retrieval_policy_view.csv
+# 一致性守门 / dual-source gate: scripts/diff_yaml_vs_csv.py retrieval_policy
+# 落盘日期 / created: 2026-05-12
+# ============================================================
+# 语义 / semantics:
+#   intent                  —— 用户意图 / user intent
+#   content_type            —— 内容类型 / canonical content type
+#   required_views          —— 必查 view list / required views
+#   optional_views          —— 可选 view list / optional views
+#   structured_filters_json —— 结构化过滤器 / structured filters (object)
+#   vector_filters_json     —— 向量过滤器 / vector filters (object, 必含 brand_layer + gate_status)
+#   max_items_per_view      —— 单 view 召回上限 / max items per view (int)
+#   rerank_strategy         —— 重排策略 / rerank strategy
+#   merge_precedence_policy —— 合并策略名 / merge precedence policy name
+#   timeout_ms              —— 超时 ms / timeout in ms (int, > 0)
+# ============================================================
+# 真源同步硬约束 / source-of-truth invariants:
+#   1. 本 yaml 与 retrieval_policy_view.csv 行集合严格等价（18 条）
+#   2. (intent, content_type) 是唯一 key
+#   3. 每条 vector_filters_json 必须包含 brand_layer + gate_status
+#   4. timeout_ms 必须 > 0；rerank_strategy 非空
+#   5. 任何修改必须先改 csv 再回灌 yaml（csv 是 canonical）
+# ============================================================
+
+retrieval_policy:
+  - intent: generate
+    content_type: behind_the_scenes
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: daily_fragment
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: emotion_expression
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: event_documentary
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: founder_ip
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: humor_content
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: knowledge_sharing
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: lifestyle_expression
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: outfit_of_the_day
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: personal_vlog
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: process_trace
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: product_copy_general
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: product_journey
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: product_review
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: role_work_vlog
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: store_daily
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: talent_showcase
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500
+
+  - intent: generate
+    content_type: training_material
+    required_views:
+      - pack_view
+      - content_type_view
+    optional_views:
+      - play_card_view
+      - runtime_asset_view
+      - brand_overlay_view
+      - evidence_view
+    structured_filters_json:
+      coverage_status:
+        - complete
+        - partial
+    vector_filters_json:
+      brand_layer: "$allowed_layers"
+      gate_status: active
+    max_items_per_view: 5
+    rerank_strategy: vector_score
+    merge_precedence_policy: brand_over_domain
+    timeout_ms: 1500

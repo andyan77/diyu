@@ -31,6 +31,9 @@ EXPECTED_DIRS = {
     "logs",
     "scripts",
     "audit",
+    # W4 新增 / W4-added：召回入口模块 + 测试根
+    "serving",
+    "tests",
 }
 
 # §11 期望文件（相对 knowledge_serving/ 路径）/ expected §11 files
@@ -103,16 +106,42 @@ EXPECTED_FILES_W3 = {
     "scripts/tests/test_lint_no_duplicate_log.py",
 }
 
+# W4 已落白名单 / W4-landed allowlist
+# W4 共 6 张卡：
+#   KS-COMPILER-003     · generation_recipe_view 编译
+#   KS-POLICY-003 / 004 · 双源 yaml（仅复用现有 policies/*.yaml 占位，不增文件）
+#   KS-RETRIEVAL-001    · tenant_scope_resolver
+#   KS-RETRIEVAL-002    · intent_classifier + content_type_router + 跨文件桥接回归
+#   KS-RETRIEVAL-003    · business_brief_checker
+# 新增 10 个文件（按卡 frontmatter `files_touched` 严格授权，不放宽通配）
+EXPECTED_FILES_W4 = {
+    # KS-COMPILER-003 · compiler + test
+    "scripts/compile_generation_recipe_view.py",
+    "scripts/tests/test_compile_generation_recipe_view.py",
+    # KS-RETRIEVAL-001 · tenant_scope_resolver
+    "serving/tenant_scope_resolver.py",
+    "tests/test_tenant_resolver.py",
+    # KS-RETRIEVAL-002 · intent_classifier + content_type_router + 跨文件桥接回归
+    "serving/intent_classifier.py",
+    "serving/content_type_router.py",
+    "tests/test_routing.py",
+    "tests/test_intent_policy_bridge.py",
+    # KS-RETRIEVAL-003 · business_brief_checker
+    "serving/business_brief_checker.py",
+    "tests/test_brief.py",
+}
+
 # 空目录占位 / placeholder for empty subdirs（git 不跟踪空目录）
 # 注：scripts/ 与 audit/ 已被 W3 实文件填充，无须 .gitkeep
 GITKEEP_DIRS = {"vector_payloads", "logs"}
 EXPECTED_GITKEEPS = {f"{d}/.gitkeep" for d in GITKEEP_DIRS}
 
-# 全部允许文件 = §11 + W0/W1 + W3 白名单 + .gitkeep 占位
+# 全部允许文件 = §11 + W0/W1 + W3 + W4 白名单 + .gitkeep 占位
 ALLOWED_FILES = (
     EXPECTED_FILES_PLAN
     | EXPECTED_FILES_PRE_EXISTING
     | EXPECTED_FILES_W3
+    | EXPECTED_FILES_W4
     | EXPECTED_GITKEEPS
 )
 
@@ -171,11 +200,12 @@ def main() -> int:
 
 def _report(errors: list[str]) -> int:
     if not errors:
-        print("[OK] knowledge_serving/ 与 §11 + W0/W1 + W3 白名单完全一致")
+        print("[OK] knowledge_serving/ 与 §11 + W0/W1 + W3 + W4 白名单完全一致")
         print(f"     根目录 / root: {SERVING}")
         print(f"     §11 期望文件数: {len(EXPECTED_FILES_PLAN)}")
         print(f"     W0/W1 白名单数: {len(EXPECTED_FILES_PRE_EXISTING)}")
         print(f"     W3 白名单数: {len(EXPECTED_FILES_W3)}")
+        print(f"     W4 白名单数: {len(EXPECTED_FILES_W4)}")
         print(f"     .gitkeep 占位数: {len(EXPECTED_GITKEEPS)}")
         return 0
     print("[FAIL] knowledge_serving/ 校验未通过 / validation failed:")

@@ -14,7 +14,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/compile_generation_recipe_view.py --check
-status: not_started
+status: done
 ---
 
 # KS-COMPILER-003 · generation_recipe_view 编译
@@ -73,6 +73,6 @@ artifact: generation_recipe_view.csv
 > 阻断项：business_brief_schema_id 为空。
 
 ## 11. DoD
-- [ ] csv 落盘
-- [ ] CI pass
-- [ ] 审查员 pass
+- [x] csv 落盘
+- [x] CI pass
+- [x] 审查员 pass

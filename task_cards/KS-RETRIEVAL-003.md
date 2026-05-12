@@ -13,8 +13,8 @@ plan_sections:
   - "§6.4"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_brief.py -v
-status: not_started
+  - python3 -m pytest knowledge_serving/tests/test_brief.py -v
+status: done
 ---
 
 # KS-RETRIEVAL-003 · business_brief_checker
@@ -63,7 +63,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_brief.py -v
+command: python3 -m pytest knowledge_serving/tests/test_brief.py -v
 pass: 全绿，含 SKU 缺失阻断用例
 artifact: pytest report
 ```
@@ -76,6 +76,6 @@ artifact: pytest report
 > 阻断项：SKU 缺失但成稿继续。
 
 ## 11. DoD
-- [ ] checker 入 git
-- [ ] pytest 全绿
-- [ ] 审查员 pass
+- [x] checker 入 git
+- [x] pytest 全绿
+- [x] 审查员 pass

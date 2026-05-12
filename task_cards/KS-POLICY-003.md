@@ -13,7 +13,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 scripts/diff_yaml_vs_csv.py merge_precedence_policy
-status: not_started
+status: done
 ---
 
 # KS-POLICY-003 · merge_precedence_policy.yaml
@@ -68,6 +68,6 @@ artifact: diff report
 > 阻断项：yaml 与 csv 出现差异。
 
 ## 11. DoD
-- [ ] yaml 落盘
-- [ ] diff 0
-- [ ] 审查员 pass
+- [x] yaml 落盘
+- [x] diff 0
+- [x] 审查员 pass

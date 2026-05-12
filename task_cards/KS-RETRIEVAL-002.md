@@ -7,6 +7,7 @@ files_touched:
   - knowledge_serving/serving/intent_classifier.py
   - knowledge_serving/serving/content_type_router.py
   - knowledge_serving/tests/test_routing.py
+  - knowledge_serving/tests/test_intent_policy_bridge.py
 artifacts:
   - knowledge_serving/serving/intent_classifier.py
   - knowledge_serving/serving/content_type_router.py
@@ -16,8 +17,9 @@ plan_sections:
   - "§6.3"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_routing.py -v
-status: not_started
+  - python3 -m pytest knowledge_serving/tests/test_routing.py -v
+  - python3 -m pytest knowledge_serving/tests/test_intent_policy_bridge.py -v
+status: done
 ---
 
 # KS-RETRIEVAL-002 · intent_classifier + content_type_router
@@ -34,7 +36,7 @@ status: not_started
 - KS-S0-005、KS-COMPILER-002
 
 ## 3. 输入契约
-- 读：content_type_canonical.csv、content_type_view.csv、retrieval_policy_view.csv
+- 运行时模块只读：`content_type_canonical.csv`（router alias→canonical 映射来源）；`content_type_view.csv` 和 `retrieval_policy_view.csv` 由**测试层**闭合（见 §4.4），不在模块 import-time 读，避免 IO 脆弱性。
 - 入参：
   - `content_type_hint`（Dify 开始节点 / API 表单字段，可为别名 alias 或 canonical id；可为 None）
   - `intent_hint`（同上，枚举：content_generation / quality_check / strategy_advice / training / sales_script；可为 None）
@@ -48,7 +50,17 @@ status: not_started
 2. **intent_classifier**：
    - 入参齐且属于枚举 → 返回 `(intent, source="input")`
    - 否则 → 返回 `(None, status="needs_review", missing="intent")`
-3. **禁止**：任何 LLM 客户端 import / 调用；任何对 `user_query` 的关键词推断分支。
+3. **intent_to_policy_key（transitional bridge / 过渡桥接，W4→W7 期）**：
+   - `content_generation` → `policy_key="generate"`，`bridge_status="direct_map"`
+   - 其余 4 类业务 intent → `policy_key=None`，`bridge_status="unsupported_intent_no_policy"`（**禁止**静默折叠到 `generate`）
+   - `None` → `bridge_status="no_intent"`；未知字符串 → `bridge_status="unknown_intent"`
+   - 调用方必须显式处理 bridge_status，不允许把 unsupported / unknown 当作 generate 走召回
+4. **跨文件闭合（测试层）**：`test_intent_policy_bridge.py` 守护
+   - `content_generation` 经 bridge 必须落在 `retrieval_policy_view.csv.intent` 集合内
+   - 其余 4 类 intent 必须 unsupported（防静默折叠）
+   - router 对 canonical id 直通的输出必须 ⊆ `retrieval_policy_view.csv.content_type` 集合
+   - `retrieval_policy_view.csv.content_type` ⊆ `content_type_canonical.csv` canonical id 集合
+5. **禁止**：任何 LLM 客户端 import / 调用；任何对 `user_query` 的关键词推断分支。
 
 ## 5. 执行交付
 | 路径 | 格式 | canonical | 入 git |
@@ -56,6 +68,7 @@ status: not_started
 | `intent_classifier.py` | py | 是 | 是 |
 | `content_type_router.py` | py | 是 | 是 |
 | `test_routing.py` | py | 是 | 是 |
+| `test_intent_policy_bridge.py` | py | 是 | 是 |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
@@ -75,7 +88,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_routing.py -v
+command: python3 -m pytest knowledge_serving/tests/test_routing.py -v
 pass: 7+ case 全绿，含"无 LLM 调用"硬断言
 artifact: pytest report
 ```
@@ -89,6 +102,6 @@ artifact: pytest report
 > 阻断项：发现任何 LLM 调用路径 / 从 user_query 推断 content_type 或 intent / 别名未知时返回兜底值（应返回 needs_review）。
 
 ## 11. DoD
-- [ ] 模块入 git
-- [ ] pytest 全绿
-- [ ] 审查员 pass
+- [x] 模块入 git
+- [x] pytest 全绿
+- [x] 审查员 pass

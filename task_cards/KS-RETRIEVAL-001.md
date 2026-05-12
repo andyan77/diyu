@@ -13,8 +13,8 @@ plan_sections:
   - "§6.1"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_tenant_resolver.py -v
-status: not_started
+  - python3 -m pytest knowledge_serving/tests/test_tenant_resolver.py -v
+status: done
 ---
 
 # KS-RETRIEVAL-001 · tenant_scope_resolver
@@ -61,7 +61,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_tenant_resolver.py -v
+command: python3 -m pytest knowledge_serving/tests/test_tenant_resolver.py -v
 pass: 10 case 全绿，含 fail-closed 用例
 failure_means: 隔离不可信
 artifact: pytest report
@@ -75,6 +75,6 @@ artifact: pytest report
 > 阻断项：函数从自然语言推断 brand。
 
 ## 11. DoD
-- [ ] resolver 入 git
-- [ ] pytest 10/10
-- [ ] 审查员 pass
+- [x] resolver 入 git
+- [x] pytest 10/10
+- [x] 审查员 pass

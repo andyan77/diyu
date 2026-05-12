@@ -1,1 +1,57 @@
-# 占位 / placeholder — 由 W4+ POLICY-* 卡填充。
+# ============================================================
+# merge_precedence_policy.yaml · 合并优先级策略 / merge precedence policy
+# ============================================================
+# 任务卡 / task card: KS-POLICY-003
+# canonical csv: knowledge_serving/control/merge_precedence_policy.csv
+# 一致性守门 / dual-source gate: scripts/diff_yaml_vs_csv.py merge_precedence_policy
+# 落盘日期 / created: 2026-05-12
+# ============================================================
+# 语义 / semantics:
+#   target_type      —— 冲突发生的对象类型 / object type where conflict occurs
+#   conflict_key     —— 冲突字段 / conflict field key
+#   precedence_order —— 优先级顺序 / precedence (brand_<name> > domain_general)
+#   conflict_action  —— 冲突动作 / action: override / append / block / needs_review
+#   allow_override   —— 是否允许 override / whether override is allowed (bool)
+# ============================================================
+
+merge_precedence_policy:
+  - target_type: brand_overlay
+    conflict_key: brand_values
+    precedence_order: "brand_faye > domain_general"
+    conflict_action: block
+    allow_override: false
+  - target_type: brand_overlay
+    conflict_key: forbidden_words
+    precedence_order: "brand_faye > domain_general"
+    conflict_action: append
+    allow_override: false
+  - target_type: brand_overlay
+    conflict_key: founder_profile
+    precedence_order: "brand_faye > domain_general"
+    conflict_action: block
+    allow_override: false
+  - target_type: brand_overlay
+    conflict_key: signature_phrases
+    precedence_order: "brand_faye > domain_general"
+    conflict_action: override
+    allow_override: true
+  - target_type: brand_overlay
+    conflict_key: tagline
+    precedence_order: "brand_faye > domain_general"
+    conflict_action: needs_review
+    allow_override: false
+  - target_type: brand_overlay
+    conflict_key: tone
+    precedence_order: "brand_faye > domain_general"
+    conflict_action: override
+    allow_override: true
+  - target_type: persona
+    conflict_key: persona_role
+    precedence_order: "brand_faye > domain_general"
+    conflict_action: override
+    allow_override: true
+  - target_type: persona
+    conflict_key: persona_voice
+    precedence_order: "brand_faye > domain_general"
+    conflict_action: override
+    allow_override: true
