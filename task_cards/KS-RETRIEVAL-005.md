@@ -19,7 +19,7 @@ ci_commands:
   - test -f knowledge_serving/audit/validate_serving_governance.report
   - python3 -c "from knowledge_serving.serving.structured_retrieval import _assert_governance_report_green; _assert_governance_report_green()"
   - python3 -m pytest knowledge_serving/tests/test_struct_retrieval.py -v
-status: not_started
+status: in_progress
 ---
 
 # KS-RETRIEVAL-005 · structured_retrieval（结构化召回 / 13 步召回流程第 7 步）

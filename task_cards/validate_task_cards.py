@@ -320,6 +320,22 @@ def main() -> int:
                 csv_wco = row["writes_clean_output"].lower() == "true"
                 if csv_wco != bool(fm.get("writes_clean_output", False)):
                     fail(tid, "C8 writes_clean_output mismatch")
+                # 新增 / added: status / wave / s_gates / plan_sections 一致性
+                # 防止"卡 frontmatter 标 done 但 dag.csv 仍 not_started"的状态账本分裂
+                if row["status"] != fm.get("status"):
+                    fail(tid, f"C8 status mismatch: csv={row['status']!r} fm={fm.get('status')!r}")
+                csv_wave = row["wave"]
+                fm_wave = fm.get("wave")
+                if csv_wave != (str(fm_wave) if fm_wave is not None else ""):
+                    fail(tid, f"C8 wave mismatch: csv={csv_wave!r} fm={fm_wave!r}")
+                csv_gates = set(g for g in row["s_gates"].split(";") if g)
+                fm_gates = set(str(g).strip("\"' ") for g in (fm.get("s_gates") or []))
+                if csv_gates != fm_gates:
+                    fail(tid, f"C8 s_gates mismatch: csv={sorted(csv_gates)} fm={sorted(fm_gates)}")
+                csv_plan = set(s.strip().strip('"') for s in row["plan_sections"].split(";") if s.strip())
+                fm_plan = set(str(s).strip().strip('"') for s in (fm.get("plan_sections") or []))
+                if csv_plan != fm_plan:
+                    fail(tid, f"C8 plan_sections mismatch: csv={sorted(csv_plan)} fm={sorted(fm_plan)}")
             for tid in fm_by_id:
                 if tid not in csv_ids:
                     fail(tid, "C8 card exists but missing from dag.csv")

@@ -140,9 +140,16 @@ EXPECTED_FILES_W5 = {
 }
 
 # W6 已落白名单 / W6-landed allowlist
-# KS-POLICY-002 · guardrail_policy 测试套件（yaml 本身在 EXPECTED_FILES_PLAN）
+# 注：所有文件均已 commit；卡 status 详见 task_cards/dag.csv
 EXPECTED_FILES_W6 = {
-    "scripts/tests/test_validate_guardrail_policy.py",         # KS-POLICY-002 · 15 case
+    # KS-POLICY-002 (done) · guardrail_policy 测试（yaml 本身在 EXPECTED_FILES_PLAN）
+    "scripts/tests/test_validate_guardrail_policy.py",
+    # KS-POLICY-001 (done) · fallback_policy 测试（commit 0255727）
+    "scripts/tests/test_validate_policy_yaml.py",
+    # KS-RETRIEVAL-005 (in_progress) · structured retrieval 实现 + 测试（commit 5301242）
+    # 文件已落盘但卡待审查员验收；标 in_progress 而非 not_started，避免"悬空"
+    "serving/structured_retrieval.py",
+    "tests/test_struct_retrieval.py",
 }
 
 # 空目录占位 / placeholder for empty subdirs（git 不跟踪空目录）
