@@ -12,8 +12,8 @@ plan_sections:
   - "§5"
 writes_clean_output: false
 ci_commands:
-  - python3 -m jsonschema --check-schema knowledge_serving/schema/context_bundle.schema.json
-status: not_started
+  - python3 scripts/check_schema.py knowledge_serving/schema/context_bundle.schema.json
+status: done
 ---
 
 # KS-SCHEMA-003 · context_bundle.schema.json
@@ -57,7 +57,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: python3 -m jsonschema --check-schema knowledge_serving/schema/context_bundle.schema.json
+command: python3 scripts/check_schema.py knowledge_serving/schema/context_bundle.schema.json
 pass: 自校验通过
 artifact: 同上
 ```

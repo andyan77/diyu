@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diyu.local/schema/serving_views.schema.json",
+  "title": "Serving Views Schema (服务读模型 / serving views)",
+  "description": "为 7 个 serving view 立法字段契约。每个 view 对象 = governance_common_fields + 业务字段。来源：knowledge_serving_plan_v1.1.md §2 + §3。",
+  "type": "object",
+  "properties": {
+    "view_schema_version": {
+      "type": "string",
+      "description": "view schema 版本号 / view schema version（顶层），便于回放与漂移定位。",
+      "minLength": 1
+    },
+    "pack_view": { "$ref": "#/$defs/pack_view" },
+    "content_type_view": { "$ref": "#/$defs/content_type_view" },
+    "generation_recipe_view": { "$ref": "#/$defs/generation_recipe_view" },
+    "play_card_view": { "$ref": "#/$defs/play_card_view" },
+    "runtime_asset_view": { "$ref": "#/$defs/runtime_asset_view" },
+    "brand_overlay_view": { "$ref": "#/$defs/brand_overlay_view" },
+    "evidence_view": { "$ref": "#/$defs/evidence_view" }
+  },
+  "required": ["view_schema_version"],
+  "$defs": {
+    "brand_layer": {
+      "type": "string",
+      "description": "多租户隔离 key / tenant isolation key。枚举：domain_general | brand_<name> | needs_review。",
+      "pattern": "^(domain_general|needs_review|brand_[a-z][a-z0-9_]*)$"
+    },
+    "granularity_layer": {
+      "type": "string",
+      "description": "粒度层 / granularity layer。仅允许 L1 / L2 / L3。",
+      "enum": ["L1", "L2", "L3"]
+    },
+    "gate_status": {
+      "type": "string",
+      "description": "4 闸门状态 / 4-gate status。默认 active；其他值需显式标注。",
+      "enum": ["active", "draft", "deprecated", "frozen"],
+      "default": "active"
+    },
+    "review_status": {
+      "type": "string",
+      "description": "评审状态 / review status。",
+      "enum": ["approved", "pending_review", "needs_review", "rejected"]
+    },
+    "traceability_status": {
+      "type": "string",
+      "description": "可追溯性状态 / traceability status。",
+      "enum": ["full", "partial", "weak", "missing"]
+    },
+    "governance_common_fields": {
+      "type": "object",
+      "description": "13 个治理通用字段 / 13 governance common fields。每条投喂给 LLM 的 view 行必须保留全部 13 个字段。",
+      "properties": {
+        "source_pack_id":         { "type": "string", "minLength": 1 },
+        "brand_layer":            { "$ref": "#/$defs/brand_layer" },
+        "granularity_layer":      { "$ref": "#/$defs/granularity_layer" },
+        "gate_status":            { "$ref": "#/$defs/gate_status" },
+        "source_table_refs":      { "type": "array", "items": { "type": "string" } },
+        "evidence_ids":           { "type": "array", "items": { "type": "string" } },
+        "traceability_status":    { "$ref": "#/$defs/traceability_status" },
+        "default_call_pool":      { "type": "boolean" },
+        "review_status":          { "$ref": "#/$defs/review_status" },
+        "compile_run_id":         { "type": "string", "minLength": 1 },
+        "source_manifest_hash":   { "type": "string", "minLength": 1 },
+        "view_schema_version":    { "type": "string", "minLength": 1 },
+        "chunk_text_hash":        { "type": "string", "description": "vector chunk 强制字段 / mandatory for vector chunks。结构化 view 行可由 source_pack_id + view_schema_version + compile_run_id 唯一确定，可选填。" }
+      },
+      "required": [
+        "source_pack_id", "brand_layer", "granularity_layer", "gate_status",
+        "source_table_refs", "evidence_ids", "traceability_status", "default_call_pool",
+        "review_status", "compile_run_id", "source_manifest_hash", "view_schema_version",
+        "chunk_text_hash"
+      ]
+    },
+
+    "pack_view": {
+      "type": "object",
+      "description": "§3.1 pack_view — 知识是什么 / what the knowledge is。",
+      "allOf": [{ "$ref": "#/$defs/governance_common_fields" }],
+      "properties": {
+        "pack_id":              { "type": "string", "minLength": 1 },
+        "pack_type":            { "type": "string", "minLength": 1 },
+        "knowledge_title":      { "type": "string", "minLength": 1 },
+        "knowledge_assertion":  { "type": "string", "minLength": 1 },
+        "applicable_when":      { "type": "string" },
+        "success_scenario":     { "type": "string" },
+        "flip_scenario":        { "type": "string" },
+        "alternative_boundary": { "type": "string" },
+        "content_type_tags":    { "type": "array", "items": { "type": "string" } },
+        "object_type_tags":     { "type": "array", "items": { "type": "string" } },
+        "embedding_text":       { "type": "string" }
+      },
+      "required": [
+        "pack_id", "pack_type", "knowledge_title", "knowledge_assertion",
+        "applicable_when", "success_scenario", "flip_scenario", "alternative_boundary",
+        "content_type_tags", "object_type_tags", "embedding_text"
+      ]
+    },
+
+    "content_type_view": {
+      "type": "object",
+      "description": "§3.2 content_type_view — 要生产哪类内容 / which content type to produce。",
+      "allOf": [{ "$ref": "#/$defs/governance_common_fields" }],
+      "properties": {
+        "content_type":                 { "type": "string", "minLength": 1 },
+        "canonical_content_type_id":    { "type": "string", "minLength": 1 },
+        "aliases":                      { "type": "array", "items": { "type": "string" } },
+        "production_mode":              { "type": "string" },
+        "north_star":                   { "type": "string" },
+        "default_output_formats":       { "type": "array", "items": { "type": "string" } },
+        "default_platforms":            { "type": "array", "items": { "type": "string" } },
+        "recommended_persona_roles":    { "type": "array", "items": { "type": "string" } },
+        "risk_level":                   { "type": "string", "enum": ["low", "medium", "high"] },
+        "brand_overlay_required_level": { "type": "string", "enum": ["none", "soft", "hard"] },
+        "required_knowledge_layers":    { "type": "array", "items": { "$ref": "#/$defs/granularity_layer" } },
+        "forbidden_patterns":           { "type": "array", "items": { "type": "string" } },
+        "source_pack_ids":              { "type": "array", "items": { "type": "string" } },
+        "coverage_status":              { "type": "string", "enum": ["complete", "partial", "missing"] }
+      },
+      "required": [
+        "content_type", "canonical_content_type_id", "aliases", "production_mode",
+        "north_star", "default_output_formats", "default_platforms",
+        "recommended_persona_roles", "risk_level", "brand_overlay_required_level",
+        "required_knowledge_layers", "forbidden_patterns", "source_pack_ids",
+        "coverage_status"
+      ]
+    },
+
+    "generation_recipe_view": {
+      "type": "object",
+      "description": "§3.3 generation_recipe_view — 这类内容怎么组装 / how to assemble。",
+      "allOf": [{ "$ref": "#/$defs/governance_common_fields" }],
+      "properties": {
+        "recipe_id":                  { "type": "string", "minLength": 1 },
+        "content_type":               { "type": "string", "minLength": 1 },
+        "output_format":              { "type": "string" },
+        "platform":                   { "type": "string" },
+        "intent_scope":               { "type": "string" },
+        "required_views":             { "type": "array", "items": { "type": "string" } },
+        "retrieval_plan_json":        { "type": "object" },
+        "step_sequence_json":         { "type": "array" },
+        "context_budget_json":        { "type": "object" },
+        "fallback_policy_id":         { "type": "string" },
+        "guardrail_policy_id":        { "type": "string" },
+        "merge_policy_id":            { "type": "string" },
+        "business_brief_schema_id":   { "type": "string" }
+      },
+      "required": [
+        "recipe_id", "content_type", "output_format", "platform", "intent_scope",
+        "required_views", "retrieval_plan_json", "step_sequence_json",
+        "context_budget_json", "fallback_policy_id", "guardrail_policy_id",
+        "merge_policy_id", "business_brief_schema_id"
+      ]
+    },
+
+    "play_card_view": {
+      "type": "object",
+      "description": "§3.4 play_card_view — 用什么玩法 / which play to run。",
+      "allOf": [{ "$ref": "#/$defs/governance_common_fields" }],
+      "properties": {
+        "play_card_id":          { "type": "string", "minLength": 1 },
+        "pack_id":               { "type": "string", "minLength": 1 },
+        "content_type":          { "type": "string" },
+        "hook":                  { "type": "string" },
+        "production_tier":       { "type": "string" },
+        "production_difficulty": { "type": "string" },
+        "duration":              { "type": "string" },
+        "steps_json":            { "type": "array" },
+        "anti_pattern":          { "type": "string" },
+        "applicable_when":       { "type": "string" },
+        "success_scenario":      { "type": "string" },
+        "alternative_boundary":  { "type": "string" },
+        "completeness_status":   { "type": "string", "enum": ["complete", "partial", "stub"] }
+      },
+      "required": [
+        "play_card_id", "pack_id", "content_type", "hook",
+        "production_tier", "production_difficulty", "duration",
+        "steps_json", "anti_pattern", "applicable_when",
+        "success_scenario", "alternative_boundary", "completeness_status"
+      ]
+    },
+
+    "runtime_asset_view": {
+      "type": "object",
+      "description": "§3.5 runtime_asset_view — 拿什么可执行素材 / which executable asset。",
+      "allOf": [{ "$ref": "#/$defs/governance_common_fields" }],
+      "properties": {
+        "runtime_asset_id":   { "type": "string", "minLength": 1 },
+        "pack_id":            { "type": "string", "minLength": 1 },
+        "asset_type":         { "type": "string" },
+        "title":              { "type": "string" },
+        "summary":            { "type": "string" },
+        "content_pointer":    { "type": "string" },
+        "asset_payload_json": { "type": "object" },
+        "source_pointer":     { "type": "string" }
+      },
+      "required": [
+        "runtime_asset_id", "pack_id", "asset_type", "title",
+        "summary", "content_pointer", "asset_payload_json", "source_pointer"
+      ]
+    },
+
+    "brand_overlay_view": {
+      "type": "object",
+      "description": "§3.6 brand_overlay_view — 这个品牌怎么变形 / how a brand overlays the generic content。",
+      "allOf": [{ "$ref": "#/$defs/governance_common_fields" }],
+      "properties": {
+        "overlay_id":             { "type": "string", "minLength": 1 },
+        "brand_overlay_kind":     { "type": "string", "enum": ["brand_voice", "founder_persona", "team_persona_overlay", "content_type_overlay"] },
+        "target_content_type":    { "type": "string" },
+        "target_pack_id":         { "type": "string" },
+        "tone_constraints_json":  { "type": "object" },
+        "output_structure_json":  { "type": "object" },
+        "required_knowledge_json":{ "type": "object" },
+        "forbidden_words":        { "type": "array", "items": { "type": "string" } },
+        "signature_phrases":      { "type": "array", "items": { "type": "string" } },
+        "precedence":             { "type": "integer" },
+        "fallback_behavior":      { "type": "string" }
+      },
+      "required": [
+        "overlay_id", "brand_overlay_kind", "target_content_type",
+        "target_pack_id", "tone_constraints_json", "output_structure_json",
+        "required_knowledge_json", "forbidden_words", "signature_phrases",
+        "precedence", "fallback_behavior"
+      ]
+    },
+
+    "evidence_view": {
+      "type": "object",
+      "description": "§3.7 evidence_view — 为什么可信 / why trustworthy。",
+      "allOf": [{ "$ref": "#/$defs/governance_common_fields" }],
+      "properties": {
+        "evidence_id":         { "type": "string", "minLength": 1 },
+        "source_md":           { "type": "string", "minLength": 1 },
+        "source_anchor":       { "type": "string" },
+        "evidence_quote":      { "type": "string", "minLength": 1 },
+        "source_type":         { "type": "string" },
+        "inference_level":     { "type": "string", "enum": ["direct_quote", "paraphrase_high", "paraphrase_mid", "paraphrase_low", "inferred"] },
+        "trace_quality":       { "type": "string", "enum": ["high", "mid", "low"] },
+        "line_no":             { "type": "integer", "minimum": 0 },
+        "adjudication_status": { "type": "string" }
+      },
+      "required": [
+        "evidence_id", "source_md", "source_anchor", "evidence_quote",
+        "source_type", "inference_level", "trace_quality", "line_no",
+        "adjudication_status"
+      ]
+    }
+  }
+}

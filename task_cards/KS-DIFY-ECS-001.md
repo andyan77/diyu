@@ -15,7 +15,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 scripts/verify_ecs_mirror.py --dry-run --env staging
-status: not_started
+status: done
 ---
 
 # KS-DIFY-ECS-001 · 本仓 → ECS 镜像方向校验脚本 / local→ECS mirror drift verifier

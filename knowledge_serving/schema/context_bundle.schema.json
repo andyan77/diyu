@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diyu.local/schema/context_bundle.schema.json",
+  "title": "Context Bundle Schema (上下文打包 / retrieve_context() return)",
+  "description": "固化 retrieve_context() 返回结构。下游 Dify 节点据此对接，S8 回放据此校验。来源：knowledge_serving_plan_v1.1.md §5 + §7。",
+  "type": "object",
+  "properties": {
+    "request_id":             { "type": "string", "minLength": 1, "description": "请求唯一 ID / unique request id。S8 回放主键。" },
+    "tenant_id":              { "type": "string", "minLength": 1 },
+    "resolved_brand_layer":   { "$ref": "#/$defs/brand_layer" },
+    "allowed_layers":         { "type": "array", "items": { "$ref": "#/$defs/brand_layer" }, "minItems": 1 },
+    "content_type":           { "type": "string" },
+    "recipe":                 { "type": "object" },
+    "business_brief":         { "type": "object", "description": "见 business_brief.schema.json / see business_brief.schema.json。" },
+    "domain_packs":           { "type": "array", "items": { "type": "object" } },
+    "play_cards":             { "type": "array", "items": { "type": "object" } },
+    "runtime_assets":         { "type": "array", "items": { "type": "object" } },
+    "brand_overlays":         { "type": "array", "items": { "type": "object" } },
+    "evidence":               { "type": "array", "items": { "$ref": "#/$defs/evidence_item" } },
+    "missing_fields":         { "type": "array", "items": { "type": "string" } },
+    "fallback_status":        { "$ref": "#/$defs/fallback_status" },
+    "generation_constraints": { "type": "array", "items": { "type": "string" } },
+    "governance":             { "$ref": "#/$defs/governance_block" }
+  },
+  "required": [
+    "request_id", "tenant_id", "resolved_brand_layer", "allowed_layers",
+    "content_type", "recipe", "business_brief", "domain_packs", "play_cards",
+    "runtime_assets", "brand_overlays", "evidence", "missing_fields",
+    "fallback_status", "generation_constraints", "governance"
+  ],
+  "$defs": {
+    "brand_layer": {
+      "type": "string",
+      "pattern": "^(domain_general|needs_review|brand_[a-z][a-z0-9_]*)$"
+    },
+    "fallback_status": {
+      "type": "string",
+      "description": "§7 五种降级状态 / 5 fallback states，必须显式落盘。",
+      "enum": [
+        "brand_full_applied",
+        "brand_partial_fallback",
+        "domain_only",
+        "blocked_missing_required_brand_fields",
+        "blocked_missing_business_brief"
+      ]
+    },
+    "evidence_item": {
+      "type": "object",
+      "description": "证据项 / evidence row。来自 §3.7 evidence_view。",
+      "properties": {
+        "evidence_id":     { "type": "string", "minLength": 1 },
+        "source_pack_id":  { "type": "string" },
+        "source_md":       { "type": "string" },
+        "source_anchor":   { "type": "string" },
+        "evidence_quote":  { "type": "string" },
+        "inference_level": { "type": "string", "enum": ["direct_quote", "paraphrase_high", "paraphrase_mid", "paraphrase_low", "inferred"] },
+        "trace_quality":   { "type": "string", "enum": ["high", "mid", "low"] },
+        "brand_layer":     { "$ref": "#/$defs/brand_layer" }
+      },
+      "required": ["evidence_id"]
+    },
+    "governance_block": {
+      "type": "object",
+      "description": "治理快照 / governance snapshot。compile_run_id + source_manifest_hash + view_schema_version 三件套，用于回放与漂移定位。",
+      "properties": {
+        "gate_policy":           { "type": "string", "description": "默认 'active_only'。" },
+        "granularity_layers":    { "type": "array", "items": { "type": "string", "enum": ["L1", "L2", "L3"] } },
+        "traceability_required": { "type": "boolean" },
+        "compile_run_id":        { "type": "string", "minLength": 1 },
+        "source_manifest_hash":  { "type": "string", "minLength": 1 },
+        "view_schema_version":   { "type": "string", "minLength": 1 }
+      },
+      "required": [
+        "gate_policy", "granularity_layers", "traceability_required",
+        "compile_run_id", "source_manifest_hash", "view_schema_version"
+      ]
+    }
+  }
+}

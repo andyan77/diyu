@@ -12,8 +12,8 @@ plan_sections:
   - "§4"
 writes_clean_output: false
 ci_commands:
-  - python3 -m jsonschema --check-schema knowledge_serving/schema/control_tables.schema.json
-status: not_started
+  - python3 scripts/check_schema.py knowledge_serving/schema/control_tables.schema.json
+status: done
 ---
 
 # KS-SCHEMA-002 · control_tables.schema.json
@@ -30,11 +30,12 @@ status: not_started
 ## 3. 输入契约
 - 读：plan §4
 - 不读：csv 数据
+- **真源边界 / source-of-truth boundary**：字段清单禁止在本卡内部维护副本；任何字段增减必须先改 plan §4.5（与 §9.3 协同），再回 schema 文件，再到本卡——卡片是入口、不是真源 / card is the entry, not the source of truth.
 
 ## 4. 执行步骤
 1. 写 5 个对象 schema（tenant_scope_registry / field_requirement_matrix / retrieval_policy_view / merge_precedence_policy / context_bundle_log）
 2. 枚举字段严格按 plan（`required_level: none|soft|hard`、`fallback_action: ...`）
-3. `context_bundle_log` 必含 24 个字段（plan §4.5）
+3. `context_bundle_log` 必含 28 个字段（以 plan §4.5 + §9.3 为真源 / source: plan §4.5 + §9.3）
 4. self-check
 
 ## 5. 执行交付
@@ -58,7 +59,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: python3 -m jsonschema --check-schema knowledge_serving/schema/control_tables.schema.json
+command: python3 scripts/check_schema.py knowledge_serving/schema/control_tables.schema.json
 pass: schema 自校验通过
 failure_means: control 表不可信
 artifact: 同上

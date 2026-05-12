@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diyu.local/schema/business_brief.schema.json",
+  "title": "Business Brief Schema (业务摘要 / business brief)",
+  "description": "服装零售场景下的事实层契约 / facts contract for apparel retail。避免 LLM 编造 SKU / 商品 / 活动事实。来源：knowledge_serving_plan_v1.1.md §A4 + §3.3。S gate: S11 business_brief_no_fabrication。",
+  "type": "object",
+  "x-soft-required": [
+    "inventory_pressure",
+    "price_band",
+    "cta"
+  ],
+  "x-soft-required-note": "x-soft-required 字段缺失视为 soft warning，不阻断 validate；hard required 走标准 required[]。",
+  "properties": {
+    "category": {
+      "type": "string",
+      "minLength": 1,
+      "description": "品类 / category（如 outerwear / dress / knit）。"
+    },
+    "sku": {
+      "type": "string",
+      "minLength": 1,
+      "description": "SKU 编号 / SKU id。hard required —— 缺即 hard fail。"
+    },
+    "series": {
+      "type": "string",
+      "description": "系列 / series。"
+    },
+    "season": {
+      "type": "string",
+      "enum": ["spring", "summer", "autumn", "winter", "all_season", "ss", "fw", "pre_fall", "resort"],
+      "description": "季节 / season。hard required。"
+    },
+    "inventory_pressure": {
+      "type": "string",
+      "enum": ["low", "normal", "high", "clearance"],
+      "description": "库存压力 / inventory pressure。soft required（缺触发 warning，不阻断）。"
+    },
+    "price_band": {
+      "type": "object",
+      "description": "价格带 / price band。必须为区间对象，禁止字符串。soft required。",
+      "properties": {
+        "currency": { "type": "string", "minLength": 1, "description": "ISO 4217，如 CNY / USD。" },
+        "min":      { "type": "number", "minimum": 0 },
+        "max":      { "type": "number", "minimum": 0 }
+      },
+      "required": ["currency", "min", "max"],
+      "additionalProperties": false
+    },
+    "fabric": {
+      "type": "string",
+      "description": "面料 / fabric。"
+    },
+    "silhouette": {
+      "type": "string",
+      "description": "版型 / silhouette。"
+    },
+    "size_range": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "尺码 / size range。"
+    },
+    "target_audience": {
+      "type": "string",
+      "description": "目标人群 / target audience。"
+    },
+    "channel": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["xiaohongshu", "douyin", "wechat", "tmall", "jd", "offline_store", "private_domain", "weibo", "instagram"] },
+      "minItems": 1,
+      "description": "渠道 / channel。hard required；至少 1 项。"
+    },
+    "promotion_boundary": {
+      "type": "string",
+      "description": "促销边界 / promotion boundary（哪些可承诺、哪些不可）。"
+    },
+    "shooting_assets": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "拍摄资源 / shooting asset pointers。"
+    },
+    "cta": {
+      "type": "string",
+      "description": "行动召唤 / call-to-action。soft required（缺触发 warning，不阻断）。"
+    },
+    "compliance_redlines": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "合规禁区 / compliance redlines。空数组允许（视为 warning 由 validator 处理），但字段必须存在。"
+    }
+  },
+  "required": ["sku", "category", "season", "channel"],
+  "additionalProperties": false
+}

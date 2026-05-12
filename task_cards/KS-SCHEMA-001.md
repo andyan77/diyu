@@ -13,8 +13,8 @@ plan_sections:
   - "§2"
 writes_clean_output: false
 ci_commands:
-  - python3 -m jsonschema --instance knowledge_serving/schema/serving_views.schema.json --check-schema
-status: not_started
+  - python3 scripts/check_schema.py knowledge_serving/schema/serving_views.schema.json
+status: done
 ---
 
 # KS-SCHEMA-001 · serving_views.schema.json
@@ -37,7 +37,7 @@ status: not_started
 2. 为 7 个 view 各写一个对象 schema，引用 governance 子 schema
 3. 字段类型 / 枚举 / required 严格按 §3.1-3.7
 4. 加 `view_schema_version` 顶层字段
-5. `jsonschema --check-schema` 自校验
+5. `scripts/check_schema.py` 自校验
 
 ## 5. 执行交付
 | 路径 | 格式 | canonical | 可重建 | 入 git | CI artifact |
@@ -61,7 +61,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: python3 -m jsonschema --check-schema knowledge_serving/schema/serving_views.schema.json
+command: python3 scripts/check_schema.py knowledge_serving/schema/serving_views.schema.json
 pass: schema 自校验通过
 failure_means: schema 不合法，编译卡无法开工
 artifact: knowledge_serving/schema/serving_views.schema.json
@@ -72,7 +72,7 @@ artifact: knowledge_serving/schema/serving_views.schema.json
 
 ## 10. 独立审查员 Prompt
 > 请：
-> 1. `jsonschema --check-schema` pass
+> 1. `python3 scripts/check_schema.py <file>` pass
 > 2. 用故意缺字段的样本 validate，必须 fail
 > 3. 用 brand_layer="FAYE" 样本 validate，必须 fail
 > 4. 比对 §3.1-3.7 字段清单，无遗漏

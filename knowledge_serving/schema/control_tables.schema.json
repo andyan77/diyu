@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diyu.local/schema/control_tables.schema.json",
+  "title": "Control Tables Schema (控制表 / control tables)",
+  "description": "为 5 个 control table 立法字段契约。来源：knowledge_serving_plan_v1.1.md §4。context_bundle_log 是 S8 回放唯一 canonical 写入位置。",
+  "type": "object",
+  "properties": {
+    "tenant_scope_registry":   { "$ref": "#/$defs/tenant_scope_registry" },
+    "field_requirement_matrix":{ "$ref": "#/$defs/field_requirement_matrix" },
+    "retrieval_policy_view":   { "$ref": "#/$defs/retrieval_policy_view" },
+    "merge_precedence_policy": { "$ref": "#/$defs/merge_precedence_policy" },
+    "context_bundle_log":      { "$ref": "#/$defs/context_bundle_log" }
+  },
+  "required": [
+    "tenant_scope_registry",
+    "field_requirement_matrix",
+    "retrieval_policy_view",
+    "merge_precedence_policy",
+    "context_bundle_log"
+  ],
+  "$defs": {
+    "brand_layer": {
+      "type": "string",
+      "description": "多租户隔离 key / tenant isolation key。",
+      "pattern": "^(domain_general|needs_review|brand_[a-z][a-z0-9_]*)$"
+    },
+    "environment": {
+      "type": "string",
+      "description": "运行环境 / deployment environment。",
+      "enum": ["dev", "staging", "prod"]
+    },
+
+    "tenant_scope_registry": {
+      "type": "object",
+      "description": "§4.1 tenant_scope_registry — 管租户隔离 / tenant isolation。品牌层只能从登录租户或 API key 推断。",
+      "properties": {
+        "tenant_id":         { "type": "string", "minLength": 1 },
+        "api_key_id":        { "type": "string", "minLength": 1 },
+        "brand_layer":       { "$ref": "#/$defs/brand_layer" },
+        "allowed_layers":    { "type": "array", "items": { "$ref": "#/$defs/brand_layer" }, "minItems": 1 },
+        "default_platforms": { "type": "array", "items": { "type": "string" } },
+        "policy_level":      { "type": "string" },
+        "enabled":           { "type": "boolean" },
+        "environment":       { "$ref": "#/$defs/environment" }
+      },
+      "required": [
+        "tenant_id", "api_key_id", "brand_layer", "allowed_layers",
+        "default_platforms", "policy_level", "enabled", "environment"
+      ]
+    },
+
+    "field_requirement_matrix": {
+      "type": "object",
+      "description": "§4.2 field_requirement_matrix — 缺字段时能否降级 / per-field fallback policy。",
+      "properties": {
+        "content_type":      { "type": "string", "minLength": 1 },
+        "field_key":         { "type": "string", "minLength": 1 },
+        "required_level":    { "type": "string", "enum": ["none", "soft", "hard"] },
+        "fallback_action":   { "type": "string", "enum": ["use_domain_general", "neutral_tone", "ask_user", "block_brand_output"] },
+        "ask_user_question": { "type": "string" },
+        "block_reason":      { "type": "string" }
+      },
+      "required": [
+        "content_type", "field_key", "required_level",
+        "fallback_action", "ask_user_question", "block_reason"
+      ]
+    },
+
+    "retrieval_policy_view": {
+      "type": "object",
+      "description": "§4.3 retrieval_policy_view — 什么问题查哪些 view / which views per intent。",
+      "properties": {
+        "intent":                  { "type": "string", "minLength": 1 },
+        "content_type":            { "type": "string", "minLength": 1 },
+        "required_views":          { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "optional_views":          { "type": "array", "items": { "type": "string" } },
+        "structured_filters_json": { "type": "object" },
+        "vector_filters_json":     { "type": "object" },
+        "max_items_per_view":      { "type": "integer", "minimum": 0 },
+        "rerank_strategy":         { "type": "string" },
+        "merge_precedence_policy": { "type": "string" },
+        "timeout_ms":              { "type": "integer", "minimum": 0 }
+      },
+      "required": [
+        "intent", "content_type", "required_views", "optional_views",
+        "structured_filters_json", "vector_filters_json", "max_items_per_view",
+        "rerank_strategy", "merge_precedence_policy", "timeout_ms"
+      ]
+    },
+
+    "merge_precedence_policy": {
+      "type": "object",
+      "description": "§4.4 merge_precedence_policy — 通用层与品牌层冲突仲裁 / domain vs brand conflict resolution。",
+      "properties": {
+        "target_type":      { "type": "string", "minLength": 1 },
+        "conflict_key":     { "type": "string", "minLength": 1 },
+        "precedence_order": { "type": "string", "description": "形如 'brand_<name> > domain_general'。" },
+        "conflict_action":  { "type": "string", "enum": ["override", "append", "block", "needs_review"] },
+        "allow_override":   { "type": "boolean" }
+      },
+      "required": ["target_type", "conflict_key", "precedence_order", "conflict_action", "allow_override"]
+    },
+
+    "context_bundle_log": {
+      "type": "object",
+      "description": "§4.5 context_bundle_log — 每次到底喂给 LLM 了什么 / what was actually fed to LLM。唯一 canonical 写入位置 knowledge_serving/control/context_bundle_log.csv。user_query 仅允许 hash 或脱敏摘要。",
+      "properties": {
+        "request_id":              { "type": "string", "minLength": 1 },
+        "tenant_id":               { "type": "string", "minLength": 1 },
+        "resolved_brand_layer":    { "$ref": "#/$defs/brand_layer", "description": "tenant_scope_resolver 输出 / resolver output；不同于 tenant_id。" },
+        "allowed_layers":          { "type": "array", "items": { "$ref": "#/$defs/brand_layer" }, "minItems": 1 },
+        "user_query_hash":         { "type": "string", "minLength": 1, "description": "仅允许 hash 或脱敏摘要 / hashed or redacted user query。" },
+        "classified_intent":       { "type": "string" },
+        "content_type":            { "type": "string" },
+        "selected_recipe_id":      { "type": "string" },
+        "retrieved_pack_ids":      { "type": "array", "items": { "type": "string" } },
+        "retrieved_play_card_ids": { "type": "array", "items": { "type": "string" } },
+        "retrieved_asset_ids":     { "type": "array", "items": { "type": "string" } },
+        "retrieved_overlay_ids":   { "type": "array", "items": { "type": "string" } },
+        "retrieved_evidence_ids":  { "type": "array", "items": { "type": "string" } },
+        "fallback_status":         { "type": "string", "enum": ["brand_full_applied", "brand_partial_fallback", "domain_only", "blocked_missing_required_brand_fields", "blocked_missing_business_brief"] },
+        "missing_fields":          { "type": "array", "items": { "type": "string" } },
+        "blocked_reason":          { "type": "string" },
+        "context_bundle_hash":     { "type": "string", "minLength": 1 },
+        "final_output_hash":       { "type": "string" },
+        "compile_run_id":          { "type": "string", "minLength": 1 },
+        "source_manifest_hash":    { "type": "string", "minLength": 1 },
+        "view_schema_version":     { "type": "string", "minLength": 1 },
+        "embedding_model":         { "type": "string", "description": "允许 'disabled' 字面量 / accepts 'disabled' literal。" },
+        "embedding_model_version": { "type": "string" },
+        "rerank_model":            { "type": "string", "description": "允许 'disabled' 字面量。" },
+        "rerank_model_version":    { "type": "string" },
+        "llm_assist_model":        { "type": "string", "description": "允许 'disabled' 字面量。" },
+        "model_policy_version":    { "type": "string", "minLength": 1 },
+        "created_at":              { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "request_id", "tenant_id", "resolved_brand_layer", "allowed_layers",
+        "user_query_hash", "classified_intent", "content_type", "selected_recipe_id",
+        "retrieved_pack_ids", "retrieved_play_card_ids", "retrieved_asset_ids",
+        "retrieved_overlay_ids", "retrieved_evidence_ids", "fallback_status",
+        "missing_fields", "blocked_reason", "context_bundle_hash", "final_output_hash",
+        "compile_run_id", "source_manifest_hash", "view_schema_version",
+        "embedding_model", "embedding_model_version", "rerank_model",
+        "rerank_model_version", "llm_assist_model", "model_policy_version", "created_at"
+      ]
+    }
+  }
+}

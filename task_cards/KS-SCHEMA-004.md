@@ -13,8 +13,8 @@ plan_sections:
   - "§3.3"
 writes_clean_output: false
 ci_commands:
-  - python3 -m jsonschema --check-schema knowledge_serving/schema/business_brief.schema.json
-status: not_started
+  - python3 scripts/check_schema.py knowledge_serving/schema/business_brief.schema.json
+status: done
 ---
 
 # KS-SCHEMA-004 · business_brief.schema.json
@@ -58,7 +58,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: python3 -m jsonschema --check-schema knowledge_serving/schema/business_brief.schema.json
+command: python3 scripts/check_schema.py knowledge_serving/schema/business_brief.schema.json
 pass: 自校验通过
 artifact: 同上
 ```
@@ -74,6 +74,12 @@ artifact: 同上
 > 阻断项：SKU 非 required；季节枚举漏。
 
 ## 11. DoD
-- [ ] schema 落盘
-- [ ] check-schema pass
-- [ ] 审查员 pass
+- [x] schema 落盘
+- [x] check-schema pass
+- [x] 审查员 pass
+
+## 12. Follow-up（不阻塞本卡 done，但 S11 真闭环必须在后续卡补上）
+- **`compliance_redlines` 空数组只是 schema description 里的文字提醒；`scripts/check_schema.py` 仅做 metaschema 自检，运行时 instance 校验不会真的在空数组时输出 warning。** 若 S11 `business_brief_no_fabrication`（业务简报防编造门）后续要靠自动门禁兜底，需要：
+  1. 为 business_brief.schema.json 写一个独立 instance validator（不仅 check_schema），把 `x-soft-required` 字段缺失 + `compliance_redlines == []` 都翻译成可消费的 warning 输出；
+  2. 把该 validator 接入 retrieval_router 的 fallback_status 决策（缺 hard required → blocked_missing_business_brief；soft 缺失 → 不阻断但写 missing_fields）。
+- 建议落卡：`KS-RETRIEVAL-003` 已挂 `S11`，可在该卡内具象化此 validator 的实现要求；本卡保持 schema 边界，不扩张。

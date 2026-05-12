@@ -97,10 +97,29 @@ def _ssh_cmd(env: dict, remote_cmd: str) -> list[str]:
     ]
 
 
-def _ecs_hashes(env: dict, retries: int = 2) -> dict[str, str]:
-    """ECS 镜像 hash 表（只读 SSH 远端）/ remote mirror hash table (read-only via SSH)."""
+def _ssh_remote_count(env: dict) -> int:
+    """先 SSH 一次只算文件数，作为完整性校验基准 / integrity-check baseline."""
     quoted = shlex.quote(ECS_REMOTE_MIRROR_DIR)
-    # 远端命令 / remote cmd: find files, sort, sha256sum 输出 'hash  /abs/path'
+    remote = f"cd {quoted} && find . -type f ! -path '*/.*' | wc -l"
+    proc = subprocess.run(_ssh_cmd(env, remote), capture_output=True, text=True, timeout=60)
+    if proc.returncode != 0:
+        _die(f"SSH count 失败 / remote count failed: {proc.stderr.strip()}")
+    try:
+        return int(proc.stdout.strip())
+    except ValueError:
+        _die(f"SSH count 输出非整数 / unexpected count output: {proc.stdout!r}")
+        return -1
+
+
+def _ecs_hashes(env: dict, retries: int = 3) -> dict[str, str]:
+    """ECS 镜像 hash 表（只读 SSH 远端）/ remote mirror hash table (read-only via SSH).
+
+    严格完整性校验 / strict integrity check：先取期望文件数，再做 sha256 列表，
+    解析后行数必须 = 期望文件数，否则视为 SSH 输出截断（曾出现过 6 行漂移误报），
+    重试最多 retries 次仍不一致则 exit 2 —— 宁可报错也不报假漂移。
+    """
+    expected = _ssh_remote_count(env)
+    quoted = shlex.quote(ECS_REMOTE_MIRROR_DIR)
     remote = (
         f"cd {quoted} && "
         f"find . -type f ! -path '*/.*' -print0 | sort -z | xargs -0 sha256sum"
@@ -109,26 +128,32 @@ def _ecs_hashes(env: dict, retries: int = 2) -> dict[str, str]:
     for attempt in range(1, retries + 2):
         proc = subprocess.run(
             _ssh_cmd(env, remote),
-            capture_output=True, text=True, timeout=180,
+            capture_output=True, text=True, timeout=300,
         )
-        if proc.returncode == 0:
-            table: dict[str, str] = {}
-            for ln in proc.stdout.splitlines():
-                if not ln.strip():
-                    continue
-                # 'sha256  ./relative/path'
-                parts = ln.split(None, 1)
-                if len(parts) != 2:
-                    continue
-                hexd, raw = parts
-                rel = raw.strip()
-                if rel.startswith("./"):
-                    rel = rel[2:]
-                table[rel] = hexd
+        if proc.returncode != 0:
+            last_err = proc.stderr.strip() or proc.stdout.strip()
+            _warn(f"SSH 第 {attempt} 次失败 / attempt {attempt} failed: {last_err}")
+            continue
+        table: dict[str, str] = {}
+        bad_lines = 0
+        for ln in proc.stdout.splitlines():
+            if not ln.strip():
+                continue
+            parts = ln.split(None, 1)
+            if len(parts) != 2 or len(parts[0]) != 64:
+                bad_lines += 1
+                continue
+            hexd, raw = parts
+            rel = raw.strip()
+            if rel.startswith("./"):
+                rel = rel[2:]
+            table[rel] = hexd
+        if len(table) == expected and bad_lines == 0:
             return table
-        last_err = proc.stderr.strip() or proc.stdout.strip()
-        _warn(f"SSH 第 {attempt} 次失败 / attempt {attempt} failed: {last_err}")
-    _die(f"SSH 镜像枚举失败 / remote enumeration failed: {last_err}")
+        last_err = (f"integrity check failed: parsed={len(table)} expected={expected} "
+                    f"bad_lines={bad_lines}")
+        _warn(f"SSH 第 {attempt} 次完整性校验失败 / attempt {attempt} integrity failed: {last_err}")
+    _die(f"SSH 镜像枚举失败 / remote enumeration failed after retries: {last_err}", code=2)
     return {}
 
 
