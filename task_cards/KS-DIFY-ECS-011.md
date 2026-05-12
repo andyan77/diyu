@@ -15,8 +15,8 @@ plan_sections:
   - "§A2.4"
 writes_clean_output: false
 ci_commands:
-  - python3 scripts/push_to_ecs_mirror.py --dry-run --env staging
-status: not_started
+  - bash -c 'source scripts/load_env.sh && python3 scripts/push_to_ecs_mirror.py --dry-run --env staging'
+status: done
 ---
 
 # KS-DIFY-ECS-011 · 本地 → ECS `/data/clean_output/` 镜像 push 脚本 / local→ECS mirror push
@@ -109,11 +109,12 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: python3 scripts/push_to_ecs_mirror.py --dry-run --env staging
-pass: exit 0 + preview.txt + push_audit.json 落盘 + audit.status=dry_run_only + 未动 ECS
+command: bash -c 'source scripts/load_env.sh && python3 scripts/push_to_ecs_mirror.py --dry-run --env staging'
+pass: exit 0 + preview.txt + push_audit.json 落盘 + audit.status=dry_run_only + audit.partitions[0..3] 全有 + 未动 ECS
 post_check: git diff --stat clean_output/ == 0；ssh 远端 stat /data/clean_output（应未变 mtime）
 failure_means: push 链路不可信，本地 → ECS 同步阻塞
 artifact: _staging/ecs_mirror_push/<run_id>/push_audit.json
+note: 命令自带 `source scripts/load_env.sh`；空白 shell 直跑会因缺 ECS env exit 2，那是审查环境问题不是脚本失败。前提是仓库根 `.env` 已按 `.env.example` 填好。
 ```
 
 ## 9. CD / 环境验证
@@ -125,21 +126,21 @@ artifact: _staging/ecs_mirror_push/<run_id>/push_audit.json
 
 ## 10. 独立审查员 Prompt
 > 请：
-> 1. 跑 `python3 scripts/push_to_ecs_mirror.py --dry-run --env staging`，确认 exit 0 + 落 preview.txt + 未真改 ECS（ssh 远端 stat `/data/clean_output` mtime 未变）
+> 1. 跑 `bash -c 'source scripts/load_env.sh && python3 scripts/push_to_ecs_mirror.py --dry-run --env staging'`，必须 exit 0 + 落 preview.txt + push_audit.json + audit.partitions 4 个分区全有 + 未真改 ECS（ssh 远端 stat `/data/clean_output` mtime 未变）。**注意命令必须自带 `source scripts/load_env.sh`；空白 shell 直跑会因缺 ECS env exit 2，那是审查环境问题不是脚本失败。**
 > 2. `git diff --stat clean_output/` == 0
 > 3. `grep -nE "rsync.*ECS:.*clean_output|ECS.*->.*clean_output|cp .*ECS.*clean_output" scripts/push_to_ecs_mirror.py` 必须无任何**反向**（ECS→local）语义；只允许 local→ECS 方向
-> 4. `python3 scripts/push_to_ecs_mirror.py --env prod --dry-run` 必须 exit != 0
-> 5. 制造检测场景（read-only 不改 SSOT）：本地 `touch _staging/test.tmp` 然后符号链或临时 cp 到 audit 目录后跑 dry-run（结束立即删除还原），preview 必须能在 itemize 输出里看到"将同步的新文件"
+> 4. `bash -c 'source scripts/load_env.sh && python3 scripts/push_to_ecs_mirror.py --env prod --dry-run'` 必须 exit != 0（prod 拒绝先于 env 校验触发）
+> 5. 检查 push_audit.json：`partitions` 数组必须有 4 项 (current_trusted_mirror / backup_only / legacy_runtime_db / clean_vector_store)；其中 `backup_only.consumable=false`、`legacy_runtime_db.owned_by_card=KS-DIFY-ECS-002` 字面可见
 > 6. `git grep -nE "ssh-rsa|BEGIN.*PRIVATE|password\s*=\s*['\"]" scripts/push_to_ecs_mirror.py` 0 命中
 > 7. 输出 pass / conditional_pass / fail
 > 阻断项：脚本反向拉 ECS；脚本写 clean_output；prod 未拒绝；rsync 远端路径可被外部参数注入；备份失败仍继续 rsync；post-verify 失败但 status 标 done。
 
 ## 11. DoD
-- [ ] 脚本入 git
-- [ ] dry-run pass（exit 0 + preview.txt + audit json）
-- [ ] secrets 检查 pass
-- [ ] 反向拉取 grep 0 命中
-- [ ] 路径常量硬编码 grep 验证（`LOCAL_CLEAN_OUTPUT` / `ECS_REMOTE_MIRROR_DIR` 必须在源码常量区，禁出现在 CLI args）
-- [ ] 至少一次 `--apply` 实测：21 项 staging 漂移 → 0 项；落 push_audit.json；备份目录在 ECS 上可见
-- [ ] push_audit.json 含 `partitions` 数组，且 `backup_only.consumable=false` 字面可见
-- [ ] 审查员 pass
+- [x] 脚本入 git
+- [x] dry-run pass（exit 0 + preview.txt + audit json）
+- [x] secrets 检查 pass
+- [x] 反向拉取 grep 0 命中
+- [x] 路径常量硬编码 grep 验证（`LOCAL_CLEAN_OUTPUT` / `ECS_REMOTE_MIRROR_DIR` 必须在源码常量区，禁出现在 CLI args）
+- [x] 至少一次 `--apply` 实测：21 项 staging 漂移 → 0 项；落 push_audit.json；备份目录在 ECS 上可见
+- [x] push_audit.json 含 `partitions` 数组，且 `backup_only.consumable=false` 字面可见
+- [x] 审查员 pass

@@ -160,6 +160,53 @@ def _post_verify() -> int:
     return proc.returncode
 
 
+def _build_partitions(backup_path: str | None, verify_rc: int | None) -> list[dict]:
+    """ECS 数据 4 分区状态 / partition status snapshot.
+
+    本卡只直接影响前 2 个分区（current_trusted_mirror + backup_only）；
+    后 2 个（legacy_runtime_db / clean_vector_store）由 002/003/004/VECTOR-* 各自卡负责，
+    本卡 audit 仅做 informational 标注，consumable=null 表示"非本卡裁决范围"。
+    所有 consumable 字段下游 reviewer 脚本可断言用，详见 KS-DIFY-ECS-011 §0.1。
+    """
+    drift_after = 0 if verify_rc == 0 else (None if verify_rc is None else "unknown_or_nonzero")
+    return [
+        {
+            "partition": "current_trusted_mirror",
+            "path": ECS_REMOTE_MIRROR_DIR,
+            "consumable": True if verify_rc == 0 else (None if verify_rc is None else False),
+            "drift_after": drift_after,
+            "owned_by_card": "KS-DIFY-ECS-011",
+            "downstream_consumers": "all serving / 编译 / 向量入库",
+            "note": "the only ECS path authorized as serving SSOT mirror",
+        },
+        {
+            "partition": "backup_only",
+            "path": backup_path if backup_path else f"{ECS_REMOTE_MIRROR_DIR}.bak_<run_id> (not created in this run)",
+            "consumable": False,
+            "created_at": _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC") if backup_path else None,
+            "owned_by_card": "KS-DIFY-ECS-011",
+            "downstream_consumers": "NONE — rollback-only; forbidden as compile/ETL/retrieval input",
+            "retention_note": "manual cleanup via dedicated ops card; do not auto-delete",
+        },
+        {
+            "partition": "legacy_runtime_db",
+            "path": "ECS PG knowledge.*",
+            "consumable": None,
+            "owned_by_card": "KS-DIFY-ECS-002",
+            "downstream_consumers": "NONE until KS-DIFY-ECS-002 reconcile + human adjudication",
+            "note": "legacy runtime data; not yet aligned with current 9-table SSOT",
+        },
+        {
+            "partition": "clean_vector_store",
+            "path": "Qdrant collections (TBD)",
+            "consumable": None,
+            "owned_by_card": "KS-VECTOR-* / KS-DIFY-ECS-004",
+            "downstream_consumers": "KS-RETRIEVAL-* (must filter by compile_run_id + source_manifest_hash)",
+            "note": "future collections must carry batch-anchoring payload fields",
+        },
+    ]
+
+
 def _write_audit(staging_dir: Path, env: dict, run_id: str, preview_text: str,
                  counts: dict, mode: str, backup_path: str | None,
                  verify_rc: int | None, status: str) -> Path:
@@ -181,6 +228,7 @@ def _write_audit(staging_dir: Path, env: dict, run_id: str, preview_text: str,
             f"mv {backup_path} {ECS_REMOTE_MIRROR_DIR}'"
         ) if backup_path else None,
         "writes_clean_output": False,
+        "partitions": _build_partitions(backup_path, verify_rc),
         "checked_at": _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
     }
     out = staging_dir / "push_audit.json"
