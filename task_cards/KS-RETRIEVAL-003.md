@@ -33,9 +33,10 @@ status: not_started
 - 读：business_brief.schema.json
 
 ## 4. 执行步骤
-1. schema 校验
+1. schema 校验（jsonschema instance validate，不只是 metaschema check）
 2. required 缺失 → blocked_missing_business_brief
-3. soft 缺失 → 返回 missing_fields 列表
+3. soft 缺失（`x-soft-required` 列出的 inventory_pressure / price_band / cta）→ 返回 missing_fields 列表，不阻断
+4. **`compliance_redlines` 必须存在；当其为 `[]` 空数组时**输出 warning 进 missing_fields，不阻断（schema 层只描述、不强制；本 checker 是 S11 自动兜底的实际门禁）—— 来源：KS-SCHEMA-004 §12 Follow-up
 
 ## 5. 执行交付
 | 路径 | 格式 | canonical | 入 git |
@@ -48,6 +49,9 @@ status: not_started
 |---|---|
 | 缺 SKU | blocked |
 | 缺 CTA | missing_fields 含 CTA，不阻断 |
+| 缺 inventory_pressure / price_band（x-soft-required） | missing_fields 含该字段，不阻断 |
+| `compliance_redlines: []` 空数组 | missing_fields 含 compliance_redlines，不阻断（warning） |
+| 缺 compliance_redlines 字段 | missing_fields 含 compliance_redlines，不阻断 |
 | 非法 season | raise |
 | 空 brief | blocked |
 | 多余字段 | warning 但不阻断 |
