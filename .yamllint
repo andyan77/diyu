@@ -1,0 +1,32 @@
+# diyu 项目 yamllint 配置 / project-level yamllint config
+# 用于 knowledge_serving/policies/*.yaml 等策略文件 lint
+# 由 scripts/validate_policy_yaml.py F1b 调用
+extends: default
+
+rules:
+  # 中文注释行较长 / Chinese comment lines can be long
+  line-length:
+    max: 200
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+
+  # 双引号是显式语义（路径 / 描述）不算冗余
+  quoted-strings: disable
+
+  # 注释缩进不强制
+  comments-indentation: disable
+
+  # 注释与内容之间一个空格即可
+  comments:
+    min-spaces-from-content: 1
+
+  # 不强制 --- 文档头
+  document-start: disable
+
+  # truthy 检查只对 keys，不对 values（避免误伤 "is_blocking: false" 等）
+  truthy:
+    check-keys: false
+
+  indentation:
+    spaces: 2
+    indent-sequences: consistent

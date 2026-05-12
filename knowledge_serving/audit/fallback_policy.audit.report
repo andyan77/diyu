@@ -1,0 +1,25 @@
+# fallback_policy.audit.report · KS-POLICY-001 验收证据 / acceptance evidence
+generated_at: 2026-05-12T16:27:12Z
+task_card: KS-POLICY-001
+wave: W6
+preceding_gate: KS-COMPILER-013 (S1-S7 全绿)
+yaml_path: knowledge_serving/policies/fallback_policy.yaml
+yaml_sha256_prefix: 34c424557d5cd215
+
+[F1a yaml parse]
+status: pass
+
+[F1b yamllint]
+status: pass
+
+[F2-F7 validator]
+已校验 / checked: knowledge_serving/policies/fallback_policy.yaml
+
+✅ fallback_policy F1a/F1b/F2-F7 全绿 / all checks passed
+
+[pytest suite]
+......................                                                   [100%]
+22 passed in 1.46s
+
+[meta validator]
+VALIDATION PASS: 57 cards, DAG closed, S0-S13 covered.

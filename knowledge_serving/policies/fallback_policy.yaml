@@ -1,1 +1,149 @@
-# 占位 / placeholder — 由 W4+ POLICY-* 卡填充。
+# fallback_policy.yaml · KS-POLICY-001 · 降级策略 / fallback policy
+# ===================================================================
+# 契约 / contract:
+#   - 本文件是 §7 五状态降级决策的唯一权威声明 / single source of truth
+#   - 触发条件 100% 结构化、不调用 LLM（运行时与编译期均禁止 LLM 介入降级判定）
+#   - retrieval router / final composer 必须按本文件的 status 决议行为
+#   - 状态语义与 field_requirement_matrix.csv 严格对齐
+# ===================================================================
+
+policy_id: fallback_policy_v1
+task_card: KS-POLICY-001
+schema_version: 1
+plan_section: "§7"
+last_updated: 2026-05-13
+
+# 五状态枚举 / five canonical states（顺序与 §7 一致 · 不许增删）
+states:
+
+  - name: brand_full_applied
+    severity: ok
+    is_blocking: false
+    trigger:
+      # 全部 required_level=hard 的字段齐全 + 业务事实齐
+      brand_required_fields_status: complete
+      brand_soft_fields_status: complete
+      business_brief_status: complete
+    output_strategy:
+      mode: brand_full
+      description: "品牌层字段齐全，输出品牌化内容 / brand-aware full output"
+      use_brand_voice: true
+      use_brand_assets: true
+      structured_only: false
+    downstream_signal:
+      log_marker: FALLBACK_NONE_BRAND_FULL
+      alert: false
+
+  - name: brand_partial_fallback
+    severity: warn
+    is_blocking: false
+    trigger:
+      brand_required_fields_status: complete
+      brand_soft_fields_status: partial_missing   # 仅 soft 字段缺
+      business_brief_status: complete
+    output_strategy:
+      mode: brand_partial
+      description: "品牌层部分缺失，输出通用结构 + 轻品牌语气 / generic structure with light brand tone"
+      use_brand_voice: light
+      use_brand_assets: partial
+      structured_only: false
+      soft_missing_action: use_domain_general   # 与 field_requirement_matrix.fallback_action 一致
+    downstream_signal:
+      log_marker: FALLBACK_BRAND_PARTIAL
+      alert: false
+
+  - name: domain_only
+    severity: warn
+    is_blocking: false
+    trigger:
+      brand_overlay_resolved: false              # brand_overlay_view 命中为空
+      brand_required_fields_status: not_applicable
+      business_brief_status: complete
+    output_strategy:
+      mode: domain_only
+      description: "品牌层无对应知识，输出通用合格内容 / domain-only generic output"
+      use_brand_voice: false
+      use_brand_assets: false
+      structured_only: false
+      brand_layer_scope: ["domain_general"]
+    downstream_signal:
+      log_marker: FALLBACK_DOMAIN_ONLY
+      alert: false
+
+  - name: blocked_missing_required_brand_fields
+    severity: error
+    is_blocking: true
+    trigger:
+      brand_required_fields_status: missing      # 任一 required_level=hard 字段缺
+      business_brief_status: complete
+    output_strategy:
+      mode: structure_skeleton_only
+      description: "强品牌内容缺核心字段，不生成品牌化成稿，只给结构稿/采集问题 / emit skeleton + ask_user_question"
+      use_brand_voice: false
+      use_brand_assets: false
+      structured_only: true
+      emit_ask_user_question: true              # 取自 field_requirement_matrix.ask_user_question
+    downstream_signal:
+      log_marker: BLOCKED_BRAND_REQUIRED_MISSING
+      alert: true
+    block_reason: "required_level=hard 的品牌核心字段缺失，禁止生成品牌化成稿 / hard-required brand field missing"
+
+  - name: blocked_missing_business_brief
+    severity: error
+    is_blocking: true
+    trigger:
+      business_brief_status: missing             # 缺 SKU/商品/活动/平台目标等事实
+    output_strategy:
+      mode: refuse_final
+      description: "缺业务事实，不生成最终稿 / refuse final composition, request brief"
+      use_brand_voice: false
+      use_brand_assets: false
+      structured_only: false
+      emit_ask_user_question: true
+    downstream_signal:
+      log_marker: BLOCKED_BUSINESS_BRIEF_MISSING
+      alert: true
+    block_reason: "缺 SKU/商品/活动/平台目标等业务事实，禁止生成最终稿 / business brief (SKU/product/campaign/platform goal) missing"
+
+# 与 field_requirement_matrix.csv 的对应 / alignment with field_requirement_matrix
+# ---------------------------------------------------------------------
+# required_level=hard  + 字段缺  → blocked_missing_required_brand_fields
+# required_level=soft  + 字段缺  → brand_partial_fallback (use_domain_general / neutral_tone)
+# required_level=none             → 不进入降级判定 / not in fallback scope
+# brand_overlay 整体未命中        → domain_only
+# 业务事实缺                      → blocked_missing_business_brief（优先级最高，先于品牌判定）
+matrix_alignment:
+  source: knowledge_serving/control/field_requirement_matrix.csv
+  hard_missing_to_state: blocked_missing_required_brand_fields
+  soft_missing_to_state: brand_partial_fallback
+  none_level_to_state: not_in_scope
+  overlay_miss_to_state: domain_only
+  brief_missing_to_state: blocked_missing_business_brief
+
+# 评估顺序 / evaluation order（先评估业务事实，再评估品牌字段）
+evaluation_pipeline:
+  - check: business_brief_status
+    on_missing: blocked_missing_business_brief
+  - check: brand_required_fields_status
+    on_missing: blocked_missing_required_brand_fields
+  - check: brand_overlay_resolved
+    on_false: domain_only
+  - check: brand_soft_fields_status
+    on_partial_missing: brand_partial_fallback
+    on_complete: brand_full_applied
+
+# 反 LLM 介入硬纪律 / no-LLM in fallback decision
+no_llm_in_decision: true
+forbidden_decision_sources:
+  - llm_judge
+  - prompt_inference
+  - model_predicted_intent
+  - anthropic_completion
+  - openai_completion
+
+# 运行时契约 / runtime contract
+runtime_contract:
+  enforced_by: KS-RETRIEVAL-007        # 执行端在 W8 落地
+  log_field_required: fallback_status   # 每次召回 / 生成日志必须带本字段
+  log_field_enum: [brand_full_applied, brand_partial_fallback, domain_only, blocked_missing_required_brand_fields, blocked_missing_business_brief]
+  alerting_states: [blocked_missing_required_brand_fields, blocked_missing_business_brief]
