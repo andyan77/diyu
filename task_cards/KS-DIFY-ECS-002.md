@@ -19,6 +19,14 @@ status: not_started
 
 # KS-DIFY-ECS-002 · ECS PG ↔ 9 表对账
 
+## 0. legacy runtime 警示（**最高优先 · 不可违反**）
+
+> ECS PG `knowledge.*` schema 是**历史 runtime 数据 / legacy runtime data**，与本仓 9 表真源**未对账**。
+>
+> **本卡对账完成且人工裁决前**：禁止任何下游 serving / 编译 / 召回 / Dify Chatflow 直接读 PG `knowledge.*` 当作真源；该数据**只允许本卡作为对账只读输入**。
+>
+> 完整 ECS 数据分区图见 `KS-DIFY-ECS-011` §0.1（4 分区硬约束 + 反偷换警告）；本卡是 §0.1 表中"历史运行时 DB"分区从未授权状态走向"由 003 回灌"路径上的**唯一对账闸**。
+
 ## 1. 任务目标
 - **业务**：ECS PG（如果保留）与本仓 9 表 CSV 必须严格一致或差异显式登记。
 - **工程**：行数 / 主键 / 关键字段 hash 三层对账；差异写 audit。

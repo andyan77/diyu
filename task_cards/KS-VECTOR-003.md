@@ -37,6 +37,7 @@ status: not_started
 1. offline 模式：用 jsonl 直接做 filter 模拟 + 断言
 2. online 模式：调 staging Qdrant 实跑（CD 阶段）
 3. 4 类 filter：brand_faye / domain_general / gate=active / cross-tenant 0 命中
+4. **批次锚定 filter**：再加 1 类——用 `compile_run_id` 或 `source_manifest_hash` 过滤，跨批次旧 chunk 必须 0 命中（防"Qdrant 上有 collection 就当真源用"，对应 `KS-DIFY-ECS-011` §0.1 第 4 行未污染向量库纪律）
 
 ## 5. 执行交付
 | 路径 | 格式 | canonical | 入 git |
@@ -48,6 +49,7 @@ status: not_started
 | 测试 | 期望 |
 |---|---|
 | brand_a 请求 → brand_b 命中 | 永不发生 |
+| 旧批次 compile_run_id 请求 → 当前批次命中 | 永不发生（批次锚定 filter 必须严格） |
 | inactive 命中 | 永不发生 |
 | Qdrant down | fallback 启用 + offline 报告 |
 | filter 缺字段 | fail-closed |

@@ -36,7 +36,8 @@ status: not_started
 1. 从 view 抽 embedding_text
 2. 用 policy.embedding 算 embedding
 3. 计算 chunk_text_hash
-4. 构造 payload：view_type / source_pack_id / brand_layer / granularity_layer / content_type / gate_status / default_call_pool / evidence_ids / compile_run_id / chunk_text_hash / embedding_model_version / index_version
+4. 构造 payload：view_type / source_pack_id / brand_layer / granularity_layer / content_type / gate_status / default_call_pool / evidence_ids / **compile_run_id** / **source_manifest_hash** / chunk_text_hash / embedding_model_version / index_version
+   - **批次锚定硬要求 / batch anchoring**：每个 chunk payload 必须同时含 `compile_run_id` + `source_manifest_hash`；缺任一即 fail。下游 retrieval 据此过滤跨批次的旧 chunk，未污染向量库纪律见 `KS-DIFY-ECS-011` §0.1 第 4 行。
 5. 输出 jsonl
 
 ## 5. 执行交付
@@ -49,6 +50,7 @@ status: not_started
 | 测试 | 期望 |
 |---|---|
 | chunk 缺 chunk_text_hash | fail |
+| chunk 缺 compile_run_id 或 source_manifest_hash | fail（批次锚定缺失，未来无法过滤跨批次旧 chunk） |
 | brand_layer 漏 | fail |
 | gate_status 非 active 默认入 | fail |
 | 重复 chunk_id | fail |

@@ -31,7 +31,8 @@ status: not_started
 - 读：plan §8
 
 ## 4. 执行步骤
-1. 写 schema：view_type / source_pack_id / brand_layer / granularity_layer / content_type / pack_type / gate_status / default_call_pool / evidence_ids / compile_run_id / chunk_text_hash / embedding_model / embedding_model_version / embedding_dimension / index_version
+1. 写 schema：view_type / source_pack_id / brand_layer / granularity_layer / content_type / pack_type / gate_status / default_call_pool / evidence_ids / **compile_run_id** / **source_manifest_hash** / chunk_text_hash / embedding_model / embedding_model_version / embedding_dimension / index_version
+   - **批次锚定硬要求**：`compile_run_id` 与 `source_manifest_hash` 都必须 required；缺任一即 schema fail。语义见 `KS-DIFY-ECS-011` §0.1 第 4 行。
 2. self-check
 
 ## 5. 执行交付
@@ -43,6 +44,7 @@ status: not_started
 | 测试 | 期望 |
 |---|---|
 | 缺 brand_layer | fail |
+| 缺 compile_run_id 或 source_manifest_hash | fail（批次锚定缺失） |
 | embedding_dimension=0 | warning |
 | gate_status 非枚举 | fail |
 | chunk_text_hash 非 hex | fail |

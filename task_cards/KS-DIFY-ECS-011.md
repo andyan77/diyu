@@ -31,6 +31,25 @@ status: not_started
 >
 > 本卡与 KS-DIFY-ECS-001（reverse verify）形成 "**推 + 校**" 对偶：011 推完后必须自动调 001 验证 drift=0，否则视为 fail。
 
+## 0.1 ECS 数据 4 分区硬约束 / ECS data partition hard constraints（跨 W2+ 全部 ECS 卡）
+
+> ECS 上**只有**以下 4 类数据，下游卡（编译 / 召回 / 灌库）**必须按分区裁决可消费性**，不得"看到 ECS 上有数据就当真源用"。
+
+| 分区 / partition | 路径 / path | 定位 / status | 谁可读 / consumers | 谁可写 / writers |
+|---|---|---|---|---|
+| **当前可信镜像 / current trusted mirror** | `/data/clean_output/` | 与本地真源 sha256 全等 (drift=0) | 所有下游 serving / 编译 / 向量入库 | **仅** 本卡 (`KS-DIFY-ECS-011 --apply`) |
+| **历史备份 / backup-only snapshots** | `/data/clean_output.bak_<run_id>/` | 旧快照，**仅供回滚** | **禁止** 任何编译 / ETL / 召回 / 读取 | 本卡 push 时自动生成；人工清理走独立运维卡 |
+| **历史运行时 DB / legacy runtime data** | ECS PG `knowledge.*` | 历史 runtime，与当前 9 表真源**未对账** | **禁止** 直接作为 serving 输入；必须先经 `KS-DIFY-ECS-002` 对账裁决 | `KS-DIFY-ECS-003` 回灌（在对账通过后） |
+| **未污染向量库 / clean vector store** | Qdrant collections | 当前为空；未来 collection 必须带 `compile_run_id` + `source_manifest_hash` payload | `KS-RETRIEVAL-*`（按 collection 元数据筛批次） | `KS-VECTOR-*` + `KS-DIFY-ECS-004` 灌库 |
+
+**反偷换警告 / anti-substitution warnings（执行 AI 必读）**：
+- "ECS 上有 `clean_output.bak_*`" ≠ "可读";  `.bak_*` 是冷备，**禁止读取、禁止编译、禁止灌库**。
+- "ECS PG `knowledge.*` 有数据" ≠ "可作为 serving 真源";  必须等 `KS-DIFY-ECS-002` 对账后由人工裁决。
+- "Qdrant 上有 collection" ≠ "可召回";  必须按 payload 的 `compile_run_id` + `source_manifest_hash` 锚定批次，跨批次的旧 collection 要么显式淘汰要么按版本号过滤。
+- 凡 ECS 上路径不在表中第 1 行的，一律按 "**未授权数据 / unauthorized data**" 处理，**不得写入 serving 信任链**。
+
+本卡是把"当前可信镜像"分区状态保鲜的唯一通道；**其他 3 个分区由各自卡（002 / 003 / 004 / VECTOR-*）按自己边界处理，本卡不越权**。
+
 ## 1. 任务目标
 - **业务**：让我们能用一条命令把本地 `clean_output/` 演进同步到 ECS staging 镜像，**不留孤儿、不漂移**；同步过程自带备份与校验，不裸跑 rsync。
 - **工程**：实现 `scripts/push_to_ecs_mirror.py`；内置 3 层安全网（dry-run preview / ECS-side timestamped backup / post-verify drift=0），单 push 动作落 audit 证据，可回滚。
@@ -76,6 +95,8 @@ status: not_started
 | SSH 中断 | exit 2 + 提示回滚 |
 | 试图反向：从 ECS 拉文件到 clean_output / | 脚本无此代码路径；review grep 0 命中 |
 | 重跑幂等（连跑两次 --apply）| 第二次 preview drift=0；rsync 无变化；post-verify 仍 drift=0 |
+| audit json 是否登记 .bak_* 为 backup-only | `push_audit.json.partitions[].current_trusted_mirror`、`partitions[].backup_only` 都必须显式给出，且 `backup_only.consumable=false` |
+| 任何下游脚本误把 `.bak_*` 当输入 | 不在本卡范围；本卡只通过 audit + §0.1 表显式声明边界，纪律由下游卡的代码评审守 |
 
 ## 7. 治理语义一致性
 - **方向单一**：脚本只读本地、写 ECS、写 `_staging/`；**不写 `clean_output/`、不反向拉 ECS 文件覆盖本地**
@@ -84,6 +105,7 @@ status: not_started
 - secrets 走 env
 - 不调 LLM
 - audit json 必须含 `source_of_truth_direction` 字段，固定字面量 `"local clean_output/ → ECS /data/clean_output/ (one-way mirror)"`
+- audit json 必须含 `partitions` 数组，按 §0.1 表声明本次 push 影响到的两个分区状态：current_trusted_mirror（path、drift_after、consumable=true）、backup_only（path、created_at、consumable=false、retention_note）。下游 reviewer 脚本可据此断言"`/data/clean_output.bak_*` 不进入 serving 信任链"。
 
 ## 8. CI 门禁
 ```
@@ -119,4 +141,5 @@ artifact: _staging/ecs_mirror_push/<run_id>/push_audit.json
 - [ ] 反向拉取 grep 0 命中
 - [ ] 路径常量硬编码 grep 验证（`LOCAL_CLEAN_OUTPUT` / `ECS_REMOTE_MIRROR_DIR` 必须在源码常量区，禁出现在 CLI args）
 - [ ] 至少一次 `--apply` 实测：21 项 staging 漂移 → 0 项；落 push_audit.json；备份目录在 ECS 上可见
+- [ ] push_audit.json 含 `partitions` 数组，且 `backup_only.consumable=false` 字面可见
 - [ ] 审查员 pass
