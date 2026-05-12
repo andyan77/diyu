@@ -32,6 +32,8 @@ status: not_started
 - 读：`clean_output/nine_tables/07_evidence.csv`、9 表关联、manifest
 - 不读：召回侧
 
+- **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从本仓 `clean_output/` 与 `knowledge_serving/schema/` 派生。
+
 ## 4. 执行步骤
 1. 加载 07_evidence
 2. 字段对齐 §3.7（source_md / source_anchor / line_no / inference_level / trace_quality / adjudication_status）

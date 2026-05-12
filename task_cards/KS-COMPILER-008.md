@@ -32,6 +32,8 @@ status: not_started
 - 读：`control_tables.schema.json`
 - 不读：用户输入
 
+- **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从本仓 `clean_output/` 与 `knowledge_serving/schema/` 派生。
+
 ## 4. 执行步骤
 1. 列出已知 tenant：tenant_faye_main → brand_faye；tenant_demo → domain_general
 2. 字段：tenant_id / api_key_id / brand_layer / allowed_layers / default_platforms / policy_level / enabled / environment

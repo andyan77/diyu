@@ -32,6 +32,8 @@ status: not_started
 - 读：content_type_canonical.csv、plan §4.2 四条样例规则
 - 不读：运行时
 
+- **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从本仓 `clean_output/` 与 `knowledge_serving/schema/` 派生。
+
 ## 4. 执行步骤
 1. 至少落 §4.2 四条规则：product_review.brand_tone(soft), store_daily.team_persona(soft), founder_ip.founder_profile(hard), brand_manifesto.brand_values(hard)
 2. 扩展到 18 类 × 关键字段

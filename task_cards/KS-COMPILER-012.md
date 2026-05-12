@@ -32,6 +32,8 @@ status: not_started
 - 读：schema
 - 不读：运行时
 
+- **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从本仓 `clean_output/` 与 `knowledge_serving/schema/` 派生。
+
 ## 4. 执行步骤
 1. 写 `control/context_bundle_log.csv` 仅 header（24 字段对齐 §4.5）
 2. 写 `lint_no_duplicate_log.sh`：`find knowledge_serving/ -name context_bundle_log.csv` 必须只命中 control/ 路径

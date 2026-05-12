@@ -33,6 +33,8 @@ status: not_started
 - 读：`clean_output/play_cards/`、9 表、source_manifest.json、serving_views.schema.json
 - 不读：运行时品牌输入
 
+- **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从本仓 `clean_output/` 与 `knowledge_serving/schema/` 派生。
+
 ## 4. 执行步骤
 1. 加载 play_card_register
 2. 关联 pack；注入 governance

@@ -31,6 +31,8 @@ status: not_started
 ## 3. 输入契约
 - 读：schema、§4.4
 
+- **W3+ 输入白名单硬约束（见 README §7.1）**：本卡禁止读取 ECS PG `knowledge.*`、ECS 备份目录 `/data/clean_output.bak_*`、历史临时目录 `/tmp/itr*`、Qdrant 中缺 `compile_run_id` + `source_manifest_hash` 的旧 collection；只能从本仓 `clean_output/` 与 `knowledge_serving/schema/` 派生。
+
 ## 4. 执行步骤
 1. 默认 precedence_order: `brand_<name> > domain_general`
 2. 列举常见 conflict_key（tone / forbidden_words / signature_phrases / persona_*）

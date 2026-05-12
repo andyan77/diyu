@@ -170,8 +170,12 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 > **当前可信输入仅限**：
 > - ✅ 本仓 `clean_output/`（真源 / source of truth）
 > - ✅ ECS `/data/clean_output/`（部署副本 / one-way mirror，与本地 sha256 全等）
+> - ✅ 本仓 `knowledge_serving/schema/`（4 份 jsonschema，W1 立法的字段契约）
+> - ✅ 本卡 `files_touched` 字段中明确允许的本地派生路径（如 `knowledge_serving/views/*.csv`、`knowledge_serving/control/*.csv` 等）
 >
 > 完整 ECS 数据 4 分区图见 [`KS-DIFY-ECS-011`](KS-DIFY-ECS-011.md) §0.1；PG 映射 / 迁移 / 回灌方案留给 `KS-DIFY-ECS-003` 或后续单独立的映射卡处理。
+>
+> **校验脚本 / verifier**：`scripts/validate_w3_input_whitelist.py` —— 检查 W3 卡正文含禁止读取声明、`files_touched` 不含禁止路径、README §7.1 章节存在；W3 起跑前必跑。
 
 **波次推进规则**：
 
