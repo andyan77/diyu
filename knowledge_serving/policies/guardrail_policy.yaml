@@ -1,1 +1,119 @@
-# 占位 / placeholder — 由 W4+ POLICY-* 卡填充。
+# guardrail_policy.yaml · KS-POLICY-002 · 防 LLM 编造事实策略
+# ===================================================================
+# 契约 / contract:
+#   - 本文件是 S11 business_brief_no_fabrication 的唯一权威声明
+#   - 三段：forbidden_patterns / required_evidence / business_brief_required
+#   - 全部为声明式（关键词 / 正则 / 字段名），运行时不允许 LLM 介入决策
+#     （plan §9.1 forbidden_tasks 含 evidence_fabrication）
+#   - required_evidence 与 knowledge_serving/control/field_requirement_matrix.csv 严格双向闭环
+#   - business_brief_required 与 knowledge_serving/schema/business_brief.schema.json 严格闭环
+#   - 与 fallback_policy.yaml 互补：fallback 管"可降级路径"，guardrail 管"不可降级的事实捏造"
+# ===================================================================
+
+policy_version: "1.0.0"
+
+# ---- §A · forbidden_patterns（plan §A3 三大高风险类目）-----------------
+forbidden_patterns:
+
+  - id: FP-FOUNDER-FABRICATION
+    category: founder_identity
+    pattern_kind: keyword
+    patterns:
+      - "创始人是"
+      - "创始人毕业于"
+      - "founder is"
+      - "founder graduated"
+      - "品牌创立于"
+      - "born in 19"
+    block_reason: "禁止编造创始人身份 / 学历 / 出生年 / 创立时间，必须来自 founder_ip pack 的 evidence_id"
+    severity: hard_block
+
+  - id: FP-SKU-FABRICATION
+    category: product_fact
+    pattern_kind: regex
+    patterns:
+      - "SKU[\\s_-]?\\d{4,}"
+      - "货号[:：]\\s*\\w{4,}"
+    block_reason: "SKU / 货号必须来自 business_brief.sku，禁止生成式编造"
+    severity: hard_block
+
+  - id: FP-PRICE-FABRICATION
+    category: product_fact
+    pattern_kind: regex
+    patterns:
+      - "¥\\s?\\d+"
+      - "[售标原]价[:：]?\\s?\\d+"
+    block_reason: "价格 / 价格区间必须来自 business_brief.price_band，禁止编造具体数字"
+    severity: hard_block
+
+  - id: FP-INVENTORY-FABRICATION
+    category: inventory_fact
+    pattern_kind: keyword
+    patterns:
+      - "库存仅剩"
+      - "限量"
+      - "仅剩最后"
+      - "only \\d+ left"
+      - "售罄在即"
+    block_reason: "库存压力 / 紧迫感必须来自 business_brief.inventory_pressure，禁止编造库存数字"
+    severity: hard_block
+
+# ---- §B · required_evidence（content_type → hard 字段必须有 evidence）---
+# 来源：field_requirement_matrix.csv 中 required_level=hard 的 8 个 content_type
+required_evidence:
+
+  event_documentary:
+    hard_fields: [event_anchor]
+    block_reason: "事件纪实必须基于具体事件 evidence，缺失则阻断"
+
+  founder_ip:
+    hard_fields: [brand_values, founder_profile]
+    block_reason: "founder_ip 必须基于具体创始人画像 + 品牌价值观 evidence，缺一则阻断"
+
+  knowledge_sharing:
+    hard_fields: [knowledge_pack]
+    block_reason: "知识分享必须有可追溯知识包 evidence，缺失则阻断"
+
+  outfit_of_the_day:
+    hard_fields: [outfit_pack]
+    block_reason: "OOTD 必须基于具体单品 / 搭配 evidence，缺失则阻断"
+
+  process_trace:
+    hard_fields: [process_anchor]
+    block_reason: "过程记录必须基于具体过程节点 evidence，缺失则阻断"
+
+  product_copy_general:
+    hard_fields: [product_pack]
+    block_reason: "商品文案必须基于具体 SKU / 品类 evidence，缺失则阻断"
+
+  product_journey:
+    hard_fields: [product_origin]
+    block_reason: "商品溯源必须基于真实来源 / 工艺 evidence，缺失则阻断"
+
+  training_material:
+    hard_fields: [training_anchor]
+    block_reason: "培训素材必须基于具体岗位 / 制度条目 evidence，缺失则阻断"
+
+# ---- §C · business_brief_required（schema 硬契约）---------------------
+# 来源：business_brief.schema.json
+#   required[]         = [sku, category, season, channel]      → hard_fields
+#   x-soft-required[]  = [inventory_pressure, price_band, cta] → soft（仅 warning）
+business_brief_required:
+  hard_fields:
+    - sku
+    - category
+    - season
+    - channel
+  soft_fields_warning_only:
+    - inventory_pressure
+    - price_band
+    - cta
+  block_reason: "business_brief hard 字段缺失，禁止进入最终成稿（S11 business_brief_no_fabrication）"
+
+# ---- §D · 与其它策略的衔接（信息性，无校验副作用）-----------------------
+upstream_alignment:
+  field_requirement_matrix_source: "knowledge_serving/control/field_requirement_matrix.csv"
+  business_brief_schema_source: "knowledge_serving/schema/business_brief.schema.json"
+  paired_with_fallback_policy: "knowledge_serving/policies/fallback_policy.yaml"
+  enforced_by_runtime: "KS-DIFY-ECS-009"  # guardrail 检查器实现在 ECS 侧
+  no_llm_in_decision: true  # 决策权在规则引擎，不在大模型（plan §9.1 evidence_fabrication 禁止项）

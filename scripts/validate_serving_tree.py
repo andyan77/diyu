@@ -139,6 +139,12 @@ EXPECTED_FILES_W5 = {
     "scripts/tests/test_validate_serving_governance.py",       # 14+ case 测试
 }
 
+# W6 已落白名单 / W6-landed allowlist
+# KS-POLICY-002 · guardrail_policy 测试套件（yaml 本身在 EXPECTED_FILES_PLAN）
+EXPECTED_FILES_W6 = {
+    "scripts/tests/test_validate_guardrail_policy.py",         # KS-POLICY-002 · 15 case
+}
+
 # 空目录占位 / placeholder for empty subdirs（git 不跟踪空目录）
 # 注：scripts/ 与 audit/ 已被 W3 实文件填充，无须 .gitkeep
 GITKEEP_DIRS = {"vector_payloads", "logs"}
@@ -151,6 +157,7 @@ ALLOWED_FILES = (
     | EXPECTED_FILES_W3
     | EXPECTED_FILES_W4
     | EXPECTED_FILES_W5
+    | EXPECTED_FILES_W6
     | EXPECTED_GITKEEPS
 )
 
