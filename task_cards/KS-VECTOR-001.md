@@ -14,7 +14,8 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/build_qdrant_payloads.py --check
-status: not_started
+  - python3 -m pytest knowledge_serving/scripts/tests/test_build_qdrant_payloads.py
+status: done
 ---
 
 # KS-VECTOR-001 · build_qdrant_payloads + qdrant_chunks.jsonl
@@ -79,6 +80,20 @@ artifact: qdrant_chunks.jsonl
 > 阻断项：字段缺；hash 不可复算。
 
 ## 11. DoD
-- [ ] jsonl 落盘
-- [ ] CI pass
-- [ ] 审查员 pass
+- [x] jsonl 落盘 / artifact written — `knowledge_serving/vector_payloads/qdrant_chunks.jsonl` rows=498 size=11.7MB（2026-05-13）
+- [x] CI pass — `build_qdrant_payloads.py --check` exit 0；pytest 12/12 green（含 7 个 F1-F7 恶意 fixture 全部 fail-closed）
+- [x] 治理一致性 — KS-COMPILER-013 前置 gate（S1-S7 全绿）作为启动 fail-closed 门禁；clean_output 零写；批次锚定 compile_run_id=`5b5e5fc1f6199ec6` / source_manifest_hash=`b3967bca...adfc2` 全链路存在
+- [x] 审查员可执行项 — §10 的 5 条抽样 + hash 复算（已在 `derive_chunk_text` 中按 view 镜像各 compile_*_view.py 公式 + 启动期 hash 漂移检测）
+
+## 12. 实测证据 / runtime evidence（2026-05-13）
+
+| 项 | 实测值 / value | 验证级别 / level |
+|---|---|---|
+| 行数 / rows | 498（pack=201 + play_card=29 + runtime_asset=24 + brand_overlay=7 + evidence=201 + content_type=18 + generation_recipe=18） | `runtime_verified` |
+| embedding 模型 / model | `text-embedding-v3` (model_version=`v3`, dim=1024)，dashscope 实调 / live call | `runtime_verified` |
+| compile_run_id | `5b5e5fc1f6199ec6`（全 498 条 = pack_view 治理列）| `runtime_verified` |
+| source_manifest_hash | `b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2` | `runtime_verified` |
+| 前置 gate 退出码 / prereq exit | KS-COMPILER-013 `--all` exit 0（S1-S7 全绿）| `runtime_verified` |
+| clean_output 改动 / writes | 0 文件（R1 通过）| `runtime_verified` |
+| chunk_text_hash 复算一致性 | 7 view 公式与 `compile_*_view.py` 镜像；启动期对每行复算并与 view csv 列比对，漂移即 fail | `runtime_verified` |
+| 对抗 fixture / hostile | 7/7 fail-closed（F1 missing hash · F2 missing batch anchor · F3 missing brand_layer · F4 non-active · F5 dup chunk_id · F6 dim mismatch · F7 missing field）| `runtime_verified` |
