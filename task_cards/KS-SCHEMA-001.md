@@ -80,7 +80,7 @@ artifact: knowledge_serving/schema/serving_views.schema.json
 > 阻断项：govenance 字段未 required；枚举漏；view 缺字段。
 
 ## 11. DoD
-- [ ] schema 落盘
-- [ ] check-schema pass
-- [ ] 字段比对完成
-- [ ] 审查员 pass
+- [x] schema 落盘
+- [x] check-schema pass
+- [x] 字段比对完成
+- [x] 审查员 pass

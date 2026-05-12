@@ -77,6 +77,6 @@ artifact: 同上
 > 阻断项：context_bundle_log 缺字段；环境枚举漏。
 
 ## 11. DoD
-- [ ] schema 落盘
-- [ ] check-schema pass
-- [ ] 审查员 pass
+- [x] schema 落盘
+- [x] check-schema pass
+- [x] 审查员 pass

@@ -14,7 +14,7 @@ plan_sections:
   - "§A2.4"
 writes_clean_output: false
 ci_commands:
-  - python3 scripts/verify_ecs_mirror.py --dry-run --env staging
+  - bash -c 'source scripts/load_env.sh && python3 scripts/verify_ecs_mirror.py --dry-run --env staging'
 status: done
 ---
 
@@ -74,10 +74,11 @@ status: done
 
 ## 8. CI 门禁
 ```
-command: python3 scripts/verify_ecs_mirror.py --dry-run --env staging
-pass: dry-run 输出本地 + ECS 文件计数 + 不真改任何文件 + 无 clean_output / ECS 写入意图
+command: bash -c 'source scripts/load_env.sh && python3 scripts/verify_ecs_mirror.py --dry-run --env staging'
+pass: dry-run 输出本地 + ECS 文件计数 + 0 漂移 + exit 0 + 不真改任何文件 + 无 clean_output / ECS 写入意图
 artifact: _staging/ecs_mirror_check/<run_id>/mirror_drift_report.json
 post_check: git diff --stat clean_output/ == 0 行
+note: 命令自带 `source scripts/load_env.sh`，新手 / 空白 shell 直接可跑；前提是仓库根 `.env` 已按 `.env.example` 填好（ECS_HOST / ECS_USER / ECS_SSH_KEY_PATH）。CI runner 可改用直接注入 env 的等价方式。
 ```
 
 ## 9. CD / 环境验证
@@ -99,8 +100,8 @@ post_check: git diff --stat clean_output/ == 0 行
 > 阻断项：脚本任何路径反向把 ECS 拉回本地；脚本写 clean_output；prod 未拒绝；凭证入仓。
 
 ## 11. DoD
-- [ ] 脚本入 git
-- [ ] dry-run pass
-- [ ] secrets 检查 pass
-- [ ] 反向 ingest grep 0 命中
-- [ ] 审查员 pass
+- [x] 脚本入 git
+- [x] dry-run pass
+- [x] secrets 检查 pass
+- [x] 反向 ingest grep 0 命中
+- [x] 审查员 pass
