@@ -6,8 +6,10 @@ depends_on: [KS-COMPILER-013]
 files_touched:
   - knowledge_serving/policies/guardrail_policy.yaml
   - scripts/validate_policy_yaml.py
+  - knowledge_serving/scripts/tests/test_validate_guardrail_policy.py
 artifacts:
   - knowledge_serving/policies/guardrail_policy.yaml
+  - knowledge_serving/scripts/tests/test_validate_guardrail_policy.py
 s_gates: [S11]
 plan_sections:
   - "§3.3"
@@ -18,6 +20,8 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 scripts/validate_policy_yaml.py guardrail_policy
+  - yamllint -c .yamllint knowledge_serving/policies/guardrail_policy.yaml
+  - python3 -m pytest knowledge_serving/scripts/tests/test_validate_guardrail_policy.py
 status: done
 ---
 
@@ -126,12 +130,17 @@ status: done
 
 ```
 command: python3 scripts/validate_policy_yaml.py guardrail_policy
-pass:
-  - yamllint 0 errors
-  - forbidden_patterns ≥ 3（覆盖 founder / sku / inventory 三类）
-  - required_evidence 与 field_requirement_matrix.csv hard 行双向闭环
-  - business_brief_required 与 business_brief.schema.json required[] 完全相等
-  - 无 LLM 判断关键词命中
+内嵌检查 / built-in:
+  - F1a yaml.safe_load + top-level mapping
+  - F1b yamllint -c .yamllint（与 fallback_policy 同口径）
+  - G1 policy_version 非空
+  - G2 forbidden_patterns 覆盖 founder_identity / product_fact / inventory_fact 三类
+  - G3/G4 每条 pattern 字段齐 + id 唯一
+  - G5 required_evidence 与 field_requirement_matrix.csv hard 行双向闭环
+  - G6 required_evidence 闭环到 canonical 18 content_type
+  - G7/G8 business_brief_required 与 schema required[] / x-soft-required[] 严格相等
+  - G9 无 LLM 结构字段（llm_assist / model / use_llm / gpt / openai / anthropic / claude）
+exit_code: 0 全绿 / 1 任一项失败
 artifact: knowledge_serving/policies/guardrail_policy.yaml
 ```
 
@@ -157,7 +166,7 @@ artifact: knowledge_serving/policies/guardrail_policy.yaml
 
 - [x] `guardrail_policy.yaml` 落盘，覆盖三段（forbidden_patterns / required_evidence / business_brief_required）
 - [x] `scripts/validate_policy_yaml.py` 新增 `guardrail_policy` 分支，G1-G9 共 9 项闭环校验
-- [x] `test_validate_guardrail_policy.py` 15 case 全绿（§6 表 12 + happy 2 + 额外类目守护 1）
-- [x] CI exit 0：`python3 scripts/validate_policy_yaml.py guardrail_policy`
-- [x] 6 道闸：pytest 15/15 + W5 --all + DAG + serving_tree（本卡范围）+ purity + no-LLM grep 全绿
-- [ ] 审查员 pass（待用户裁决）
+- [x] `test_validate_guardrail_policy.py` 16 case 全绿（§6 表 12 + happy 2 + 类目守护 1 + yamllint 守护 1）
+- [x] CI exit 0：`python3 scripts/validate_policy_yaml.py guardrail_policy`（内嵌 F1b yamllint + G1-G9）
+- [x] 6 道闸：pytest 16/16 + W5 --all + DAG（C8 强化后）+ serving_tree + purity + no-LLM grep 全绿
+- [x] 审查员 CONDITIONAL_PASS（2026-05-13）→ F1/F2 修复后升 PASS

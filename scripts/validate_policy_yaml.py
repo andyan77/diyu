@@ -365,8 +365,8 @@ def main(argv: list[str]) -> int:
         print(f"❌ F1a 顶层必须为 mapping / top-level must be a mapping")
         return 1
 
-    # F1b yamllint 检查（仅 fallback_policy 强制；guardrail 暂走 G* 校验，可后续接入）
-    if name == "fallback_policy":
+    # F1b yamllint 检查（fallback_policy 与 guardrail_policy 同口径强制）
+    if name in ("fallback_policy", "guardrail_policy"):
         yamllint_bin = shutil.which("yamllint")
         if yamllint_bin is None:
             print("❌ F1b yamllint 不在 PATH / yamllint not installed (pip install yamllint)")
@@ -402,7 +402,7 @@ def main(argv: list[str]) -> int:
             print(f"   - {e}")
         return 1
 
-    label = "F1a/F1b/F2-F7" if name == "fallback_policy" else "G1-G9"
+    label = "F1a/F1b/F2-F7" if name == "fallback_policy" else "F1b yamllint + G1-G9"
     print(f"\n✅ {name} {label} 全绿 / all checks passed")
     return 0
 

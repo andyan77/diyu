@@ -203,6 +203,19 @@ def test_case12_duplicate_pattern_id(tmp_path):
     assert "duplicate" in (result.stdout + result.stderr).lower() or "重复" in (result.stdout + result.stderr)
 
 
+# ---------- F1b 守护：yamllint 必须对 guardrail 生效 ----------
+
+def test_yamllint_violation_fails(tmp_path):
+    """构造 yamllint 规则违例（行尾空格 + 缺末尾换行），校验器必须 fail。"""
+    p = tmp_path / "guardrail_policy.yaml"
+    # 故意 trailing spaces 行（违反 .yamllint trailing-spaces 规则）
+    p.write_text("policy_version: \"1.0.0\"   \nforbidden_patterns: []", encoding="utf-8")
+    result = _run(p)
+    assert result.returncode == 1
+    out = (result.stdout + result.stderr).lower()
+    assert "yamllint" in out, f"应当报 yamllint 错; 实际:\n{result.stdout}\n{result.stderr}"
+
+
 # ---------- 额外守护：三大 category 必须齐 ----------
 
 def test_missing_inventory_category_fails(tmp_path):
