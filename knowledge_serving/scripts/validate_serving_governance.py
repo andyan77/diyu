@@ -840,14 +840,18 @@ def main(argv: list[str] | None = None) -> int:
 
     selected = GATE_FUNCS if args.all else [args.gate]
 
-    # compile_run_id 取 manifest_hash 前 16；缺 manifest 不算 fail-closed（只是 report 标 n/a）
+    # report 头 compile_run_id 必须与 view 行里的 compile_run_id 一致，
+    # 即走 _common.derive_compile_run_id(manifest_hash, view_schema_version)，
+    # 而非 manifest_hash[:16]（后者是历史 bug，与 view 行 ID 不匹配）。
+    # 缺 manifest 或 schema 不算 fail-closed，只把 header 标 n/a。
     compile_run_id: str | None = None
     try:
-        if args.manifest.exists():
+        if args.manifest.exists() and DEFAULT_SERVING_SCHEMA_PATH.exists():
             mh = load_manifest_hash(args.manifest)
-            compile_run_id = mh[:16]
+            vsv = derive_view_schema_version(DEFAULT_SERVING_SCHEMA_PATH)
+            compile_run_id = derive_compile_run_id(mh, vsv)
     except Exception as exc:  # pragma: no cover
-        log.warning("manifest 解析失败 / parse failure: %s", exc)
+        log.warning("compile_run_id derivation failed: %s", exc)
 
     try:
         results, exit_hint = run_gates(

@@ -123,6 +123,49 @@ def test_s5_real_data_pass_strict_count(tmp_path):
     assert "checked_rows: 201" in text
 
 
+# ---------- post-audit follow-up: report header compile_run_id 必须 == view 行 ----------
+
+def test_report_header_compile_run_id_matches_view_rows(tmp_path):
+    """post-audit follow-up: report 头部 compile_run_id 必须是 derive_compile_run_id
+    (manifest_hash, view_schema_version) 的结果，而不是 manifest_hash[:16]。
+
+    历史 bug: validator main() 之前写 `compile_run_id = mh[:16]`，导致 report 头
+    与 view 行里的 compile_run_id 不一致，运行证据报告误导审查员。
+    """
+    import csv as _csv
+    views, ctl, rpt = _stage_real(tmp_path)
+    r = _run(["--all"] + _common_args(views, ctl, rpt))
+    assert r.returncode == 0, r.stderr
+    text = rpt.read_text(encoding="utf-8")
+
+    # 解 header compile_run_id
+    header_line = [ln for ln in text.splitlines() if ln.startswith("compile_run_id:")][0]
+    header_crid = header_line.split(":", 1)[1].strip()
+
+    # view 行的 compile_run_id（7 view 应全部一致）
+    view_crids = set()
+    for v in VIEW_NAMES:
+        rows = list(_csv.DictReader(open(views / f"{v}.csv", encoding="utf-8")))
+        if rows:
+            view_crids.add(rows[0]["compile_run_id"])
+    assert len(view_crids) == 1, f"7 view 的 compile_run_id 不一致: {view_crids}"
+    view_crid = next(iter(view_crids))
+
+    assert header_crid == view_crid, (
+        f"report 头 compile_run_id ({header_crid!r}) 必须等于 view 行的 "
+        f"compile_run_id ({view_crid!r})；前者疑似仍用 manifest_hash[:16]"
+    )
+    # 反向防御：header 不应等于 manifest_hash 前缀（防止退回旧 bug）
+    from pathlib import Path
+    import sys
+    sys.path.insert(0, str(REPO_ROOT / "knowledge_serving" / "scripts"))
+    from _common import load_manifest_hash  # type: ignore
+    mh = load_manifest_hash(REPO_ROOT / "clean_output" / "audit" / "source_manifest.json")
+    assert header_crid != mh[:16], (
+        f"report 头退回到 manifest_hash[:16] 反模式，应走 derive_compile_run_id"
+    )
+
+
 # ---------- no-LLM 硬扫 ----------
 
 def test_grep_no_llm_in_source():
