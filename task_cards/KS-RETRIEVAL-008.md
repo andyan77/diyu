@@ -17,7 +17,7 @@ plan_sections:
   - "§5"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_bundle_log.py -v
+  - python3 -m pytest knowledge_serving/tests/test_bundle_log.py -v
 status: not_started
 ---
 
@@ -58,16 +58,18 @@ status: not_started
 | log 字段空 | raise（disabled 显式填） |
 | 写到 logs/context_bundle_log.csv | 拒绝（唯一写入位置） |
 | 重放：同 request_id 重建 bundle | 一致 |
+| `merged_overlay_payload={}` 时 bundle/log | 如实落空集，不补占位（W8 外审 EVIDENCE 遗留守门）|
 
 ## 7. 治理语义一致性
 - S8 回放：log 字段必须够重建 bundle
 - log 单真源（control/context_bundle_log.csv）
 - governance 全字段
 - 不调 LLM
+- **空 overlay payload 是真实业务事实**（W8 外审 EVIDENCE 遗留）：当 `merged_overlay_payload={}` 时 bundle / log 必须如实落空集，**禁止**用占位、默认值或臆造的品牌语气补齐；该状态会让下游 fallback_status 继续按 KS-POLICY-001 走 brand_full_applied / brand_partial_fallback 决议——这是 [[w8-external-review-followups]] 的强制守门
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_bundle_log.py -v
+command: python3 -m pytest knowledge_serving/tests/test_bundle_log.py -v
 pass: schema 校验 + 回放 + 单源全绿
 artifact: pytest report
 ```
