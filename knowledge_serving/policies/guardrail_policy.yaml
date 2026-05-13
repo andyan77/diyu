@@ -32,8 +32,10 @@ forbidden_patterns:
     category: product_fact
     pattern_kind: regex
     patterns:
-      - "SKU[\\s_-]?\\d{4,}"
-      - "货号[:：]\\s*\\w{4,}"
+      # SKU / 货号 token：数字型（如 SKU 99999）或字母数字连字符型（如 SKU FAYE-OW-2026SS-001）
+      # 必须由 guardrail 运行时与 business_brief.sku 做白名单豁免；命中片段不含 brief.sku 即阻断
+      - "SKU[\\s_:：\\-]?[A-Za-z0-9][A-Za-z0-9_\\-]{3,}"
+      - "货号[:：]?\\s*[A-Za-z0-9][A-Za-z0-9_\\-]{3,}"
     block_reason: "SKU / 货号必须来自 business_brief.sku，禁止生成式编造"
     severity: hard_block
 

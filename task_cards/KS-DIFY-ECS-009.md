@@ -14,8 +14,8 @@ plan_sections:
   - "§7"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_guardrail.py -v
-status: not_started
+  - python3 -m pytest knowledge_serving/tests/test_guardrail.py -v
+status: in_progress
 ---
 
 # KS-DIFY-ECS-009 · Guardrail 检查器
@@ -60,7 +60,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_guardrail.py -v
+command: python3 -m pytest knowledge_serving/tests/test_guardrail.py -v
 pass: 阻断 + 通过用例全绿
 artifact: pytest report
 ```
