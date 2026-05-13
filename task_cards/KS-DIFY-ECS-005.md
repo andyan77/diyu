@@ -85,7 +85,7 @@ artifact: pytest report
 ## 11. DoD
 - [x] log_writer 扩展入 git（双写 + outbox + fsync + dedup + reconcile_pg_mirror）
 - [x] pytest 全绿（9/9 + 全量 220/220）
-- [ ] 审查员 pass（外审入口）
+- [x] 审查员 pass（2026-05-13 W10 外审 CONDITIONAL_PASS：本地核心交付全通——9/9 + 全量 220/220 + 单 canonical + reconcile CLI + 反向 grep S8 PG-free 全证；遗留两项均非本卡阻断：1) ECS/PG staging env 当前缺失 → 真 reconcile 留待 staging 部署阶段；2) `replay*.py` 不在本仓 → 属 KS-DIFY-ECS-010 回放卡范围）
 
 ## 12. 实施记录 / 2026-05-13 W10
 
