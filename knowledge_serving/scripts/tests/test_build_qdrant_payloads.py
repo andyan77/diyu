@@ -151,19 +151,21 @@ def csv_field_size_workaround():
     _csv.field_size_limit(_sys.maxsize)
 
 
-def test_payload_has_16_fields_full():
-    """payload 16 字段全填（全量校验，不抽样）/ all 498 rows full schema check.
+def test_payload_has_17_fields_full():
+    """payload 17 字段全填（全量校验，不抽样）/ all 498 rows full schema check.
     §8: view_type, source_pack_id, brand_layer, granularity_layer, content_type,
         pack_type, gate_status, default_call_pool, evidence_ids, compile_run_id,
         chunk_text_hash, embedding_model, embedding_model_version,
         embedding_dimension, index_version
     KS-VECTOR-001 §4: + source_manifest_hash (批次锚定 / batch anchoring)
+    plan §2 governance_common_fields: + view_schema_version (视图 schema 版本锚定)
     """
     lines = _load_lines()
     required = {
         "view_type", "source_pack_id", "brand_layer", "granularity_layer",
         "content_type", "pack_type", "gate_status", "default_call_pool",
         "evidence_ids", "compile_run_id", "source_manifest_hash",
+        "view_schema_version",
         "chunk_text_hash", "embedding_model", "embedding_model_version",
         "embedding_dimension", "index_version",
     }

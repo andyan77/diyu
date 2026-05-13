@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://diyu.local/schemas/qdrant_payload_schema.json",
   "title": "Qdrant Chunk Payload Schema (KS-VECTOR-002)",
-  "description": "Phase 2 serving 向量 payload 契约 / vector payload contract. 覆盖 plan §8 全 16 字段; compile_run_id + source_manifest_hash 为批次锚定硬要求 (语义见 KS-DIFY-ECS-011 §0.1 第 4 行).",
+  "description": "Phase 2 serving 向量 payload 契约 / vector payload contract. 覆盖 plan §8 全字段 + plan §2 governance_common_fields (含 view_schema_version); compile_run_id + source_manifest_hash + view_schema_version 三元锚定 (批次锚定 + 视图 schema 版本锚定, 语义见 KS-DIFY-ECS-011 §0.1 第 4 行).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -17,6 +17,7 @@
     "evidence_ids",
     "compile_run_id",
     "source_manifest_hash",
+    "view_schema_version",
     "chunk_text_hash",
     "embedding_model",
     "embedding_model_version",
@@ -87,6 +88,11 @@
       "type": "string",
       "pattern": "^[0-9a-f]{64}$",
       "description": "源 manifest sha256 / source manifest hash (批次锚定硬要求; clean_output 真源指纹)"
+    },
+    "view_schema_version": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8,64}$",
+      "description": "视图 schema 版本 / view schema version (plan §2 governance_common_fields; 跨 view schema bump 的回放与漂移定位 key, 与 compile_run_id + source_manifest_hash 共同三元锚定)"
     },
     "chunk_text_hash": {
       "type": "string",

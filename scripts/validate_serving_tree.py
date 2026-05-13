@@ -179,6 +179,10 @@ EXPECTED_FILES_W7 = {
     "tests/test_vector_offline.py",
     # KS-DIFY-ECS-004 (in_progress) · Qdrant chunks 灌库脚本（commit cf38315）
     "scripts/upload_qdrant_chunks.py",
+    # KS-RETRIEVAL-004 (done) · recipe + requirement check 召回链
+    "serving/recipe_selector.py",
+    "serving/requirement_checker.py",
+    "tests/test_recipe.py",
 }
 
 # 全部允许文件 = §11 + W0/W1 + W3 + W4 + W5 + W6 + W7 白名单 + .gitkeep 占位

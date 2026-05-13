@@ -1,7 +1,7 @@
 {
   "task_card": "KS-VECTOR-003",
   "mode": "offline",
-  "generated_at": "2026-05-13T03:52:13Z",
+  "generated_at": "2026-05-13T06:54:09Z",
   "chunks_corpus_path": "knowledge_serving/vector_payloads/qdrant_chunks.jsonl",
   "chunks_total": 498,
   "current_compile_run_id": "5b5e5fc1f6199ec6",

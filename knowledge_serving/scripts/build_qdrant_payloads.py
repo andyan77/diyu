@@ -77,7 +77,7 @@ INDEX_VERSION_PREFIX = "idx"
 #     index_version
 #   KS-VECTOR-001 §4 + KS-DIFY-ECS-011 §0.1 第 4 行追加 / additionally required:
 #     source_manifest_hash  (批次锚定 / batch anchoring — 未污染向量库纪律的硬前提)
-#   合计 16 字段 / total 16 fields.
+#   合计 17 字段 / total 17 fields (新增 view_schema_version, 对齐 plan §2 governance_common_fields).
 PAYLOAD_FIELDS = [
     "view_type",
     "source_pack_id",
@@ -90,6 +90,7 @@ PAYLOAD_FIELDS = [
     "evidence_ids",
     "compile_run_id",
     "source_manifest_hash",
+    "view_schema_version",
     "chunk_text_hash",
     "embedding_model",
     "embedding_model_version",
@@ -283,6 +284,7 @@ def build_payload(
         "evidence_ids": _load_json_list(row["evidence_ids"]),
         "compile_run_id": row["compile_run_id"],
         "source_manifest_hash": row["source_manifest_hash"],
+        "view_schema_version": row["view_schema_version"],
         "chunk_text_hash": chunk_text_hash,
         "embedding_model": embedding_model,
         "embedding_model_version": embedding_model_version,
