@@ -477,8 +477,8 @@ def main() -> int:
 
     # 写 eval csv（覆盖式，确定性 evidence）
     args.eval_csv.parent.mkdir(parents=True, exist_ok=True)
-    with args.eval_csv.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=EVAL_FIELDS)
+    with args.eval_csv.open("w", encoding="utf-8", newline="\n") as f:
+        writer = csv.DictWriter(f, fieldnames=EVAL_FIELDS, lineterminator="\n")
         writer.writeheader()
         for r in rows:
             writer.writerow({k: r.get(k, "") for k in EVAL_FIELDS})
