@@ -78,7 +78,7 @@ note: 本仓 venv 无 pytest entry，统一 `python3 -m pytest`
 ## 11. DoD
 - [x] replay 入 git（`scripts/replay_context_bundle.py` + `knowledge_serving/tests/test_replay.py`）
 - [x] pytest 全绿（10/10 PASS：happy_path + 6 类语义化 exit code + 幂等 hash + 篡改可检出 + PG-free 反向 grep）
-- [ ] 审查员 pass — 待 W11 外审入口
+- [x] 审查员 pass — runtime_verified（2026-05-13 W11 外审第二轮复跑后裁决 `completion_audit + architecture_consistency` PASS：无阻断 finding；strict S8 byte-identical 已对齐 plan §722，4 个真实 request_id 复跑全部 `replayed_bundle_hash == log_context_bundle_hash`；W11 三卡均 PASS，整波次落盘收口；PG mirror DDL 上线 + outbox 重放为非阻断 staging 部署待补证）
 
 ## 12. 实施记录 / 2026-05-13 W11
 
