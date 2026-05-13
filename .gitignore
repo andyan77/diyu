@@ -50,3 +50,10 @@ _staging/
 *.tmp
 .coverage
 htmlcov/
+
+# ============================================================
+# KS-DIFY-ECS-004 audit：dry-run / rollback 走 CI artifact，不入 git
+# canonical apply audit 仍入 git（见 task card §8）
+# ============================================================
+knowledge_serving/audit/qdrant_upload_KS-DIFY-ECS-004.dry_run.json
+knowledge_serving/audit/qdrant_upload_KS-DIFY-ECS-004.rollback.json

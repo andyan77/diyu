@@ -1,0 +1,36 @@
+{
+  "task_card": "KS-DIFY-ECS-004",
+  "run_id": "d5308c41-aa31-46c5-977f-77e563ede558",
+  "run_at": "2026-05-13T02:56:44Z",
+  "env": "staging",
+  "mode": "apply",
+  "model_policy_version": "mp_20260512_002",
+  "embedding": {
+    "model": "text-embedding-v3",
+    "model_version": "v3",
+    "dimension": 1024
+  },
+  "collection_name": "ks_chunks__mp_20260512_002",
+  "alias": "ks_chunks_current",
+  "batch_size": 256,
+  "source_chunks_path": "knowledge_serving/vector_payloads/qdrant_chunks.jsonl",
+  "source_chunks_sha256": "3267c69d916351a1aab7134618318b3c8ee46e295058441b1c4f1c788cbce310",
+  "source_chunks_rows": 498,
+  "model_policy_sha256": "426d0f68c11cdfafbccc408d31999cad0fa847c901d20aa632eda73b75fb2375",
+  "payload_schema": "qdrant_payload_schema.json",
+  "payload_schema_sha256": "75968dccd14cd546b6d0ddcf6a4639bc5f4551de03cbef7d5cd9aabe0a309026",
+  "qdrant_endpoint_label": "QDRANT_URL_STAGING",
+  "ssot_direction": "local→ECS push; never reverse-read",
+  "collection_state": "created",
+  "previous_collection": null,
+  "alias_switched_to": "ks_chunks__mp_20260512_002",
+  "upserted_count": 498,
+  "collection_count_after": 498,
+  "count_check": "pass",
+  "upsert_elapsed_seconds": 27.79,
+  "retained_collections": [
+    "ks_chunks__mp_20260512_002"
+  ],
+  "rollback_target": null,
+  "status": "pass"
+}
