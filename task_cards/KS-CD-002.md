@@ -14,7 +14,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 scripts/rollback_to_compile_run.py --to <run_id> --dry-run
-status: not_started
+status: done
 ---
 
 # KS-CD-002 · 回滚预案

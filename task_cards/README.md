@@ -145,7 +145,7 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 | **W5** | 1 | **S1-S7 compile 总闸**（compile_run_id 全链路） | KS-COMPILER-013 | ✅ **done (1/1)** |
 | **W6** | 5 | guardrail + retrieval policy + structured 召回 + 向量库初始化 + ECS 双写 | KS-POLICY-001/002, KS-RETRIEVAL-005, KS-VECTOR-001, KS-DIFY-ECS-003 | ✅ **done (5/5)** |
 | **W7** | 6 | structured 召回链 + 向量回归 + ECS Qdrant 灌库 + replay 准备 | KS-RETRIEVAL-004/006, KS-VECTOR-002/003, KS-DIFY-ECS-004/009 | ✅ **done (6/6)** |
-| **W8** | 2 | 召回合流 + 回滚预案 | KS-RETRIEVAL-007, KS-CD-002 | ⬜ not_started |
+| **W8** | 2 | 召回合流 + 回滚预案 | KS-RETRIEVAL-007, KS-CD-002 | ✅ **done (2/2)** |
 | **W9** | 1 | 召回排序/裁剪/输出 | KS-RETRIEVAL-008 | ⬜ not_started |
 | **W10** | 3 | 召回 13 步全链汇总 + ECS API 集成 + LLM 边界回归 | KS-RETRIEVAL-009, KS-DIFY-ECS-005, KS-PROD-003 | ⬜ not_started |
 | **W11** | 3 | 端到端冒烟 + Chatflow + replay | KS-DIFY-ECS-006/007/010 | ⬜ not_started |

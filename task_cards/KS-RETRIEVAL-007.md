@@ -20,7 +20,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - pytest knowledge_serving/tests/test_merge_fallback.py -v
-status: not_started
+status: done
 ---
 
 # KS-RETRIEVAL-007 · brand_overlay_retrieval + merge_context + fallback_decider
