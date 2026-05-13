@@ -84,7 +84,7 @@ note: 仓库 / 本项目 venv 未在 PATH 暴露 `pytest` 入口，必须用 `py
 ## 11. DoD
 - [x] API 入 git（`knowledge_serving/serving/api/retrieve_context.py` + `openapi.yaml` + `__init__.py`）
 - [x] pytest 全绿（15/15 PASS，含 W11 外审收口新增 3 case：missing_content_type_400 / unknown_content_type→needs_review / unknown_intent→needs_review）
-- [ ] 审查员 pass — 待 W11 外审入口（本轮 RISKY 已消化 3 项 finding，详见 §13）
+- [x] 审查员 pass — runtime_verified（2026-05-13 W11 外审复跑后裁决 CONDITIONAL_PASS：单卡未发现阻断 finding；明确允许勾审查员 pass；同时强调 W11 波次未闭，需等 KS-DIFY-ECS-010 完成后再更新波次状态）
 
 ## 12. 实施记录 / 2026-05-13 W11
 
