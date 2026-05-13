@@ -1,0 +1,173 @@
+# KS-DIFY-ECS-007 · retrieve_context HTTP API OpenAPI spec
+# 红线 / red line：本 spec **不含** brand_layer 入参；brand_layer 由 tenant_scope_resolver
+# 从 tenant_id 在后端推断，调用方不得 override。
+openapi: 3.0.3
+info:
+  title: diyu retrieve_context API
+  version: "1.0.0"
+  description: |
+    KS-DIFY-ECS-007 W11 落盘 / W11 deliverable.
+
+    把 13 步 retrieve_context 链路（KS-RETRIEVAL-001..009）包装成 HTTP 接口供 Dify Chatflow 调用。
+
+    边界 / scope:
+      - **不接受 `brand_layer` 入参（红线）**：brand_layer 由 tenant_scope_resolver 从 tenant_id 推断
+      - 不调 LLM 做最终判断；不写 clean_output；secrets 仅走 env
+      - replay / 回放一致性 → KS-DIFY-ECS-010
+
+servers:
+  - url: http://127.0.0.1:8088
+    description: local dev
+  - url: https://api.diyu.staging.internal
+    description: staging (placeholder)
+
+paths:
+  /healthz:
+    get:
+      summary: 健康检查 / liveness probe
+      operationId: healthz
+      responses:
+        "200":
+          description: 服务存活
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, service, version]
+                properties:
+                  status: { type: string, example: ok }
+                  service: { type: string, example: retrieve_context }
+                  version: { type: string, example: "1.0.0" }
+
+  /v1/retrieve_context:
+    post:
+      summary: 召回上下文 / orchestrate 13-step retrieve_context
+      operationId: retrieveContext
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RetrieveContextRequest"
+      responses:
+        "200":
+          description: 成功返回 context_bundle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetrieveContextResponse"
+        "400":
+          description: 入参语法错误（缺 tenant_id / 缺 user_query / 含 brand_layer 等被禁字段）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: tenant 未登记 / disabled / api_key mismatch
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponseWithRequestId"
+        "413":
+          description: user_query 超长（> 4000 字符）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: 内部异常（响应体携带 request_id 供运营关联）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponseWithRequestId"
+
+components:
+  schemas:
+    # 注：入参 **没有** brand_layer 字段。下面用 additionalProperties=false 防 override 漏入。
+    RetrieveContextRequest:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, user_query]
+      properties:
+        tenant_id:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: 租户 ID；brand_layer 由后端 tenant_scope_resolver 推断
+        user_query:
+          type: string
+          minLength: 1
+          maxLength: 4000
+          description: 用户自然语言查询；超长 → 413
+        content_type:
+          type: string
+          nullable: true
+          description: content_type hint（如 product_review / store_daily / founder_ip）；缺省由路由器解析
+        platform:
+          type: string
+          default: xiaohongshu
+        output_format:
+          type: string
+          default: text
+        fallback_mode:
+          type: string
+          nullable: true
+          description: fallback hint；仅作记录，最终由 fallback_decider 自决
+        intent_hint:
+          type: string
+          default: content_generation
+        business_brief:
+          type: object
+          additionalProperties: true
+          description: 业务 brief（sku / category / season / channel 等）
+
+    RetrieveContextResponse:
+      type: object
+      required: [request_id, elapsed_ms, bundle, meta]
+      properties:
+        request_id:
+          type: string
+          description: 服务端生成的 unique request id
+        elapsed_ms:
+          type: integer
+        bundle:
+          type: object
+          description: context_bundle（16 必填字段，对齐 context_bundle.schema.json）
+        meta:
+          type: object
+          required: [bundle_hash, user_query_hash, merged_overlay_payload_empty]
+          properties:
+            bundle_hash:
+              type: string
+            user_query_hash:
+              type: string
+            merged_overlay_payload_empty:
+              type: boolean
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+        detail:
+          description: 详细错误信息（可为字符串或对象）
+
+    ErrorResponseWithRequestId:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+        - type: object
+          required: [detail]
+          properties:
+            detail:
+              type: object
+              required: [request_id]
+              properties:
+                request_id:
+                  type: string
+                error:
+                  type: string
+                message:
+                  type: string
+                type:
+                  type: string
