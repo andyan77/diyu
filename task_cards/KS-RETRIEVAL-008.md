@@ -86,7 +86,7 @@ artifact: pytest report
 - [x] 模块入 git（context_bundle_builder.py / log_writer.py / test_bundle_log.py）
 - [x] pytest 全绿（22/22；含 5 个 fallback_status 全状态 round-trip）
 - [x] 回放可行（同 request_id + 同上游输入 → 同 bundle_hash；log 28 字段够重建 governance）
-- [ ] 审查员 pass（外审入口）
+- [x] 审查员 pass（2026-05-13 W9 外审 CONDITIONAL_PASS → 收口口径补齐后升 PASS：W9 波次表 not_started → done、合计 33/57 → 34/57、DoD 审查员勾选）
 
 ## 12. 实施记录 / 2026-05-13 W9
 
