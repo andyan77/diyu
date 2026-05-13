@@ -87,7 +87,7 @@ artifact: pytest report
 ## 11. DoD
 - [x] 边界测试入 git（test_llm_assist_boundary.py，22 测试用例）
 - [x] 8 类全绿（22/22 PASS；全量 242/242）
-- [ ] 审查员 pass（外审入口）
+- [x] 审查员 pass（2026-05-13 W10 外审 CONDITIONAL_PASS → PASS 升级：22/22 + 全量 242/242 + REQUIRED_FORBIDDEN 与 model_policy.yaml 同源 + 测试本身 LLM-free 反向 grep 全证；外审独立确认 8 类禁项守门齐全无遗漏）
 
 ## 12. 实施记录 / 2026-05-13 W10
 
