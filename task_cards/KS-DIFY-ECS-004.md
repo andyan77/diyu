@@ -15,7 +15,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/upload_qdrant_chunks.py --env staging --dry-run
-status: done
+status: in_progress
 ---
 
 # KS-DIFY-ECS-004 · Qdrant chunks 灌库
@@ -68,6 +68,7 @@ status: done
 - governance 全字段在 payload
 - 不调 LLM
 - alias 切换可回滚
+- **needs_review chunk 允许入库 / allowed to load**：`brand_layer=needs_review` 是租户键待决（非 gate 待决），允许入 Qdrant，由召回侧 KS-RETRIEVAL-006 `vector_retrieval.py` 通过 brand_layer hard filter 隐式排除（allowed_layers 不含 needs_review）。本卡装载侧仅负责忠实 push，不在装载阶段额外裁剪——保留可追溯，避免污染 KS-VECTOR-001 真源。裁决日期：2026-05-13。
 
 ## 8. CI 门禁
 ```
