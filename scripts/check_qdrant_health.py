@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 import time
 import urllib.error
@@ -25,7 +26,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-AUDIT = ROOT / "clean_output" / "audit" / "qdrant_health_KS-S0-004.json"
+DEFAULT_AUDIT = ROOT / "clean_output" / "audit" / "qdrant_health_KS-S0-004.json"
 
 PROBES = [
     ("/", "service banner"),
@@ -37,17 +38,56 @@ PROBES = [
 ALLOWED_ENVS = {"staging", "dev"}  # prod 禁止从这个脚本直接探，避免误触
 
 
-def probe(url: str, timeout: int = 5) -> tuple[int, str]:
-    """单次 HTTP 探活；返回 (http_code, body[:200])"""
+def probe(url: str, timeout: int = 5, full_body: bool = False) -> tuple[int, str]:
+    """单次 HTTP 探活；返回 (http_code, body)
+    full_body=False 截断到 200 字节（探活）；True 取完整（解析 version / collections）"""
     try:
         req = urllib.request.Request(url, method="GET")
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            body = resp.read(200).decode("utf-8", errors="replace")
+            raw = resp.read() if full_body else resp.read(200)
+            body = raw.decode("utf-8", errors="replace")
             return resp.status, body
     except urllib.error.HTTPError as e:
         return e.code, str(e)
     except (urllib.error.URLError, TimeoutError, OSError) as e:
         return -1, str(e)
+
+
+def extract_version(base: str) -> str | None:
+    """解析 / banner JSON 取 version / 版本号"""
+    code, body = probe(base + "/", timeout=5, full_body=True)
+    if code != 200:
+        return None
+    try:
+        data = json.loads(body)
+        return data.get("version")
+    except (ValueError, json.JSONDecodeError):
+        return None
+
+
+def extract_collections(base: str) -> list[str] | None:
+    """解析 /collections JSON 取 collection name 列表"""
+    code, body = probe(base + "/collections", timeout=5, full_body=True)
+    if code != 200:
+        return None
+    try:
+        data = json.loads(body)
+        result = data.get("result", {})
+        cols = result.get("collections", []) if isinstance(result, dict) else []
+        return [c.get("name") for c in cols if isinstance(c, dict) and c.get("name")]
+    except (ValueError, json.JSONDecodeError):
+        return None
+
+
+def git_commit() -> str | None:
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True, text=True, check=False, cwd=str(ROOT),
+        )
+        return out.stdout.strip() or None
+    except (FileNotFoundError, OSError):
+        return None
 
 
 def main() -> int:
@@ -56,7 +96,14 @@ def main() -> int:
                     help="staging / dev（禁止 prod / forbid prod）")
     ap.add_argument("--strict", action="store_true",
                     help="任一探活失败即 exit 1 / fail-closed")
+    ap.add_argument("--out", default=None,
+                    help="artifact 落盘路径（默认 clean_output/audit/qdrant_health_KS-S0-004.json）")
+    ap.add_argument("--task-card", default="KS-S0-004",
+                    help="artifact 中 task_card 字段（FIX-01 用 KS-FIX-01）")
     args = ap.parse_args()
+    audit_path = Path(args.out) if args.out else DEFAULT_AUDIT
+    if not audit_path.is_absolute():
+        audit_path = ROOT / audit_path
 
     base = os.environ.get("QDRANT_URL_STAGING", "").rstrip("/")
     if not base:
@@ -95,23 +142,58 @@ def main() -> int:
         print("❌ 部分探活失败 / some probes failed")
         overall = "unhealthy"
 
+    # 富化字段（FIX-01 §5 schema 要求）/ enrich for FIX-01 schema
+    version = extract_version(base) if all_pass else None
+    collections = extract_collections(base) if all_pass else None
+    commit = git_commit()
+
+    # FIX-01 §6 对抗性测试硬门 / FIX-01 §6 adversarial gates
+    # version 缺失 / collections 空 → fail_closed，即便所有 probe 200
+    warnings: list[str] = []
+    schema_ok = True
+    if all_pass:
+        if not version:
+            warnings.append("missing_version")
+            schema_ok = False
+        if collections is None:
+            warnings.append("collections_unreadable")
+            schema_ok = False
+        elif len(collections) == 0:
+            warnings.append("empty_collections")
+            schema_ok = False
+
+    final_pass = all_pass and schema_ok
+    if all_pass and not schema_ok:
+        print(f"❌ schema 校验失败 / schema gate failed: {','.join(warnings)}")
+        overall = "unhealthy"
+
     # 落盘 / write audit
-    AUDIT.parent.mkdir(parents=True, exist_ok=True)
+    audit_path.parent.mkdir(parents=True, exist_ok=True)
     audit = {
-        "task_card": "KS-S0-004",
+        "task_card": args.task_card,
         "env": args.env,
         "base_url": base,
+        "qdrant_url": base,
         "checked_at": time.strftime("%Y-%m-%d %H:%M:%S"),
         "overall": overall,
+        "version": version,
+        "collections": collections,
+        "evidence_level": "runtime_verified" if final_pass else "fail_closed",
+        "warnings": warnings,
+        "git_commit": commit,
         "probes": results,
-        "fallback_signal": "structured_only" if not all_pass else "none",
+        "fallback_signal": "structured_only" if not final_pass else "none",
     }
-    AUDIT.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\n落盘 / artifact: {AUDIT.relative_to(ROOT)}")
+    audit_path.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8")
+    try:
+        rel = audit_path.relative_to(ROOT)
+        print(f"\n落盘 / artifact: {rel}")
+    except ValueError:
+        print(f"\n落盘 / artifact: {audit_path}")
 
-    if args.strict and not all_pass:
+    if args.strict and not final_pass:
         return 1
-    return 0 if all_pass else 1
+    return 0 if final_pass else 1
 
 
 if __name__ == "__main__":
