@@ -1,0 +1,64 @@
+{
+  "allowed_layers": [
+    "brand_faye",
+    "domain_general"
+  ],
+  "brands_hit": [
+    "domain_general"
+  ],
+  "candidate_count": 30,
+  "collection_name": "ks_chunks_current",
+  "cross_tenant_leak": [],
+  "filter": {
+    "must": [
+      {
+        "key": "brand_layer",
+        "match": {
+          "any": [
+            "brand_faye",
+            "domain_general"
+          ]
+        }
+      },
+      {
+        "key": "gate_status",
+        "match": {
+          "value": "active"
+        }
+      },
+      {
+        "key": "granularity_layer",
+        "match": {
+          "any": [
+            "L1",
+            "L2",
+            "L3"
+          ]
+        }
+      }
+    ]
+  },
+  "gate_drift": [],
+  "gate_status_hit": [
+    "active"
+  ],
+  "generated_at": "2026-05-13T02:56:52Z",
+  "granularity_drift": [],
+  "granularity_hit": [
+    "L1"
+  ],
+  "mode": "vector",
+  "policy_snapshot": {
+    "embedding_dimension": 1024,
+    "embedding_model": "text-embedding-v3",
+    "embedding_model_version": "v3",
+    "model_policy_version": "mp_20260512_002",
+    "rerank_enabled": true,
+    "top_k_after": 8,
+    "top_k_before": 30
+  },
+  "query": "大衣搭配陈列要点",
+  "query_embedding_dim": 1024,
+  "rerank_applied": false,
+  "task_card": "KS-RETRIEVAL-006"
+}
