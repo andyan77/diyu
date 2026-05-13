@@ -162,16 +162,34 @@ def _default_embed_fn(policy: dict) -> Callable[[str], list[float]]:
 # ---------- qdrant ----------
 
 def _is_connection_error(exc: BaseException) -> bool:
-    """判定是否属于 Qdrant down 的连通性异常（→ structured-only 降级）。
+    """判定是否属于 Qdrant down 的连通性异常（→ structured-only 降级）.
 
-    认知/凭据/请求错误不算 down，必须 propagate；只有真连不上 / 服务无应答才走 fallback。
+    纪律 / discipline:
+      - 仅"真连不上 / 服务无应答 / 5xx 服务端崩"才走 fallback
+      - 凭据错（401 / 403）/ 请求错（400 / 404）/ 业务错必须 propagate，不允许被掩盖成 down
+      - qdrant-client `ResponseHandlingException` 专门包底层 transport / network 故障 → fallback
+      - `ApiException` 是 openapi-generated 基类，会覆盖任意 HTTP 状态码（含 4xx），不能整类放行；
+        改为查 status_code，仅 5xx / 无 status（网络层崩）才认为 down
     """
     if isinstance(exc, (ConnectionError, TimeoutError, OSError)):
         return True
-    # qdrant-client 把底层网络异常包成 ResponseHandlingException
     name = type(exc).__name__
-    if name in {"ResponseHandlingException", "ApiException"}:
+    if name == "ResponseHandlingException":
         return True
+    # qdrant-client UnexpectedResponse / ApiException：按 HTTP status 区分
+    # 5xx → 服务端崩 → fallback；4xx → 配置/凭据/请求错 → propagate
+    status = getattr(exc, "status_code", None)
+    if status is None:
+        # 还可能挂在 .status 上（openapi 生成代码常见命名）
+        status = getattr(exc, "status", None)
+    if name in {"UnexpectedResponse", "ApiException"}:
+        if status is None:
+            # 无 status 通常意味着 transport 层异常，归 down
+            return True
+        try:
+            return int(status) >= 500
+        except (TypeError, ValueError):
+            return False
     return False
 
 

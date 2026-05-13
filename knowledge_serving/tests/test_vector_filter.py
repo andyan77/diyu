@@ -222,6 +222,67 @@ def test_qdrant_down_returns_structured_only(policy_dim):
     assert res["_meta"]["fallback_log_marker"] == "FALLBACK_STRUCTURED_ONLY"
 
 
+class FakeHTTPErrorClient:
+    """模拟 qdrant-client 抛 ApiException / UnexpectedResponse + HTTP status。"""
+
+    def __init__(self, status_code: int, exc_name: str = "UnexpectedResponse"):
+        self.status_code = status_code
+        self.exc_name = exc_name
+
+    def search(self, **kwargs):
+        exc_cls = type(self.exc_name, (Exception,), {})
+        exc = exc_cls(f"simulated HTTP {self.status_code}")
+        exc.status_code = self.status_code
+        raise exc
+
+
+def test_qdrant_401_auth_error_propagates(policy_dim):
+    """凭据错（401）必须 propagate，不得被当成 down 掩盖。"""
+    with pytest.raises(Exception) as exc_info:
+        vr.vector_retrieve(
+            query="x",
+            allowed_layers=["brand_faye"],
+            embed_fn=_embed_factory(policy_dim),
+            qdrant_client=FakeHTTPErrorClient(401, "ApiException"),
+        )
+    assert "401" in str(exc_info.value)
+
+
+def test_qdrant_400_bad_request_propagates(policy_dim):
+    """请求错（400）必须 propagate。"""
+    with pytest.raises(Exception) as exc_info:
+        vr.vector_retrieve(
+            query="x",
+            allowed_layers=["brand_faye"],
+            embed_fn=_embed_factory(policy_dim),
+            qdrant_client=FakeHTTPErrorClient(400, "UnexpectedResponse"),
+        )
+    assert "400" in str(exc_info.value)
+
+
+def test_qdrant_404_not_found_propagates(policy_dim):
+    """404（collection 不存在）是配置错，必须 propagate。"""
+    with pytest.raises(Exception):
+        vr.vector_retrieve(
+            query="x",
+            allowed_layers=["brand_faye"],
+            embed_fn=_embed_factory(policy_dim),
+            qdrant_client=FakeHTTPErrorClient(404, "UnexpectedResponse"),
+        )
+
+
+def test_qdrant_503_server_error_falls_back(policy_dim):
+    """5xx 服务端崩 → fallback structured_only（区别于 4xx 配置错）。"""
+    res = vr.vector_retrieve(
+        query="x",
+        allowed_layers=["brand_faye"],
+        embed_fn=_embed_factory(policy_dim),
+        qdrant_client=FakeHTTPErrorClient(503, "UnexpectedResponse"),
+    )
+    assert res["mode"] == "structured_only"
+    assert res["_meta"]["fallback_reason"].startswith("qdrant_search_failed")
+
+
 def test_qdrant_down_does_not_5xx(policy_dim):
     """卡 §10 阻断项：Qdrant down 时不得抛 5xx（即不得抛连通性异常）。"""
     # 直接调用，不应抛 ConnectionError / TimeoutError
