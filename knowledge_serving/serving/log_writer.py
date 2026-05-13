@@ -67,6 +67,13 @@ LOG_FIELDS = [
     "llm_assist_model",
     "model_policy_version",
     "created_at",
+    # KS-DIFY-ECS-010 W11 外审收口 / strict S8 byte-identical replay 扩字段：
+    # 之前 log 只冗余 retrieved_*_ids，replay 无法重建完整 bundle 来对比 bundle_hash。
+    # 落盘完整 bundle 的 canonical JSON 是最稳的方案：
+    # - vector 候选混入的 evidence 行不会因为 Qdrant 时间漂移而无法重建
+    # - business_brief / recipe / generation_constraints / brand_overlays 全部 bundle 内字段都保留
+    # - replay 端 cbb.compute_bundle_hash(parsed) 必须严格等于 context_bundle_hash
+    "context_bundle_json",
 ]
 
 
@@ -130,6 +137,27 @@ def _serialize_id_list(values: Iterable[Any] | None) -> str:
     return json.dumps(vals, ensure_ascii=False, separators=(",", ":"))
 
 
+def _serialize_json_blob(value: Any, *, expected: str) -> str:
+    """dict / list / 字符串列表 → canonical JSON 编码（KS-DIFY-ECS-010 W11 strict S8 扩字段）。
+
+    与 cbb.compute_bundle_hash 用同一 separators 保证 replay 重建后 hash 严格一致。
+    expected ∈ {"object", "array"} 用于守门：传错类型立刻 raise，避免 schema 漂移。
+    """
+    if expected == "object":
+        if value is None:
+            value = {}
+        if not isinstance(value, dict):
+            raise LogWriteError(f"expected object/dict, got {type(value).__name__}")
+    elif expected == "array":
+        if value is None:
+            value = []
+        if not isinstance(value, list):
+            raise LogWriteError(f"expected array/list, got {type(value).__name__}")
+    else:
+        raise LogWriteError(f"_serialize_json_blob expected ∈ object|array, got {expected!r}")
+    return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+
+
 def _now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -191,6 +219,10 @@ def _build_row(
         "llm_assist_model": _resolve_model_field(model_policy, "llm_assist", "model"),
         "model_policy_version": str(model_policy.get("model_policy_version") or "disabled"),
         "created_at": created_at or _now_iso(),
+        # KS-DIFY-ECS-010 W11 strict S8 扩字段：完整 bundle canonical JSON 落盘，
+        # 用同一 separators / sort_keys 与 cbb.compute_bundle_hash 对齐，保证
+        # 反序列化后 hash 严格等于 context_bundle_hash
+        "context_bundle_json": _serialize_json_blob(bundle, expected="object"),
     }
 
     # 字段完整性硬门：任一字段空字符串 → raise（强制 "disabled" 显式）。

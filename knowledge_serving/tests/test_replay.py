@@ -200,6 +200,81 @@ def test_consistency_hash_changes_on_log_tamper(sample_log_row, tmp_log, tmp_vie
     assert tampered["replay_consistency_hash"] != baseline["replay_consistency_hash"]
 
 
+def test_byte_identical_bundle_hash_check_passes(sample_log_row):
+    """W11 外审收口 strict S8：replay 必须严格复算 bundle_hash 等于 log.context_bundle_hash。"""
+    result = rcb.replay(sample_log_row["request_id"])
+    assert result["byte_identical_replay"] is True
+    assert result["replayed_bundle_hash"] == result["log_context_bundle_hash"]
+    assert "byte_identical_bundle_hash" in result["checks_passed"]
+
+
+def test_tampered_bundle_json_raises_8(sample_log_row, tmp_log, tmp_views):
+    """篡改 context_bundle_json（如改 bundle 内 fallback_status）→ bundle_hash 重算
+    必与 log 不一致 → exit 8。"""
+    import json as _json
+    rows = list(csv.DictReader(tmp_log.open("r", encoding="utf-8", newline="")))
+    fieldnames = list(rows[0].keys())
+    target = next(r for r in rows if r["request_id"] == sample_log_row["request_id"])
+    bundle = _json.loads(target["context_bundle_json"])
+    # 改 bundle 内一个字段（保持 schema 合法 / 但 hash 必变）
+    bundle["fallback_status"] = "brand_full_applied"  # 与 log.fallback_status 不一致也会触发
+    target["context_bundle_json"] = _json.dumps(bundle, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    with tmp_log.open("w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        w.writeheader()
+        w.writerows(rows)
+    with pytest.raises(rcb.ReplayError) as exc_info:
+        rcb.replay(sample_log_row["request_id"], log_path=tmp_log, views_root=tmp_views)
+    assert exc_info.value.code == 8
+
+
+def test_tampered_context_bundle_hash_raises_8(sample_log_row, tmp_log, tmp_views):
+    """篡改 log 行的 context_bundle_hash 而不改 bundle JSON → replay 复算与 log 不一致 → exit 8。"""
+    rows = list(csv.DictReader(tmp_log.open("r", encoding="utf-8", newline="")))
+    fieldnames = list(rows[0].keys())
+    target = next(r for r in rows if r["request_id"] == sample_log_row["request_id"])
+    target["context_bundle_hash"] = "sha256:" + "0" * 64
+    with tmp_log.open("w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        w.writeheader()
+        w.writerows(rows)
+    with pytest.raises(rcb.ReplayError) as exc_info:
+        rcb.replay(sample_log_row["request_id"], log_path=tmp_log, views_root=tmp_views)
+    assert exc_info.value.code == 8
+
+
+def test_missing_context_bundle_json_raises_8(sample_log_row, tmp_log, tmp_views):
+    """log 行 context_bundle_json 为空 / 缺失（旧格式）→ replay exit 8（不可严格回放）。"""
+    rows = list(csv.DictReader(tmp_log.open("r", encoding="utf-8", newline="")))
+    fieldnames = list(rows[0].keys())
+    target = next(r for r in rows if r["request_id"] == sample_log_row["request_id"])
+    target["context_bundle_json"] = ""
+    with tmp_log.open("w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        w.writeheader()
+        w.writerows(rows)
+    with pytest.raises(rcb.ReplayError) as exc_info:
+        rcb.replay(sample_log_row["request_id"], log_path=tmp_log, views_root=tmp_views)
+    assert exc_info.value.code == 8
+
+
+def test_cli_audit_outside_repo_does_not_crash(tmp_path, sample_log_row):
+    """W11 外审 finding #4：--audit /tmp/... 时 main 不能因 relative_to 抛异常。"""
+    import subprocess
+    audit_dst = tmp_path / "replay_external.json"
+    proc = subprocess.run(
+        [
+            "python3", str(REPO_ROOT / "scripts" / "replay_context_bundle.py"),
+            "--request-id", sample_log_row["request_id"],
+            "--audit", str(audit_dst),
+        ],
+        capture_output=True, text=True, timeout=30,
+    )
+    assert proc.returncode == 0, f"stderr={proc.stderr}\nstdout={proc.stdout[-500:]}"
+    assert audit_dst.exists()
+    assert "audit → " in proc.stdout
+
+
 def test_replay_module_is_pg_free():
     """KS-DIFY-ECS-005 §10 S8 回放硬约束：回放代码路径只读 CSV，不接 PG/Qdrant。
 

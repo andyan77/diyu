@@ -26,7 +26,9 @@ REQUIRED_HEADER = (
     "retrieved_evidence_ids,fallback_status,missing_fields,blocked_reason,"
     "context_bundle_hash,final_output_hash,compile_run_id,source_manifest_hash,"
     "view_schema_version,embedding_model,embedding_model_version,rerank_model,"
-    "rerank_model_version,llm_assist_model,model_policy_version,created_at"
+    "rerank_model_version,llm_assist_model,model_policy_version,created_at,"
+    # KS-DIFY-ECS-010 W11 外审收口扩字段（strict S8 byte-identical replay）
+    "context_bundle_json"
 )
 
 
@@ -100,7 +102,9 @@ def test_canonical_with_data_row_passes(tmp_path):
         REQUIRED_HEADER
         + "\nreq1,t1,brand_faye,\"[\"\"brand_faye\"\"]\",sha256:h,intent,product_review,RCP_1,"
           "\"[]\",\"[]\",\"[]\",\"[]\",\"[]\",brand_full_applied,\"[]\",none,sha256:b,disabled,"
-          "cr1,sha256:m1,v1,model-x,v3,disabled,disabled,disabled,mp_1,2026-01-01T00:00:00Z\n",
+          "cr1,sha256:m1,v1,model-x,v3,disabled,disabled,disabled,mp_1,2026-01-01T00:00:00Z,"
+          # KS-DIFY-ECS-010 strict S8 扩字段：context_bundle_json 完整 bundle canonical JSON
+          "{}\n",
         encoding="utf-8",
     )
     r = _run_lint(root)

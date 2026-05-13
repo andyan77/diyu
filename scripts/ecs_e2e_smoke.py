@@ -687,7 +687,7 @@ def main() -> int:
             "outbox": outbox_detail,
         },
         "gates": {
-            "csv_log_complete_28_fields": gate_csv_complete,
+            "csv_log_complete_all_fields": gate_csv_complete,
             "s9_cross_tenant_zero_leak": gate_cross_tenant,
             "no_silent_pass": gate_no_silent_pass,
             "three_samples_ran": gate_three_samples_ran,

@@ -21,7 +21,7 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 CANONICAL_REL="knowledge_serving/control/context_bundle_log.csv"
 CANONICAL_ABS="${ROOT}/${CANONICAL_REL}"
 
-REQUIRED_HEADER='request_id,tenant_id,resolved_brand_layer,allowed_layers,user_query_hash,classified_intent,content_type,selected_recipe_id,retrieved_pack_ids,retrieved_play_card_ids,retrieved_asset_ids,retrieved_overlay_ids,retrieved_evidence_ids,fallback_status,missing_fields,blocked_reason,context_bundle_hash,final_output_hash,compile_run_id,source_manifest_hash,view_schema_version,embedding_model,embedding_model_version,rerank_model,rerank_model_version,llm_assist_model,model_policy_version,created_at'
+REQUIRED_HEADER='request_id,tenant_id,resolved_brand_layer,allowed_layers,user_query_hash,classified_intent,content_type,selected_recipe_id,retrieved_pack_ids,retrieved_play_card_ids,retrieved_asset_ids,retrieved_overlay_ids,retrieved_evidence_ids,fallback_status,missing_fields,blocked_reason,context_bundle_hash,final_output_hash,compile_run_id,source_manifest_hash,view_schema_version,embedding_model,embedding_model_version,rerank_model,rerank_model_version,llm_assist_model,model_policy_version,created_at,context_bundle_json'
 
 errors=0
 
@@ -57,7 +57,7 @@ fi
 if [[ "${errors}" -eq 0 ]]; then
     echo "[OK] context_bundle_log 单 canonical 守门通过"
     echo "     path: ${CANONICAL_REL}"
-    echo "     header 字段数: 28"
+    echo "     header 字段数: 29"
     exit 0
 fi
 echo "[FAIL] context_bundle_log 守门 ${errors} 项失败" >&2

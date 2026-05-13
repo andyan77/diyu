@@ -156,3 +156,52 @@ KS-RETRIEVAL-008 + KS-DIFY-ECS-005 §10 决定）。
   consistency-level S8
 - ECS staging / prod 历史 PG mirror 行的回放：本卡 CSV-only，PG mirror 由 KS-DIFY-ECS-005
   reconcile 保证 CSV 与 PG 一致即可；不在本卡范围
+
+## 13. W11 外审收口 / 2026-05-13（第二轮 RISKY → PASS 候选）
+
+第二轮审查员裁决 RISKY 4 项 finding，全部消化：
+
+| Finding | 等级 | E8 决策 | 修法 | 证据 |
+|---|---|---|---|---|
+| #1 S8 回放口径低于 plan §722 真源 | HIGH | 用户裁决方案 A：本会话扩 log schema + replay byte-identical | 加 `context_bundle_log.context_bundle_json` 字段（schema + log_writer + lint header 28→29）；log_writer `_serialize_json_blob` 用 cbb 同款 canonical separators 序列化；replay 加 7th 检查 `byte_identical_bundle_hash`：解析 JSON → `cbb.validate_bundle` → `cbb.compute_bundle_hash` → 严格等于 `log.context_bundle_hash` | 实测：smoke 落盘 4 行新格式 CSV；`python3 scripts/replay_context_bundle.py --request-id ks-dify-ecs-006-sample_product_review-20260513T145528Z` exit 0，`byte_identical_replay=true`，`replayed_bundle_hash == log_context_bundle_hash`；6 项 checks_passed |
+| #2 PG mirror 仍 outbox pending | MEDIUM | 待补证：阻塞在 ECS staging `knowledge.context_bundle_log` DDL 上线 | 不在本会话可行域；已在 §12 边界遗留登记；KS-DIFY-ECS-005 reconcile CLI 已就绪，建表后即可 `--apply` 重放 | smoke audit `pg_mirror.status=degraded_outbox_pending` 显式标记；outbox jsonl 累计 4 条 pending_pg_sync |
+| #3 W11 README 状态漂移 | MEDIUM | 改 data：dag.csv 三卡 done 是事实，README 总册应同步 | `task_cards/README.md` W11 行更新为 `done (3/3)`；合计 50/57 → 53/57 (92.9%) | `python3 task_cards/validate_task_cards.py` PASS：57 cards / DAG closed |
+| #4 replay CLI `--audit /tmp/...` 假失败 | LOW | 改 data：`Path.relative_to(REPO_ROOT)` 在 repo 外路径抛 ValueError，回退打印绝对路径 | `try: audit_path.relative_to(REPO_ROOT); except ValueError: audit_display = audit_path` | 新增测试 `test_cli_audit_outside_repo_does_not_crash` PASS；实测 `--audit /tmp/replay_test.json` exit 0，stdout 显示绝对路径 |
+
+### log schema 升级影响（本卡范围内一并完成）
+
+- **schema** (`control_tables.schema.json` §context_bundle_log)：required 28→29，新增 `context_bundle_json` 必填 object
+- **log_writer** (`knowledge_serving/serving/log_writer.py`)：`LOG_FIELDS` 28→29，`_serialize_json_blob` 用 sort_keys + compact separators 与 `cbb.compute_bundle_hash` 严格对齐；`_build_row` 从 bundle dict 直接抽取
+- **lint** (`knowledge_serving/scripts/lint_no_duplicate_log.sh`)：`REQUIRED_HEADER` 同步；header 字段数文案 28→29；test header 同步
+- **smoke** (`scripts/ecs_e2e_smoke.py`)：gate 名 `csv_log_complete_28_fields` → `csv_log_complete_all_fields`，避免数字硬编码
+- **存量 CSV**：W11 第一轮收口的 4 行旧格式（28 col）已清空；smoke 第二轮重跑落 4 行新格式（29 col）；outbox 同步重建
+
+### 新增测试矩阵（15 case，全 PASS）
+
+旧 10 case 保留 + 新增 5 case：
+- `test_byte_identical_bundle_hash_check_passes`：strict S8 happy path
+- `test_tampered_bundle_json_raises_8`：篡改 bundle JSON 内容 → hash 重算不一致
+- `test_tampered_context_bundle_hash_raises_8`：篡改 hash 字段但 JSON 不动 → 同样不一致
+- `test_missing_context_bundle_json_raises_8`：旧格式行无 bundle JSON → 显式 exit 8
+- `test_cli_audit_outside_repo_does_not_crash`：Finding #4 回归
+
+### 7 类 exit code（原 6 类 + 新增 8）
+
+| exit | 含义 | 测试 |
+|---|---|---|
+| 8 | byte-identical bundle_hash 复算与 log 不一致 / bundle JSON 缺失或非法 | ✅ 3 case |
+
+### 回归证据 / 2026-05-13 W11 第二轮收口
+
+- `python3 -m pytest knowledge_serving/tests/test_replay.py -v` → 15 passed
+- `python3 -m pytest knowledge_serving/tests/ knowledge_serving/scripts/tests/ -q` → 498 passed（升级前 493 + 5）
+- `python3 knowledge_serving/scripts/validate_serving_governance.py --all` → S1-S7 全绿（preflight 含新字段）
+- `bash knowledge_serving/scripts/lint_no_duplicate_log.sh` → exit 0，header 29 字段
+- `python3 task_cards/validate_task_cards.py` → 57 cards / DAG closed
+- 端到端：smoke 落 4 行新格式 → replay 4 行全部 byte-identical hash 匹配
+
+### 与 plan §722 真源对齐 / spec alignment
+
+| Plan 真源 | 本卡实现 |
+|---|---|
+| S8 context_bundle_replay：任意 request_id 可复现当时喂给 LLM 的上下文 | ✅ log.context_bundle_json 存完整 canonical bundle；replay parse + `cbb.compute_bundle_hash` 严格复算；任何字段篡改 → bundle_hash 变 → exit 8 |

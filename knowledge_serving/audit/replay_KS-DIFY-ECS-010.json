@@ -3,23 +3,26 @@
     "brand_faye",
     "domain_general"
   ],
+  "byte_identical_replay": true,
   "checks_passed": [
     "log_row_found",
     "field_enums",
     "governance_consistency",
     "tenant_brand_consistency",
-    "retrieved_ids_resolve"
+    "retrieved_ids_resolve",
+    "byte_identical_bundle_hash"
   ],
-  "finished_at": "2026-05-13T14:17:56Z",
+  "finished_at": "2026-05-13T14:56:09Z",
   "governance": {
     "compile_run_id": "5b5e5fc1f6199ec6",
     "source_manifest_hash": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2",
     "view_schema_version": "3c0863a75967"
   },
-  "log_context_bundle_hash": "sha256:24e5cc24300f5b72feafbe0b521d41b12298083eee18fc67012d8161400bf08f",
+  "log_context_bundle_hash": "sha256:75113be00092858c52a8f8699d29dfe956c3896db7d131cf1431e0e535997c73",
   "log_path": "/home/faye/diyu/knowledge_serving/control/context_bundle_log.csv",
-  "replay_consistency_hash": "sha256:a77148a6f834521f3dadce835aeb4cc186176109dbc0e4e649acc2e512eab5dd",
-  "request_id": "ks-dify-ecs-006-sample_product_review-20260513T130821Z",
+  "replay_consistency_hash": "sha256:25eb5c504aa6700f1f2b77ad76802825373857f1fb6f6c59cd5d8963f4df1240",
+  "replayed_bundle_hash": "sha256:75113be00092858c52a8f8699d29dfe956c3896db7d131cf1431e0e535997c73",
+  "request_id": "ks-dify-ecs-006-sample_product_review-20260513T145528Z",
   "resolved_brand_layer": "brand_faye",
   "resolved_counts": {
     "brand_overlay_view": 4,
@@ -28,7 +31,7 @@
     "play_card_view": 5,
     "runtime_asset_view": 5
   },
-  "started_at": "2026-05-13T14:17:56Z",
+  "started_at": "2026-05-13T14:56:09Z",
   "status": "ok",
   "task_id": "KS-DIFY-ECS-010",
   "tenant_id": "tenant_faye_main",

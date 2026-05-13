@@ -25,14 +25,20 @@ S gate / gate: S8（任意 request_id 可重建当时喂给 LLM 的 context_bund
   也会失败）
 
 退出码 / exit codes:
-  0  replay 成功，所有 6 项一致性检查通过
+  0  replay 成功，所有 7 项一致性检查 + byte-identical bundle_hash 复算通过
   2  request_id 未命中（log 行不存在）
   3  governance 三件套与当前 views 不一致（compile_run_id 漂移 / 历史数据已删）
   4  log 的某 retrieved_*_id 在 view 中查不到（篡改 / 数据已删）
   5  resolved view 行 compile_run_id 与 log 不同（跨 run 混用）
   6  租户 / brand_layer / S9 隔离破裂
   7  字段语义非法（fallback_status / content_type / brand_layer 等枚举越界）
+  8  byte-identical bundle_hash 复算与 log.context_bundle_hash 不一致（篡改 bundle 或 hash）
   9  入参 / 环境异常
+
+W11 外审收口 / KS-DIFY-ECS-010 strict S8 升级 (2026-05-13):
+- log_writer 新增 `context_bundle_json` 字段，存完整 bundle canonical JSON
+- replay 用 `cbb.compute_bundle_hash(parsed_bundle)` 严格复算 sha256；
+  与 log.context_bundle_hash 不一致 → exit 8（plan §722 真源对齐）
 """
 from __future__ import annotations
 
@@ -51,6 +57,7 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from knowledge_serving.serving import tenant_scope_resolver as tsr  # noqa: E402
 from knowledge_serving.serving import log_writer as lw  # noqa: E402
+from knowledge_serving.serving import context_bundle_builder as cbb  # noqa: E402
 
 DEFAULT_VIEWS_ROOT = REPO_ROOT / "knowledge_serving" / "views"
 DEFAULT_AUDIT_PATH = (
@@ -371,11 +378,63 @@ def replay(
     # 6) 一致性 hash（输出锚定 / 篡改可比对）
     consistency_hash = _compute_consistency_hash(log_row, resolved)
 
+    # 7) ★ strict S8 byte-identical：重建 bundle + 复算 bundle_hash + 严格对比
+    bundle_json_raw = log_row.get("context_bundle_json")
+    if not bundle_json_raw:
+        raise ReplayError(
+            8,
+            "log 缺 context_bundle_json 字段（W11 外审收口前的旧格式 log 行不可严格回放）",
+            details={"request_id": request_id},
+        )
+    try:
+        parsed_bundle = json.loads(bundle_json_raw)
+    except (json.JSONDecodeError, ValueError) as e:
+        raise ReplayError(
+            8, f"context_bundle_json 不是合法 JSON：{e}",
+            details={"request_id": request_id},
+        )
+    # 解析后直接走 cbb 的 schema + 业务硬约束校验，防 bundle 被 hex-edit
+    try:
+        cbb.validate_bundle(parsed_bundle)
+    except cbb.BundleValidationError as e:
+        raise ReplayError(
+            8, f"重建的 bundle 不符合 schema：{e}",
+            details={"request_id": request_id},
+        )
+    replayed_bundle_hash = cbb.compute_bundle_hash(parsed_bundle)
+    log_bundle_hash = log_row["context_bundle_hash"]
+    if replayed_bundle_hash != log_bundle_hash:
+        raise ReplayError(
+            8,
+            f"bundle_hash 复算与 log 不一致 / byte-identical replay mismatch: "
+            f"replayed={replayed_bundle_hash} log={log_bundle_hash}",
+            details={
+                "request_id": request_id,
+                "replayed_bundle_hash": replayed_bundle_hash,
+                "log_bundle_hash": log_bundle_hash,
+            },
+        )
+    # 还要拦：parsed bundle 的 request_id / tenant_id 与 log 行字段一致，
+    # 防止有人换 bundle JSON 但不动 hash（hash 还是会变，但多守一层）
+    for field in ("request_id", "tenant_id", "resolved_brand_layer", "content_type", "fallback_status"):
+        if parsed_bundle.get(field) != log_row.get(field):
+            raise ReplayError(
+                8,
+                f"bundle.{field} 与 log 行 {field} 不一致 / cross-field tamper detected",
+                details={
+                    "field": field,
+                    "bundle": parsed_bundle.get(field),
+                    "log": log_row.get(field),
+                },
+            )
+
     return {
         "request_id": request_id,
         "status": "ok",
         "replay_consistency_hash": consistency_hash,
-        "log_context_bundle_hash": log_row["context_bundle_hash"],
+        "replayed_bundle_hash": replayed_bundle_hash,
+        "log_context_bundle_hash": log_bundle_hash,
+        "byte_identical_replay": True,
         "governance": views_gov,
         "tenant_id": log_row["tenant_id"],
         "resolved_brand_layer": log_row["resolved_brand_layer"],
@@ -387,6 +446,7 @@ def replay(
             "governance_consistency",
             "tenant_brand_consistency",
             "retrieved_ids_resolve",
+            "byte_identical_bundle_hash",
         ],
         "log_path": str(log_path),
         "views_root": str(views_root),
@@ -454,7 +514,12 @@ def main() -> int:
          if k not in ("error_details", "log_path", "views_root")},
         indent=2, ensure_ascii=False,
     ))
-    print(f"audit → {audit_path.relative_to(REPO_ROOT)}")
+    # 仓库外路径（--audit /tmp/...）relative_to() 会 raise；回退打印绝对路径
+    try:
+        audit_display = audit_path.relative_to(REPO_ROOT)
+    except ValueError:
+        audit_display = audit_path
+    print(f"audit → {audit_display}")
     return exit_code
 
 

@@ -1,13 +1,13 @@
 {
   "case_exceptions": [],
   "csv_log": {
-    "expected_field_count": 28,
+    "expected_field_count": 29,
     "field_issues": [],
     "found": [
-      "ks-dify-ecs-006-sample_product_review-20260513T131746Z",
-      "ks-dify-ecs-006-sample_store_daily-20260513T131746Z",
-      "ks-dify-ecs-006-sample_founder_ip-20260513T131746Z",
-      "ks-dify-ecs-006-s9_cross_tenant_control-20260513T131746Z"
+      "ks-dify-ecs-006-sample_product_review-20260513T145528Z",
+      "ks-dify-ecs-006-sample_store_daily-20260513T145528Z",
+      "ks-dify-ecs-006-sample_founder_ip-20260513T145528Z",
+      "ks-dify-ecs-006-s9_cross_tenant_control-20260513T145528Z"
     ],
     "missing": []
   },
@@ -33,9 +33,9 @@
     "QDRANT_API_KEY",
     "QDRANT_URL_STAGING"
   ],
-  "elapsed_seconds": 24.607,
+  "elapsed_seconds": 24.765,
   "env": "staging",
-  "finished_at": "2026-05-13T13:18:09Z",
+  "finished_at": "2026-05-13T14:55:51Z",
   "gates": {
     "csv_log_complete_28_fields": true,
     "no_silent_pass": true,
@@ -71,16 +71,16 @@
     "outbox": {
       "outbox_path": "/home/faye/diyu/knowledge_serving/control/context_bundle_log_outbox.jsonl",
       "pending_pg_sync": [
-        "ks-dify-ecs-006-sample_product_review-20260513T131746Z",
-        "ks-dify-ecs-006-sample_store_daily-20260513T131746Z",
-        "ks-dify-ecs-006-sample_founder_ip-20260513T131746Z",
-        "ks-dify-ecs-006-s9_cross_tenant_control-20260513T131746Z"
+        "ks-dify-ecs-006-sample_product_review-20260513T145528Z",
+        "ks-dify-ecs-006-sample_store_daily-20260513T145528Z",
+        "ks-dify-ecs-006-sample_founder_ip-20260513T145528Z",
+        "ks-dify-ecs-006-s9_cross_tenant_control-20260513T145528Z"
       ],
       "replayed": []
     },
     "status": "degraded_outbox_pending"
   },
-  "run_token": "20260513T131746Z",
+  "run_token": "20260513T145528Z",
   "samples": [
     {
       "actual_fallback_status": "blocked_missing_business_brief",
@@ -90,24 +90,22 @@
       ],
       "case_id": "sample_product_review",
       "content_type": "product_review",
-      "context_bundle_hash": "sha256:f6751b21405e2f3d844ec73d0b0954a1656447eb68558f734ee480dc158d1485",
+      "context_bundle_hash": "sha256:75113be00092858c52a8f8699d29dfe956c3896db7d131cf1431e0e535997c73",
       "cross_tenant_leak_count": 0,
       "cross_tenant_leak_layers": [],
       "expected_fallback_status": "blocked_missing_business_brief",
       "fallback_match": true,
       "log_empty_fields": [],
-      "log_row_field_count": 28,
-      "notes": [
-        "vector_live_failed: ConnectionError: HTTPSConnectionPool(host='dashscope.aliyuncs.com', port=443): Max retries exceeded with url: /api/v1/services/embeddings/text-embedding/text-embedding (Caused by NameResolutionError(\"HTTPSConnection(host='dashscope.aliyuncs.com', port=443): Failed to resolve 'dashscope.aliyuncs.com' ([Errno -3] Temporary failure in name resolution)\"))"
-      ],
+      "log_row_field_count": 29,
+      "notes": [],
       "recipe_id": "RECIPE-product_review-text-xiaohongshu-a326868327",
-      "request_id": "ks-dify-ecs-006-sample_product_review-20260513T131746Z",
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260513T145528Z",
       "resolved_brand_layer": "brand_faye",
       "tenant_id": "tenant_faye_main",
       "user_query_hash": "sha256:f9853b88b3663a78a7b7b05a7d570e66294ea3cfd6d73956cd184b177bf3c4f8",
       "vector_brand_leak": 0,
-      "vector_candidates_total": 0,
-      "vector_mode": "structured_only_vector_error"
+      "vector_candidates_total": 2,
+      "vector_mode": "vector"
     },
     {
       "actual_fallback_status": "brand_partial_fallback",
@@ -117,16 +115,16 @@
       ],
       "case_id": "sample_store_daily",
       "content_type": "store_daily",
-      "context_bundle_hash": "sha256:7ab31f9e9ce3a0a12261da45db4dcd04c29e487346df8f5b26cacc6bdb1a03b8",
+      "context_bundle_hash": "sha256:40674651c74a540e131b4929465b013916b94aa4b80102195ff63959e57f7ed1",
       "cross_tenant_leak_count": 0,
       "cross_tenant_leak_layers": [],
       "expected_fallback_status": "brand_partial_fallback",
       "fallback_match": true,
       "log_empty_fields": [],
-      "log_row_field_count": 28,
+      "log_row_field_count": 29,
       "notes": [],
       "recipe_id": "RECIPE-store_daily-text-xiaohongshu-8f0a08b38f",
-      "request_id": "ks-dify-ecs-006-sample_store_daily-20260513T131746Z",
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260513T145528Z",
       "resolved_brand_layer": "brand_faye",
       "tenant_id": "tenant_faye_main",
       "user_query_hash": "sha256:2afba0b517f645b700e0701c0f0f9858b767f7989b46e98c6748faa31b0933c4",
@@ -142,22 +140,24 @@
       ],
       "case_id": "sample_founder_ip",
       "content_type": "founder_ip",
-      "context_bundle_hash": "sha256:592850d9dcce1f1a90fa203cf6183ef566e6d020c6c36da55b6ae9a53d613b08",
+      "context_bundle_hash": "sha256:982448f71d4c4173eec8b1131db83f3b6295530fa35873e5e84f2e84898d5371",
       "cross_tenant_leak_count": 0,
       "cross_tenant_leak_layers": [],
       "expected_fallback_status": "blocked_missing_required_brand_fields",
       "fallback_match": true,
       "log_empty_fields": [],
-      "log_row_field_count": 28,
-      "notes": [],
+      "log_row_field_count": 29,
+      "notes": [
+        "vector_live_failed: ConnectionError: HTTPSConnectionPool(host='dashscope.aliyuncs.com', port=443): Max retries exceeded with url: /api/v1/services/embeddings/text-embedding/text-embedding (Caused by NameResolutionError(\"HTTPSConnection(host='dashscope.aliyuncs.com', port=443): Failed to resolve 'dashscope.aliyuncs.com' ([Errno -3] Temporary failure in name resolution)\"))"
+      ],
       "recipe_id": "RECIPE-founder_ip-text-xiaohongshu-24d0adb574",
-      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260513T131746Z",
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260513T145528Z",
       "resolved_brand_layer": "brand_faye",
       "tenant_id": "tenant_faye_main",
       "user_query_hash": "sha256:319134bcaa72354b6023ba6c14d9a20e07b093b65279a2b186fd966fe6a0ca28",
       "vector_brand_leak": 0,
-      "vector_candidates_total": 2,
-      "vector_mode": "vector"
+      "vector_candidates_total": 0,
+      "vector_mode": "structured_only_vector_error"
     },
     {
       "actual_fallback_status": "domain_only",
@@ -166,16 +166,16 @@
       ],
       "case_id": "s9_cross_tenant_control",
       "content_type": "product_review",
-      "context_bundle_hash": "sha256:0e1b48db281ff3eadb9faa28f46dc51038f2fc7b00e23a0069255f2bd1a1a426",
+      "context_bundle_hash": "sha256:ed9145ecdbbebfc7c2420547d91eb3f07c1eef25e6df07d9b8b85ff67d6edbfe",
       "cross_tenant_leak_count": 0,
       "cross_tenant_leak_layers": [],
       "expected_fallback_status": "domain_only",
       "fallback_match": true,
       "log_empty_fields": [],
-      "log_row_field_count": 28,
+      "log_row_field_count": 29,
       "notes": [],
       "recipe_id": "RECIPE-product_review-text-xiaohongshu-a326868327",
-      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260513T131746Z",
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260513T145528Z",
       "resolved_brand_layer": "domain_general",
       "tenant_id": "tenant_demo",
       "user_query_hash": "sha256:9c2e0c11be55603c0ddcc130a4b782d3cf92ca68e15b8cb92bc14741476eecbf",
@@ -185,7 +185,7 @@
     }
   ],
   "smoke_result": "pass",
-  "started_at": "2026-05-13T13:17:44Z",
+  "started_at": "2026-05-13T14:55:26Z",
   "task_id": "KS-DIFY-ECS-006",
   "vector_evidence": {
     "live_hit": true,
