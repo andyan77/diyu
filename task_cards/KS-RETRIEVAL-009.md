@@ -16,7 +16,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/run_context_retrieval_demo.py --all
-status: not_started
+status: done
 ---
 
 # KS-RETRIEVAL-009 · 端到端召回 demo（product_review / store_daily / founder_ip）
@@ -80,7 +80,39 @@ artifact: retrieval_eval_sample.csv, run_context_retrieval_demo.log
 > 阻断项：任一 demo 静默 pass；跨租户串味。
 
 ## 11. DoD
-- [ ] demo 入 git
-- [ ] CI pass
-- [ ] retrieval_eval_sample.csv 落盘
-- [ ] 审查员 pass
+- [x] demo 入 git（`run_context_retrieval_demo.py`）
+- [x] CI pass（`python3 knowledge_serving/scripts/run_context_retrieval_demo.py --all` exit=0；4/4 case PASS）
+- [x] retrieval_eval_sample.csv 落盘（5 行：1 header + 4 case；canonical 入 git）
+- [ ] 审查员 pass（外审入口）
+
+## 12. 实施记录 / 2026-05-13 W10
+
+### case 命中矩阵 / case → fallback_status
+
+| case | tenant | content_type | expected | actual | leak | status |
+|---|---|---|---|---|---|---|
+| case_1_product_review_blocked_brief | tenant_faye_main | product_review | blocked_missing_business_brief | blocked_missing_business_brief | 0 | ✅ |
+| case_2_store_daily_partial_fallback | tenant_faye_main | store_daily | brand_partial_fallback | brand_partial_fallback | 0 | ✅ |
+| case_3_founder_ip_blocked_hard | tenant_faye_main | founder_ip | blocked_missing_required_brand_fields | blocked_missing_required_brand_fields | 0 | ✅ |
+| case_S9_cross_tenant_isolation | tenant_demo (allowed=[domain_general]) | product_review | domain_only | domain_only | 0 | ✅ |
+
+### 设计要点
+
+- **13 步全链路串接**：tenant_scope_resolver → intent_classifier → content_type_router → business_brief_checker → recipe_selector → requirement_checker → structured_retrieval → vector_retrieval → brand_overlay_retrieve → merge_context → fallback_decider → build_context_bundle → write_context_bundle_log
+- **offline 模式默认**：vector_retrieve 不调（vector_mode=`structured_only_offline`）；这是卡 §6 "Qdrant down → structured-only fallback" 的覆盖。`--live` 启用真 dashscope + Qdrant
+- **bundle log 写到 `/tmp`**：避免污染 canonical `knowledge_serving/control/context_bundle_log.csv`；log_writer 仍强制 28 字段非空 + 'disabled' 显式（W8 EVIDENCE 守门同款）
+- **任一 case 静默 PASS = fail**：每 case 必须打印 actual vs expected 对比，任一 case_status≠PASS → exit 1
+- **S9 跨租户隔离**：tenant_demo allowed=[domain_general]，扫描 structured_retrieve 全 view 候选 brand_layer，命中 allowed 外的 row 数必须 0
+- **governance 三件套**：从 `pack_view.csv` 第 2 行抽 `compile_run_id` / `source_manifest_hash` / `view_schema_version`，全链路透传
+
+### 回归证据
+
+- `python3 task_cards/validate_task_cards.py` → 57 cards, DAG closed, S0-S13 covered
+- `python3 -m pytest knowledge_serving/tests/` → 211 passed
+- `bash knowledge_serving/scripts/lint_no_duplicate_log.sh` → context_bundle_log 单 canonical 守门 OK
+- `python3 knowledge_serving/scripts/run_context_retrieval_demo.py --all` → exit=0, 4/4 PASS
+
+### W8 外审 follow-ups 消化
+
+- ✅ GOV#2 "模块未接 retrieve_context()" → 本卡把 RETRIEVAL-001..008 在 4 case 上串通
+- ✅ EVIDENCE#3 "空 overlay payload" → case_S9 实测 `merged_overlay_payload_empty=True`，fallback 走 `domain_only`，未被占位伪造
