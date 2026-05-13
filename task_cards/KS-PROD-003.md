@@ -13,8 +13,8 @@ plan_sections:
   - "§12 S13"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_llm_assist_boundary.py -v
-status: not_started
+  - python3 -m pytest knowledge_serving/tests/test_llm_assist_boundary.py -v
+status: done
 ---
 
 # KS-PROD-003 · LLM assist 边界回归
@@ -69,7 +69,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_llm_assist_boundary.py -v
+command: python3 -m pytest knowledge_serving/tests/test_llm_assist_boundary.py -v
 pass: 8 类用例全绿（拒绝）
 failure_means: LLM 越界风险
 artifact: pytest report
@@ -85,6 +85,43 @@ artifact: pytest report
 > 阻断项：任一类型未拦。
 
 ## 11. DoD
-- [ ] 边界测试入 git
-- [ ] 8 类全绿
-- [ ] 审查员 pass
+- [x] 边界测试入 git（test_llm_assist_boundary.py，22 测试用例）
+- [x] 8 类全绿（22/22 PASS；全量 242/242）
+- [ ] 审查员 pass（外审入口）
+
+## 12. 实施记录 / 2026-05-13 W10
+
+### 8 类禁项 → 测试用例映射
+
+| forbidden_task | 守门测试 | 守门机制 |
+|---|---|---|
+| tenant_scope_resolution | `*_signature_rejects_llm_hint` + `*_rejects_natural_language_id` | tsr.resolve 签名严格只收 `(tenant_id, api_key_id=None)` + registry 真源查 |
+| brand_layer_override | `*_via_bundle_rejected` (5 个 LLM 编值) | `_BRAND_LAYER_RE = ^(domain_general\|needs_review\|brand_[a-z][a-z0-9_]*)$` |
+| fallback_policy_decision | `*_only_takes_deterministic_inputs` + `*_outside_enum_rejected_by_bundle` | decide_fallback 签名 4 字段；bundle.fallback_status 枚举 5 项 |
+| merge_precedence_decision | `*_yaml_only` | merge_context 签名反扫 + precedence_rule 来自 YAML 硬编码 |
+| evidence_fabrication | `*_invalid_inference_level_rejected` + `*_missing_evidence_id_rejected` | $defs/evidence_item: inference_level / trace_quality 枚举 + evidence_id 非空 |
+| final_generation | `*_schema_has_no_generated_text_field` + `*_bundle_rejects_smuggled_completion` | schema 无成稿字段 + bundle 反向硬拦 user_query 明文 |
+| intent_classification | `*_llm_string_rejected` (4 LLM 输入) + `*_unsupported_business_intent_not_promoted_to_generate` | classify 只接受 canonical 枚举；非枚举 → needs_review；4 类业务 intent 不静默兜底 |
+| content_type_routing | `*_llm_string_rejected` (4 LLM 输入) | route 只接受 canonical id 或 alias；自然语言 / 多选 / 加修饰全 needs_review |
+
+### 设计要点
+
+- **REQUIRED_FORBIDDEN 同源校验**：`test_model_policy_forbidden_tasks_contains_all_8`
+  实测 model_policy.yaml `llm_assist.forbidden_tasks` 与本测试 8 项严格一致，
+  任意一侧增删都立刻断；防止 yaml 漂移导致测试假绿
+- **LLM unavailable rule-only**：4 个核心确定性模块（classify / route / decide_fallback /
+  merge_context）在 0 LLM 输入下产出确定性结果；本测试本身跑通即 rule-only 证据
+- **测试本身 LLM-free**：反向 grep 本测试源码不允许 `import dashscope/openai/anthropic`，
+  避免假绿（曾经的反模式："测 LLM 边界结果反而调了真 LLM"）
+- **brand_layer 5 类 LLM 漂移**：自然语言中文、大小写错、连字符、截断、看似合法但不在枚举——
+  覆盖 LLM 输出最容易出错的 5 种格式漂移
+- **business intent 静默兜底防回归**：4 类 unsupported 业务 intent 必须返回
+  `policy_key=None` + `bridge_status=unsupported_intent_no_policy`，不准悄悄映射到 generate
+
+### 回归证据
+
+- `python3 -m pytest knowledge_serving/tests/test_llm_assist_boundary.py -v` → 22 passed
+- `python3 -m pytest knowledge_serving/tests/` → 242 passed（220 + 22 新）
+- `python3 knowledge_serving/scripts/run_context_retrieval_demo.py --all` → 4/4 PASS（向后兼容）
+- `python3 task_cards/validate_task_cards.py` → 57 cards, DAG closed, S0-S13 covered
+- `bash knowledge_serving/scripts/lint_no_duplicate_log.sh` → 单 canonical OK

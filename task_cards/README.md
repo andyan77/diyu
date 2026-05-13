@@ -147,12 +147,12 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 | **W7** | 6 | structured 召回链 + 向量回归 + ECS Qdrant 灌库 + replay 准备 | KS-RETRIEVAL-004/006, KS-VECTOR-002/003, KS-DIFY-ECS-004/009 | ✅ **done (6/6)** |
 | **W8** | 2 | 召回合流 + 回滚预案 | KS-RETRIEVAL-007, KS-CD-002 | ✅ **done (2/2)** |
 | **W9** | 1 | 召回排序/裁剪/输出 | KS-RETRIEVAL-008 | ✅ **done (1/1)** |
-| **W10** | 3 | 召回 13 步全链汇总 + ECS API 集成 + LLM 边界回归 | KS-RETRIEVAL-009, KS-DIFY-ECS-005, KS-PROD-003 | 🟡 **in_progress (2/3 done)** |
+| **W10** | 3 | 召回 13 步全链汇总 + ECS API 集成 + LLM 边界回归 | KS-RETRIEVAL-009, KS-DIFY-ECS-005, KS-PROD-003 | ✅ **done (3/3)** |
 | **W11** | 3 | 端到端冒烟 + Chatflow + replay | KS-DIFY-ECS-006/007/010 | ⬜ not_started |
 | **W12** | 2 | guardrail 集成 + 跨租户回归 | KS-DIFY-ECS-008, KS-PROD-002 | ⬜ not_started |
 | **W13** | 1 | **CI/CD 流水线总闸（S0-S13 全绿）** | KS-CD-001 | ⬜ not_started |
 | **W14** | 1 | **S1-S13 上线总回归** | KS-PROD-001 | ⬜ not_started |
-| **合计** | **57** | — | — | **49/57 done = 86.0%** |
+| **合计** | **57** | — | — | **50/57 done = 87.7%** |
 
 ## 7.1 W3+ serving 输入白名单（**最高优先 · 不可违反 · 跨 W3-W14 全部卡**）
 
