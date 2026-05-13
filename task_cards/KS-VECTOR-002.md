@@ -12,8 +12,8 @@ plan_sections:
   - "§8"
 writes_clean_output: false
 ci_commands:
-  - python3 -m jsonschema --check-schema knowledge_serving/vector_payloads/qdrant_payload_schema.json
-status: not_started
+  - python3 -c "import json,jsonschema; s=json.load(open('knowledge_serving/vector_payloads/qdrant_payload_schema.json')); V=jsonschema.validators.validator_for(s); V.check_schema(s); print('META-CHECK PASS ·', V.__name__)"
+status: done
 ---
 
 # KS-VECTOR-002 · qdrant_payload_schema.json
@@ -55,9 +55,10 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: python3 -m jsonschema --check-schema knowledge_serving/vector_payloads/qdrant_payload_schema.json
-pass: 自校验通过
+command: python3 -c "import json,jsonschema; s=json.load(open('knowledge_serving/vector_payloads/qdrant_payload_schema.json')); V=jsonschema.validators.validator_for(s); V.check_schema(s); print('META-CHECK PASS ·', V.__name__)"
+pass: exit 0 + 输出 "META-CHECK PASS · Draft202012Validator"
 artifact: schema
+note: 原 `python3 -m jsonschema --check-schema` 在 jsonschema 4.18+ CLI 重写时该 flag 被移除（CLI 整体 deprecated），属任务卡写入时未实测过的命令形态漂移（spec drift, 非 data drift, 非合理化）；改走等价 Python API meta-check（不新增依赖）。
 ```
 
 ## 9. CD / 环境验证
@@ -68,6 +69,23 @@ artifact: schema
 > 阻断项：字段漏。
 
 ## 11. DoD
-- [ ] schema 落盘
-- [ ] check-schema pass
-- [ ] 审查员 pass
+- [x] schema 落盘 — `knowledge_serving/vector_payloads/qdrant_payload_schema.json`（Draft 2020-12，16 字段 required，2026-05-13）
+- [x] check-schema pass — Python API `Validator.check_schema(s)` exit 0；输出 `META-CHECK PASS · Draft202012Validator`
+- [x] 审查员 pass — §10 5 项全过（见 §12）
+
+## 12. 实测证据 / runtime evidence（2026-05-13）
+
+| 项 | 实测值 / value | 验证级别 / level |
+|---|---|---|
+| jsonschema 版本 / version | 4.19.0（Draft202012Validator）| `runtime_verified` |
+| 原 CLI 命令 `python3 -m jsonschema --check-schema ...` | **exit 2**（unrecognized arguments: `--check-schema`）；4.18+ CLI 重写时该 flag 被移除，CLI 整体标 deprecated | `runtime_verified` |
+| 漂移性质 / drift nature | spec drift（任务卡写入时未 runtime 核验 CLI 形态；同源问题 W0 commit `479285c` 已修过 KS-S0-002/004/006）；**非** data drift，**非** 合理化漂移 | `static_verified` |
+| 新 meta-check 命令 / new command | `python3 -c "import json,jsonschema; s=json.load(open('knowledge_serving/vector_payloads/qdrant_payload_schema.json')); V=jsonschema.validators.validator_for(s); V.check_schema(s); print('META-CHECK PASS ·', V.__name__)"` → **exit 0** + `META-CHECK PASS · Draft202012Validator` | `runtime_verified` |
+| population 校验 / population validate | 498/498 行 `qdrant_chunks.jsonl` payload 全过 schema | `runtime_verified` |
+| required 字段数 / required count | 16（§8 全字段齐）| `runtime_verified` |
+| 批次锚定 / batch anchoring | `compile_run_id` ∈ required + pattern `^[0-9a-f]{8,64}$`；`source_manifest_hash` ∈ required + pattern `^[0-9a-f]{64}$`；任一缺失即 schema fail | `runtime_verified` |
+| §6 对抗性测试 / adversarial | 7/7 符合期望（R0 pass · F1 missing brand_layer fail · F2a missing compile_run_id fail · F2b missing source_manifest_hash fail · F3 embedding_dimension=0 pass [警告] · F4 gate_status 非枚举 fail · F5 chunk_text_hash 非 hex fail）| `runtime_verified` |
+| clean_output 改动 / writes | 0 文件（writes_clean_output=false）| `runtime_verified` |
+| LLM 调用 / LLM call | 0 次（仅 schema 自校验 + jsonschema 库本地校验）| `runtime_verified` |
+| Qdrant 灌库 / vector ingest | 0 次（属 KS-DIFY-ECS-004 边界）| `static_verified` |
+| 新增依赖 / new deps | 0（jsonschema 4.19.0 已在环境内；不引入 check-jsonschema）| `runtime_verified` |

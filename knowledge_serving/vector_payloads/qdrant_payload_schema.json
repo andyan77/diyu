@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diyu.local/schemas/qdrant_payload_schema.json",
+  "title": "Qdrant Chunk Payload Schema (KS-VECTOR-002)",
+  "description": "Phase 2 serving 向量 payload 契约 / vector payload contract. 覆盖 plan §8 全 16 字段; compile_run_id + source_manifest_hash 为批次锚定硬要求 (语义见 KS-DIFY-ECS-011 §0.1 第 4 行).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "view_type",
+    "source_pack_id",
+    "brand_layer",
+    "granularity_layer",
+    "content_type",
+    "pack_type",
+    "gate_status",
+    "default_call_pool",
+    "evidence_ids",
+    "compile_run_id",
+    "source_manifest_hash",
+    "chunk_text_hash",
+    "embedding_model",
+    "embedding_model_version",
+    "embedding_dimension",
+    "index_version"
+  ],
+  "properties": {
+    "view_type": {
+      "type": "string",
+      "enum": [
+        "pack_view",
+        "play_card_view",
+        "runtime_asset_view",
+        "brand_overlay_view",
+        "evidence_view",
+        "content_type_view",
+        "generation_recipe_view"
+      ],
+      "description": "serving view 类型 / view type (7 个派生读模型之一)"
+    },
+    "source_pack_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "源 CandidatePack ID / source candidate pack id"
+    },
+    "brand_layer": {
+      "type": "string",
+      "pattern": "^(domain_general|needs_review|brand_[a-z0-9_]+)$",
+      "description": "多租户隔离 key / multi-tenant isolation key (domain_general | needs_review | brand_<name>)"
+    },
+    "granularity_layer": {
+      "type": "string",
+      "enum": ["L1", "L2", "L3"],
+      "description": "粒度层 / granularity layer (L1 概念 / L2 规则 / L3 实例)"
+    },
+    "content_type": {
+      "type": "string",
+      "description": "内容类型 / content type (可为空串表示不适用)"
+    },
+    "pack_type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "包类型 / pack type (8 类业务 + 元类型)"
+    },
+    "gate_status": {
+      "type": "string",
+      "enum": ["active"],
+      "description": "闸门状态 / gate status. 默认只入库 active; 非 active 由召回路由显式裁决."
+    },
+    "default_call_pool": {
+      "type": "boolean",
+      "description": "是否默认入召回池 / default retrieval pool membership"
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "证据引用 / evidence id refs (可为空数组)"
+    },
+    "compile_run_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8,64}$",
+      "description": "编译批次号 / compile batch id (批次锚定硬要求; 跨批次过滤的主 key)"
+    },
+    "source_manifest_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "源 manifest sha256 / source manifest hash (批次锚定硬要求; clean_output 真源指纹)"
+    },
+    "chunk_text_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "chunk_text sha256 (回放校验 key, 必须 hex)"
+    },
+    "embedding_model": {
+      "type": "string",
+      "minLength": 1,
+      "description": "embedding 模型名 / embedding model name"
+    },
+    "embedding_model_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "embedding 模型版本 / embedding model version"
+    },
+    "embedding_dimension": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "embedding 维度 / dimension. 0 是 schema 上合法但语义异常 (审查员告警 / warning)."
+    },
+    "index_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "索引版本 / index version key (集合内批次淘汰用)"
+    }
+  }
+}
