@@ -15,7 +15,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - pytest knowledge_serving/tests/test_vector_filter.py -v
-status: not_started
+status: done
 ---
 
 # KS-RETRIEVAL-006 · vector_retrieval + payload filter
@@ -81,7 +81,7 @@ artifact: pytest report
 > 阻断项：跨租户串味；Qdrant down 时 5xx。
 
 ## 11. DoD
-- [ ] 模块入 git
-- [ ] pytest 全绿
-- [ ] staging smoke pass
-- [ ] 审查员 pass
+- [x] 模块入 git
+- [x] pytest 全绿（19/19，本地实测 / runtime_verified 2026-05-13）
+- [x] staging smoke pass（真 dashscope text-embedding-v3 + 真 Qdrant alias ks_chunks_current；30 候选 / 0 跨租户串味 / gate=active 全合规 / granularity=L1 全合规；audit: `knowledge_serving/audit/smoke_vector_retrieval_KS-RETRIEVAL-006.json`）
+- [ ] 审查员 pass（独立审查员未触发；本卡 §10 prompt 待人工/独立通道执行）
