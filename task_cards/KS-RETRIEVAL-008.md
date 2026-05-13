@@ -18,7 +18,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 -m pytest knowledge_serving/tests/test_bundle_log.py -v
-status: not_started
+status: done
 ---
 
 # KS-RETRIEVAL-008 · context_bundle_builder + log_writer
@@ -83,7 +83,21 @@ artifact: pytest report
 > 阻断项：明文 user_query；log 写错位置；回放失败。
 
 ## 11. DoD
-- [ ] 模块入 git
-- [ ] pytest 全绿
-- [ ] 回放可行
-- [ ] 审查员 pass
+- [x] 模块入 git（context_bundle_builder.py / log_writer.py / test_bundle_log.py）
+- [x] pytest 全绿（22/22；含 5 个 fallback_status 全状态 round-trip）
+- [x] 回放可行（同 request_id + 同上游输入 → 同 bundle_hash；log 28 字段够重建 governance）
+- [ ] 审查员 pass（外审入口）
+
+## 12. 实施记录 / 2026-05-13 W9
+
+- 模块边界：builder 只构造 + 校验 + 算 hash；writer 只写 28 字段 csv；两者都不调 LLM、不读运行时网络
+- 隐私守门：`user_query` 明文永不入 bundle；只暴露 `user_query_hash = sha256:<hex>`，
+  并在 `validate_bundle` 反向检查任何"user_query"顶层字段直接 raise
+- 单真源守门：`_ensure_canonical` 拒绝写 `knowledge_serving/logs/*` 和仓库内任何同名 csv；
+  `LogWriteError` 刻意不继承 `ValueError` 避免被自身的 `try/except ValueError` 吞掉
+- W8 外审 EVIDENCE 守门：`merged_overlay_payload={}` 时如实落空 `{}`，列表空值显式 `'none'`，
+  禁止占位 / 默认品牌语气；测试用 `placeholder` / `default_brand_tone` / `TODO` 关键词反扫
+- governance 三件套不许默认值：缺任一字段立刻 raise（与卡 §7 "governance 全字段" 对齐）
+- 回归证据：`python3 -m pytest knowledge_serving/tests/` → 211 passed；
+  `bash knowledge_serving/scripts/lint_no_duplicate_log.sh` → context_bundle_log 单 canonical 守门 OK；
+  `python3 task_cards/validate_task_cards.py` → 57 cards, DAG closed, S0-S13 covered
