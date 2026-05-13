@@ -144,7 +144,7 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 | **W4** | 6 | overlay view + 2 policy（fallback/merge） + 3 召回起点 | KS-COMPILER-003, KS-POLICY-003/004, KS-RETRIEVAL-001/002/003 | ✅ **done (6/6)** |
 | **W5** | 1 | **S1-S7 compile 总闸**（compile_run_id 全链路） | KS-COMPILER-013 | ✅ **done (1/1)** |
 | **W6** | 5 | guardrail + retrieval policy + structured 召回 + 向量库初始化 + ECS 双写 | KS-POLICY-001/002, KS-RETRIEVAL-005, KS-VECTOR-001, KS-DIFY-ECS-003 | ✅ **done (5/5)** |
-| **W7** | 6 | structured 召回链 + 向量回归 + ECS Qdrant 灌库 + replay 准备 | KS-RETRIEVAL-004/006, KS-VECTOR-002/003, KS-DIFY-ECS-004/009 | 🔄 **in_progress (3/6)** — KS-RETRIEVAL-006 / KS-VECTOR-002 / KS-VECTOR-003 done；KS-DIFY-ECS-004 in_progress；KS-RETRIEVAL-004 / KS-DIFY-ECS-009 not_started |
+| **W7** | 6 | structured 召回链 + 向量回归 + ECS Qdrant 灌库 + replay 准备 | KS-RETRIEVAL-004/006, KS-VECTOR-002/003, KS-DIFY-ECS-004/009 | 🔄 **in_progress (4/6)** — KS-RETRIEVAL-004 / KS-RETRIEVAL-006 / KS-VECTOR-002 / KS-VECTOR-003 done；KS-DIFY-ECS-004 in_progress；KS-DIFY-ECS-009 not_started |
 | **W8** | 2 | 召回合流 + 回滚预案 | KS-RETRIEVAL-007, KS-CD-002 | ⬜ not_started |
 | **W9** | 1 | 召回排序/裁剪/输出 | KS-RETRIEVAL-008 | ⬜ not_started |
 | **W10** | 3 | 召回 13 步全链汇总 + ECS API 集成 + LLM 边界回归 | KS-RETRIEVAL-009, KS-DIFY-ECS-005, KS-PROD-003 | ⬜ not_started |

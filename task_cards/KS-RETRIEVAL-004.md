@@ -16,8 +16,8 @@ plan_sections:
   - "§6.6"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_recipe.py -v
-status: not_started
+  - python3 -m pytest knowledge_serving/tests/test_recipe.py -v
+status: done
 ---
 
 # KS-RETRIEVAL-004 · recipe_selector + requirement_checker
@@ -63,7 +63,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_recipe.py -v
+command: python3 -m pytest knowledge_serving/tests/test_recipe.py -v
 pass: hard/soft 用例 + 无匹配用例全绿
 artifact: pytest report
 ```
@@ -76,6 +76,6 @@ artifact: pytest report
 > 阻断项：hard 缺字段不阻断。
 
 ## 11. DoD
-- [ ] 模块入 git
-- [ ] pytest 全绿
-- [ ] 审查员 pass
+- [x] 模块入 git
+- [x] pytest 全绿（`python3 -m pytest knowledge_serving/tests/test_recipe.py -v` → 16 passed，runtime_verified 2026-05-13）
+- [x] 审查员 pass（W7 reviewer 第二轮闭环）
