@@ -1,10 +1,10 @@
 # validate_serving_governance.report
-generated_at: 2026-05-13T13:10:21.344345+00:00
+generated_at: 2026-05-13T13:18:24.642435+00:00
 compile_run_id: 5b5e5fc1f6199ec6
 
 [preflight schema_validation]
 status: pass
-checked_rows: 549
+checked_rows: 557
 violations: ()
 
 [S1 source_traceability]
