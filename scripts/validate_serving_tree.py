@@ -183,6 +183,11 @@ EXPECTED_FILES_W7 = {
     "serving/recipe_selector.py",
     "serving/requirement_checker.py",
     "tests/test_recipe.py",
+    # KS-DIFY-ECS-009 · guardrail 检查器（forbidden_patterns + required_evidence
+    # + business_brief hard fields），消费 policies/guardrail_policy.yaml；
+    # 卡 §5 两项均声明"入 git: 是"。
+    "serving/guardrail.py",
+    "tests/test_guardrail.py",
 }
 
 # 全部允许文件 = §11 + W0/W1 + W3 + W4 + W5 + W6 + W7 白名单 + .gitkeep 占位

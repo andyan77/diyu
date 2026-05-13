@@ -15,7 +15,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 -m pytest knowledge_serving/tests/test_guardrail.py -v
-status: in_progress
+status: done
 ---
 
 # KS-DIFY-ECS-009 · Guardrail 检查器
@@ -74,6 +74,6 @@ artifact: pytest report
 > 阻断项：编造未拦。
 
 ## 11. DoD
-- [ ] guardrail 入 git
-- [ ] pytest 全绿
-- [ ] 审查员 pass
+- [x] guardrail 入 git（commit `f368b37`）
+- [x] pytest 全绿（`python3 -m pytest knowledge_serving/tests/test_guardrail.py -v` → 19 passed）
+- [x] 审查员 pass（reviewer round-3：实现 / SKU 漏拦修复 / 入 git / purity gate 四道门全绿）
