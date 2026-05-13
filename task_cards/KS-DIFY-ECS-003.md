@@ -8,6 +8,7 @@ files_touched:
 artifacts:
   - knowledge_serving/scripts/upload_serving_views_to_ecs.py
   - knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json
+  - knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.dry_run.json
   - knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.ddl.sql
 s_gates: []
 plan_sections:
@@ -66,7 +67,8 @@ status: done
 | 路径 | 格式 | canonical | 入 git | CI artifact |
 |---|---|---|---|---|
 | `knowledge_serving/scripts/upload_serving_views_to_ecs.py` | py | 是 | 是 | — |
-| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json` | json | 是（运行证据） | 是 | 是 |
+| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json` | json | 是（**仅 apply 写**的可回放证据） | 是 | 是 |
+| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.dry_run.json` | json | 是（**仅 dry-run 写**的 sidecar，永不覆盖 apply 证据） | 是 | 是 |
 | `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.ddl.sql` | sql | 是（dry-run 副产） | 是 | 是 |
 
 ## 6. 对抗性 / 边缘性测试
@@ -88,6 +90,7 @@ status: done
 | `--env prod` 无 `--model-policy-version` | exit 2 |
 | apply 模式缺 PG_* env | exit 2 + 列出缺失变量 |
 | ssh/psql 失败 | exit 2 + 远端 stderr |
+| dry-run 在 apply 后重跑 | **canonical audit `upload_views_KS-DIFY-ECS-003.json` sha256 不变**（dry-run 写 sidecar `upload_views_KS-DIFY-ECS-003.dry_run.json`，永不覆盖 apply 证据；防 E7 旧快照 + E2 假绿叠加） |
 
 ## 7. 治理语义一致性
 

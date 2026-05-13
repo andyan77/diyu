@@ -46,7 +46,10 @@ SCHEMA_PATH = REPO_ROOT / "knowledge_serving" / "schema" / "serving_views.schema
 MANIFEST_PATH = REPO_ROOT / "clean_output" / "audit" / "source_manifest.json"
 GOVERNANCE_REPORT = REPO_ROOT / "knowledge_serving" / "audit" / "validate_serving_governance.report"
 AUDIT_DIR = REPO_ROOT / "knowledge_serving" / "audit"
-AUDIT_PATH = AUDIT_DIR / "upload_views_KS-DIFY-ECS-003.json"
+# 双路径隔离 / dual-path isolation：dry-run 与 apply 永不互相覆盖，
+# 防止 CI dry-run 静默抹掉 prod apply 的可回放证据（governor finding 修复）。
+AUDIT_PATH_APPLY = AUDIT_DIR / "upload_views_KS-DIFY-ECS-003.json"          # 仅 --apply 写
+AUDIT_PATH_DRY_RUN = AUDIT_DIR / "upload_views_KS-DIFY-ECS-003.dry_run.json"  # 仅 --dry-run 写
 
 TARGET_SCHEMA = "serving"  # 新建；与 legacy knowledge.* 物理隔离
 PG_CONTAINER = "diyu-infra-postgres-1"
@@ -431,7 +434,8 @@ def main() -> int:
         AUDIT_DIR.mkdir(parents=True, exist_ok=True)
         preview_path.write_text(ddl_sql, encoding="utf-8")
         audit["ddl_preview_path"] = str(preview_path.relative_to(REPO_ROOT))
-        AUDIT_PATH.write_text(
+        # 关键：dry-run 写 sidecar 路径，永不覆盖 apply 的可回放证据
+        AUDIT_PATH_DRY_RUN.write_text(
             json.dumps(audit, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
@@ -439,7 +443,8 @@ def main() -> int:
               f"compile_run_id={compile_run_id} manifest={manifest_hash[:12]}…")
         print(f"[dry-run] DDL → {preview_path.relative_to(REPO_ROOT)} "
               f"({audit['ddl_byte_size']} bytes, sha256={audit['ddl_sha256'][:12]}…)")
-        print(f"[dry-run] audit → {AUDIT_PATH.relative_to(REPO_ROOT)}")
+        print(f"[dry-run] audit → {AUDIT_PATH_DRY_RUN.relative_to(REPO_ROOT)} "
+              f"(apply 证据 {AUDIT_PATH_APPLY.relative_to(REPO_ROOT)} 不会被覆盖)")
         return 0
 
     # apply 路径
@@ -471,13 +476,14 @@ def main() -> int:
     )
 
     AUDIT_DIR.mkdir(parents=True, exist_ok=True)
-    AUDIT_PATH.write_text(
+    # apply 写 canonical 路径，留作可回放证据；dry-run 永不触碰此文件
+    AUDIT_PATH_APPLY.write_text(
         json.dumps(audit, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     print(f"[apply] env={args.env} tables={len(inventory)} "
           f"post_verify={audit['post_verify_status']}")
-    print(f"[apply] audit → {AUDIT_PATH.relative_to(REPO_ROOT)}")
+    print(f"[apply] audit → {AUDIT_PATH_APPLY.relative_to(REPO_ROOT)}")
     return 0 if audit["post_verify_status"] == "pass" else 1
 
 

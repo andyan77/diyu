@@ -1,0 +1,48 @@
+{
+  "task_card": "KS-DIFY-ECS-003",
+  "run_id": "d5415636-3263-45ab-9ecd-828ab7ba4858",
+  "run_at": "2026-05-13T01:22:34Z",
+  "env": "staging",
+  "mode": "dry_run",
+  "target_schema": "serving",
+  "partition_reference": "KS-DIFY-ECS-011 §0.1 row 3→new serving.* (NOT legacy knowledge.*)",
+  "prerequisite_gate": {
+    "task_card": "KS-COMPILER-013",
+    "report": "knowledge_serving/audit/validate_serving_governance.report",
+    "compile_run_id": "5b5e5fc1f6199ec6",
+    "gates": {
+      "S1": "pass",
+      "S2": "pass",
+      "S3": "pass",
+      "S4": "pass",
+      "S5": "pass",
+      "S6": "pass",
+      "S7": "pass"
+    },
+    "status": "pass"
+  },
+  "source_manifest_hash": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2",
+  "compile_run_id": "5b5e5fc1f6199ec6",
+  "view_schema_version": "3c0863a75967",
+  "tables": {
+    "serving.pack_view": 201,
+    "serving.content_type_view": 18,
+    "serving.generation_recipe_view": 18,
+    "serving.play_card_view": 29,
+    "serving.runtime_asset_view": 24,
+    "serving.brand_overlay_view": 7,
+    "serving.evidence_view": 201,
+    "serving.tenant_scope_registry": 2,
+    "serving.field_requirement_matrix": 19,
+    "serving.retrieval_policy_view": 18,
+    "serving.merge_precedence_policy": 8,
+    "serving.context_bundle_log": 0
+  },
+  "ddl_table_count": 12,
+  "ddl_byte_size": 8994,
+  "ddl_sha256": "4b0f9ea236991c4d918ff7782b40385b54a7b4fe6493cbc902f4d677e1bbf441",
+  "human_signoff": null,
+  "model_policy_version": null,
+  "read_only_legacy_guarantee": "脚本拒绝任何引用 knowledge.* 的 SQL；只写 serving.*",
+  "ddl_preview_path": "knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.ddl.sql"
+}
