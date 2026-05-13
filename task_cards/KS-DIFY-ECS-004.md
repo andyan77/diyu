@@ -65,7 +65,7 @@ status: in_progress
 - collection 命名含 model_policy_version
 - gate active only
 - brand hard filter（payload）
-- governance 全字段在 payload
+- governance 全字段在 payload（**17 字段**，对齐 plan §8 + §2 governance_common_fields；W7 收口补齐 `view_schema_version`）
 - 不调 LLM
 - alias 切换可回滚
 - **needs_review chunk 允许入库 / allowed to load**：`brand_layer=needs_review` 是租户键待决（非 gate 待决），允许入 Qdrant，由召回侧 KS-RETRIEVAL-006 `vector_retrieval.py` 通过 brand_layer hard filter 隐式排除（allowed_layers 不含 needs_review）。本卡装载侧仅负责忠实 push，不在装载阶段额外裁剪——保留可追溯，避免污染 KS-VECTOR-001 真源。裁决日期：2026-05-13。
@@ -73,10 +73,12 @@ status: in_progress
 ## 8. CI 门禁
 ```
 command: python3 knowledge_serving/scripts/upload_qdrant_chunks.py --env staging --dry-run
-pass:    dry-run 期望行数 == jsonl 行数；collection_name 拼接正确；payload jsonschema 全 16 字段通过
+pass:    dry-run 期望行数 == jsonl 行数；collection_name 拼接正确；payload jsonschema 全 17 字段通过
 artifact: qdrant_upload_KS-DIFY-ECS-004.json（canonical apply audit；dry-run / rollback 走 CI artifact，不入 git）
-followup_external_reference: qdrant_filter_smoke.py 4/4 由 KS-VECTOR-003 提供 canonical
-                              ownership；本卡只引用其作为 W7 波次外部验收，不在本卡 DoD。
+followup_external_reference: qdrant_filter_smoke.py（5 类抽样 filter / 8 sampled cases）由 KS-VECTOR-003
+                              提供 canonical ownership；本卡只引用其作为 W7 波次外部验收，不在本卡 DoD。
+schema_revision_2026_05_13: payload schema W7 收口从 16 → 17 字段（新增 view_schema_version；
+                              对齐 plan §2 governance_common_fields），dry-run 与 apply 均已重跑。
 ```
 
 ## 9. CD / 环境验证
@@ -88,16 +90,16 @@ followup_external_reference: qdrant_filter_smoke.py 4/4 由 KS-VECTOR-003 提供
 - secrets：env
 
 ## 10. 独立审查员 Prompt
-> 请：1) dry-run 行数 == jsonl 行数；2) collection 命名含 model_policy_version；3) staging apply 实测 count_check=pass；4) `--env prod` 拒绝；5) `--rollback` 代码路径存在且会话内已用 dummy previous 序列实测通过；6) payload 走 qdrant_payload_schema.json 全 16 字段校验（schema 漂移 1 字段即 exit 2）；7) 输出 pass / fail。
+> 请：1) dry-run 行数 == jsonl 行数；2) collection 命名含 model_policy_version；3) staging apply 实测 count_check=pass；4) `--env prod` 拒绝；5) `--rollback` 代码路径存在且会话内已用 dummy previous 序列实测通过；6) payload 走 qdrant_payload_schema.json 全 **17 字段**校验（schema 漂移 1 字段即 exit 2；2026-05-13 W7 收口补齐 `view_schema_version`）；7) 输出 pass / fail。
 > 阻断项：dimension in-place 改；prod 未拒绝；rollback 不可用；密钥入仓；payload 字段校验不走 schema。
-> 跨卡引用：smoke 4/4 归属 KS-VECTOR-003（其 §6 含 4 filter 对抗性测试），W7 闭波时引其结果，不算本卡 DoD。
+> 跨卡引用：smoke（5 类抽样 filter / 8 sampled cases）归属 KS-VECTOR-003（其 §6 含 brand / gate / content_type / cross-tenant / 批次锚定 五类对抗性测试），W7 闭波时引其结果，不算本卡 DoD。
 
 ## 11. DoD
-- [x] dry-run pass — runtime_verified（exit 0；expected_rows=498；payload schema 16 字段通过；canonical audit `qdrant_upload_KS-DIFY-ECS-004.dry_run.json`）
-- [x] staging apply — runtime_verified（ECS 实测 count=498；`qdrant_upload_KS-DIFY-ECS-004.json`：state=created, alias_switched_to=ks_chunks__mp_20260512_002, count_check=pass, upsert_elapsed≈28s）
+- [x] dry-run pass — runtime_verified（exit 0；expected_rows=498；payload schema **17 字段**通过；canonical audit `qdrant_upload_KS-DIFY-ECS-004.dry_run.json`；2026-05-13 W7 收口重跑）
+- [x] staging apply — runtime_verified（ECS 实测 count=498；`qdrant_upload_KS-DIFY-ECS-004.json`：state=reused, alias_switched_to=ks_chunks__mp_20260512_002, count_check=pass, upsert_elapsed≈32.5s；2026-05-13 W7 收口重跑，source_chunks_sha256=`9706a5f8...9039869`, payload_schema_sha256=`4f6fe4be...17c355`，服务端抽样验证 view_schema_version=`3c0863a75967`）
 - [x] alias 切换 + 旧版保留语义 — code_verified（switch_alias 在 alias 替换前 snapshot 旧指向；首部署 previous_collection=null 是合规真值；session 内已用 dummy `ks_chunks__prev_test` 序列实测 previous 捕获 + 旧 collection 在 retained_collections 中保留）
 - [x] rollback 实测可用 — runtime_verified（session 内 alias `ks_chunks__mp_20260512_002 → ks_chunks__prev_test` 实测切换通过；rollback audit 落盘；首部署后 rollback_target=null 是合规真值，`--rollback` 会拒绝并给出原因）
-- [x] payload schema 16 字段硬校验 — runtime_verified（jsonschema Draft 2020-12 against `qdrant_payload_schema.json`；负向：手工删任一 required 字段即 exit 2）
+- [x] payload schema **17 字段**硬校验 — runtime_verified（jsonschema Draft 2020-12 against `qdrant_payload_schema.json`；W7 收口补齐 `view_schema_version`；负向：手工删任一 required 字段即 exit 2）
 - [ ] 独立审查员 pass — pending（按 §10 prompt 提交外审；本卡代码与 audit 已就位）
 
-> **跨卡 followup（非本卡 DoD）**：W7 闭波时 KS-VECTOR-003 的 `qdrant_filter_smoke.py 4/4` 需绿；session 内已用裸 REST 等价验证 4 条（brand_layer 隔离 / 不存在 brand 0 命中 / gate active 498/498 / dimension 1024），写入 W7 闭波检查表。
+> **跨卡 followup（非本卡 DoD）**：W7 闭波时 KS-VECTOR-003 的 `qdrant_filter_smoke.py`（5 类抽样 filter / 8 sampled cases）需绿——**2026-05-13 实测已闭**：`sampled filter pass=8/8`、`cross_tenant_hits=0`、`fallback policy ready=True`、audit=`knowledge_serving/audit/qdrant_filter_smoke_KS-VECTOR-003.json`；session 内另以裸 REST 等价验证 4 条（brand_layer 隔离 / 不存在 brand 0 命中 / gate active 498/498 / dimension 1024），写入 W7 闭波检查表。

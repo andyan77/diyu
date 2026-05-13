@@ -78,5 +78,14 @@ artifact: smoke report
 
 ## 11. DoD
 - [x] smoke 入 git（qdrant_filter_smoke.py + test_vector_offline.py + canonical audit json）
-- [x] CI pass（`python3 knowledge_serving/scripts/qdrant_filter_smoke.py --offline` exit 0；8 sampled cases 全过；`python3 -m pytest knowledge_serving/tests/test_vector_offline.py` 16/16 pass；`python3 scripts/validate_serving_tree.py` exit 0）
-- [x] 审查员 pass（独立审查员 2026-05-13 FAIL → 4 项 finding 逐项闭环：status 翻 done + 入 git + W7 白名单 + content_type 进 canonical smoke C7p/C7n）
+- [x] CI pass（`python3 knowledge_serving/scripts/qdrant_filter_smoke.py --offline` exit 0；8 sampled cases 全过；`python3 -m pytest knowledge_serving/tests/test_vector_offline.py` 16/16 pass；`python3 scripts/validate_serving_tree.py` exit 0；2026-05-13 W7 收口重跑：上游 KS-VECTOR-002 schema 17 字段 + KS-VECTOR-001 chunks 重出后 smoke 仍 8/8）
+- [x] 审查员 pass（独立审查员 2026-05-13 两轮收口：① 首轮 FAIL → 4 项 finding 逐项闭环；② 二轮 CONDITIONAL_PASS finding #1 `view_schema_version` 治理债 → 按 E8 升级至上游 KS-VECTOR-001/002 接线修复，schema 17 字段 + 编译器透传 + 498 chunks 重出 + staging apply 重跑，三元锚定完成）
+
+## 12. W7 收口跨卡引用 / W7 cross-card reverse refs（2026-05-13）
+
+| 跨卡引用 / reverse ref | 状态 | 证据 |
+|---|---|---|
+| 为 [KS-DIFY-ECS-004](KS-DIFY-ECS-004.md) §11 followup「smoke 8/8 需绿」提供 evidence | ✅ 已闭 | `qdrant_filter_smoke.py --offline` exit 0；sampled filter pass=8/8；cross_tenant_hits=0；audit=`knowledge_serving/audit/qdrant_filter_smoke_KS-VECTOR-003.json` |
+| 上游依赖 [KS-VECTOR-001](KS-VECTOR-001.md) §13 W7 收口修订 | ✅ 已闭 | 编译器 PAYLOAD_FIELDS=17（含 `view_schema_version`）；498 chunks 重出 dashscope 实调 |
+| 上游依赖 [KS-VECTOR-002](KS-VECTOR-002.md) §13 W7 收口修订 | ✅ 已闭 | schema required=17；META-CHECK PASS · Draft202012Validator；payload_schema_sha256=`4f6fe4be...17c355` |
+| 三元锚定语义在 offline smoke 中验证 | ✅ 已闭 | C5 旧批次 `compile_run_id` 0 命中 + C5b 当前批次 497 命中（compile_run_id + source_manifest_hash + view_schema_version 三元锚定共同生效） |
