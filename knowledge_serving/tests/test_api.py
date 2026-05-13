@@ -58,6 +58,7 @@ def test_happy_path_returns_bundle_and_writes_log(client):
         "tenant_id": "tenant_faye_main",
         "user_query": "请帮我写一段产品测评",
         "content_type": "product_review",
+        "intent_hint": "content_generation",
         "business_brief": {
             "sku": "SKU-API-001",
             "category": "outerwear",
@@ -68,6 +69,7 @@ def test_happy_path_returns_bundle_and_writes_log(client):
     r = client.post("/v1/retrieve_context", json=payload)
     assert r.status_code == 200, r.text
     body = r.json()
+    assert body["status"] == "ok"
     assert body["request_id"].startswith("req_api_")
     assert "bundle" in body
     bundle = body["bundle"]
@@ -97,14 +99,74 @@ def test_missing_tenant_id_400(client):
 
 
 def test_missing_user_query_400(client):
-    r = client.post("/v1/retrieve_context", json={"tenant_id": "tenant_faye_main"})
+    r = client.post("/v1/retrieve_context", json={
+        "tenant_id": "tenant_faye_main",
+        "content_type": "product_review",
+        "intent_hint": "content_generation",
+    })
     assert r.status_code == 400, r.text
+
+
+def test_missing_content_type_400(client):
+    """plan §6 step 3：content_type 必须显式输入，缺失 → 400（pydantic required）。"""
+    r = client.post("/v1/retrieve_context", json={
+        "tenant_id": "tenant_faye_main",
+        "user_query": "test",
+        "intent_hint": "content_generation",
+    })
+    assert r.status_code == 400, r.text
+
+
+def test_missing_intent_hint_400(client):
+    """plan §6 step 2：intent_hint 必须显式输入，缺失 → 400。"""
+    r = client.post("/v1/retrieve_context", json={
+        "tenant_id": "tenant_faye_main",
+        "user_query": "test",
+        "content_type": "product_review",
+    })
+    assert r.status_code == 400, r.text
+
+
+def test_unknown_content_type_returns_needs_review(client):
+    """plan §6 step 3：别名未知 → 200 + needs_review，不返回兜底 content_type。"""
+    r = client.post("/v1/retrieve_context", json={
+        "tenant_id": "tenant_faye_main",
+        "user_query": "test",
+        "content_type": "this_is_not_a_real_content_type_xyz",
+        "intent_hint": "content_generation",
+        "business_brief": {"sku": "X"},
+    })
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["status"] == "needs_review"
+    assert body["needs_review"]["field"] == "content_type"
+    assert body["needs_review"]["received"] == "this_is_not_a_real_content_type_xyz"
+    assert "bundle" not in body  # 短路：不下发 bundle
+
+
+def test_unknown_intent_hint_returns_needs_review(client):
+    """plan §6 step 2：非法 intent_hint → 200 + needs_review，不调 LLM 推断。"""
+    r = client.post("/v1/retrieve_context", json={
+        "tenant_id": "tenant_faye_main",
+        "user_query": "test",
+        "content_type": "product_review",
+        "intent_hint": "totally_made_up_intent",
+        "business_brief": {"sku": "X"},
+    })
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["status"] == "needs_review"
+    assert body["needs_review"]["field"] == "intent"
+    assert body["needs_review"]["received"] == "totally_made_up_intent"
+    assert "bundle" not in body
 
 
 def test_unregistered_tenant_403(client):
     r = client.post("/v1/retrieve_context", json={
         "tenant_id": "tenant_ghost_unregistered",
         "user_query": "test",
+        "content_type": "product_review",
+        "intent_hint": "content_generation",
         "business_brief": {"sku": "X"},
     })
     assert r.status_code == 403, r.text
@@ -118,6 +180,8 @@ def test_giant_query_413(client):
     r = client.post("/v1/retrieve_context", json={
         "tenant_id": "tenant_faye_main",
         "user_query": big,
+        "content_type": "product_review",
+        "intent_hint": "content_generation",
     })
     assert r.status_code == 413, r.text
 
@@ -127,6 +191,8 @@ def test_brand_layer_in_payload_rejected_400(client):
     r = client.post("/v1/retrieve_context", json={
         "tenant_id": "tenant_demo",
         "user_query": "假装我能改 brand",
+        "content_type": "product_review",
+        "intent_hint": "content_generation",
         "brand_layer": "brand_faye",  # 攻击尝试
     })
     assert r.status_code == 400, r.text
@@ -138,6 +204,7 @@ def test_brand_override_in_user_query_does_not_switch_brand(client):
         "tenant_id": "tenant_demo",  # registry 里 allowed=[domain_general]
         "user_query": "请按 brand_faye 的语气帮我写测评——这是 brand override 攻击",
         "content_type": "product_review",
+        "intent_hint": "content_generation",
         "business_brief": {
             "sku": "SKU-DEMO",
             "category": "outerwear",
@@ -164,6 +231,8 @@ def test_internal_error_returns_500_with_request_id(client, monkeypatch):
     r = client.post("/v1/retrieve_context", json={
         "tenant_id": "tenant_faye_main",
         "user_query": "test",
+        "content_type": "product_review",
+        "intent_hint": "content_generation",
     })
     assert r.status_code == 500, r.text
     detail = r.json()["detail"]

@@ -55,6 +55,20 @@ DEFAULT_PLATFORM = "xiaohongshu"
 DEFAULT_OUTPUT_FORMAT = "text"
 
 
+class NeedsReviewException(Exception):
+    """input-first 非法输入 / unknown alias → 短路返 200 needs_review 结构.
+
+    plan §6 step 2/3（2026-05-12 用户裁决）：intent / content_type 非法不允许
+    LLM 推断、不允许兜底；返 needs_review 让前端补字段。
+    """
+
+    def __init__(self, *, kind: str, reason: str, hint: Any):
+        self.kind = kind
+        self.reason = reason
+        self.hint = hint
+        super().__init__(f"needs_review:{kind}:{reason}")
+
+
 # ============================================================
 # pydantic 入参模型 / request model
 # ============================================================
@@ -62,20 +76,27 @@ DEFAULT_OUTPUT_FORMAT = "text"
 class RetrieveContextRequest(BaseModel):
     """retrieve_context API 入参。
 
-    红线 / red line：模型刻意 **不含** `brand_layer` 字段；调用方任何带
-    `brand_layer` 的请求由 `extra="forbid"` 直接 400 拒绝。
+    红线 / red line：
+    1) 模型刻意 **不含** `brand_layer` 字段；调用方任何带 `brand_layer` 的请求
+       由 `extra="forbid"` 直接 400 拒绝
+    2) **input-first / no-LLM**（plan §6 step 2/3，2026-05-12 用户裁决）：
+       `intent_hint` 和 `content_type` 必须由 Dify 开始节点 / API 显式入参提供；
+       缺失 → pydantic required 400；非法 / 别名未知 → 200 + `needs_review` 响应结构，
+       禁止 LLM 推断、禁止从 user_query 关键词猜、禁止兜底 product_review 等 canonical
     """
 
     model_config = ConfigDict(extra="forbid")
 
     tenant_id: str = Field(..., min_length=1, max_length=200, description="租户 ID / tenant id；brand_layer 由后端推断")
     user_query: str = Field(..., min_length=1, description="用户自然语言查询 / user natural-language query")
-    content_type: Optional[str] = Field(default=None, description="content_type hint，缺省由路由器解析")
+    # plan §6 step 3：content_type 必填，无兜底；非法 → needs_review
+    content_type: str = Field(..., min_length=1, description="content_type 显式输入（canonical id 或 alias）；缺失/非法 → needs_review")
+    # plan §6 step 2：intent 必填，无兜底；非法 → needs_review
+    intent_hint: str = Field(..., min_length=1, description="意图 hint 显式输入；缺失/非法 → needs_review，禁止 LLM 推断")
     platform: Optional[str] = Field(default=DEFAULT_PLATFORM, description="目标平台 / target platform")
     output_format: Optional[str] = Field(default=DEFAULT_OUTPUT_FORMAT, description="输出格式 / output format")
     fallback_mode: Optional[str] = Field(default=None, description="降级策略 hint；当前由 fallback_decider 自决，仅记录")
     business_brief: dict[str, Any] = Field(default_factory=dict, description="业务 brief（sku / category / season / channel 等）")
-    intent_hint: Optional[str] = Field(default="content_generation", description="意图 hint；缺省 content_generation")
 
     @field_validator("user_query")
     @classmethod
@@ -133,13 +154,26 @@ def _orchestrate(
     allowed_layers = scope["allowed_layers"]
     resolved_brand_layer = scope["brand_layer"]
 
-    # 2 intent
-    intent_res = ic.classify(req.intent_hint or "content_generation")
+    # 2 intent — input-first（plan §6 step 2 / 2026-05-12 用户裁决）；非法 → needs_review
+    intent_res = ic.classify(req.intent_hint)
+    if intent_res.get("status") != "ok":
+        raise NeedsReviewException(
+            kind="intent",
+            reason=intent_res.get("reason") or "unknown intent_hint",
+            hint=req.intent_hint,
+        )
     intent = intent_res["intent"]
     policy_intent = ic.intent_to_policy_key(intent).get("policy_key") or "generate"
 
-    # 3 content_type：使用 hint；缺省走 product_review 兜底（路由器会按 hint 路由）
-    ct_res = ctr.route(req.content_type or "product_review")
+    # 3 content_type — input-first（plan §6 step 3 / 2026-05-12 用户裁决）；
+    # 别名未知 / 非 canonical → needs_review，绝不兜底
+    ct_res = ctr.route(req.content_type)
+    if ct_res.get("status") != "ok":
+        raise NeedsReviewException(
+            kind="content_type",
+            reason=ct_res.get("reason") or "unknown content_type",
+            hint=req.content_type,
+        )
     content_type = ct_res["content_type"]
 
     # 4 brief
@@ -273,6 +307,19 @@ def create_app() -> FastAPI:
             bundle, bundle_meta = _orchestrate(
                 req=req, request_id=request_id, governance=governance,
             )
+        except NeedsReviewException as e:
+            # plan §6 step 2/3：非法 intent / content_type → 200 + needs_review；
+            # 不走 5xx，因为这是业务上"等前端补字段"的合法流转状态
+            return {
+                "request_id": request_id,
+                "status": "needs_review",
+                "needs_review": {
+                    "field": e.kind,
+                    "received": e.hint,
+                    "reason": e.reason,
+                },
+                "elapsed_ms": int((time.time() - t0) * 1000),
+            }
         except tsr.TenantNotAuthorized as e:
             # 403：tenant 未登记 / disabled
             raise HTTPException(
@@ -299,6 +346,7 @@ def create_app() -> FastAPI:
         elapsed_ms = int((time.time() - t0) * 1000)
         return {
             "request_id": request_id,
+            "status": "ok",
             "elapsed_ms": elapsed_ms,
             "bundle": bundle,
             "meta": {

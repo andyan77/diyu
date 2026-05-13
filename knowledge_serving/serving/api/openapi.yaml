@@ -51,11 +51,16 @@ paths:
               $ref: "#/components/schemas/RetrieveContextRequest"
       responses:
         "200":
-          description: 成功返回 context_bundle
+          description: |
+            成功：根据 status 字段区分两类合法响应：
+              - status=ok → 返回 context_bundle
+              - status=needs_review → intent_hint / content_type 非法或别名未知，前端补字段后重试
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RetrieveContextResponse"
+                oneOf:
+                  - $ref: "#/components/schemas/RetrieveContextResponse"
+                  - $ref: "#/components/schemas/NeedsReviewResponse"
         "400":
           description: 入参语法错误（缺 tenant_id / 缺 user_query / 含 brand_layer 等被禁字段）
           content:
@@ -87,7 +92,9 @@ components:
     RetrieveContextRequest:
       type: object
       additionalProperties: false
-      required: [tenant_id, user_query]
+      # plan §6 step 2/3（2026-05-12 用户裁决 / input-first / no-LLM）：
+      # intent_hint 和 content_type 必须由调用方显式提供；缺失 → 400，非法 → 200 needs_review。
+      required: [tenant_id, user_query, content_type, intent_hint]
       properties:
         tenant_id:
           type: string
@@ -101,8 +108,16 @@ components:
           description: 用户自然语言查询；超长 → 413
         content_type:
           type: string
-          nullable: true
-          description: content_type hint（如 product_review / store_daily / founder_ip）；缺省由路由器解析
+          minLength: 1
+          description: |
+            content_type 显式输入（canonical id 或 alias）。
+            缺失 → 400；别名未知 → 200 + needs_review；**禁止 LLM 推断、禁止兜底**。
+        intent_hint:
+          type: string
+          minLength: 1
+          description: |
+            意图 hint 显式输入。
+            缺失 → 400；非法 → 200 + needs_review；**禁止 LLM 推断、禁止从 user_query 关键词猜**。
         platform:
           type: string
           default: xiaohongshu
@@ -113,9 +128,6 @@ components:
           type: string
           nullable: true
           description: fallback hint；仅作记录，最终由 fallback_decider 自决
-        intent_hint:
-          type: string
-          default: content_generation
         business_brief:
           type: object
           additionalProperties: true
@@ -123,11 +135,14 @@ components:
 
     RetrieveContextResponse:
       type: object
-      required: [request_id, elapsed_ms, bundle, meta]
+      required: [request_id, status, elapsed_ms, bundle, meta]
       properties:
         request_id:
           type: string
           description: 服务端生成的 unique request id
+        status:
+          type: string
+          enum: [ok]
         elapsed_ms:
           type: integer
         bundle:
@@ -143,6 +158,33 @@ components:
               type: string
             merged_overlay_payload_empty:
               type: boolean
+
+    NeedsReviewResponse:
+      type: object
+      required: [request_id, status, needs_review, elapsed_ms]
+      description: |
+        plan §6 step 2/3 短路 / short-circuit：intent_hint 或 content_type
+        缺失之外的非法值（非 canonical / 别名未知）→ 200 + needs_review。
+        不返回 bundle，等前端补字段重试。
+      properties:
+        request_id:
+          type: string
+        status:
+          type: string
+          enum: [needs_review]
+        needs_review:
+          type: object
+          required: [field, received, reason]
+          properties:
+            field:
+              type: string
+              enum: [intent, content_type]
+            received:
+              description: 调用方原始入参值（仅回显，便于前端定位）
+            reason:
+              type: string
+        elapsed_ms:
+          type: integer
 
     ErrorResponse:
       type: object

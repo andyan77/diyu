@@ -15,7 +15,7 @@ plan_sections:
   - "§5"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_api.py -v
+  - python3 -m pytest knowledge_serving/tests/test_api.py -v
 status: done
 ---
 
@@ -64,9 +64,10 @@ status: done
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_api.py -v
-pass: 5+ case 全绿
+command: python3 -m pytest knowledge_serving/tests/test_api.py -v
+pass: 5+ case 全绿（W11 外审收口：15 case 全绿）
 artifact: pytest report
+note: 仓库 / 本项目 venv 未在 PATH 暴露 `pytest` 入口，必须用 `python3 -m pytest`
 ```
 
 ## 9. CD / 环境验证
@@ -82,8 +83,8 @@ artifact: pytest report
 
 ## 11. DoD
 - [x] API 入 git（`knowledge_serving/serving/api/retrieve_context.py` + `openapi.yaml` + `__init__.py`）
-- [x] pytest 全绿（11/11 PASS：healthz / happy_path / 400×2 / 403 / 413 / 500 / brand_layer_payload_red_line / brand_override_in_query_blocked / openapi_yaml_red_line / runtime_openapi_red_line）
-- [ ] 审查员 pass — 待 W11 外审入口
+- [x] pytest 全绿（15/15 PASS，含 W11 外审收口新增 3 case：missing_content_type_400 / unknown_content_type→needs_review / unknown_intent→needs_review）
+- [ ] 审查员 pass — 待 W11 外审入口（本轮 RISKY 已消化 3 项 finding，详见 §13）
 
 ## 12. 实施记录 / 2026-05-13 W11
 
@@ -131,4 +132,42 @@ artifact: pytest report
 
 - 本卡只交付 HTTP wrapper + OpenAPI + 单元测试；**不交付 Dify 节点**（属 KS-DIFY-ECS-008 范围）
 - live Qdrant 召回路径走 KS-DIFY-ECS-006 smoke / 批量评测；API 默认 structured_only（与卡 §3 一致，未列 qdrant 入参）
+- replay / 回放一致性 → KS-DIFY-ECS-010
+
+## 13. W11 外审收口 / 2026-05-13
+
+审查员 RISKY 裁决 3 项 finding，全部消化：
+
+| Finding | 等级 | E8 决策 | 修法 | 证据 |
+|---|---|---|---|---|
+| #1 `content_type` / `intent_hint` 语义漂移 | HIGH | 改 data 匹配 spec：plan §6 step 2/3（2026-05-12 用户裁决）是真源；API 层兜底是漂移 | (a) `RetrieveContextRequest.content_type` / `intent_hint` 改 required（min_length=1），缺失 → 400；(b) `_orchestrate` 在 step 2/3 后检查 `status != "ok"` → 抛 `NeedsReviewException` 短路；(c) handler 把 `NeedsReviewException` 转成 **200 + `{status: needs_review, needs_review: {field, received, reason}}`**，不再 500；(d) happy path 响应增 `status: ok` 用于前端 oneOf 分发 | 新增 4 测试 PASS：`test_missing_content_type_400` / `test_missing_intent_hint_400` / `test_unknown_content_type_returns_needs_review` / `test_unknown_intent_hint_returns_needs_review` |
+| #2 CI 命令 `pytest` 在本仓 venv 不可用 | MEDIUM | spec 改 data：本仓 venv 未在 PATH 暴露 `pytest` 入口（`exit 127`），命令应统一为 `python3 -m pytest` | task card §8 / front matter `ci_commands` 同步改为 `python3 -m pytest knowledge_serving/tests/test_api.py -v` | 现场复跑 `python3 -m pytest knowledge_serving/tests/test_api.py -v` → 15 passed |
+| #3 status=done vs 审查员 pass 未勾不一致 | MEDIUM | 项目两阶段惯例（其它已交付卡如 KS-DIFY-ECS-005 同样模式）：`status=done` = "本卡交付落盘"；DoD 「审查员 pass」由外审复跑后单独勾。本次审查员 RISKY 自然不勾；修完 #1 后等下一轮外审复跑再勾 | DoD 第 3 项保持 `[ ]`，本节明确登记本轮 finding 消化记录 | 待 W11 外审入口复跑后由审查员勾选 |
+
+### OpenAPI 同步更新
+
+- `RetrieveContextRequest.required` 增 `content_type` 和 `intent_hint`；移除两者的 `nullable / default`，改为 `minLength: 1` + plan 真源描述
+- POST `/v1/retrieve_context` 200 响应改 `oneOf: [RetrieveContextResponse, NeedsReviewResponse]`
+- 新增 `NeedsReviewResponse` schema（含 `status: needs_review`、`needs_review.field ∈ {intent, content_type}` 枚举）
+- `additionalProperties: false` 红线守门保留
+
+### 与 plan §6 真源对齐 / spec alignment
+
+| Plan 真源 | 本卡实现 |
+|---|---|
+| step 2: intent 必须显式入参；中间件枚举校验；缺失/非法 → needs_review；禁止 LLM 推断 | ✅ pydantic required + `ic.classify()` status != ok → NeedsReview |
+| step 3: content_type 必须显式入参；中间件 alias→canonical；别名未知 → needs_review，不返回兜底 | ✅ pydantic required + `ctr.route()` status != ok → NeedsReview，绝不兜底 product_review |
+| step 9: brand_overlay 只允许 tenant_scope_resolver 推断的 resolved_brand_layer | ✅ pydantic extra=forbid 拦 brand_layer 入参 + bundle 始终用 tsr 结果 |
+
+### 回归证据 / 2026-05-13 W11 外审收口
+
+- `python3 -m pytest knowledge_serving/tests/test_api.py -v` → 15 passed
+- `python3 -m pytest knowledge_serving/tests/ knowledge_serving/scripts/tests/ -q` → 483 passed（升级前 479 + 新增 4 case）
+- `python3 task_cards/validate_task_cards.py` → 57 cards / DAG closed / S0-S13 covered
+- `bash knowledge_serving/scripts/lint_no_duplicate_log.sh` → exit 0
+
+### 边界（不变）
+
+- 本卡只交付 HTTP wrapper + OpenAPI + 单元测试；不交付 Dify 节点（KS-DIFY-ECS-008）
+- live Qdrant 召回路径走 KS-DIFY-ECS-006 smoke；本 API 默认 structured_only
 - replay / 回放一致性 → KS-DIFY-ECS-010
