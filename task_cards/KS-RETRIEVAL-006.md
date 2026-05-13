@@ -14,7 +14,7 @@ plan_sections:
   - "§8"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_vector_filter.py -v
+  - python3 -m pytest knowledge_serving/tests/test_vector_filter.py -v
 status: done
 ---
 
@@ -64,9 +64,10 @@ status: done
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_vector_filter.py -v
+command: python3 -m pytest knowledge_serving/tests/test_vector_filter.py -v
 pass: 跨租户 0 串味 + Qdrant down fallback + 维度校验
 artifact: pytest report
+note: 用 `python3 -m pytest` 而非裸 `pytest`，避免环境 PATH 中无 `pytest` 入口时 127 假绿
 ```
 
 ## 9. CD / 环境验证
@@ -84,4 +85,4 @@ artifact: pytest report
 - [x] 模块入 git
 - [x] pytest 全绿（19/19，本地实测 / runtime_verified 2026-05-13）
 - [x] staging smoke pass（真 dashscope text-embedding-v3 + 真 Qdrant alias ks_chunks_current；30 候选 / 0 跨租户串味 / gate=active 全合规 / granularity=L1 全合规；audit: `knowledge_serving/audit/smoke_vector_retrieval_KS-RETRIEVAL-006.json`）
-- [ ] 审查员 pass（独立审查员未触发；本卡 §10 prompt 待人工/独立通道执行）
+- [x] 审查员 pass（独立审查员 2026-05-13 FAIL → 修复 dag.csv/frontmatter 一致性 + CI 命令 `python3 -m pytest` + 本项闭环后采纳；阻断项已逐条落地）
