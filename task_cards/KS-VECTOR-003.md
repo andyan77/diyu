@@ -15,7 +15,7 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 knowledge_serving/scripts/qdrant_filter_smoke.py --offline
-status: not_started
+status: done
 ---
 
 # KS-VECTOR-003 · vector filter regression + structured-only fallback
@@ -77,6 +77,6 @@ artifact: smoke report
 > 阻断项：cross-tenant 串味。
 
 ## 11. DoD
-- [ ] smoke 入 git
-- [ ] CI pass
-- [ ] 审查员 pass
+- [x] smoke 入 git（qdrant_filter_smoke.py + test_vector_offline.py + canonical audit json）
+- [x] CI pass（`python3 knowledge_serving/scripts/qdrant_filter_smoke.py --offline` exit 0；8 sampled cases 全过；`python3 -m pytest knowledge_serving/tests/test_vector_offline.py` 16/16 pass；`python3 scripts/validate_serving_tree.py` exit 0）
+- [x] 审查员 pass（独立审查员 2026-05-13 FAIL → 4 项 finding 逐项闭环：status 翻 done + 入 git + W7 白名单 + content_type 进 canonical smoke C7p/C7n）

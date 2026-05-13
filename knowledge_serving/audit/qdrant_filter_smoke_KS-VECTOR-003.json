@@ -1,0 +1,381 @@
+{
+  "task_card": "KS-VECTOR-003",
+  "mode": "offline",
+  "generated_at": "2026-05-13T03:52:13Z",
+  "chunks_corpus_path": "knowledge_serving/vector_payloads/qdrant_chunks.jsonl",
+  "chunks_total": 498,
+  "current_compile_run_id": "5b5e5fc1f6199ec6",
+  "brand_layers_in_corpus": [
+    "brand_faye",
+    "domain_general",
+    "needs_review"
+  ],
+  "sampled_filter_pass_ratio": "8/8",
+  "cross_tenant_hits": 0,
+  "fallback_probe": {
+    "policy_loaded": true,
+    "log_marker_present": true,
+    "strategy_name_present": true,
+    "pass": true
+  },
+  "cases": [
+    {
+      "case_id": "C1_brand_faye_plus_domain_general",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 497,
+      "brands_hit": [
+        "brand_faye",
+        "domain_general"
+      ],
+      "expected": "hits>0 且只命中 {brand_faye, domain_general}",
+      "pass": true,
+      "leak": []
+    },
+    {
+      "case_id": "C2_domain_general_only",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 475,
+      "brands_hit": [
+        "domain_general"
+      ],
+      "expected": "hits>0 且全部 brand_layer=domain_general",
+      "pass": true,
+      "leak": []
+    },
+    {
+      "case_id": "C3_gate_active_only",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 497,
+      "gate_status_hit": [
+        "active"
+      ],
+      "expected": "synthetic_inactive_probe 0 命中 且 gate_status 全 active",
+      "pass": true,
+      "inactive_leaked": false
+    },
+    {
+      "case_id": "C4_cross_tenant_zero_hit",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_b"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 0,
+      "brands_hit": [],
+      "expected": "0 命中（brand_b 不在语料）",
+      "pass": true
+    },
+    {
+      "case_id": "C5_batch_anchor_stale_run_zero_hit",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "compile_run_id",
+            "match": {
+              "value": "deadbeefcafef00d"
+            }
+          }
+        ]
+      },
+      "stale_compile_run_id": "deadbeefcafef00d",
+      "current_compile_run_id": "5b5e5fc1f6199ec6",
+      "hits_count": 0,
+      "expected": "0 命中（旧批次 compile_run_id 应被服务端 hard filter 拒绝）",
+      "pass": true
+    },
+    {
+      "case_id": "C5b_batch_anchor_current_run_positive",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "compile_run_id",
+            "match": {
+              "value": "5b5e5fc1f6199ec6"
+            }
+          }
+        ]
+      },
+      "hits_count": 497,
+      "expected": "hits>0（当前批次 compile_run_id 必须可召回）",
+      "pass": true
+    },
+    {
+      "case_id": "C7p_content_type_positive",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "content_type",
+            "match": {
+              "value": "behind"
+            }
+          }
+        ]
+      },
+      "content_type_probe": "behind",
+      "hits_count": 4,
+      "content_types_hit": [
+        "behind"
+      ],
+      "expected": "hits>0 且 content_type 全部等于 probe（hard filter 真生效）",
+      "pass": true
+    },
+    {
+      "case_id": "C7n_content_type_negative_zero_hit",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "content_type",
+            "match": {
+              "value": "synthetic_unknown_content_type_probe"
+            }
+          }
+        ]
+      },
+      "content_type_probe": "synthetic_unknown_content_type_probe",
+      "hits_count": 0,
+      "expected": "0 命中（未知 content_type 必须被 hard filter 拒绝）",
+      "pass": true
+    },
+    {
+      "case_id": "C6_fail_closed_missing_field",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 0,
+      "expected": "0 命中（缺 brand_layer 必须 fail-closed）",
+      "pass": true
+    }
+  ],
+  "verdict": "pass"
+}

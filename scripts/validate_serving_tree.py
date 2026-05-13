@@ -164,7 +164,24 @@ EXPECTED_FILES_W6 = {
 GITKEEP_DIRS = {"vector_payloads", "logs"}
 EXPECTED_GITKEEPS = {f"{d}/.gitkeep" for d in GITKEEP_DIRS}
 
-# 全部允许文件 = §11 + W0/W1 + W3 + W4 + W5 白名单 + .gitkeep 占位
+# W7 已落白名单 / W7-landed allowlist
+# 注：W7 涵盖 KS-RETRIEVAL-006 / KS-VECTOR-002 / KS-VECTOR-003 / KS-DIFY-ECS-004。
+# audit/smoke_*.json、audit/qdrant_filter_smoke_*.json 等是运行时 CI artifact，不进白名单。
+EXPECTED_FILES_W7 = {
+    # KS-RETRIEVAL-006 (done) · vector_retrieval + payload hard filter（commit 88363e5）
+    "serving/vector_retrieval.py",
+    "tests/test_vector_filter.py",
+    "scripts/smoke_vector_retrieval.py",
+    # KS-VECTOR-002 (done) · qdrant payload jsonschema（commit abf1054）
+    "vector_payloads/qdrant_payload_schema.json",
+    # KS-VECTOR-003 · offline filter smoke + 单测（本卡）
+    "scripts/qdrant_filter_smoke.py",
+    "tests/test_vector_offline.py",
+    # KS-DIFY-ECS-004 (in_progress) · Qdrant chunks 灌库脚本（commit cf38315）
+    "scripts/upload_qdrant_chunks.py",
+}
+
+# 全部允许文件 = §11 + W0/W1 + W3 + W4 + W5 + W6 + W7 白名单 + .gitkeep 占位
 ALLOWED_FILES = (
     EXPECTED_FILES_PLAN
     | EXPECTED_FILES_PRE_EXISTING
@@ -172,6 +189,7 @@ ALLOWED_FILES = (
     | EXPECTED_FILES_W4
     | EXPECTED_FILES_W5
     | EXPECTED_FILES_W6
+    | EXPECTED_FILES_W7
     | EXPECTED_GITKEEPS
 )
 
