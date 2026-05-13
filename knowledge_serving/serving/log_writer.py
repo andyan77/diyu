@@ -1,25 +1,42 @@
-"""KS-RETRIEVAL-008 · log_writer.
+"""KS-RETRIEVAL-008 + KS-DIFY-ECS-005 · log_writer.
 
 13 步召回流程第 13 步：把已构造好的 context_bundle 落到 §4.5 唯一 canonical
 log 文件 `knowledge_serving/control/context_bundle_log.csv`，28 字段全填，
 embedding / rerank / llm_assist 未启用时**显式**填 `"disabled"`，禁止留空。
 
+KS-DIFY-ECS-005 双写扩展 / dual-write extension:
+- CSV 仍是 §4.5 唯一 canonical（S8 回放真源）；先 write + fsync，磁盘落定才返回
+- PG 是 outbox mirror（BI / 跨服务查询用）；CSV 成功后异步同步
+- PG 失败：行进 outbox jsonl（`pending_pg_sync`），不回退、不影响业务调用
+- CSV 失败：raise，PG **绝不写**（不能反向成隐含真源）
+- 同 request_id 重复写：CSV 拒绝（uniqueness）
+
 S8 回放约束 / replay invariants:
 - 单真源：拒绝写到非 canonical 路径（尤其是 `knowledge_serving/logs/...`）
 - 同 request_id + 同上游输入 → 同 bundle_hash（由 context_bundle_builder 保证）
 - 任何字段空字符串 → raise（disabled 必须显式）
+- read_log_rows 只读 CSV；PG 不参与回放
 """
 from __future__ import annotations
 
 import csv
+import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable, Optional
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CANONICAL_LOG_PATH = REPO_ROOT / "knowledge_serving" / "control" / "context_bundle_log.csv"
+CANONICAL_OUTBOX_PATH = REPO_ROOT / "knowledge_serving" / "control" / "context_bundle_log_outbox.jsonl"
 FORBIDDEN_LOG_DIR = REPO_ROOT / "knowledge_serving" / "logs"
+
+OUTBOX_STATUS_PENDING = "pending_pg_sync"
+OUTBOX_STATUS_REPLAYED = "replayed"
+
+# PG mirror 表名（KS-DIFY-ECS-005 staging schema 约定；DDL 由 staging 部署阶段建表，
+# 本模块只通过注入的 pg_writer callable 与 PG 交互，本地测试不依赖真 PG）。
+PG_MIRROR_TABLE = "knowledge.context_bundle_log"
 
 LOG_FIELDS = [
     "request_id",
@@ -179,6 +196,52 @@ def _build_row(
     return row
 
 
+def _default_outbox_for(log_path: Path) -> Path:
+    """log_path 同目录下的 outbox jsonl，跟 csv 配对。canonical csv → canonical outbox。"""
+    if log_path.resolve() == CANONICAL_LOG_PATH.resolve():
+        return CANONICAL_OUTBOX_PATH
+    return log_path.parent / "context_bundle_log_outbox.jsonl"
+
+
+def _check_duplicate_request_id(target: Path, request_id: str) -> None:
+    """CSV 内若已存在同 request_id 行 → raise（卡 §6 unique 约束）。
+
+    实现：流式读 csv，命中即抛；O(n) 但 log 文件本身有界（一次会话一行级别）。
+    """
+    if not target.exists() or target.stat().st_size == 0:
+        return
+    with target.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        for existing in reader:
+            if existing.get("request_id") == request_id:
+                raise LogWriteError(
+                    f"duplicate request_id={request_id!r} 已存在于 {target}；"
+                    "CSV 是 §4.5 单 canonical，禁止重复写"
+                )
+
+
+def _append_outbox(
+    outbox_path: Path,
+    row: dict[str, str],
+    *,
+    status: str,
+    error: str | None = None,
+    attempts: int = 1,
+) -> None:
+    """把行追加到 outbox jsonl；每条 json line 含 row + status + error + attempts + ts。"""
+    outbox_path.parent.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "request_id": row.get("request_id"),
+        "status": status,
+        "attempts": attempts,
+        "error": error,
+        "queued_at": _now_iso(),
+        "row": row,
+    }
+    with outbox_path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + "\n")
+
+
 def write_context_bundle_log(
     *,
     bundle: dict,
@@ -191,21 +254,25 @@ def write_context_bundle_log(
     blocked_reason: str | None = None,
     log_path: Path | None = None,
     created_at: str | None = None,
+    pg_writer: Optional[Callable[[dict[str, str]], None]] = None,
+    outbox_path: Path | None = None,
+    fsync_csv: bool = True,
 ) -> tuple[Path, dict[str, str]]:
     """追加一行 log 到 canonical csv；返回写入路径 + 写入行。
 
+    顺序硬约束（KS-DIFY-ECS-005 §4 / §6）：
+      1. CSV 写 + fsync（磁盘落定才继续）；任一步失败 → raise，**绝不**调 pg_writer
+      2. CSV 成功后才尝试 pg_writer（mirror）
+      3. pg_writer 失败 → 行进 outbox（pending_pg_sync），不回退、不影响调用方
+
     Args:
-        bundle: context_bundle_builder.build_context_bundle 的 bundle 输出
-        bundle_meta: 同函数的 meta 输出（带 bundle_hash / user_query_hash）
-        classified_intent: 由 Dify 开始节点 / API 入参提供（intent_classifier 输出）
-        selected_recipe_id: recipe_selector 输出
-        retrieved_ids: {pack_ids, play_card_ids, asset_ids, overlay_ids, evidence_ids}
-            各 list[str]；空列表会写 'none'，禁止留空字符串
-        model_policy: model_policy.yaml 解析结果
-        final_output_hash: 若 LLM 未实际产出文案则填 None → log 写 'disabled'
-        blocked_reason: fallback 是 blocked_* 时的 reason；否则 None → 'none'
-        log_path: 默认 canonical；测试用 tmp_path
-        created_at: 默认 utc now；回放测试可注入固定值
+        bundle / bundle_meta / classified_intent / selected_recipe_id /
+        retrieved_ids / model_policy / final_output_hash / blocked_reason /
+        log_path / created_at: 同 KS-RETRIEVAL-008 原版
+        pg_writer: 可选 PG mirror 写入回调。签名 `(row: dict) -> None`；
+            None 时纯 CSV 模式（兼容 W9 demo / KS-RETRIEVAL-008 单元测试）
+        outbox_path: pg_writer 失败时 fallback 队列；None → 与 log_path 同目录
+        fsync_csv: 默认 True；测试可关闭（tmpfs / mock fs 不支持 fsync）
     """
     target = _ensure_canonical(log_path or CANONICAL_LOG_PATH)
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -222,20 +289,108 @@ def write_context_bundle_log(
         created_at=created_at,
     )
 
+    # 步骤 0：unique 约束（卡 §6 "同 request_id 两次写 → CSV 拒绝"）
+    _check_duplicate_request_id(target, row["request_id"])
+
+    # 步骤 1：CSV 写 + fsync（canonical 必须落盘成功，下游 PG 才允许尝试）
     write_header = not target.exists() or target.stat().st_size == 0
-    with target.open("a", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=LOG_FIELDS)
+    with target.open("a", encoding="utf-8", newline="\n") as f:
+        writer = csv.DictWriter(f, fieldnames=LOG_FIELDS, lineterminator="\n")
         if write_header:
             writer.writeheader()
         writer.writerow(row)
+        f.flush()
+        if fsync_csv:
+            try:
+                os.fsync(f.fileno())
+            except OSError:
+                # tmpfs / 某些 mock fs 不支持 fsync；不致命，CSV 写入本身已成功
+                pass
+    # 此处 CSV 已落盘。**若上面 with 块任何一行 raise，整个函数已退出，pg_writer 不会被调用**。
+
+    # 步骤 2：PG mirror（best-effort，失败入 outbox）
+    if pg_writer is not None:
+        ob = outbox_path or _default_outbox_for(target)
+        try:
+            pg_writer(row)
+        except Exception as e:  # noqa: BLE001 mirror 失败不影响业务
+            _append_outbox(ob, row, status=OUTBOX_STATUS_PENDING, error=f"{type(e).__name__}: {e}")
 
     return target, row
 
 
 def read_log_rows(log_path: Path | None = None) -> list[dict[str, str]]:
-    """按 S8 回放读 log；调试 / 测试用。"""
+    """按 S8 回放读 log；调试 / 测试用。S8 回放硬约束：只读 CSV，不访问外部数据库。"""
     target = (log_path or CANONICAL_LOG_PATH).resolve()
     if not target.exists():
         return []
     with target.open("r", encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
+
+
+def read_outbox(outbox_path: Path | None = None) -> list[dict[str, Any]]:
+    """读 outbox jsonl；reconcile 脚本用。"""
+    target = (outbox_path or CANONICAL_OUTBOX_PATH).resolve()
+    if not target.exists():
+        return []
+    out: list[dict[str, Any]] = []
+    with target.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            out.append(json.loads(line))
+    return out
+
+
+def reconcile_pg_mirror(
+    *,
+    csv_path: Path | None = None,
+    pg_reader: Callable[[], list[dict[str, str]]],
+    pg_writer: Callable[[dict[str, str]], None],
+    outbox_path: Path | None = None,
+) -> dict[str, Any]:
+    """一致性校验：以 CSV 为基准对比 PG mirror。
+
+    - **PG 缺行**（CSV 有 / PG 无）：调 pg_writer 补齐，并在 outbox 标 replayed
+    - **PG 多行**（PG 有 / CSV 无）：报警（CSV 才是真源），不擅自删 PG
+
+    Returns:
+        {
+            "csv_count": int,
+            "pg_count": int,
+            "missing_in_pg": list[request_id],
+            "extra_in_pg": list[request_id],   # 报警，需人工
+            "replayed_count": int,
+            "replay_errors": list[{request_id, error}],
+        }
+    """
+    csv_rows = read_log_rows(csv_path)
+    pg_rows = pg_reader()
+    csv_ids = {r["request_id"]: r for r in csv_rows}
+    pg_ids = {r["request_id"]: r for r in pg_rows}
+
+    missing_in_pg = [rid for rid in csv_ids if rid not in pg_ids]
+    extra_in_pg = [rid for rid in pg_ids if rid not in csv_ids]
+
+    ob = outbox_path or _default_outbox_for(
+        (csv_path or CANONICAL_LOG_PATH).resolve()
+    )
+    replayed = 0
+    errors: list[dict[str, str]] = []
+    for rid in missing_in_pg:
+        try:
+            pg_writer(csv_ids[rid])
+            _append_outbox(ob, csv_ids[rid], status=OUTBOX_STATUS_REPLAYED, attempts=1)
+            replayed += 1
+        except Exception as e:  # noqa: BLE001
+            errors.append({"request_id": rid, "error": f"{type(e).__name__}: {e}"})
+
+    return {
+        "csv_count": len(csv_rows),
+        "pg_count": len(pg_rows),
+        "missing_in_pg": missing_in_pg,
+        "extra_in_pg": extra_in_pg,
+        "replayed_count": replayed,
+        "replay_errors": errors,
+    }

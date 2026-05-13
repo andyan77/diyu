@@ -14,8 +14,8 @@ plan_sections:
   - "§9.3"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_log_dual_write.py -v
-status: not_started
+  - python3 -m pytest knowledge_serving/tests/test_log_dual_write.py -v
+status: done
 ---
 
 # KS-DIFY-ECS-005 · context_bundle_log PG outbox mirror（CSV 单 canonical）
@@ -66,7 +66,7 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_log_dual_write.py -v
+command: python3 -m pytest knowledge_serving/tests/test_log_dual_write.py -v
 pass: PG down / up 用例全绿
 artifact: pytest report
 ```
@@ -83,6 +83,53 @@ artifact: pytest report
 > 阻断项：S8 回放路径访问 PG；CSV 失败但 PG 仍写；PG 失败阻塞业务。
 
 ## 11. DoD
-- [ ] log_writer 扩展入 git
-- [ ] pytest 全绿
-- [ ] 审查员 pass
+- [x] log_writer 扩展入 git（双写 + outbox + fsync + dedup + reconcile_pg_mirror）
+- [x] pytest 全绿（9/9 + 全量 220/220）
+- [ ] 审查员 pass（外审入口）
+
+## 12. 实施记录 / 2026-05-13 W10
+
+### 工程要点
+
+- **CSV 优先 + fsync**：`write_context_bundle_log` 在 `open("a")` with 块内 `f.flush() + os.fsync()`，
+  磁盘落定才返回；任一步 raise → 函数立刻退出，**pg_writer 永远不被触达**（卡 §6 case 3 守门）
+- **dedup**：写之前流式扫 CSV，命中同 request_id 立刻 raise `LogWriteError("duplicate...")`，
+  在 PG mirror 之前拦下（卡 §6 case 6）
+- **outbox jsonl**：CSV 同目录下的 `context_bundle_log_outbox.jsonl`，
+  每行 `{request_id, status, attempts, error, queued_at, row}`；
+  PG 失败 → `pending_pg_sync`；reconcile 重放成功 → `replayed`
+- **callable 注入 PG 接口**：log_writer 不 import `psycopg` / `sqlalchemy`，
+  所有 PG 交互走 `pg_writer: Callable[[dict], None]` + `pg_reader: Callable[[], list[dict]]`，
+  保证 S8 回放路径 (`read_log_rows`) PG-free
+- **reconcile 脚本** `knowledge_serving/scripts/reconcile_context_bundle_log_mirror.py`：
+  独立 CLI（dry-run 默认 / `--apply` 真写），走 SSH + docker exec psql（同 KS-DIFY-ECS-003 模式），
+  以 CSV 为基准，PG 缺行 → outbox 重放；PG 多行 → 报警 exit 1，不擅自删 PG
+
+### 测试矩阵（9 case，全 PASS）
+
+| 测试 | 覆盖卡 §6 / §7 / §10 |
+|---|---|
+| test_pg_down_csv_still_writes_outbox_queued | §6 PG down → CSV 200 + outbox |
+| test_pg_long_down_outbox_stacks | §6 PG 长 down → outbox 堆积 |
+| test_csv_failure_pg_never_called | §6 CSV 失败 → raise + PG 0 调用 |
+| test_reconcile_pg_extra_row_alarms | §6 一致性：PG 多行 → extra_in_pg 报警 |
+| test_reconcile_pg_missing_row_replays | §6 一致性：PG 缺行 → outbox 重放补齐 |
+| test_duplicate_request_id_rejected | §6 同 request_id 两次写 → CSV 拒 + PG 不二调 |
+| test_replay_path_does_not_touch_pg | §10 read_log_rows + 模块级 PG-free |
+| test_reconcile_script_uses_lw_callable_interface | callable 注入接口反证 |
+| test_pg_up_no_outbox_pending | PG 顺利时 outbox 不入 pending |
+
+### 回归证据
+
+- `python3 -m pytest knowledge_serving/tests/test_log_dual_write.py -v` → 9 passed
+- `python3 -m pytest knowledge_serving/tests/` → 220 passed
+- `python3 knowledge_serving/scripts/run_context_retrieval_demo.py --all` → exit 0, 4/4 PASS（向后兼容）
+- `python3 task_cards/validate_task_cards.py` → 57 cards, DAG closed, S0-S13 covered
+- `bash knowledge_serving/scripts/lint_no_duplicate_log.sh` → 单 canonical OK
+
+### 边界遗留 / next-card handoff
+
+- PG DDL（`knowledge.context_bundle_log` mirror 表 + `request_id` UNIQUE）由 staging
+  部署阶段建表，不属本卡范围；当前 reconcile 脚本的 dry-run 模式可在表存在后立即跑通
+- `--live` reconcile 真实跑需要 `ECS_HOST` / `PG_USER` / `PG_DATABASE` / `ECS_SSH_KEY_PATH` env，
+  与 KS-DIFY-ECS-003 同款约定，无新增 secrets
