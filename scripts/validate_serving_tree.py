@@ -150,6 +150,13 @@ EXPECTED_FILES_W6 = {
     # 文件已落盘但卡待审查员验收；标 in_progress 而非 not_started，避免"悬空"
     "serving/structured_retrieval.py",
     "tests/test_struct_retrieval.py",
+    # KS-DIFY-ECS-003 (done) · serving views 回灌 ECS PG（commit dda4f56）
+    "scripts/upload_serving_views_to_ecs.py",
+    # KS-VECTOR-001 (done) · 离线 Qdrant chunks 构建器 + 测试 + jsonl 产物（commit f4c2254）
+    # 卡 §5 三项均声明"入 git: 是"——脚本 / 测试 / jsonl 全部纳入版本控制
+    "scripts/build_qdrant_payloads.py",
+    "scripts/tests/test_build_qdrant_payloads.py",
+    "vector_payloads/qdrant_chunks.jsonl",
 }
 
 # 空目录占位 / placeholder for empty subdirs（git 不跟踪空目录）
