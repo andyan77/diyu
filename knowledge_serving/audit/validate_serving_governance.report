@@ -1,0 +1,50 @@
+# validate_serving_governance.report
+generated_at: 2026-05-13T03:14:50.248163+00:00
+compile_run_id: 5b5e5fc1f6199ec6
+
+[preflight schema_validation]
+status: pass
+checked_rows: 545
+violations: ()
+
+[S1 source_traceability]
+status: pass
+checked_rows: 498
+resolved_views_checked: 462
+synthetic_views_checked: 36
+plural_refs_checked: 0
+id_mismatches: 0
+violations: ()
+
+[S2 gate_filter]
+status: pass
+checked_rows: 498
+gate_status_distribution: {'pack_view': {'active': 201}, 'content_type_view': {'active': 18}, 'play_card_view': {'active': 29}, 'runtime_asset_view': {'active': 24}, 'brand_overlay_view': {'active': 7}, 'evidence_view': {'active': 201}, 'generation_recipe_view': {'active': 18}}
+violations: ()
+
+[S3 brand_layer_scope]
+status: pass
+checked_rows: 498
+violations: ()
+
+[S4 granularity_integrity]
+status: pass
+checked_rows: 498
+violations: ()
+
+[S5 evidence_linkage]
+status: pass
+checked_rows: 201
+violations: ()
+
+[S6 play_card_completeness]
+status: pass
+checked_rows: 29
+violations: ()
+
+[S7 fallback_policy_coverage]
+status: pass
+checked_rows: 19
+canonical_count: 18
+frm_count: 18
+violations: ()
