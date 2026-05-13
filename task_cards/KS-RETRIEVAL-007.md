@@ -19,7 +19,7 @@ plan_sections:
   - "§6.11"
 writes_clean_output: false
 ci_commands:
-  - pytest knowledge_serving/tests/test_merge_fallback.py -v
+  - python3 -m pytest knowledge_serving/tests/test_merge_fallback.py -v
 status: done
 ---
 
@@ -66,10 +66,12 @@ status: done
 
 ## 8. CI 门禁
 ```
-command: pytest knowledge_serving/tests/test_merge_fallback.py -v
+command: python3 -m pytest knowledge_serving/tests/test_merge_fallback.py -v
 pass: 5 状态用例 + override 用例全绿
 artifact: pytest report
 ```
+（W8 外审 finding GOV#1：CI 入口必须用 `python3 -m pytest`，因 CI 环境不保证有
+`pytest` 顶层可执行；2026-05-13 W8 收口已修正）
 
 ## 9. CD / 环境验证
 不部署。
