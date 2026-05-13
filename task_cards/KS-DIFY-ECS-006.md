@@ -88,7 +88,7 @@ note: 回放 / replay 验证由 KS-DIFY-ECS-010 单独 CI 命令负责
 - [x] 脚本入 git（`scripts/ecs_e2e_smoke.py`）
 - [x] CI pass（数据穿透 + S9 + log 字段齐）— runtime_verified（2026-05-13 W11 staging 实测：4/4 case PASS，CSV 28 字段全填，4 个 request_id 全部命中 canonical CSV，cross_tenant_leak=0，smoke_result=pass）
 - [x] 本卡可在 KS-DIFY-ECS-010 未完成时独立通过 — code_verified（脚本未引用 replay 模块；audit JSON 显式不含 replay 段）
-- [ ] 审查员 pass — 待外审复跑（W11 外审入口）
+- [x] 审查员 pass — runtime_verified（2026-05-13 W11 外审复跑后收口：4 项 finding 全部消化，全量回归 468 passed / serving 总闸 S1-S7 全绿 / lint 通过 / DAG 闭环；详见 §13 W11 外审收口）
 
 ## 12. 实施记录 / 2026-05-13 W11
 
@@ -122,3 +122,37 @@ note: 回放 / replay 验证由 KS-DIFY-ECS-010 单独 CI 命令负责
 
 - 本脚本**只读 CSV 的字段完整性 + 命中**，**不重建 bundle**；replay / 回放一致性由 KS-DIFY-ECS-010 独立 CI 命令负责（卡 §1 / §7 / §8 note）
 - audit JSON 不含 replay 段，避免 W11 / W12 边界漂移
+
+## 13. W11 外审收口 / 2026-05-13
+
+外审 RISKY 裁决 4 项 finding，全部在本卡 W11 范围内消化（用户裁决方案 A：本卡一并修跨卡序列化漂移）：
+
+| Finding | 等级 | 修法 | 证据 |
+|---|---|---|---|
+| #1 schema array vs CSV `;` 拼接（KS-RETRIEVAL-008 序列化漂移） | HIGH | E8 改 data 匹配 spec：`log_writer._join_ids` → `_serialize_id_list`，7 个 array 字段 JSON 编码落盘；空 list 写 `"[]"` 保留非空守门；清空存量 demo/smoke CSV 旧格式行 | `validate_serving_governance.py --all` 重跑：preflight schema_validation status=pass，checked_rows=549；S1-S7 全绿 |
+| #2 smoke 未做真 Qdrant 穿透 | HIGH | smoke 加 `_build_live_qdrant_call`：Qdrant reachable + DASHSCOPE_API_KEY + qdrant_client 三齐全则调真 `vret.vector_retrieve`；任一不全降级 structured_only + audit 显式标因；vector 侧候选 brand_layer 也并入 S9 leak 计数 | 复跑实测 `vector_evidence.live_hit=true`；3/4 case 真 Qdrant 命中 `candidates=2 brand_leak=0`，1 case 因 dashscope 瞬时失败降级 + notes 显式记录 |
+| #3 复跑无 PG/ECS env 导致全量降级 | MEDIUM | smoke import 时 best-effort auto-load 仓库根 `.env`（不覆盖已存在 env）；audit 记录 `dotenv_loaded_keys` | `env -i HOME=$HOME PATH=$PATH python3 scripts/ecs_e2e_smoke.py` 实测：`dotenv_loaded=14 keys`，pg.reachable=true / qdrant.reachable=true |
+| #4 lint header-only 与 W8+ 真实写日志阶段冲突 | MEDIUM | E8 漂移修正：`lint_no_duplicate_log.sh` 删除 `body_lines==0` 硬约束；只守"单 canonical + header 28 字段"；同步更新测试（`test_canonical_with_data_row_passes`），添加 W11 修正注释 | `bash lint_no_duplicate_log.sh` exit 0；7/7 lint test 全绿 |
+
+### 跨卡影响（用户已裁决纳入本卡范围）
+
+- **`knowledge_serving/serving/log_writer.py`**：`_join_ids` → `_serialize_id_list`，7 处调用点同步替换；CSV cell 由 `;` 拼接改 JSON 编码；下游 reconcile（`reconcile_context_bundle_log_mirror.py`）走 `lw.LOG_FIELDS` 透传，PG 列为 TEXT，对 JSON 字面量天然兼容
+- **`knowledge_serving/control/context_bundle_log.csv`**：清空旧格式 demo/smoke 数据行，仅保留 header；W11 smoke 重跑后落 4 行新格式 canonical 证据
+- **`knowledge_serving/control/context_bundle_log_outbox.jsonl`**：删除（旧 outbox 行用旧 `;` 格式，会污染 reconcile 重放真源）；W11 smoke 重跑后由 outbox 重新落盘（4 行 pending_pg_sync，等 staging 建表后 reconcile 重放）
+- **测试同步**：`test_bundle_log.py` 7 处 `"none"` 断言改 `"[]"`；`test_lint_no_duplicate_log.py` `test_canonical_with_data_row_fails` → `_passes`
+
+### 完整回归矩阵 / full regression evidence
+
+| 命令 | 结果 |
+|---|---|
+| `python3 scripts/ecs_e2e_smoke.py --env staging` | exit 0；4/4 case PASS；`vector_evidence.live_hit=true`；smoke_result=pass |
+| `python3 -m pytest knowledge_serving/tests/ knowledge_serving/scripts/tests/ -q` | 468 passed |
+| `python3 knowledge_serving/scripts/validate_serving_governance.py --all` | exit 0；S1-S7 全绿（preflight checked_rows=549） |
+| `bash knowledge_serving/scripts/lint_no_duplicate_log.sh` | exit 0；单 canonical 守门通过 |
+| `python3 task_cards/validate_task_cards.py` | VALIDATION PASS: 57 cards, DAG closed, S0-S13 covered |
+| `env -i HOME=$HOME PATH=$PATH python3 scripts/ecs_e2e_smoke.py --env staging` | 外审无 `source load_env.sh` 复跑场景模拟：dotenv 自动加载 14 keys，pg/qdrant 全 reachable |
+
+### 边界遗留 / next-card handoff
+
+- staging PG `knowledge.context_bundle_log` mirror 表 DDL 仍未上线 → 4 行落 outbox `pending_pg_sync`；建表后由 `reconcile_context_bundle_log_mirror.py --apply` 自动补齐（KS-DIFY-ECS-005 已交付 reconcile CLI，不属本卡范围）
+- replay / 回放一致性 → KS-DIFY-ECS-010

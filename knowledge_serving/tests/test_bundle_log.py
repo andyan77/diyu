@@ -420,10 +420,11 @@ def test_empty_overlay_payload_persists_as_empty(
         model_policy=model_policy,
         log_path=target,
     )
-    # 空列表字段必须显式 'none'，不许空字符串
-    assert row["retrieved_play_card_ids"] == "none"
-    assert row["retrieved_asset_ids"] == "none"
-    assert row["missing_fields"] == "none"
+    # 空列表字段必须显式 "[]"，不许空字符串
+    # （KS-DIFY-ECS-006 W11：array 字段统一 JSON 序列化，对齐 control_tables.schema array 真源）
+    assert row["retrieved_play_card_ids"] == "[]"
+    assert row["retrieved_asset_ids"] == "[]"
+    assert row["missing_fields"] == "[]"
 
 
 # ------------------------------------------------------------------

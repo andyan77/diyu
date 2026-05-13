@@ -6,6 +6,11 @@
 #   knowledge_serving/control/context_bundle_log.csv
 # 同时校验 header == 28 字段（control_tables.schema.json $defs/context_bundle_log/required）。
 #
+# W11（KS-DIFY-ECS-006）漂移修正 / drift correction:
+#   旧版要求 canonical 必须 header-only（W6 时代假设：log 尚未投入运行）。
+#   W8 KS-RETRIEVAL-008 起 CSV 已是真实业务写入路径，W11 ECS smoke 又会写入运行行；
+#   header-only 与 W8+ 阶段事实冲突，故下放此约束，只守"单 canonical + header 合规"。
+#
 # 退出码 / exit:
 #   0  唯一 canonical + header 合规
 #   1  发现重复同名 csv 或 header 不合规
@@ -45,12 +50,8 @@ if [[ -f "${CANONICAL_ABS}" ]]; then
         echo "       required: ${REQUIRED_HEADER}" >&2
         errors=$((errors + 1))
     fi
-    # header 后必须无数据行（落盘只允许 header）
-    body_lines="$(tail -n +2 "${CANONICAL_ABS}" | sed '/^$/d' | wc -l | tr -d ' ')"
-    if [[ "${body_lines}" -ne 0 ]]; then
-        echo "[FAIL] canonical 必须只含 header，发现 ${body_lines} 行数据 / header-only required" >&2
-        errors=$((errors + 1))
-    fi
+    # 注：W8+ 已进入真实业务写入阶段；不再要求 header-only。canonical 内行级正确性
+    # 由 `validate_serving_governance.py preflight` + log_writer 字段守门负责。
 fi
 
 if [[ "${errors}" -eq 0 ]]; then

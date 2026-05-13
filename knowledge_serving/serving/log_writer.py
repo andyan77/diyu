@@ -115,12 +115,19 @@ def _ensure_canonical(path: Path) -> Path:
     return p
 
 
-def _join_ids(values: Iterable[Any] | None) -> str:
-    """list[str] → ';' joined；空列表 → 'none'（显式标记，禁止空字符串）。"""
+def _serialize_id_list(values: Iterable[Any] | None) -> str:
+    """list[str] → JSON-encoded string（schema array 真源对齐 / KS-DIFY-ECS-006 W11 收口）。
+
+    旧版 `_join_ids` 用 ';' 拼接，导致 `validate_serving_governance.py` preflight
+    把 array 字段看成 string 报 type mismatch（control_tables.schema 期望 array）。
+    改为 JSON 编码，CSV cell 反序列化（`json.loads`）即可还原 schema 期望类型；
+    空 list / None 都落 `"[]"`，保留显式"非空字符串"语义，配合下游空字段守门。
+    """
     if values is None:
-        return "none"
-    vals = [str(v) for v in values if v is not None and str(v) != ""]
-    return ";".join(vals) if vals else "none"
+        vals: list[str] = []
+    else:
+        vals = [str(v) for v in values if v is not None and str(v) != ""]
+    return json.dumps(vals, ensure_ascii=False, separators=(",", ":"))
 
 
 def _now_iso() -> str:
@@ -159,18 +166,18 @@ def _build_row(
         "request_id": bundle.get("request_id", ""),
         "tenant_id": bundle.get("tenant_id", ""),
         "resolved_brand_layer": bundle.get("resolved_brand_layer", ""),
-        "allowed_layers": _join_ids(bundle.get("allowed_layers")),
+        "allowed_layers": _serialize_id_list(bundle.get("allowed_layers")),
         "user_query_hash": str(bundle_meta.get("user_query_hash", "")),
         "classified_intent": classified_intent or "",
         "content_type": bundle.get("content_type", ""),
         "selected_recipe_id": selected_recipe_id or "",
-        "retrieved_pack_ids": _join_ids(retrieved_ids.get("pack_ids")),
-        "retrieved_play_card_ids": _join_ids(retrieved_ids.get("play_card_ids")),
-        "retrieved_asset_ids": _join_ids(retrieved_ids.get("asset_ids")),
-        "retrieved_overlay_ids": _join_ids(retrieved_ids.get("overlay_ids")),
-        "retrieved_evidence_ids": _join_ids(retrieved_ids.get("evidence_ids")),
+        "retrieved_pack_ids": _serialize_id_list(retrieved_ids.get("pack_ids")),
+        "retrieved_play_card_ids": _serialize_id_list(retrieved_ids.get("play_card_ids")),
+        "retrieved_asset_ids": _serialize_id_list(retrieved_ids.get("asset_ids")),
+        "retrieved_overlay_ids": _serialize_id_list(retrieved_ids.get("overlay_ids")),
+        "retrieved_evidence_ids": _serialize_id_list(retrieved_ids.get("evidence_ids")),
         "fallback_status": bundle.get("fallback_status", ""),
-        "missing_fields": _join_ids(bundle.get("missing_fields")),
+        "missing_fields": _serialize_id_list(bundle.get("missing_fields")),
         "blocked_reason": blocked_reason or "none",
         "context_bundle_hash": str(bundle_meta.get("bundle_hash", "")),
         "final_output_hash": final_output_hash or "disabled",

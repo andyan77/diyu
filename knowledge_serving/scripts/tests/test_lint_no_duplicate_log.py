@@ -88,16 +88,23 @@ def test_canonical_missing_fails(tmp_path):
     assert "canonical" in r.stderr.lower() or "missing" in r.stderr.lower() or "缺" in r.stderr
 
 
-def test_canonical_with_data_row_fails(tmp_path):
+def test_canonical_with_data_row_passes(tmp_path):
+    """W11 KS-DIFY-ECS-006 漂移修正：CSV 已是真实业务写入路径，允许 header + 数据行。
+
+    旧约束 header-only 是 W6 时代假设；W8 起 CSV 投入运行，行级正确性由
+    `validate_serving_governance.py preflight` + log_writer 字段守门负责，
+    lint 只守"单 canonical 路径 + header 28 字段"。
+    """
     root = _mirror_repo(tmp_path)
-    # header + 数据行
     (root / "knowledge_serving" / "control" / "context_bundle_log.csv").write_text(
-        REQUIRED_HEADER + "\nreq1,t1,brand_faye,\"[]\",h,,,,\"[]\",\"[]\",\"[]\",\"[]\",\"[]\",brand_full_applied,\"[]\",,h,,r1,m1,v1,disabled,,disabled,,disabled,p1,2026-01-01T00:00:00Z\n",
+        REQUIRED_HEADER
+        + "\nreq1,t1,brand_faye,\"[\"\"brand_faye\"\"]\",sha256:h,intent,product_review,RCP_1,"
+          "\"[]\",\"[]\",\"[]\",\"[]\",\"[]\",brand_full_applied,\"[]\",none,sha256:b,disabled,"
+          "cr1,sha256:m1,v1,model-x,v3,disabled,disabled,disabled,mp_1,2026-01-01T00:00:00Z\n",
         encoding="utf-8",
     )
     r = _run_lint(root)
-    assert r.returncode == 1
-    assert "header" in r.stderr.lower() or "数据" in r.stderr
+    assert r.returncode == 0, f"unexpected rc={r.returncode}; stderr={r.stderr}; stdout={r.stdout}"
 
 
 def test_lint_script_executable_and_uses_safe_shell():

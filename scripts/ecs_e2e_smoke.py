@@ -43,6 +43,36 @@ from urllib import request as urllib_request
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
+
+def _auto_load_dotenv() -> dict[str, str]:
+    """启动 best-effort 加载仓库根 `.env`（不覆盖已存在 env）。
+
+    审查员复跑无 `source scripts/load_env.sh` 时，避免 PG/ECS 探测因 env 缺
+    集体退化为 degraded（W11 finding #3 守门）。已设置的 env 不动；只补缺。
+    """
+    loaded: dict[str, str] = {}
+    env_file = REPO_ROOT / ".env"
+    if not env_file.exists():
+        return loaded
+    for raw in env_file.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip().strip("'\"")
+        # 展开 ${VAR} / ${HOME} 等简单变量引用，与 set -a 行为一致
+        value = os.path.expandvars(value)
+        if key and key not in os.environ:
+            os.environ[key] = value
+            loaded[key] = value
+    return loaded
+
+
+# 在 import serving 模块之前先 load env，避免 model_policy / dashscope key 等
+# 模块级读取漏掉 .env 真值。
+_DOTENV_LOADED = _auto_load_dotenv()
+
 from knowledge_serving.serving import tenant_scope_resolver as tsr
 from knowledge_serving.serving import intent_classifier as ic
 from knowledge_serving.serving import content_type_router as ctr
@@ -50,6 +80,7 @@ from knowledge_serving.serving import business_brief_checker as bbc
 from knowledge_serving.serving import recipe_selector as rsel
 from knowledge_serving.serving import requirement_checker as rchk
 from knowledge_serving.serving import structured_retrieval as sret
+from knowledge_serving.serving import vector_retrieval as vret
 from knowledge_serving.serving import brand_overlay_retrieval as bovr
 from knowledge_serving.serving import merge_context as mctx
 from knowledge_serving.serving import fallback_decider as fdec
@@ -261,12 +292,42 @@ def _count_cross_tenant_leak(structured: dict, allowed: set[str]) -> tuple[int, 
     return leak, sorted(bad)
 
 
+def _build_live_qdrant_call(
+    qdrant_url: str,
+) -> tuple[Any, Any] | None:
+    """构造 live Qdrant client + embed_fn / return None when deps missing.
+
+    Qdrant reachable 时由 smoke 主调用真 `vector_retrieve`（W11 finding #2 守门：
+    业务目标 §1 写明 retrieve_context → Qdrant 穿透，不能止步 /readyz 探活）。
+    缺包或缺 key → 返回 None，回退 structured_only + 标 degraded.qdrant_live=true。
+    """
+    api_key = os.environ.get("DASHSCOPE_API_KEY")
+    if not api_key:
+        return None
+    try:
+        from qdrant_client import QdrantClient  # type: ignore
+        import dashscope  # type: ignore
+    except ImportError:
+        return None
+
+    def _embed(text: str) -> list[float]:
+        dashscope.api_key = api_key
+        r = dashscope.TextEmbedding.call(model="text-embedding-v3", input=text)
+        if r.status_code != 200 or not getattr(r, "output", None):
+            raise RuntimeError(f"dashscope embed failed: status={r.status_code} msg={r.message}")
+        return list(r.output["embeddings"][0]["embedding"])
+
+    client = QdrantClient(url=qdrant_url, timeout=10.0)
+    return client, _embed
+
+
 def run_retrieve_context(
     case: dict,
     *,
     request_id: str,
     governance: dict,
     pg_writer,
+    qdrant_live: tuple[Any, Any] | None,
 ) -> dict:
     """跑完 13 步 + 写 canonical log。
 
@@ -326,8 +387,35 @@ def run_retrieve_context(
         allowed_layers=allowed_layers,
     )
 
-    # 8 vector：smoke 默认 structured-only（向量降级 / Qdrant down 时仍 pass + degraded）
+    # 8 vector：Qdrant reachable 时调真 vector_retrieve（W11 finding #2 守门）；
+    # 任一环节失败 → 降级 structured_only + notes 记录，smoke 仍 pass（卡 §6 Qdrant down）
     vector_res = None
+    vector_mode = "structured_only_offline"
+    vector_candidates_total = 0
+    vector_brand_leak = 0
+    if qdrant_live is not None:
+        qclient, embed_fn = qdrant_live
+        try:
+            vector_res = vret.vector_retrieve(
+                query=case["user_query"],
+                allowed_layers=allowed_layers,
+                content_type=content_type,
+                embed_fn=embed_fn,
+                qdrant_client=qclient,
+            )
+            vector_mode = vector_res.get("mode", "unknown")
+            cands = vector_res.get("candidates") or []
+            vector_candidates_total = len(cands)
+            allowed_set = set(allowed_layers)
+            for c in cands:
+                pl = (c or {}).get("payload") or {}
+                bl = pl.get("brand_layer")
+                if bl and bl not in allowed_set:
+                    vector_brand_leak += 1
+        except Exception as e:  # noqa: BLE001
+            vector_res = None
+            vector_mode = "structured_only_vector_error"
+            notes.append(f"vector_live_failed: {type(e).__name__}: {e}")
 
     # 9 overlay
     overlay = bovr.brand_overlay_retrieve(
@@ -398,8 +486,9 @@ def run_retrieve_context(
         pg_writer=pg_writer,
     )
 
-    # S9 leak count
+    # S9 leak count（structured + vector 两侧合并；任一侧出现非 allowed brand_layer 都算泄漏）
     leak_count, bad_layers = _count_cross_tenant_leak(structured, set(allowed_layers))
+    leak_count += vector_brand_leak
 
     # 字段完整性（log_writer 内已守门空字段，这里再断言一次便于 audit 显式列出）
     empty_fields = [f for f in lw.LOG_FIELDS if not log_row.get(f, "")]
@@ -423,6 +512,9 @@ def run_retrieve_context(
         "user_query_hash": bundle_meta["user_query_hash"],
         "log_row_field_count": len(log_row),
         "log_empty_fields": empty_fields,
+        "vector_mode": vector_mode,
+        "vector_candidates_total": vector_candidates_total,
+        "vector_brand_leak": vector_brand_leak,
         "notes": notes,
     }
 
@@ -494,6 +586,16 @@ def main() -> int:
     qdrant_degraded = not qdrant_probe.get("reachable", False)
     pg_degraded = not pg_probe.get("reachable", False)
 
+    qdrant_live = None
+    qdrant_live_reason: str | None = None
+    if not qdrant_degraded:
+        qdrant_live = _build_live_qdrant_call(qdrant_probe.get("url") or "http://127.0.0.1:6333")
+        if qdrant_live is None:
+            qdrant_live_reason = (
+                "missing DASHSCOPE_API_KEY or qdrant_client/dashscope packages — "
+                "vector retrieval degraded to structured_only"
+            )
+
     governance = read_governance_from_view()
 
     # 同 run 内 unique request_id；避免 CSV unique 约束触发 dedup
@@ -507,7 +609,7 @@ def main() -> int:
         try:
             row = run_retrieve_context(
                 case, request_id=request_id, governance=governance,
-                pg_writer=pg_writer,
+                pg_writer=pg_writer, qdrant_live=qdrant_live,
             )
             case_rows.append(row)
         except Exception as e:  # noqa: BLE001
@@ -534,6 +636,13 @@ def main() -> int:
         sum(1 for r in case_rows if r["case_id"].startswith("sample_")) == 3
     )
     gate_s9_ran = any(r["case_id"] == "s9_cross_tenant_control" for r in case_rows)
+    # vector evidence：advisory（不阻断 smoke pass，按卡 §6 Qdrant down → degraded）
+    # 但记录到 audit，让审查员能看到本次跑了真 Qdrant 还是降级 structured_only
+    vector_modes_seen = sorted({r.get("vector_mode") for r in case_rows if r.get("vector_mode")})
+    vector_live_evidence = any(
+        r.get("vector_mode") == "vector" and r.get("vector_candidates_total", 0) > 0
+        for r in case_rows
+    )
 
     smoke_pass = (
         gate_csv_complete
@@ -563,9 +672,12 @@ def main() -> int:
             "pg": pg_probe,
         },
         "degraded": {
-            "qdrant": qdrant_degraded,
+            "qdrant_unreachable": qdrant_degraded,
+            "qdrant_live_skipped": qdrant_live is None,
+            "qdrant_live_skip_reason": qdrant_live_reason,
             "pg": pg_degraded,
         },
+        "dotenv_loaded_keys": sorted(_DOTENV_LOADED.keys()),
         "governance_snapshot": governance,
         "samples": case_rows,
         "case_exceptions": case_exceptions,
@@ -581,6 +693,14 @@ def main() -> int:
             "three_samples_ran": gate_three_samples_ran,
             "s9_control_ran": gate_s9_ran,
         },
+        "vector_evidence": {
+            "modes_seen": vector_modes_seen,
+            "live_hit": vector_live_evidence,
+            "note": (
+                "vector_live_evidence=true 表示本次确实跑了真 Qdrant 召回；"
+                "false 表示 Qdrant 不可达或缺 embedding 依赖，按卡 §6 降级 structured_only"
+            ),
+        },
         "smoke_result": "pass" if smoke_pass else "fail",
     }
 
@@ -592,7 +712,8 @@ def main() -> int:
 
     # 打印 / print summary
     print(f"=== KS-DIFY-ECS-006 ECS e2e smoke (env={args.env}) ===")
-    print(f"  qdrant.reachable={qdrant_probe.get('reachable')} pg.reachable={pg_probe.get('reachable')}")
+    print(f"  qdrant.reachable={qdrant_probe.get('reachable')} qdrant_live_hit={vector_live_evidence}")
+    print(f"  pg.reachable={pg_probe.get('reachable')} dotenv_loaded={len(_DOTENV_LOADED)} keys")
     for r in case_rows:
         marker = "✅" if (r["fallback_match"] and r["cross_tenant_leak_count"] == 0) else "❌"
         print(
