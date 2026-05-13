@@ -1,0 +1,10 @@
+{
+  "csv_count": 12,
+  "extra_in_pg": [],
+  "generated_at": "2026-05-13T16:09:47Z",
+  "missing_in_pg": [],
+  "mode": "apply",
+  "pg_count": 12,
+  "replay_errors": [],
+  "replayed_count": 0
+}

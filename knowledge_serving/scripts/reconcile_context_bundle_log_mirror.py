@@ -21,6 +21,8 @@
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import json
 import os
 import shlex
@@ -42,18 +44,25 @@ def _now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def _ssh_psql(sql: str) -> str:
-    """与 KS-DIFY-ECS-003 同款 SSH + docker exec psql 管道。"""
+def _ssh_psql(sql: str, *, csv_mode: bool = False) -> str:
+    """与 KS-DIFY-ECS-003 同款 SSH + docker exec psql 管道。
+
+    csv_mode=True：使用 psql `--csv` 输出，按 RFC 4180 转义字段内换行 / 引号 /
+    分隔符，供 reader 用 csv 模块解析；解决 context_bundle_json 字面 `\\n` 把
+    `-At -F'\\t' + splitlines()` 解析链路打断、读者静默丢行的 fake-green
+    （W12 KS-CD-001 §8.1 上线总闸补证发现）。
+    """
     for k in ("ECS_HOST", "ECS_USER", "ECS_SSH_KEY_PATH", "PG_USER", "PG_DATABASE"):
         if not os.environ.get(k):
             sys.exit(f"❌ env 缺 / missing: {k}")
+    fmt_flags = "-At --csv" if csv_mode else "-At -F'\\t'"
     cmd = (
         f"ssh -i {shlex.quote(os.environ['ECS_SSH_KEY_PATH'])} "
         f"-o StrictHostKeyChecking=no "
         f"{shlex.quote(os.environ['ECS_USER'])}@{shlex.quote(os.environ['ECS_HOST'])} "
         f"docker exec -i {shlex.quote(PG_CONTAINER)} "
         f"psql -U {shlex.quote(os.environ['PG_USER'])} -d {shlex.quote(os.environ['PG_DATABASE'])} "
-        f"-At -F'\\t'"
+        f"{fmt_flags}"
     )
     proc = subprocess.run(cmd, input=sql, shell=True, capture_output=True, text=True, timeout=60)
     if proc.returncode != 0:
@@ -62,17 +71,29 @@ def _ssh_psql(sql: str) -> str:
 
 
 def _live_pg_reader() -> list[dict[str, str]]:
-    """读 PG mirror 表全部行；按 LOG_FIELDS 顺序返回 dict list。"""
+    """读 PG mirror 表全部行；按 LOG_FIELDS 顺序返回 dict list。
+
+    走 psql `--csv` 输出 + csv.reader 解析：context_bundle_json 等字段含
+    字面换行时，行内换行会被 CSV 双引号包裹（RFC 4180），不会破坏行边界。
+    """
     cols = ", ".join(lw.LOG_FIELDS)
     sql = f"SELECT {cols} FROM {lw.PG_MIRROR_TABLE};"
-    raw = _ssh_psql(sql)
+    raw = _ssh_psql(sql, csv_mode=True)
+    if not raw.strip():
+        return []
     rows: list[dict[str, str]] = []
-    for line in raw.splitlines():
-        if not line.strip():
-            continue
-        parts = line.split("\t")
+    reader = csv.reader(io.StringIO(raw))
+    for idx, parts in enumerate(reader):
         if len(parts) != len(lw.LOG_FIELDS):
-            continue
+            # fail-closed / W12 KS-CD-001 §8.1 补证发现 fake-green 后改造：
+            # 旧实现这里 `continue` 静默丢行，导致 audit `pg_count=0` 但 PG 实际
+            # 已有数据，上线总闸据此误判通过。任何字段数漂移（schema / 输出格式）
+            # 必须立即抛错，禁止吞掉。
+            sys.exit(
+                f"❌ PG reader 字段数漂移 / column count drift "
+                f"at row {idx}: expected={len(lw.LOG_FIELDS)} actual={len(parts)} "
+                f"first_cell={parts[0][:80] if parts else '<empty>'!r}"
+            )
         rows.append(dict(zip(lw.LOG_FIELDS, parts)))
     return rows
 

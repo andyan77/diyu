@@ -1,0 +1,101 @@
+{
+  "generated_at": "2026-05-13T15:58:10Z",
+  "phase": "W12 上线总闸 §8.1 补证 / pre-launch gate evidence",
+  "preflight_pg_mirror_ddl": {
+    "applied_to": "ecs staging diyu-infra-postgres-1 / db=diyu_brand_faye / schema=knowledge",
+    "column_count_actual": 29,
+    "column_count_expected": 29,
+    "context_bundle_json_present": true,
+    "ddl_file": "knowledge_serving/scripts/pg_mirror_context_bundle_log.ddl.sql",
+    "exit_code": 0,
+    "request_id_constraint": "PRIMARY KEY (implies UNIQUE)",
+    "status": "ok"
+  },
+  "reader_bug_found_and_fixed": {
+    "files_touched": [
+      "knowledge_serving/scripts/reconcile_context_bundle_log_mirror.py"
+    ],
+    "fix": "切换 psql 输出到 `--csv` + csv.reader 解析；行内换行被 RFC 4180 双引号包裹，行边界不再被打破",
+    "post_fix_verification": "dry-run pg_count=12 missing=[] extra=[]",
+    "root_cause": "_live_pg_reader 走 psql `-At -F'\\t'` + splitlines() + split('\\t')；context_bundle_json 字段含字面 \\n，被 splitlines 拆成多片，每片 tab 数 != 29，触发 silent drop（'continue'）",
+    "severity": "fake_green",
+    "symptom": "首跑 --apply 实际写入 PG 12 行（SQL COUNT 验证），但 audit 仍报 pg_count=0；二次 dry-run 仍报 pg_count=0、missing_in_pg=12"
+  },
+  "reconcile_apply": {
+    "command": "python3 knowledge_serving/scripts/reconcile_context_bundle_log_mirror.py --apply",
+    "first_run": {
+      "exit_code": 0,
+      "replay_errors": [],
+      "replayed_count": 12
+    },
+    "post_fix_idempotent_dry_run": {
+      "csv_count": 12,
+      "extra_in_pg": [],
+      "missing_in_pg": [],
+      "pg_count": 12,
+      "replayed_count": 0
+    }
+  },
+  "request_id_sample_verification": {
+    "samples": [
+      {
+        "context_bundle_hash_match": true,
+        "field_match": {
+          "classified_intent": true,
+          "compile_run_id": true,
+          "content_type": true,
+          "context_bundle_hash": true,
+          "fallback_status": true,
+          "resolved_brand_layer": true,
+          "tenant_id": true
+        },
+        "pg_present": true,
+        "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260513T151145Z"
+      },
+      {
+        "context_bundle_hash_match": true,
+        "field_match": {
+          "classified_intent": true,
+          "compile_run_id": true,
+          "content_type": true,
+          "context_bundle_hash": true,
+          "fallback_status": true,
+          "resolved_brand_layer": true,
+          "tenant_id": true
+        },
+        "pg_present": true,
+        "request_id": "ks-dify-ecs-006-sample_founder_ip-20260513T151145Z"
+      },
+      {
+        "context_bundle_hash_match": true,
+        "field_match": {
+          "classified_intent": true,
+          "compile_run_id": true,
+          "content_type": true,
+          "context_bundle_hash": true,
+          "fallback_status": true,
+          "resolved_brand_layer": true,
+          "tenant_id": true
+        },
+        "pg_present": true,
+        "request_id": "ks-dify-ecs-006-sample_product_review-20260513T151145Z"
+      },
+      {
+        "context_bundle_hash_match": true,
+        "field_match": {
+          "classified_intent": true,
+          "compile_run_id": true,
+          "content_type": true,
+          "context_bundle_hash": true,
+          "fallback_status": true,
+          "resolved_brand_layer": true,
+          "tenant_id": true
+        },
+        "pg_present": true,
+        "request_id": "ks-dify-ecs-006-sample_store_daily-20260513T151145Z"
+      }
+    ],
+    "scope": "4 latest ks-dify-ecs-006-* (round 20260513T151145Z)"
+  },
+  "task_id": "KS-CD-001"
+}
