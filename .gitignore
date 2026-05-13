@@ -57,3 +57,6 @@ htmlcov/
 # ============================================================
 knowledge_serving/audit/qdrant_upload_KS-DIFY-ECS-004.dry_run.json
 knowledge_serving/audit/qdrant_upload_KS-DIFY-ECS-004.rollback.json
+
+# KS-CD-002 rollback audit：每次 dry-run / apply 产时间戳文件，CI artifact
+knowledge_serving/audit/rollback_KS-CD-002_*.json
