@@ -83,7 +83,7 @@ artifact: retrieval_eval_sample.csv, run_context_retrieval_demo.log
 - [x] demo 入 git（`run_context_retrieval_demo.py`）
 - [x] CI pass（`python3 knowledge_serving/scripts/run_context_retrieval_demo.py --all` exit=0；4/4 case PASS）
 - [x] retrieval_eval_sample.csv 落盘（5 行：1 header + 4 case；canonical 入 git）
-- [ ] 审查员 pass（外审入口）
+- [x] 审查员 pass（2026-05-13 W10 外审 CONDITIONAL_PASS：核心交付全通 + 4/4 case + 跨租户 leak=0 + R4 byte-identical；遗留项"--live staging 未实测"由 KS-DIFY-ECS-005 接管，非本卡阻断）
 
 ## 12. 实施记录 / 2026-05-13 W10
 
