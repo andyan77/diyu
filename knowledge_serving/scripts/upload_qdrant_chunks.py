@@ -239,6 +239,32 @@ def _qdrant_base_url() -> str:
     return url
 
 
+def assert_qdrant_ready() -> None:
+    """live 前置自检 / pre-flight check：tunnel + readyz；fail-closed 早退，避免半死状态产假绿 audit。
+
+    - 清 ALL_PROXY/all_proxy（WSL2 SOCKS proxy 会让 httpx ValueError）
+    - curl /readyz with 3s timeout
+    - 失败给出明确修复指令
+    """
+    for k in ("ALL_PROXY", "all_proxy"):
+        if k in os.environ:
+            del os.environ[k]
+    base = _qdrant_base_url()
+    try:
+        req = urllib.request.Request(f"{base}/readyz", method="GET")
+        if os.environ.get("QDRANT_API_KEY"):
+            req.add_header("api-key", os.environ["QDRANT_API_KEY"])
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            if resp.status != 200:
+                err(f"Qdrant /readyz HTTP {resp.status} · 先 `bash scripts/qdrant_tunnel.sh status`", 2)
+    except (urllib.error.URLError, OSError) as e:
+        err(
+            f"Qdrant 不可达 / unreachable @ {base}: {e}\n"
+            "  修复 / fix: bash scripts/qdrant_tunnel.sh down && bash scripts/qdrant_tunnel.sh up",
+            2,
+        )
+
+
 def _qdrant_rest_get(path: str) -> Dict[str, Any]:
     """裸 REST GET：避开 qdrant-client 1.7 与 v1.12.5 服务端的 pydantic schema 漂移。"""
     base = _qdrant_base_url()
@@ -473,6 +499,7 @@ def main() -> int:
     collection_name = f"ks_chunks__{policy['model_policy_version']}"
 
     if args.rollback:
+        assert_qdrant_ready()
         return run_rollback(args.env)
 
     chunks = load_chunks()
@@ -480,6 +507,8 @@ def main() -> int:
 
     if args.dry_run:
         return run_dry(policy, chunks, stats, collection_name, args.env)
+    # apply：真连 ECS 前先做 tunnel + readyz 自检（fail-closed，避免半死状态产假绿 audit）
+    assert_qdrant_ready()
     return run_apply(policy, chunks, stats, collection_name, args.env)
 
 

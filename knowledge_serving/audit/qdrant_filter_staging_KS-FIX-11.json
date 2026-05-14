@@ -1,30 +1,24 @@
 {
   "task_card": "KS-VECTOR-003",
-  "mode": "offline",
-  "env": "local",
-  "generated_at": "2026-05-14T08:58:29Z",
-  "checked_at": "2026-05-14T08:58:29Z",
+  "corrects_via": "KS-FIX-11",
+  "mode": "online",
+  "env": "staging",
+  "checked_at": "2026-05-14T09:10:01Z",
   "git_commit": "6d7d5c96620dbb760b6c6d7363c8f9facc92be0b",
-  "evidence_level": "offline_auxiliary",
-  "source_chunks_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
-  "chunks_corpus_path": "knowledge_serving/vector_payloads/qdrant_chunks.jsonl",
-  "chunks_total": 498,
+  "evidence_level": "runtime_verified",
+  "qdrant_endpoint_label": "QDRANT_URL_STAGING",
+  "collection": "ks_chunks__mp_20260512_002",
+  "collection_points_count": 498,
   "current_compile_run_id": "5b5e5fc1f6199ec6",
-  "brand_layers_in_corpus": [
-    "brand_faye",
-    "domain_general",
-    "needs_review"
-  ],
-  "sampled_filter_pass_ratio": "8/8",
-  "cross_tenant_hits": 0,
-  "fallback_probe": {
-    "policy_loaded": true,
-    "log_marker_present": true,
-    "strategy_name_present": true,
-    "pass": true
-  },
+  "current_source_manifest_hash": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2",
+  "source_chunks_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
   "cases": [
     {
+      "brands_hit_sample": [
+        "brand_faye",
+        "domain_general"
+      ],
+      "pass": true,
       "case_id": "C1_brand_faye_plus_domain_general",
       "filter": {
         "must": [
@@ -55,16 +49,13 @@
           }
         ]
       },
-      "hits_count": 497,
-      "brands_hit": [
-        "brand_faye",
-        "domain_general"
-      ],
-      "expected": "hits>0 且只命中 {brand_faye, domain_general}",
-      "pass": true,
-      "leak": []
+      "hits_count": 497
     },
     {
+      "brands_hit_sample": [
+        "domain_general"
+      ],
+      "pass": true,
       "case_id": "C2_domain_general_only",
       "filter": {
         "must": [
@@ -94,15 +85,13 @@
           }
         ]
       },
-      "hits_count": 475,
-      "brands_hit": [
-        "domain_general"
-      ],
-      "expected": "hits>0 且全部 brand_layer=domain_general",
-      "pass": true,
-      "leak": []
+      "hits_count": 475
     },
     {
+      "gate_status_sample": [
+        "active"
+      ],
+      "pass": true,
       "case_id": "C3_gate_active_only",
       "filter": {
         "must": [
@@ -133,15 +122,10 @@
           }
         ]
       },
-      "hits_count": 497,
-      "gate_status_hit": [
-        "active"
-      ],
-      "expected": "synthetic_inactive_probe 0 命中 且 gate_status 全 active",
-      "pass": true,
-      "inactive_leaked": false
+      "hits_count": 497
     },
     {
+      "pass": true,
       "case_id": "C4_cross_tenant_zero_hit",
       "filter": {
         "must": [
@@ -171,12 +155,10 @@
           }
         ]
       },
-      "hits_count": 0,
-      "brands_hit": [],
-      "expected": "0 命中（brand_b 不在语料）",
-      "pass": true
+      "hits_count": 0
     },
     {
+      "pass": true,
       "case_id": "C5_batch_anchor_stale_run_zero_hit",
       "filter": {
         "must": [
@@ -213,13 +195,10 @@
           }
         ]
       },
-      "stale_compile_run_id": "deadbeefcafef00d",
-      "current_compile_run_id": "5b5e5fc1f6199ec6",
-      "hits_count": 0,
-      "expected": "0 命中（旧批次 compile_run_id 应被服务端 hard filter 拒绝）",
-      "pass": true
+      "hits_count": 0
     },
     {
+      "pass": true,
       "case_id": "C5b_batch_anchor_current_run_positive",
       "filter": {
         "must": [
@@ -256,11 +235,14 @@
           }
         ]
       },
-      "hits_count": 497,
-      "expected": "hits>0（当前批次 compile_run_id 必须可召回）",
-      "pass": true
+      "hits_count": 497
     },
     {
+      "content_type_probe": "behind",
+      "content_types_hit_sample": [
+        "behind"
+      ],
+      "pass": true,
       "case_id": "C7p_content_type_positive",
       "filter": {
         "must": [
@@ -297,15 +279,10 @@
           }
         ]
       },
-      "content_type_probe": "behind",
-      "hits_count": 4,
-      "content_types_hit": [
-        "behind"
-      ],
-      "expected": "hits>0 且 content_type 全部等于 probe（hard filter 真生效）",
-      "pass": true
+      "hits_count": 4
     },
     {
+      "pass": true,
       "case_id": "C7n_content_type_negative_zero_hit",
       "filter": {
         "must": [
@@ -342,20 +319,19 @@
           }
         ]
       },
-      "content_type_probe": "synthetic_unknown_content_type_probe",
-      "hits_count": 0,
-      "expected": "0 命中（未知 content_type 必须被 hard filter 拒绝）",
-      "pass": true
+      "hits_count": 0
     },
     {
-      "case_id": "C6_fail_closed_missing_field",
+      "pass": true,
+      "case_id": "C8_source_manifest_hash_current_positive",
       "filter": {
         "must": [
           {
             "key": "brand_layer",
             "match": {
               "any": [
-                "brand_faye"
+                "brand_faye",
+                "domain_general"
               ]
             }
           },
@@ -374,13 +350,28 @@
                 "L3"
               ]
             }
+          },
+          {
+            "key": "compile_run_id",
+            "match": {
+              "value": "5b5e5fc1f6199ec6"
+            }
+          },
+          {
+            "key": "source_manifest_hash",
+            "match": {
+              "value": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2"
+            }
           }
         ]
       },
-      "hits_count": 0,
-      "expected": "0 命中（缺 brand_layer 必须 fail-closed）",
-      "pass": true
+      "hits_count": 497
     }
   ],
+  "case_count": 9,
+  "pass_count": 9,
+  "fail_count": 0,
+  "skip_count": 0,
+  "cross_tenant_hits": 0,
   "verdict": "pass"
 }

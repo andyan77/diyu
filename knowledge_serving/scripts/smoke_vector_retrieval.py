@@ -45,6 +45,29 @@ def real_dashscope_embed(text: str) -> list[float]:
     return list(resp.output["embeddings"][0]["embedding"])
 
 
+def assert_qdrant_ready():
+    """live 前置自检：清 ALL_PROXY + curl /readyz；fail-closed 早退。"""
+    import urllib.error, urllib.request
+    for k in ("ALL_PROXY", "all_proxy"):
+        if k in os.environ:
+            del os.environ[k]
+    url = os.environ.get("QDRANT_URL_STAGING")
+    if not url:
+        sys.exit("❌ QDRANT_URL_STAGING 未设置")
+    try:
+        req = urllib.request.Request(f"{url.rstrip('/')}/readyz", method="GET")
+        if os.environ.get("QDRANT_API_KEY"):
+            req.add_header("api-key", os.environ["QDRANT_API_KEY"])
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            if resp.status != 200:
+                sys.exit(f"❌ Qdrant /readyz HTTP {resp.status} · 先 bash scripts/qdrant_tunnel.sh status")
+    except (urllib.error.URLError, OSError) as e:
+        sys.exit(
+            f"❌ Qdrant 不可达 @ {url}: {e}\n"
+            "   修复: bash scripts/qdrant_tunnel.sh down && bash scripts/qdrant_tunnel.sh up"
+        )
+
+
 def real_qdrant_client():
     from qdrant_client import QdrantClient
     url = os.environ.get("QDRANT_URL_STAGING")
@@ -55,6 +78,7 @@ def real_qdrant_client():
 
 
 def main() -> int:
+    assert_qdrant_ready()
     query = "大衣搭配陈列要点"
     allowed_layers = ["brand_faye", "domain_general"]
 
