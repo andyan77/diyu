@@ -66,7 +66,10 @@ def _audit_envelope(
     missing = result.get("missing_in_pg") or []
     extra = result.get("extra_in_pg") or []
     errors = result.get("replay_errors") or []
-    mismatch = len(missing) + len(extra) + len(errors)
+    replayed = int(result.get("replayed_count") or 0)
+    # KS-FIX-14 AT-01..AT-04：mismatch 必须反映 post-state（apply 成功 replay 的行不再算 mismatch）
+    unreplayed_missing = max(len(missing) - replayed, 0)
+    mismatch = unreplayed_missing + len(extra) + len(errors)
     row_count = int(result.get("csv_count") or 0)
     checked_at = result.get("generated_at") or _now()
     return {
@@ -259,10 +262,15 @@ def main() -> int:
     if args.out:
         print(f"runtime audit → {args.out.resolve().relative_to(REPO_ROOT)}")
 
+    # KS-FIX-14 AT-01：missing_in_pg 在非 apply 模式（或 apply 后仍未补齐）必须 fail-closed
+    replayed = int(result.get("replayed_count") or 0)
+    unreplayed_missing = max(len(result["missing_in_pg"]) - replayed, 0)
     if result["replay_errors"]:
         return 2
     if result["extra_in_pg"]:
         return 1
+    if unreplayed_missing > 0:
+        return 2
     return 0
 
 

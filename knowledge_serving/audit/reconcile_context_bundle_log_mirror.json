@@ -1,10 +1,10 @@
 {
-  "csv_count": 100,
+  "csv_count": 156,
   "extra_in_pg": [],
-  "generated_at": "2026-05-14T14:35:07Z",
+  "generated_at": "2026-05-14T17:12:13Z",
   "missing_in_pg": [],
-  "mode": "dry_run",
-  "pg_count": 100,
+  "mode": "reconcile_read",
+  "pg_count": 156,
   "replay_errors": [],
   "replayed_count": 0
 }
