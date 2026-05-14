@@ -9,8 +9,11 @@ files_touched:
   - knowledge_serving/scripts/run_context_retrieval_demo.py
   - knowledge_serving/serving/api/retrieve_context.py
   - knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json
+  - knowledge_serving/tests/test_retrieval_009_vector_path.py
 artifacts:
   - knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json
+creates:
+  - knowledge_serving/tests/test_retrieval_009_vector_path.py
 status: done
 ---
 
@@ -40,11 +43,11 @@ status: done
 | `audit/retrieval_009_vector_path_KS-FIX-15.json` | json | 是 | 是 | runtime_verified |
 
 ## 6. 对抗性 / 边缘性测试
-| 测试 | 期望 |
-|---|---|
-| 不显式 offline 却走 structured_only | **fail-closed** |
-| Qdrant down 默认模式 | 503 不静默降级 |
-| `--explicit-offline` 标志 | 允许并标 RISKY |
+| AT | 测试 | 期望 |
+|---|---|---|
+| AT-01 | API RetrieveContextRequest.structured_only 默认值 | 必须 False（默认走 vector，禁止默认 offline） |
+| AT-02 | API 源码不允许"静默 fallback structured_only=True" | 红线 grep 不匹配；存在 503 fail-closed 注释 |
+| AT-03 | demo 脚本必须同时含 `--default-mode=vector_enabled` 与 `structured_only_offline` 显式取值 | argparse 入口齐全；offline 路径必须显式开启 |
 
 ## 7. 治理语义一致性
 - LLM 边界不变。
@@ -68,3 +71,19 @@ pass:    default_mode=vector_enabled 且 vector_hits > 0
 - [x] artifact runtime_verified（`knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json` env=staging / checked_at=2026-05-14T14:55:42Z / git_commit=5440990 / evidence_level=runtime_verified）
 - [x] 审查员 pass（reviewer_prompt_coverage §10 三项 + KS-RETRIEVAL-009 §10 四项均 PASS；verdict=PASS）
 - [x] 原卡 KS-RETRIEVAL-009 回写（§13 追加 KS-FIX-15 vector path 补证段）
+- [x] AT-01..AT-03 全 pass（`python3 -m pytest knowledge_serving/tests/test_retrieval_009_vector_path.py -v` → 3 passed）
+
+## 12. AT 映射 / test_id 映射
+
+| AT | pytest function | 测试文件 |
+|---|---|---|
+| AT-01 | `test_at01_api_request_structured_only_default_false` | knowledge_serving/tests/test_retrieval_009_vector_path.py |
+| AT-02 | `test_at02_api_no_silent_structured_only_fallback_on_qdrant_down` | knowledge_serving/tests/test_retrieval_009_vector_path.py |
+| AT-03 | `test_at03_demo_supports_default_mode_and_explicit_offline_flags` | knowledge_serving/tests/test_retrieval_009_vector_path.py |
+
+## 16. 被纠卡同步 / sync original card
+
+- 被纠卡：**KS-RETRIEVAL-009**（W10 主卡 · 13 步全链 demo / API 默认 vector path）。
+- 同步动作：原卡 §13 实施记录已追加 KS-FIX-15 vector path 补证段（详见原卡 §13）。
+- 双写 runtime artifact：[knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json](../../knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json)（本卡 §5 唯一 artifact，env=staging / evidence_level=runtime_verified / default_mode=vector_enabled / 4 API 探针 vector_meta.mode=vector）。
+- 同步时间戳：2026-05-14T14:55:42Z（API 探针 + demo --live 复跑通过）。
