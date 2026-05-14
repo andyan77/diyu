@@ -1,14 +1,45 @@
 {
   "task_card": "META-01",
-  "checked_at": "2026-05-14 11:21:30",
-  "git_commit": "44a59dc9e9d200c026734c8f0e860eab6a4021b2",
+  "checked_at": "2026-05-14 11:28:56",
+  "git_commit": "60b1988843d21cc5695b7ab981f0f84f62293912",
   "evidence_level": "runtime_verified",
   "env": "local",
   "validations": {
-    "validate_corrections_py": {"exit": 0, "warnings_count": 60, "errors": 0, "note": "C16-C19 实施成功；24 张未起跑卡 C16/C17/C18 issues 进 warnings 分支，validator 不阻塞"},
-    "validate_task_cards_py": {"exit": 0, "cards": 57, "note": "原 57 卡账本未污染"},
-    "meta_pytest": {"exit": 0, "cases": 6, "cases_passed": 6, "note": "AT-01..06 全绿"},
-    "validate_serving_tree_py": {"exit": 1, "note": "外部 FIX-02 三轮收口新增 knowledge_serving/tests/test_ecs_mirror_fail_closed.py 未入白名单——非 META-01 责任，FIX-02 自身待补"}
+    "validate_corrections_py": {
+      "exit": 0,
+      "warnings_count": 60,
+      "errors": 0,
+      "note": "C16-C19 implemented; 24 not_started cards in warnings; not blocking"
+    },
+    "validate_task_cards_py": {
+      "exit": 0,
+      "cards": 57
+    },
+    "validate_serving_tree_py": {
+      "exit": 0,
+      "note": "外审 FAIL 二轮收口后已绿；新增 test_ecs_mirror_fail_closed.py + test_corrections_meta.py 入 W1/META 白名单"
+    },
+    "meta_pytest": {
+      "exit": 0,
+      "cases": 6,
+      "cases_passed": 6
+    },
+    "ci_contract_pytest": {
+      "exit": 0,
+      "cases": 2,
+      "cases_passed": 2,
+      "note": "force-write 解决幂等 vs ci_contract mtime 冲突"
+    },
+    "schema_gate_pytest": {
+      "exit": 0,
+      "cases": 4,
+      "cases_passed": 4
+    },
+    "provenance_pytest": {
+      "exit": 0,
+      "cases": 3,
+      "cases_passed": 3
+    }
   },
   "c16_c19_implementation": {
     "c16_at_id_required": "implemented",
@@ -17,18 +48,15 @@
     "c19_fix25_26_prereq_gate": "implemented",
     "grading": "not_started=warn, in_progress=fail, done&grandfather(FIX-01/02)=warn, done=fail"
   },
+  "blockers_resolved_round_2": {
+    "blocker_1_idempotent_vs_ci_contract": "scripts/check_qdrant_health.py 加 --force-write flag；wrapper 双写时传此 flag 强制刷新 mtime；mirror 同步路径默认仍幂等",
+    "blocker_2_serving_tree_whitelist": "knowledge_serving/tests/test_ecs_mirror_fail_closed.py 加入 EXPECTED_FILES_PRE_EXISTING (W1 KS-FIX-02) + README §10 复核表第 24 行",
+    "blocker_3_24_cards_not_updated": "设计上 not_started → warning 不阻塞；FIX-03 起跑前现场补 §16+AT-NN 即可（执行流程已落 README §9）"
+  },
   "templates_delivered": [
     "task_cards/corrections/templates/fix_card_template.md",
     "task_cards/corrections/templates/test_fix_card_template.py"
   ],
-  "meta_pytest_at_coverage": {
-    "AT-01": "test_at_01_c16_missing_at_id_warns_for_not_started",
-    "AT-02": "test_at_02_c17_missing_sec16_in_validator_output",
-    "AT-03": "test_at_03_c18_double_write_check_detects_runtime_artifacts",
-    "AT-04": "test_at_04_c19_premature_fix25_done_would_fail",
-    "AT-05": "test_at_05_clean_shell_allowlist_strips_secrets",
-    "AT-06": "test_at_06_grandfather_done_cards_not_in_errors"
-  },
-  "fix04_overflow_audit_table": "task_cards/corrections/README.md §10 — 23 项全部 cross-verified (file_exists + git_provenance + task_card_id in commit message)",
-  "notes": "META-01 不进 26 卡 1:1 corrects 映射；FIX-01/02 grandfather 豁免。剩余 24 张 FIX 卡起跑前必须按 templates/fix_card_template.md 补 §16 + AT-NN 后才能 status=in_progress。"
+  "fix04_overflow_audit_table": "task_cards/corrections/README.md §10 — 25 项（W0 KS-FIX-01 ×2 + W1 KS-FIX-02 ×1 + META ×1 + W8-W12 ×21）全部 cross-verified",
+  "notes": "META-01 不进 26 卡 1:1 corrects 映射；FIX-01/02 grandfather 豁免；15/15 pytest 全绿；4/4 validator exit 0。"
 }

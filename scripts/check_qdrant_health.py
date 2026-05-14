@@ -100,6 +100,8 @@ def main() -> int:
                     help="artifact 落盘路径（默认 clean_output/audit/qdrant_health_KS-S0-004.json）")
     ap.add_argument("--task-card", default="KS-S0-004",
                     help="artifact 中 task_card 字段（FIX-01 用 KS-FIX-01）")
+    ap.add_argument("--force-write", action="store_true",
+                    help="绕过幂等写入：强制刷新 artifact mtime（KS-FIX-01 ci_contract 测试 + wrapper H4 双写场景用；mirror 同步路径不传此 flag 保留幂等）")
     args = ap.parse_args()
     audit_path = Path(args.out) if args.out else DEFAULT_AUDIT
     if not audit_path.is_absolute():
@@ -200,7 +202,7 @@ def main() -> int:
 
     new_view = _semantic_view(audit)
     will_write = True
-    if audit_path.exists():
+    if audit_path.exists() and not args.force_write:
         try:
             old = json.loads(audit_path.read_text(encoding="utf-8"))
             if _semantic_view(old) == new_view:
@@ -210,7 +212,7 @@ def main() -> int:
 
     if will_write:
         audit_path.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8")
-        action = "落盘 / artifact"
+        action = "强制刷新 / force-write" if args.force_write else "落盘 / artifact"
     else:
         action = "幂等跳过 / idempotent skip (semantic fields unchanged)"
     try:

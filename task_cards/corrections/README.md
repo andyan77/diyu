@@ -229,6 +229,8 @@ python3 task_cards/validate_task_cards.py
 | 21 | `tests/test_tenant_isolation_e2e.py` | W12 | `f75a894` | KS-PROD-002 | ✅ |
 | 22 | `scripts/run_qdrant_health_check.sh` | W0 | `b45e25d` | KS-FIX-01 | ✅ |
 | 23 | `tests/test_qdrant_health_schema_gate.py` | W0 | `b45e25d` | KS-FIX-01 | ✅ |
+| 24 | `tests/test_ecs_mirror_fail_closed.py` | W1 | `1cc2715` | KS-FIX-02 | ✅ |
+| 25 | `tests/test_corrections_meta.py` | META | `60b1988` | META-01 | ✅ |
 
-**初判结论**：23 项全部能交叉验证 (文件实存 + git provenance + 任务卡 ID commit message)。
+**初判结论**：25 项全部能交叉验证 (文件实存 + git provenance + 任务卡 ID commit message)。
 **FIX-04 起跑时仍需**：(a) 逐项确认是否仍属 "knowledge_serving/ 派生层 canonical 真源"；(b) 任意一项若被原卡撤回或重命名，必须同步白名单。

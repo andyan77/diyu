@@ -76,6 +76,7 @@ EXPECTED_FILES_PRE_EXISTING = {
     "tests/test_task_card_ci_contract.py",       # W0 KS-FIX-01 §15 · 任务卡 ci_commands artifact 契约测试
     "tests/test_serving_tree_whitelist_provenance.py",  # W0 KS-FIX-01 §15 · 白名单溯源测试
     "tests/test_corrections_meta.py",                    # META · META-01 通用机器校验（6 AT case）
+    "tests/test_ecs_mirror_fail_closed.py",              # W1 KS-FIX-02 R2 · ECS mirror fail-closed 用例（commit 1cc2715）
 }
 
 # W3 已落白名单 / W3-landed allowlist

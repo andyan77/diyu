@@ -48,13 +48,15 @@ python3 scripts/check_qdrant_health.py \
   --env staging \
   --strict \
   --task-card KS-FIX-01 \
-  --out "$ARTIFACT"
+  --out "$ARTIFACT" \
+  --force-write
 
 python3 scripts/check_qdrant_health.py \
   --env staging \
   --strict \
   --task-card KS-S0-004 \
-  --out "$S0_ARTIFACT"
+  --out "$S0_ARTIFACT" \
+  --force-write
 
 echo "✅ KS-FIX-01 health check pass; artifact: $ARTIFACT"
 echo "✅ KS-S0-004 artifact 契约同步: $S0_ARTIFACT"
