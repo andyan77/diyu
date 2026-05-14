@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/model_policy_staging_snapshot_KS-FIX-05.json
 artifacts:
   - knowledge_serving/audit/model_policy_staging_snapshot_KS-FIX-05.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-05 · model_policy staging env snapshot
@@ -62,7 +62,7 @@ pass:    warn_count == 0
 > 验：artifact 无明文 key；fingerprint 与 env 推导一致；validate warn=0。
 
 ## 11. DoD
-- [ ] warn=0
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-POLICY-005 回写
+- [x] warn=0（2026-05-14：source load_env.sh 后 --staging --strict --out 跑通，warn_count=0）
+- [x] artifact runtime_verified（snapshot 含 env=staging / checked_at / git_commit / evidence_level=runtime_verified / model_policy_version / models inventory / key_fingerprints sha256[:8]，无明文 key）
+- [x] 审查员 pass（fail-closed 反向校验：缺 env + --strict → exit 1；--out 守门：clean_output → exit 2）
+- [x] 原卡 KS-POLICY-005 回写（KS-POLICY-005 status=done 仍成立，本卡只补 staging runtime snapshot，不动 spec）

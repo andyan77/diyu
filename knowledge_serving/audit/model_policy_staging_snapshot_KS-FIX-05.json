@@ -1,0 +1,45 @@
+{
+  "card": "KS-POLICY-005",
+  "checked_at": "2026-05-14T05:37:19Z",
+  "env": "staging",
+  "git_commit": "f33ebfcd0496be49d5f673f0d1f3eb0112bc876d",
+  "evidence_level": "runtime_verified",
+  "policy_path": "knowledge_serving/policies/model_policy.yaml",
+  "model_policy_version": "mp_20260512_002",
+  "error_count": 0,
+  "warn_count": 0,
+  "errors": [],
+  "warnings": [],
+  "models": {
+    "embedding": {
+      "provider": "dashscope",
+      "model": "text-embedding-v3",
+      "dimension": 1024,
+      "endpoint": null
+    },
+    "rerank": {
+      "enabled": true,
+      "provider": "dashscope",
+      "model": "gte-rerank",
+      "endpoint": null,
+      "fallback_when_unavailable": "vector_score_then_structured_priority"
+    },
+    "llm_assist": {
+      "enabled": true,
+      "primary": {
+        "provider": "dashscope",
+        "model": "qwen-plus",
+        "endpoint": null
+      },
+      "fallback": {
+        "provider": "deepseek",
+        "model": "deepseek-chat",
+        "endpoint": null
+      }
+    }
+  },
+  "key_fingerprints": {
+    "DASHSCOPE_API_KEY": "sha256:f45edc88",
+    "DEEPSEEK_API_KEY": "sha256:5388c171"
+  }
+}

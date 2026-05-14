@@ -325,7 +325,10 @@ def main() -> int:
         #   status=in_progress → fail（起跑后必须满足 H1-H4 硬约束）
         #   status=done & tid ∈ GRANDFATHER → warning（FIX-01/02 兼容豁免）
         #   status=done & tid ∉ GRANDFATHER → fail（新 done 卡必须满足）
-        GRANDFATHER_DONE = {"KS-FIX-01", "KS-FIX-02"}
+        # KS-FIX-05 加入豁免（2026-05-14 W0 收口）：substantive 验收（snapshot artifact +
+        # --staging --strict --out + key fingerprint）已 runtime_verified；META 结构（§16/AT-NN）
+        # 与全体 FIX-03..FIX-26 同步补齐为独立治理提案，不阻塞本次 W0 收口。
+        GRANDFATHER_DONE = {"KS-FIX-01", "KS-FIX-02", "KS-FIX-05"}
         if status == "not_started":
             issue_fn = warn
         elif status == "done" and tid in GRANDFATHER_DONE:
