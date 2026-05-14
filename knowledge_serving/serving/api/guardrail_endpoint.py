@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
@@ -24,8 +24,10 @@ router = APIRouter()
 
 class GuardrailRequest(BaseModel):
     generated_text: str = Field(..., description="LLM 生成文本")
-    bundle: dict[str, Any] = Field(..., description="context_bundle（KS-RETRIEVAL-008 输出）")
-    business_brief: dict[str, Any] = Field(..., description="商业 brief（含 sku / category / price_band 等）")
+    # KS-CD-003 reimport bug fix：Dify HTTP body 模板在 bundle/brief 为 null/缺失时
+    # 会传字面 null；wrapper 应接受并归一为 {}，由 guardrail.check 自行判断
+    bundle: Optional[dict[str, Any]] = Field(default=None, description="context_bundle（KS-RETRIEVAL-008 输出）；null→{}")
+    business_brief: Optional[dict[str, Any]] = Field(default=None, description="商业 brief；null→{}")
 
 
 def _policy_path() -> Path:
@@ -62,8 +64,8 @@ def post_guardrail(req: GuardrailRequest) -> dict[str, Any]:
             pass
         result = _guardrail_mod.check(
             generated_text=req.generated_text,
-            bundle=req.bundle,
-            business_brief=req.business_brief,
+            bundle=req.bundle or {},
+            business_brief=req.business_brief or {},
         )
     except (TypeError, ValueError) as e:
         raise HTTPException(status_code=400, detail={"error": "bad_input", "message": str(e)})

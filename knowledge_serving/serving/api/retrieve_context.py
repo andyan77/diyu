@@ -22,6 +22,7 @@
 """
 from __future__ import annotations
 
+import json
 import os
 import sys
 import time
@@ -108,7 +109,30 @@ class RetrieveContextRequest(BaseModel):
     platform: Optional[str] = Field(default=DEFAULT_PLATFORM, description="目标平台 / target platform")
     output_format: Optional[str] = Field(default=DEFAULT_OUTPUT_FORMAT, description="输出格式 / output format")
     fallback_mode: Optional[str] = Field(default=None, description="降级策略 hint；当前由 fallback_decider 自决，仅记录")
-    business_brief: dict[str, Any] = Field(default_factory=dict, description="业务 brief（sku / category / season / channel 等）")
+    # 显式 Optional：上游 Dify chatflow 在 brief 留空时会传 null；用 validator 归一到 {}
+    # 业务上 brief 缺失是合法状态 → 走 fallback_status=blocked_missing_business_brief，
+    # 不应该在 pydantic 层 400（KS-CD-003 reimport 后真实出现的 bug）
+    business_brief: Optional[dict[str, Any]] = Field(default=None, description="业务 brief（sku / category / season / channel 等）；null 等价于空 dict")
+
+    @field_validator("business_brief", mode="before")
+    @classmethod
+    def _null_brief_to_empty(cls, v: Any) -> dict[str, Any]:
+        if v is None:
+            return {}
+        if isinstance(v, dict):
+            return v
+        # 字符串 JSON 也兼容（Dify 表单 paragraph 字段会传 string）
+        if isinstance(v, str):
+            s = v.strip()
+            if not s:
+                return {}
+            try:
+                parsed = json.loads(s)
+                if isinstance(parsed, dict):
+                    return parsed
+            except Exception:
+                pass
+        raise ValueError("business_brief 必须是 dict / null / JSON 字符串")
     # KS-FIX-12: structured_only 显式开 → 不调 vector_retrieve（兼容模式，
     # 用于已知 Qdrant 维护窗 / 客户合规要求只用关系召回）；缺省 False = 调 vector，
     # Qdrant 不可达时 503 fail-closed（不静默 None）
@@ -314,7 +338,7 @@ def _orchestrate(
         user_query=req.user_query,
         content_type=content_type,
         recipe=recipe,
-        business_brief=req.business_brief,
+        business_brief=req.business_brief or {},
         merge_result=merge_res,
         fallback_decision=fb_dict,
         governance=governance,

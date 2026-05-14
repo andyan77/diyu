@@ -96,9 +96,26 @@ def test_guardrail_endpoint_blocks_empty_text(client):
 
 
 def test_guardrail_endpoint_rejects_bad_payload(client):
-    """缺字段 → 400（pydantic 422 已经被 retrieve_context 转 400）。"""
-    resp = client.post("/v1/guardrail", json={"generated_text": "x"})  # 缺 bundle / brief
+    """缺 generated_text → 400（pydantic 422 已经被 retrieve_context 转 400）。
+
+    注：bundle / business_brief 设计上容忍 null/缺失（归一到 {}），
+    因为 Dify chatflow 在 brief 留空时会传 null（KS-CD-003 reimport 实测发现的真实场景）。
+    """
+    resp = client.post("/v1/guardrail", json={"bundle": {}, "business_brief": {}})  # 缺 generated_text
     assert resp.status_code in (400, 422), f"expected 4xx, got {resp.status_code}"
+
+
+def test_guardrail_endpoint_tolerates_null_bundle_brief(client):
+    """KS-CD-003 reimport 真实场景：bundle/brief 为 null 不应 400，
+    应进入 guardrail.check，由 check 用空 bundle/brief 给出 violations。"""
+    resp = client.post("/v1/guardrail", json={
+        "generated_text": "test text",
+        "bundle": None,
+        "business_brief": None,
+    })
+    assert resp.status_code == 200, f"null bundle/brief 应 tolerate; got {resp.status_code}: {resp.text}"
+    body = resp.json()
+    assert "status" in body and "violations" in body
 
 
 # ============================================================
@@ -178,6 +195,41 @@ def test_log_write_endpoint_mounted_and_writes_csv(client, tmp_path, monkeypatch
     assert log_path.exists(), f"log CSV not written to {log_path}"
     lines = log_path.read_text().strip().splitlines()
     assert len(lines) >= 2, f"CSV has only header (or empty); rows={len(lines)}"
+
+
+def test_log_write_endpoint_accepts_retrieve_context_response_shape(client, tmp_path, monkeypatch):
+    """KS-CD-003 reimport：Dify chatflow 直接传 n5 整包 response，server 自动拆 bundle/meta。"""
+    log_path = tmp_path / "context_bundle_log.csv"
+    monkeypatch.setenv("DIYU_LOG_CSV_OVERRIDE", str(log_path))
+
+    payload = {
+        "retrieve_context_response": {
+            "request_id": "req_dify_test_42",
+            "status": "ok",
+            "elapsed_ms": 100,
+            "bundle": {
+                "request_id": "req_dify_test_42",
+                "tenant_id": "tenant_faye_main",
+                "resolved_brand_layer": "brand_faye",
+                "allowed_layers": ["domain_general", "brand_faye"],
+                "content_type": "outfit_of_the_day",
+                "fallback_status": "ok",
+                "missing_fields": [],
+                "governance": {"compile_run_id": "mpv::test", "source_manifest_hash": "x"*64, "view_schema_version": "v1"},
+                "recipe": {"recipe_id": "RECIPE-x", "evidence_ids": ["ev1", "ev2"]},
+            },
+            "meta": {"bundle_hash": "h"*64, "user_query_hash": "q"*64, "merged_overlay_payload_empty": True},
+        },
+        "classified_intent": "content_generation",
+        "final_output_text": "draft output with\nactual newlines\nin it",
+        "blocked_reason": None,
+    }
+    resp = client.post("/internal/context_bundle_log", json=payload)
+    assert resp.status_code == 200, f"expected 200, got {resp.status_code}: {resp.text}"
+    body = resp.json()
+    assert body["status"] == "ok"
+    assert body["request_id"] == "req_dify_test_42"
+    assert log_path.exists()
 
 
 def test_log_write_endpoint_rejects_missing_request_id(client):
