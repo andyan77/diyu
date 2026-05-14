@@ -1,8 +1,8 @@
 {
   "card": "KS-FIX-06",
-  "checked_at": "2026-05-14T07:01:08Z",
+  "checked_at": "2026-05-14T07:04:53Z",
   "env": "local",
-  "git_commit": "36cb4c3b44e7206ef799c7bba57725f166584e9d",
+  "git_commit": "a2f7416d78f7a9b579c284f710f2660022f324eb",
   "evidence_level": "runtime_verified",
   "threshold": 0.95,
   "distribution": {
