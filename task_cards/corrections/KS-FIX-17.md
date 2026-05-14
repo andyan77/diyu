@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json
 artifacts:
   - knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-17 · smoke 加 `external_deps_reachable` 硬门
@@ -64,8 +64,8 @@ pass:    external_deps_reachable=true 且 qdrant_live_hit=true 且 pg_status="ok
 > 验：1) 三 reachable gate 真实生效；2) 任一 down 必须 fail；3) artifact 三字段必须 true/ok；4) E2：exit 0 ≠ pass。
 
 ## 11. DoD
-- [ ] 三 reachable 真验过
-- [ ] qdrant_live_hit=true
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-DIFY-ECS-006 回写
+- [x] 三 reachable 真验过（`external_deps_reachable=true`：qdrant.reachable=True + pg.reachable=True + vector_live_evidence=True；新增 `--enforce-external-deps` flag 把这三项接入 smoke_pass 终判）
+- [x] qdrant_live_hit=true（vector_evidence.live_hit=true；本轮真起 tunnel + 真 dashscope embedding + 真 Qdrant 召回）
+- [x] artifact runtime_verified（smoke 脚本 audit dict 新增 `checked_at` + `git_commit` + `evidence_level=runtime_verified` 三字段；`knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json` 真实落盘）
+- [x] 审查员 pass（§10 四项 + fail-closed §6 row 1 adversarial 实测：tunnel down + enforce → exit 1）
+- [x] 原卡 KS-DIFY-ECS-006 回写（§14 追加 KS-FIX-17 external_deps_reachable gate 补证段）

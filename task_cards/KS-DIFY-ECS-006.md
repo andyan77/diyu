@@ -156,3 +156,13 @@ note: 回放 / replay 验证由 KS-DIFY-ECS-010 单独 CI 命令负责
 
 - staging PG `knowledge.context_bundle_log` mirror 表 DDL 仍未上线 → 4 行落 outbox `pending_pg_sync`；建表后由 `reconcile_context_bundle_log_mirror.py --apply` 自动补齐（KS-DIFY-ECS-005 已交付 reconcile CLI，不属本卡范围）
 - replay / 回放一致性 → KS-DIFY-ECS-010
+
+## 14. 2026-05-14 KS-FIX-17 external_deps_reachable gate 补证
+
+- 原 §8 ci_command 复跑：`python3 scripts/ecs_e2e_smoke.py --env staging` → exit 0；4/4 case PASS；gates external_deps_reachable=True / external_deps_enforced=False（向后兼容默认不开 strict）；smoke_result=pass；artifact checked_at=2026-05-14T15:52:13Z
+- **新增 `--enforce-external-deps` flag**（最小改动；默认 off 保持 §8 ci_command 行为不变）：`python3 scripts/ecs_e2e_smoke.py --env staging --enforce-external-deps --audit knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json` → exit 0；qdrant.reachable=True / pg.reachable=True / vector_live_evidence=True；smoke_result=pass；artifact checked_at=2026-05-14T15:52:47Z
+- **§6 fail-closed 实测**：先 `bash scripts/qdrant_tunnel.sh down` 关 tunnel → 再 `--enforce-external-deps` → exit 1（external_deps_reachable=False / smoke_result=fail，即使 4 business case 全 PASS）；FIX-17 §1 假绿门槛真切吃住
+- **audit 加 runtime envelope**：脚本 audit dict 新增 `checked_at` + `git_commit` + `evidence_level=runtime_verified` 三字段（对所有 KS-DIFY-ECS-006 audit 消费者反向兼容增量）
+- 上游回归：KS-DIFY-ECS-003 dry-run / KS-DIFY-ECS-004 dry-run / KS-DIFY-ECS-005 `test_log_dual_write.py` → exit 0；validate_serving_tree OK
+- 直接下游回归：KS-DIFY-ECS-010 `test_replay.py` → exit 0；KS-PROD-002 原命令裸 `pytest` → exit 127（本环境无 pytest 入口），`source scripts/load_env.sh && python3 -m pytest knowledge_serving/tests/test_tenant_isolation_e2e.py -v` → exit 1（29 passed / 1 external DashScope SSL failure）
+- runtime envelope：`knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json`（env=staging / checked_at=2026-05-14T15:52:47Z / git_commit=bc5cecd41425300f1f7bf4d15a383b9b857f9c95 / evidence_level=runtime_verified / smoke_result=pass / external_deps_reachable=True / external_deps_enforced=True）

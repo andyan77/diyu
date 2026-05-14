@@ -574,6 +574,11 @@ def main() -> int:
         "--audit", type=Path, default=AUDIT_PATH,
         help="audit JSON 输出路径（默认 canonical）",
     )
+    parser.add_argument(
+        "--enforce-external-deps", action="store_true",
+        help="KS-FIX-17 §1 fail-closed gate：external_deps_reachable (Qdrant + PG + qdrant_live_hit) "
+             "任一为 false → smoke exit 1（默认 off 兼容现有 KS-DIFY-ECS-006 §8 命令行）",
+    )
     args = parser.parse_args()
 
     started_at = _now()
@@ -644,12 +649,21 @@ def main() -> int:
         for r in case_rows
     )
 
+    # KS-FIX-17 §1 fail-closed gate：external_deps_reachable = Qdrant + PG + qdrant_live_hit 三齐
+    external_deps_reachable = (
+        bool(qdrant_probe.get("reachable"))
+        and bool(pg_probe.get("reachable"))
+        and bool(vector_live_evidence)
+    )
+    gate_external_deps_reachable = external_deps_reachable if args.enforce_external_deps else True
+
     smoke_pass = (
         gate_csv_complete
         and gate_cross_tenant
         and gate_no_silent_pass
         and gate_three_samples_ran
         and gate_s9_ran
+        and gate_external_deps_reachable
     )
 
     # PG mirror 状态 / pg mirror status
@@ -660,11 +674,24 @@ def main() -> int:
     else:
         pg_status = "ok"
 
+    # KS-FIX-17 §6/#6 runtime envelope 三件套
+    try:
+        _git_commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT,
+            capture_output=True, text=True, check=False, timeout=5,
+        ).stdout.strip() or "unknown"
+    except Exception:
+        _git_commit = "unknown"
+    _finished_at = _now()
+
     audit = {
         "task_id": "KS-DIFY-ECS-006",
         "env": args.env,
         "started_at": started_at,
-        "finished_at": _now(),
+        "finished_at": _finished_at,
+        "checked_at": _finished_at,
+        "git_commit": _git_commit,
+        "evidence_level": "runtime_verified",
         "elapsed_seconds": round(time.time() - t0, 3),
         "run_token": run_token,
         "infra_probe": {
@@ -692,6 +719,8 @@ def main() -> int:
             "no_silent_pass": gate_no_silent_pass,
             "three_samples_ran": gate_three_samples_ran,
             "s9_control_ran": gate_s9_ran,
+            "external_deps_reachable": external_deps_reachable,
+            "external_deps_enforced": bool(args.enforce_external_deps),
         },
         "vector_evidence": {
             "modes_seen": vector_modes_seen,
@@ -727,7 +756,11 @@ def main() -> int:
     print(f"  gates={audit['gates']}")
     print(f"  pg_mirror.status={pg_status}")
     print(f"  smoke_result={audit['smoke_result']}")
-    print(f"  audit → {args.audit.relative_to(REPO_ROOT)}")
+    try:
+        audit_display = args.audit.relative_to(REPO_ROOT)
+    except ValueError:
+        audit_display = args.audit  # 路径不在仓库内（如 /tmp/...）时回退绝对路径
+    print(f"  audit → {audit_display}")
 
     return 0 if smoke_pass else 1
 
