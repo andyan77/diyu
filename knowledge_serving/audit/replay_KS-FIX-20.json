@@ -1,0 +1,2989 @@
+{
+  "audit_for": "KS-DIFY-ECS-010",
+  "byte_identical_count": 156,
+  "byte_identical_rate": 1.0,
+  "checked_at": "2026-05-14T16:08:01Z",
+  "ci_gate": {
+    "byte_identical_rate_eq_1.0": true,
+    "count_eq_total": true,
+    "exit_code": 0
+  },
+  "count": 156,
+  "elapsed_seconds": 2.601,
+  "env": "staging",
+  "evidence_level": "runtime_verified",
+  "fail_count": 0,
+  "finished_at": "2026-05-14T16:08:01Z",
+  "git_commit": "a1c372a60cde14363001c1f45a808499df02a268",
+  "issued_by": "KS-FIX-20",
+  "per_row": [
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 1,
+      "log_context_bundle_hash": "sha256:75113be00092858c52a8f8699d29dfe956c3896db7d131cf1431e0e535997c73",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:75113be00092858c52a8f8699d29dfe956c3896db7d131cf1431e0e535997c73",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260513T145528Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 2,
+      "log_context_bundle_hash": "sha256:40674651c74a540e131b4929465b013916b94aa4b80102195ff63959e57f7ed1",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:40674651c74a540e131b4929465b013916b94aa4b80102195ff63959e57f7ed1",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260513T145528Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 3,
+      "log_context_bundle_hash": "sha256:982448f71d4c4173eec8b1131db83f3b6295530fa35873e5e84f2e84898d5371",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:982448f71d4c4173eec8b1131db83f3b6295530fa35873e5e84f2e84898d5371",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260513T145528Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 4,
+      "log_context_bundle_hash": "sha256:ed9145ecdbbebfc7c2420547d91eb3f07c1eef25e6df07d9b8b85ff67d6edbfe",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:ed9145ecdbbebfc7c2420547d91eb3f07c1eef25e6df07d9b8b85ff67d6edbfe",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260513T145528Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 5,
+      "log_context_bundle_hash": "sha256:d00bb9522d0db65e201e3b69b7c3945f16545687f73c5c2fba41351e512cb0db",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:d00bb9522d0db65e201e3b69b7c3945f16545687f73c5c2fba41351e512cb0db",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260513T150314Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 6,
+      "log_context_bundle_hash": "sha256:f2d73a6660242e24de3a93ff57e37d0503d1ab694f044d083a602e854f3bdb7c",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:f2d73a6660242e24de3a93ff57e37d0503d1ab694f044d083a602e854f3bdb7c",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260513T150314Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 7,
+      "log_context_bundle_hash": "sha256:c56c72244da86a818c11f2fd76b94c0673544b588747936b9be2248233795d1b",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:c56c72244da86a818c11f2fd76b94c0673544b588747936b9be2248233795d1b",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260513T150314Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 8,
+      "log_context_bundle_hash": "sha256:0135c3750aa3a41b675a6136fcb47fda6913678e34daec85ba3867dda0091017",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:0135c3750aa3a41b675a6136fcb47fda6913678e34daec85ba3867dda0091017",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260513T150314Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 9,
+      "log_context_bundle_hash": "sha256:a8589d6ce5e7becaca6b3a068df0f820f0c55ae663f88666fbc3734fca539fe6",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:a8589d6ce5e7becaca6b3a068df0f820f0c55ae663f88666fbc3734fca539fe6",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260513T151145Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 10,
+      "log_context_bundle_hash": "sha256:9973e53571fb78bf412ea7c6d9f1399a809b8f22b53f3a3dc45b1d023e82113f",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:9973e53571fb78bf412ea7c6d9f1399a809b8f22b53f3a3dc45b1d023e82113f",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260513T151145Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 11,
+      "log_context_bundle_hash": "sha256:693c8df4cbe7103f341c7d81a21cacac7a8abb66b875e42b90cd015c36154fab",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:693c8df4cbe7103f341c7d81a21cacac7a8abb66b875e42b90cd015c36154fab",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260513T151145Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 12,
+      "log_context_bundle_hash": "sha256:16d8d15a79ba9a2c395550e6bd34e7d0dbea8e5464f563930be89695ae508480",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:16d8d15a79ba9a2c395550e6bd34e7d0dbea8e5464f563930be89695ae508480",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260513T151145Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 13,
+      "log_context_bundle_hash": "sha256:1fab0153f2af38a5180192e4dcf9509b32498432543039a57bfffb8545ad6460",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:1fab0153f2af38a5180192e4dcf9509b32498432543039a57bfffb8545ad6460",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T071738Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 14,
+      "log_context_bundle_hash": "sha256:91b5914b48f57ea250ea73f5bf55281d76aa9ed93a88376be1f721651278d710",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:91b5914b48f57ea250ea73f5bf55281d76aa9ed93a88376be1f721651278d710",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T071738Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 15,
+      "log_context_bundle_hash": "sha256:2a076ffc5d6ff59ece3bba3a8de54453104bf778d2cea8c4898e2006d7e960b8",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:2a076ffc5d6ff59ece3bba3a8de54453104bf778d2cea8c4898e2006d7e960b8",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T071738Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 16,
+      "log_context_bundle_hash": "sha256:dd0636ee9e4cf42a8c59d40d56ec46274092e29fd6dc77c4acd2cbafa13a98e0",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:dd0636ee9e4cf42a8c59d40d56ec46274092e29fd6dc77c4acd2cbafa13a98e0",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T071738Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 17,
+      "log_context_bundle_hash": "sha256:542242255454a004ce7d27aff97742a0d61f5ef23a69e599805562a70cffc0a0",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:542242255454a004ce7d27aff97742a0d61f5ef23a69e599805562a70cffc0a0",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T073020Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 18,
+      "log_context_bundle_hash": "sha256:5610e6d9527315e3caf4390a293e90641358f6de60363b61d9790e0abd0a367a",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:5610e6d9527315e3caf4390a293e90641358f6de60363b61d9790e0abd0a367a",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T073020Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 19,
+      "log_context_bundle_hash": "sha256:33e920f5d79a3ac4dd0bf3818b344c8c584fdf7157feca041d6744edf9cf0ee5",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:33e920f5d79a3ac4dd0bf3818b344c8c584fdf7157feca041d6744edf9cf0ee5",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T073020Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 20,
+      "log_context_bundle_hash": "sha256:b330e55852a9e438ad4df6b51ddaa77ca7c44baaac8c51116f7036d1bafde7ca",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:b330e55852a9e438ad4df6b51ddaa77ca7c44baaac8c51116f7036d1bafde7ca",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T073020Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 21,
+      "log_context_bundle_hash": "sha256:de506e19fec30ad2815bb632e37bedf981554310be9315904bfb30af8ae23e84",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:de506e19fec30ad2815bb632e37bedf981554310be9315904bfb30af8ae23e84",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T084233Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 22,
+      "log_context_bundle_hash": "sha256:745903a9a82a08c645b24bfa51e685cdb5e94265a9a20cecefa4be5978ae3f76",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:745903a9a82a08c645b24bfa51e685cdb5e94265a9a20cecefa4be5978ae3f76",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T084233Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 23,
+      "log_context_bundle_hash": "sha256:af35644aa72f57236ae2cee271b29eca176dbf904b18de0511dca24d341382db",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:af35644aa72f57236ae2cee271b29eca176dbf904b18de0511dca24d341382db",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T084233Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 24,
+      "log_context_bundle_hash": "sha256:55282d63131b1b1efa8a965d5d3f5fd7142ab371adf02fbff9ca7876fe72d4e4",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:55282d63131b1b1efa8a965d5d3f5fd7142ab371adf02fbff9ca7876fe72d4e4",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T084233Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 25,
+      "log_context_bundle_hash": "sha256:395423ac9a25232101e3f113b29def6ac87f0d81482a5e2900fa2f9869339ff9",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:395423ac9a25232101e3f113b29def6ac87f0d81482a5e2900fa2f9869339ff9",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T100239Z_58748446",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 26,
+      "log_context_bundle_hash": "sha256:1fac2e20b9709746036f4447189118c761af92f30a68f5e856fe169403880ba7",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:1fac2e20b9709746036f4447189118c761af92f30a68f5e856fe169403880ba7",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T100702Z_5310de5f",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 27,
+      "log_context_bundle_hash": "sha256:68362c3a4b201661d02f9413f33666f4ee021406a523e4d878d455c899af4536",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:68362c3a4b201661d02f9413f33666f4ee021406a523e4d878d455c899af4536",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T100736Z_e1a4078e",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 28,
+      "log_context_bundle_hash": "sha256:3cdfa11a46db9463c8fbef732a65ff1450c621b73e141369783b5aad3b52bf70",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:3cdfa11a46db9463c8fbef732a65ff1450c621b73e141369783b5aad3b52bf70",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T100738Z_5baf42b0",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 29,
+      "log_context_bundle_hash": "sha256:844b576196cc2916670b741215f47828549c37ded68e1403f978cb3cac243a3a",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:844b576196cc2916670b741215f47828549c37ded68e1403f978cb3cac243a3a",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T100849Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 30,
+      "log_context_bundle_hash": "sha256:c0afd9bb286c9d077d722294fd8beca2b6792b7d307c5a820be010d33f425483",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:c0afd9bb286c9d077d722294fd8beca2b6792b7d307c5a820be010d33f425483",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T100849Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 31,
+      "log_context_bundle_hash": "sha256:d72bb4bea490a99e64dd9e23555b28ac38a8e8f197aa8edee672ba0d9e12365f",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:d72bb4bea490a99e64dd9e23555b28ac38a8e8f197aa8edee672ba0d9e12365f",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T100849Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 32,
+      "log_context_bundle_hash": "sha256:f1ca072ecec199915decad45dc38d302b34e1b7742c026401efcb33b8fbe535c",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:f1ca072ecec199915decad45dc38d302b34e1b7742c026401efcb33b8fbe535c",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T100849Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 33,
+      "log_context_bundle_hash": "sha256:473ded9764b1f727924184ad2f95de9f9ae4770f1034e0fc6fd9769e1d395783",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:473ded9764b1f727924184ad2f95de9f9ae4770f1034e0fc6fd9769e1d395783",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T102025Z_d44febfe",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 34,
+      "log_context_bundle_hash": "sha256:0aed2251e08ccf7d6a267b1b0e7a0380f8e0ede9c78af0f13fef3ecb1f3d9d56",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:0aed2251e08ccf7d6a267b1b0e7a0380f8e0ede9c78af0f13fef3ecb1f3d9d56",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T102027Z_e1878300",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 35,
+      "log_context_bundle_hash": "sha256:6522d6c42549f909eafdfef44a26a4b08985b4c3d812cb885110db6c6efd6da7",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:6522d6c42549f909eafdfef44a26a4b08985b4c3d812cb885110db6c6efd6da7",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T114215Z_722ef797",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 36,
+      "log_context_bundle_hash": "sha256:c9e8876123421dd517970709a8f7582bd4d150e9e95cab2353031c68248f1b79",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:c9e8876123421dd517970709a8f7582bd4d150e9e95cab2353031c68248f1b79",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T114219Z_17dc5d88",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 37,
+      "log_context_bundle_hash": "sha256:7c74b2230e225b830bb8c70baf56a28134f4b4bb2dd80df10c3bb3dd00ba80b7",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:7c74b2230e225b830bb8c70baf56a28134f4b4bb2dd80df10c3bb3dd00ba80b7",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141457Z_a0650aab",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 38,
+      "log_context_bundle_hash": "sha256:582ee7cf9556312d01c5036ef2e5062bb212630bf876d30bb3b0891561c7a144",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:582ee7cf9556312d01c5036ef2e5062bb212630bf876d30bb3b0891561c7a144",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141459Z_e76df244",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 39,
+      "log_context_bundle_hash": "sha256:7c2fb7d31b4831680bc8ab434180a96faa1507824d09b0698dd49c57c4e2715f",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:7c2fb7d31b4831680bc8ab434180a96faa1507824d09b0698dd49c57c4e2715f",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141500Z_96b58f89",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 40,
+      "log_context_bundle_hash": "sha256:db4dca2571922c7b37ff972aa4296bf53f3fcf66096210d45f710266009ce02f",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:db4dca2571922c7b37ff972aa4296bf53f3fcf66096210d45f710266009ce02f",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141505Z_5ef1873b",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 41,
+      "log_context_bundle_hash": "sha256:d34fa4a8b477ec350193ec7094200b6e53c8c4fe208a428bf50bdf2d5d0062f7",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:d34fa4a8b477ec350193ec7094200b6e53c8c4fe208a428bf50bdf2d5d0062f7",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141506Z_9515e81d",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 42,
+      "log_context_bundle_hash": "sha256:cc651180a9d2b27ae179ecca9b11cfbec4ddc6ea5214ece78862a50d2f5d6f85",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:cc651180a9d2b27ae179ecca9b11cfbec4ddc6ea5214ece78862a50d2f5d6f85",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141512Z_40afaa3d",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 43,
+      "log_context_bundle_hash": "sha256:0882e2f8ddf696f8b49a9df9f882eeb0157d3eff97399cc266bd426587a71b64",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:0882e2f8ddf696f8b49a9df9f882eeb0157d3eff97399cc266bd426587a71b64",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141523Z_4e55e3fa",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 44,
+      "log_context_bundle_hash": "sha256:9afef45fa12222db052e029635df70116bbf7f86def04688342dbadcfd8f22c3",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:9afef45fa12222db052e029635df70116bbf7f86def04688342dbadcfd8f22c3",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141524Z_50712514",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 45,
+      "log_context_bundle_hash": "sha256:7272a38644c82c99385f27eb7f8d0cc3a605d8a559ad40a1ef9b97b4974535c1",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:7272a38644c82c99385f27eb7f8d0cc3a605d8a559ad40a1ef9b97b4974535c1",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141526Z_35236115",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 46,
+      "log_context_bundle_hash": "sha256:69f02931a8431e7c1016af01712cff115ad91af56d1ff36244a5082e4822ef2a",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:69f02931a8431e7c1016af01712cff115ad91af56d1ff36244a5082e4822ef2a",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141526Z_11e2d9bc",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 47,
+      "log_context_bundle_hash": "sha256:f4e8ca4c5573f7dfcf53c25c7fdc55d95bb90dfe7de1fdcf6dc0dc43b3ed7599",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:f4e8ca4c5573f7dfcf53c25c7fdc55d95bb90dfe7de1fdcf6dc0dc43b3ed7599",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141532Z_5c23dcd4",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 48,
+      "log_context_bundle_hash": "sha256:3b48b7de12dfe942e34e805fac00e2aec62b56cd3b8fd6d1a73d6b48af75c34f",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:3b48b7de12dfe942e34e805fac00e2aec62b56cd3b8fd6d1a73d6b48af75c34f",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141538Z_b7390f8d",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 49,
+      "log_context_bundle_hash": "sha256:0466f901e3ef0ff63c02bce50cecbc2d2aaf0ccfe4db6fa2f436a725fe499434",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:0466f901e3ef0ff63c02bce50cecbc2d2aaf0ccfe4db6fa2f436a725fe499434",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141539Z_361ab88e",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 50,
+      "log_context_bundle_hash": "sha256:24e43b2163b7a6cb92ee5f3875bda2d7856001d053e3ec2c76ca1d71ae1402df",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:24e43b2163b7a6cb92ee5f3875bda2d7856001d053e3ec2c76ca1d71ae1402df",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141540Z_656673bf",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 51,
+      "log_context_bundle_hash": "sha256:113262bf3b2d58f7ab050884f8d3df19401fd0f0a0957c1c271f3b9df26145aa",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:113262bf3b2d58f7ab050884f8d3df19401fd0f0a0957c1c271f3b9df26145aa",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141541Z_d15fb511",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 52,
+      "log_context_bundle_hash": "sha256:51fd399fc73d06b401d0ecc532702b2163815f7ceaf8bee5a7dd1476de3c96cb",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:51fd399fc73d06b401d0ecc532702b2163815f7ceaf8bee5a7dd1476de3c96cb",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141542Z_00650b23",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 53,
+      "log_context_bundle_hash": "sha256:307690ffd5877b48624f8d852cae0e9e3b1432f4afab02ed27f508604f36aa13",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:307690ffd5877b48624f8d852cae0e9e3b1432f4afab02ed27f508604f36aa13",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141543Z_5c927829",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 54,
+      "log_context_bundle_hash": "sha256:cd8b6e73ae8a1d8186985b3860e58321b62a874b861f1cf30496b350a6a6dc5d",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:cd8b6e73ae8a1d8186985b3860e58321b62a874b861f1cf30496b350a6a6dc5d",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141544Z_054861fb",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 55,
+      "log_context_bundle_hash": "sha256:ceb210488d648f56bc4420f1e392172bfbb6fcbe85cd69ccf6d433a8ec970599",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:ceb210488d648f56bc4420f1e392172bfbb6fcbe85cd69ccf6d433a8ec970599",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141545Z_a081c6b6",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 56,
+      "log_context_bundle_hash": "sha256:1d227907a36f6722e516707b3d8545af3f1260c83e8fdba1d373005baa5be730",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:1d227907a36f6722e516707b3d8545af3f1260c83e8fdba1d373005baa5be730",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141546Z_e15977ce",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 57,
+      "log_context_bundle_hash": "sha256:35e00328e55726a31b33fe5db53698387505b8efb15b279ff480768f7dc5b9fd",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:35e00328e55726a31b33fe5db53698387505b8efb15b279ff480768f7dc5b9fd",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141547Z_f29e40c1",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 58,
+      "log_context_bundle_hash": "sha256:13101f14aee6270f4c636b815f77e2522f1e72bc7cdddb64f42f0b46bf58d6f6",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:13101f14aee6270f4c636b815f77e2522f1e72bc7cdddb64f42f0b46bf58d6f6",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141548Z_33cee140",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 59,
+      "log_context_bundle_hash": "sha256:070cb833c0071b04743bc78b328c0865e86193a51396e0cd900da0526c62377e",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:070cb833c0071b04743bc78b328c0865e86193a51396e0cd900da0526c62377e",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141549Z_d569478e",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 60,
+      "log_context_bundle_hash": "sha256:a259b46b87d93c882bbdcca27ec17a9bb3e5efd8f48e6c14c4f57fd56eaacb67",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:a259b46b87d93c882bbdcca27ec17a9bb3e5efd8f48e6c14c4f57fd56eaacb67",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141550Z_53504eef",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 61,
+      "log_context_bundle_hash": "sha256:a425c7c5409a87a100b04e73cfef608dac5e09fbbb3cfc23fb3d893d71d2b1d9",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:a425c7c5409a87a100b04e73cfef608dac5e09fbbb3cfc23fb3d893d71d2b1d9",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141551Z_d4edffb6",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 62,
+      "log_context_bundle_hash": "sha256:834ec8eb946e6b33d9a2ac579de7d71bb9ae7e132243ba3009dd68be739cc815",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:834ec8eb946e6b33d9a2ac579de7d71bb9ae7e132243ba3009dd68be739cc815",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141552Z_073dcb5b",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 63,
+      "log_context_bundle_hash": "sha256:c3f7ec962248055aca69f8103e2006bb689197370e429682d0bb2ab5ef8927f0",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:c3f7ec962248055aca69f8103e2006bb689197370e429682d0bb2ab5ef8927f0",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141553Z_5bde2d77",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 64,
+      "log_context_bundle_hash": "sha256:318221c8a77ae643ac0d744cdb2ac4d18000746e6f670cb1d16d167559022281",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:318221c8a77ae643ac0d744cdb2ac4d18000746e6f670cb1d16d167559022281",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T141554Z_3b8cbec1",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 65,
+      "log_context_bundle_hash": "sha256:34b761ea48bb27aae2412cb4e71b4e8ff10ba01a0ecafde8c87f1977555b06c6",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:34b761ea48bb27aae2412cb4e71b4e8ff10ba01a0ecafde8c87f1977555b06c6",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141716Z_10d39a3b",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 66,
+      "log_context_bundle_hash": "sha256:260507074bc05b07b465d6a1ab987b0246f2d467b3403e7bf141cc2776ce258e",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:260507074bc05b07b465d6a1ab987b0246f2d467b3403e7bf141cc2776ce258e",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T141722Z_76f0ed0a",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 67,
+      "log_context_bundle_hash": "sha256:54db2c48f631093e5979ea98a4b15fc73bd1e9d555ea22778c3e6449230e742d",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:54db2c48f631093e5979ea98a4b15fc73bd1e9d555ea22778c3e6449230e742d",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T142938Z_c6be3c43",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 68,
+      "log_context_bundle_hash": "sha256:46239647472fefeb010cc13c90a409685c2ee6a5fc094b1dea075ebede25e29f",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:46239647472fefeb010cc13c90a409685c2ee6a5fc094b1dea075ebede25e29f",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T142940Z_edb4c63c",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 69,
+      "log_context_bundle_hash": "sha256:d5935f522ff0f64288fc4aad2530934f625b28f9ea9fac6ae990bf13db02fde8",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:d5935f522ff0f64288fc4aad2530934f625b28f9ea9fac6ae990bf13db02fde8",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T142941Z_f5f1888e",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 70,
+      "log_context_bundle_hash": "sha256:1cedbdd71c48d94f737979217e14c5a82de75c2d691ea9ca2c99540316afeaf5",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:1cedbdd71c48d94f737979217e14c5a82de75c2d691ea9ca2c99540316afeaf5",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T142942Z_ddd37cc3",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 71,
+      "log_context_bundle_hash": "sha256:be7593d285dbada0347a2febf76d600d16aa99664cf6314a79fb116190ce09f4",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:be7593d285dbada0347a2febf76d600d16aa99664cf6314a79fb116190ce09f4",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T142943Z_44f79b36",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 72,
+      "log_context_bundle_hash": "sha256:b42801d24742a8457f9fc732cc4045fdf1ab8d2d76c9f0db4a625296b3774b38",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:b42801d24742a8457f9fc732cc4045fdf1ab8d2d76c9f0db4a625296b3774b38",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143007Z_4335bb1e",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 73,
+      "log_context_bundle_hash": "sha256:d4f3e652cdd3fa98d8e71279e9d9a306c48b046a9bfb9c54219121a8a24de920",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:d4f3e652cdd3fa98d8e71279e9d9a306c48b046a9bfb9c54219121a8a24de920",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143008Z_f0901f44",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 74,
+      "log_context_bundle_hash": "sha256:31413fae87478b0862a20a9eda46cfab343dd60875cc0c36725162309c10429b",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:31413fae87478b0862a20a9eda46cfab343dd60875cc0c36725162309c10429b",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143014Z_067696e5",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 75,
+      "log_context_bundle_hash": "sha256:ff94b25618ff0d84fc4e43b3772271743ef20dbb2f4d9b8516211e990b031067",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:ff94b25618ff0d84fc4e43b3772271743ef20dbb2f4d9b8516211e990b031067",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143026Z_fa0d662e",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 76,
+      "log_context_bundle_hash": "sha256:ab2d1f545cc78c4f703591b7b83900d73a6babac69e0a1a4a184523491c4fc42",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:ab2d1f545cc78c4f703591b7b83900d73a6babac69e0a1a4a184523491c4fc42",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143027Z_0eb5bdad",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 77,
+      "log_context_bundle_hash": "sha256:7d8b6010ff11d4d65c93459edc20f126adaaec81e39f1f76a797e5d39da95742",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:7d8b6010ff11d4d65c93459edc20f126adaaec81e39f1f76a797e5d39da95742",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143028Z_6ab8956f",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 78,
+      "log_context_bundle_hash": "sha256:e939a2283da13e55b1e2cf83cd176624b2af20820c7b41424d89737a633d3c59",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:e939a2283da13e55b1e2cf83cd176624b2af20820c7b41424d89737a633d3c59",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143029Z_543aace9",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 79,
+      "log_context_bundle_hash": "sha256:9ce85ab35ce1fd21fa0beade14d939496db7ac962a196d1ba540a124505871ec",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:9ce85ab35ce1fd21fa0beade14d939496db7ac962a196d1ba540a124505871ec",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143030Z_27662797",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 80,
+      "log_context_bundle_hash": "sha256:90f780de0f23e088da5b93993b7ae76031615f56bd9caa39c211fb6fb86efb47",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:90f780de0f23e088da5b93993b7ae76031615f56bd9caa39c211fb6fb86efb47",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143054Z_34b53b0e",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 81,
+      "log_context_bundle_hash": "sha256:b6cceec46a65bbd2681506fc61cfb4fd5bea8f4a71b5144473f524a93f1cabd9",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:b6cceec46a65bbd2681506fc61cfb4fd5bea8f4a71b5144473f524a93f1cabd9",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143055Z_05371fab",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 82,
+      "log_context_bundle_hash": "sha256:2487704563026fbefa5e3909b83fbf67616f8c8bc726d9bb9c14155637311917",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:2487704563026fbefa5e3909b83fbf67616f8c8bc726d9bb9c14155637311917",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143101Z_8a56f8e5",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 83,
+      "log_context_bundle_hash": "sha256:e89a0571c72c87e0a2c474c568a498adcb6013ef2dba2437de65ed952ea7139a",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:e89a0571c72c87e0a2c474c568a498adcb6013ef2dba2437de65ed952ea7139a",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143102Z_e0ba5c6b",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 84,
+      "log_context_bundle_hash": "sha256:68ded8ee8d3d29309429cf8c6e0c306edfc9fb592ed7a478356f95b1f79b586a",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:68ded8ee8d3d29309429cf8c6e0c306edfc9fb592ed7a478356f95b1f79b586a",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143108Z_7cfe1359",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 85,
+      "log_context_bundle_hash": "sha256:bf27ef184ea0a85f207f78a0b5674e7d1171b3bb36b98e8b6c8c5c808d9016c5",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:bf27ef184ea0a85f207f78a0b5674e7d1171b3bb36b98e8b6c8c5c808d9016c5",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143121Z_dc7fc253",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 86,
+      "log_context_bundle_hash": "sha256:c87943005037121ae5345775e25e7dfbf581ac2f0e24333b69af6b37ab5c78f0",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:c87943005037121ae5345775e25e7dfbf581ac2f0e24333b69af6b37ab5c78f0",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143122Z_8b11e9b3",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 87,
+      "log_context_bundle_hash": "sha256:55f2da0bd4ae20da3344e20c38fd40d3c6d35ee6ecb0064a60266011fd24c0a8",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:55f2da0bd4ae20da3344e20c38fd40d3c6d35ee6ecb0064a60266011fd24c0a8",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143122Z_19f84d1b",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 88,
+      "log_context_bundle_hash": "sha256:b5051018a6139e1bcefb38b0a333f3d779748d013e53d84e0b95a06517c03142",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:b5051018a6139e1bcefb38b0a333f3d779748d013e53d84e0b95a06517c03142",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143124Z_56787f96",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 89,
+      "log_context_bundle_hash": "sha256:caa0a3b56baf4ddf9c1f82cefdfeb5924505ad0c45bcace76e5631acaf87d34d",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:caa0a3b56baf4ddf9c1f82cefdfeb5924505ad0c45bcace76e5631acaf87d34d",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143125Z_7e152dea",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 90,
+      "log_context_bundle_hash": "sha256:14869b5289ca96714c38d79b846f07ad1f52daa2d6170214baefb062c50d168e",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:14869b5289ca96714c38d79b846f07ad1f52daa2d6170214baefb062c50d168e",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143137Z_3b420d17",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 91,
+      "log_context_bundle_hash": "sha256:1996f3699a60bfaf4958f3fab7b4b0a0eca9bb304eb4ee44569d0316f988b066",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:1996f3699a60bfaf4958f3fab7b4b0a0eca9bb304eb4ee44569d0316f988b066",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143138Z_d340aa36",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 92,
+      "log_context_bundle_hash": "sha256:3011e9d49260c039188e726299d6f8ce0ff3358d098b7d46b2a4361e99cbba6c",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:3011e9d49260c039188e726299d6f8ce0ff3358d098b7d46b2a4361e99cbba6c",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143144Z_004476b5",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 93,
+      "log_context_bundle_hash": "sha256:ad5701c4e5cc084c6cde4d4a9142cac3e497f09803066134e6e8daf41ad8a886",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:ad5701c4e5cc084c6cde4d4a9142cac3e497f09803066134e6e8daf41ad8a886",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143156Z_eb58ee29",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 94,
+      "log_context_bundle_hash": "sha256:09b3ac108d2d88e598d57e94ee82d912b74516c75864c375313a97b98e23ff3c",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:09b3ac108d2d88e598d57e94ee82d912b74516c75864c375313a97b98e23ff3c",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143203Z_2fdf7f14",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 95,
+      "log_context_bundle_hash": "sha256:1536fb38ffcba75d9e151ab3c0938e880016b5a56fd38f1ff083f0a5d50d6ccd",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:1536fb38ffcba75d9e151ab3c0938e880016b5a56fd38f1ff083f0a5d50d6ccd",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143204Z_0da212fc",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 96,
+      "log_context_bundle_hash": "sha256:5d8a67e34cedad666c91f585dbec4c9c051bd5c0a7bb81e6f691420d944b3b83",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:5d8a67e34cedad666c91f585dbec4c9c051bd5c0a7bb81e6f691420d944b3b83",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143205Z_3ee7c1c7",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 97,
+      "log_context_bundle_hash": "sha256:067885f07c625ce7bf4abe5dd7768aeb2dd9a8cf3f644fba86efc4d62b31049f",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:067885f07c625ce7bf4abe5dd7768aeb2dd9a8cf3f644fba86efc4d62b31049f",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143210Z_c47becf6",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 98,
+      "log_context_bundle_hash": "sha256:406a7b6058090818ecee800cc12005c61ab7fde6f35a160515cd20f004ceba86",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:406a7b6058090818ecee800cc12005c61ab7fde6f35a160515cd20f004ceba86",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143211Z_49cff147",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 99,
+      "log_context_bundle_hash": "sha256:fe13d22c7365f46760472b0c240519b43415ff4b445c032ecf65677b01687829",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:fe13d22c7365f46760472b0c240519b43415ff4b445c032ecf65677b01687829",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T143212Z_9bd3ca3d",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 100,
+      "log_context_bundle_hash": "sha256:f026138e53d2f4d5a966d695951dd2e77343d01ee470e0f6f29c023852dcf1e8",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:f026138e53d2f4d5a966d695951dd2e77343d01ee470e0f6f29c023852dcf1e8",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T143213Z_15d2b505",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 101,
+      "log_context_bundle_hash": "sha256:df3ab223ce3961f6c9ce8fe8d12f9541bfb812524482b56bc4c41706f80507fd",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:df3ab223ce3961f6c9ce8fe8d12f9541bfb812524482b56bc4c41706f80507fd",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T144343Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 102,
+      "log_context_bundle_hash": "sha256:db382e4d93a27505836a09ad7097bacca127839a151cdb3241a2ae3c13e78070",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:db382e4d93a27505836a09ad7097bacca127839a151cdb3241a2ae3c13e78070",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T144343Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 103,
+      "log_context_bundle_hash": "sha256:9d9d9092bc8c1e11b2cbca0bfb107399d99c1cc64d00558642b449ba89208c2b",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:9d9d9092bc8c1e11b2cbca0bfb107399d99c1cc64d00558642b449ba89208c2b",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T144343Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 104,
+      "log_context_bundle_hash": "sha256:56728034329f9d545a611d29dd920dc934ac0264e85b41b976bb0b3938fb04b9",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:56728034329f9d545a611d29dd920dc934ac0264e85b41b976bb0b3938fb04b9",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T144343Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 105,
+      "log_context_bundle_hash": "sha256:1e6826af58a6fce0d8b04b2ae366f4526f4b40a25afefe2f455a6a368df5c48e",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:1e6826af58a6fce0d8b04b2ae366f4526f4b40a25afefe2f455a6a368df5c48e",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T145415Z_53d5d8f0",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 106,
+      "log_context_bundle_hash": "sha256:bee384fec480b45692a38809d631f5d8ab69f615cb541d8aa7b67f7c0e1bb46f",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:bee384fec480b45692a38809d631f5d8ab69f615cb541d8aa7b67f7c0e1bb46f",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T145453Z_180c306a",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 107,
+      "log_context_bundle_hash": "sha256:4b490dd1fbee87c65a4761294f2d1f4d994640a6829d8bbfb32b3f87a0ce4113",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:4b490dd1fbee87c65a4761294f2d1f4d994640a6829d8bbfb32b3f87a0ce4113",
+      "replayed_overlay_count": 0,
+      "request_id": "req_api_20260514T145455Z_b87f70be",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 108,
+      "log_context_bundle_hash": "sha256:da89846e33ae885467b645eaee58e30dd729550cbbd633577f2ba5912cdc002d",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:da89846e33ae885467b645eaee58e30dd729550cbbd633577f2ba5912cdc002d",
+      "replayed_overlay_count": 4,
+      "request_id": "req_api_20260514T145519Z_29095254",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 109,
+      "log_context_bundle_hash": "sha256:174ec0e9bae2d63fe5dd80cbf459f612d41558812576ca2f4bfb3ca33eec334d",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:174ec0e9bae2d63fe5dd80cbf459f612d41558812576ca2f4bfb3ca33eec334d",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T153803Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 110,
+      "log_context_bundle_hash": "sha256:fcb30a6c2828459277eb2a1eec9dd5cad9ee70d05849d52456ba1ebcba07608b",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:fcb30a6c2828459277eb2a1eec9dd5cad9ee70d05849d52456ba1ebcba07608b",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T153803Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 111,
+      "log_context_bundle_hash": "sha256:c3a541ff46838fe31e06f1320c33265c3d9e2e1f5c9cc484beb92d39fe64b86e",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:c3a541ff46838fe31e06f1320c33265c3d9e2e1f5c9cc484beb92d39fe64b86e",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T153803Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 112,
+      "log_context_bundle_hash": "sha256:35571b5f2659a29d1b3a65eb3803e3363b4c51a5ce03434b3d4a87da0a5c9ea5",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:35571b5f2659a29d1b3a65eb3803e3363b4c51a5ce03434b3d4a87da0a5c9ea5",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T153803Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 113,
+      "log_context_bundle_hash": "sha256:0e35b7a2ff09f179e17cf029d68fc81e9900b4e0463c4a8563006258d6da6dff",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:0e35b7a2ff09f179e17cf029d68fc81e9900b4e0463c4a8563006258d6da6dff",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T153852Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 114,
+      "log_context_bundle_hash": "sha256:68f706721a8724032b69c0334b51e93e91e8dc5a38a8e29b33b5d9f44dc67d51",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:68f706721a8724032b69c0334b51e93e91e8dc5a38a8e29b33b5d9f44dc67d51",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T153852Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 115,
+      "log_context_bundle_hash": "sha256:fdcd9d56826019a2a287149c027cd16093e10532ecb15e86ed59f8b7da571034",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:fdcd9d56826019a2a287149c027cd16093e10532ecb15e86ed59f8b7da571034",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T153852Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 116,
+      "log_context_bundle_hash": "sha256:34d1de5fd469c6077779900e72756131696beb1fa769e4d4d8ef2ecf3579ec88",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:34d1de5fd469c6077779900e72756131696beb1fa769e4d4d8ef2ecf3579ec88",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T153852Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 117,
+      "log_context_bundle_hash": "sha256:c4125ef966a9cd6f55a132005c0af0f3a2bd5cd934833cc71228a9eaf277d8b4",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:c4125ef966a9cd6f55a132005c0af0f3a2bd5cd934833cc71228a9eaf277d8b4",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T153959Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 118,
+      "log_context_bundle_hash": "sha256:2e17d39899db644c9268cb723d466b1a4507041155ff40fcd404e629517ff618",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:2e17d39899db644c9268cb723d466b1a4507041155ff40fcd404e629517ff618",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T153959Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 119,
+      "log_context_bundle_hash": "sha256:37271ea0955d1373af0d11e480ce25548d5d23ee85907ac37725943d34d96dbb",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:37271ea0955d1373af0d11e480ce25548d5d23ee85907ac37725943d34d96dbb",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T153959Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 120,
+      "log_context_bundle_hash": "sha256:052fc88c1e2424dcf4de25c2b7e8d403198b56502489415822fb74d454acae30",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:052fc88c1e2424dcf4de25c2b7e8d403198b56502489415822fb74d454acae30",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T153959Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 121,
+      "log_context_bundle_hash": "sha256:7e6f07b3d8361ba3f3fd5d490a84971c11e6cb7d8285903cfbc579fc87f8346e",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:7e6f07b3d8361ba3f3fd5d490a84971c11e6cb7d8285903cfbc579fc87f8346e",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T154051Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 122,
+      "log_context_bundle_hash": "sha256:2313565b590b71d5ece8dddbc005fb0f2509dbf6d5c9929f5a740ebfd1cf4e42",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:2313565b590b71d5ece8dddbc005fb0f2509dbf6d5c9929f5a740ebfd1cf4e42",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T154051Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 123,
+      "log_context_bundle_hash": "sha256:307ac561b02aa10c12694b134dc8f61a387c7847dc22e37344c1eedbf0028e3e",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:307ac561b02aa10c12694b134dc8f61a387c7847dc22e37344c1eedbf0028e3e",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T154051Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 124,
+      "log_context_bundle_hash": "sha256:294d51eb0a258754db811248a2ffa3b7f33c1725a4277f1c6819a5db74b85386",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:294d51eb0a258754db811248a2ffa3b7f33c1725a4277f1c6819a5db74b85386",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T154051Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 125,
+      "log_context_bundle_hash": "sha256:1c954602e76701ef74dcfe21c34e0b78a52040b24cd10499b2cffa5f17cb91dc",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:1c954602e76701ef74dcfe21c34e0b78a52040b24cd10499b2cffa5f17cb91dc",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T154144Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 126,
+      "log_context_bundle_hash": "sha256:bf6e25ec683c80af9146792da06c9f5327b83ea0e3ca676ace9274ca8ff10aa2",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:bf6e25ec683c80af9146792da06c9f5327b83ea0e3ca676ace9274ca8ff10aa2",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T154144Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 127,
+      "log_context_bundle_hash": "sha256:023f088aeb625c634e74e629b1efb635c3022dd0cc6a76ab237d2415206f84d3",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:023f088aeb625c634e74e629b1efb635c3022dd0cc6a76ab237d2415206f84d3",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T154144Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 128,
+      "log_context_bundle_hash": "sha256:2db96d70262deed0784788740651565aa89a1f30d7854f4a99228fb66ce5bad2",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:2db96d70262deed0784788740651565aa89a1f30d7854f4a99228fb66ce5bad2",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T154144Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 129,
+      "log_context_bundle_hash": "sha256:88235c3de11774e531ee6112073fd008e0958d9c6bde0485882c5ae876368d6f",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:88235c3de11774e531ee6112073fd008e0958d9c6bde0485882c5ae876368d6f",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T154220Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 130,
+      "log_context_bundle_hash": "sha256:6e0a71e4fefeb37e6f533a4b86028f744499e86f3f3af005a729ea7587d2292b",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:6e0a71e4fefeb37e6f533a4b86028f744499e86f3f3af005a729ea7587d2292b",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T154220Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 131,
+      "log_context_bundle_hash": "sha256:cf53c366952cceacf135cd55898fa2c2cad7c4fb42aecf57cbb9d3a90c439ccf",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:cf53c366952cceacf135cd55898fa2c2cad7c4fb42aecf57cbb9d3a90c439ccf",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T154220Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 132,
+      "log_context_bundle_hash": "sha256:1178114a42a1a832e89c7a5b7fd6f207418d6f9033a030db4bb39cc9b88b5229",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:1178114a42a1a832e89c7a5b7fd6f207418d6f9033a030db4bb39cc9b88b5229",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T154220Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 133,
+      "log_context_bundle_hash": "sha256:5acfd00ce9cdd0573a0585bf351a7f143ddeed34fef6ca4ff6f27afaa141e056",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:5acfd00ce9cdd0573a0585bf351a7f143ddeed34fef6ca4ff6f27afaa141e056",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T154315Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 134,
+      "log_context_bundle_hash": "sha256:7a230dee6da326c96778cfbedc5ea8be750370beb2191c93048a48b8b1272aeb",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:7a230dee6da326c96778cfbedc5ea8be750370beb2191c93048a48b8b1272aeb",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T154315Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 135,
+      "log_context_bundle_hash": "sha256:bcd3733141e7455dc8e65536d7482743e187d4226acfb1182b4e5f5e506d6032",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:bcd3733141e7455dc8e65536d7482743e187d4226acfb1182b4e5f5e506d6032",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T154315Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 136,
+      "log_context_bundle_hash": "sha256:381bf3c4f780215e9c96ebbf00da551965299795663ba34403506edf29f552c3",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:381bf3c4f780215e9c96ebbf00da551965299795663ba34403506edf29f552c3",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T154315Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 137,
+      "log_context_bundle_hash": "sha256:5e28a13117171163939c92c1ea5054f7d7ca6be340673ef303e6ec961728600f",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:5e28a13117171163939c92c1ea5054f7d7ca6be340673ef303e6ec961728600f",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T154641Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 138,
+      "log_context_bundle_hash": "sha256:7edf44a1186cbc459a3d1553a8f0ddf586569df156d62c780d5c7b4d0149aca0",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:7edf44a1186cbc459a3d1553a8f0ddf586569df156d62c780d5c7b4d0149aca0",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T154641Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 139,
+      "log_context_bundle_hash": "sha256:86cd5baba1047704a9cdb422bd739d61e7ee010ab71a849f9dce1c46824178d6",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:86cd5baba1047704a9cdb422bd739d61e7ee010ab71a849f9dce1c46824178d6",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T154641Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 140,
+      "log_context_bundle_hash": "sha256:a3147c5faf7be68b6d64c8fdd0656d1facfe4a82ce0e68237850d5839d17b777",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:a3147c5faf7be68b6d64c8fdd0656d1facfe4a82ce0e68237850d5839d17b777",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T154641Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 141,
+      "log_context_bundle_hash": "sha256:efe5b92f0baf172a1e2f44f9eab9845422b93c2ed16b9e285eb3475c3c937d50",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:efe5b92f0baf172a1e2f44f9eab9845422b93c2ed16b9e285eb3475c3c937d50",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T154719Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 142,
+      "log_context_bundle_hash": "sha256:02c50a6467dbb637a4105d2bfb9798575f78f35309066decbb42bb023003a5d4",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:02c50a6467dbb637a4105d2bfb9798575f78f35309066decbb42bb023003a5d4",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T154719Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 143,
+      "log_context_bundle_hash": "sha256:2711eebc28cc3e9af156067b25b279c70e313b38f50591ed05c84b5350ac0846",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:2711eebc28cc3e9af156067b25b279c70e313b38f50591ed05c84b5350ac0846",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T154719Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 144,
+      "log_context_bundle_hash": "sha256:1c4b59e248a08bac523a5806c69cd3361a351b38b84aca50553b9e7035d6913e",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:1c4b59e248a08bac523a5806c69cd3361a351b38b84aca50553b9e7035d6913e",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T154719Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 145,
+      "log_context_bundle_hash": "sha256:4d671245ee74f7d3479883911d9adb742a2982ab633ac50896c130b774978dfd",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:4d671245ee74f7d3479883911d9adb742a2982ab633ac50896c130b774978dfd",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T155201Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 146,
+      "log_context_bundle_hash": "sha256:0346d15033e33338304c88795a08c9bc734d6e77718c8c5a4d91673ae31c1410",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:0346d15033e33338304c88795a08c9bc734d6e77718c8c5a4d91673ae31c1410",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T155201Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 147,
+      "log_context_bundle_hash": "sha256:244c5f21cba9669fed47307cf785a6ea50b8be1caa0f68fd480625e8da0f6577",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:244c5f21cba9669fed47307cf785a6ea50b8be1caa0f68fd480625e8da0f6577",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T155201Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 148,
+      "log_context_bundle_hash": "sha256:aedd76eabce2f083560d6ed273f2a555238e19fb30a66b9972b2d62da6dd98fd",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:aedd76eabce2f083560d6ed273f2a555238e19fb30a66b9972b2d62da6dd98fd",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T155201Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 149,
+      "log_context_bundle_hash": "sha256:4e67f4414430103a090a543eeefaea9bcc0d7a4b36a649d3bcdc343edeb11ceb",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:4e67f4414430103a090a543eeefaea9bcc0d7a4b36a649d3bcdc343edeb11ceb",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T155220Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 150,
+      "log_context_bundle_hash": "sha256:79421e5831f420a4798455a7a2b7b2246edde62786791b4d5f2b71495317bf09",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:79421e5831f420a4798455a7a2b7b2246edde62786791b4d5f2b71495317bf09",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T155220Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 151,
+      "log_context_bundle_hash": "sha256:4661ce2458e0f1aad8b313b2d30a2441599ff45f0e9faeb8ed9203d81ab62aea",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:4661ce2458e0f1aad8b313b2d30a2441599ff45f0e9faeb8ed9203d81ab62aea",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T155220Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 152,
+      "log_context_bundle_hash": "sha256:ebbde8ab5f3a1cc5fc3b4ead7cb03e6c5715497e24e5964cadcd913339e419f9",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:ebbde8ab5f3a1cc5fc3b4ead7cb03e6c5715497e24e5964cadcd913339e419f9",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T155220Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 153,
+      "log_context_bundle_hash": "sha256:568197af492f0a19150e1e0c988c62bf1ae9397f3e131c2ad73e5b50976cd107",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:568197af492f0a19150e1e0c988c62bf1ae9397f3e131c2ad73e5b50976cd107",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T155258Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 154,
+      "log_context_bundle_hash": "sha256:c4d8ce5a468c3eca8fe4ecbe8416a62fecd0bfcbfb1798f5182c2abf9a907e5d",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:c4d8ce5a468c3eca8fe4ecbe8416a62fecd0bfcbfb1798f5182c2abf9a907e5d",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T155258Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 155,
+      "log_context_bundle_hash": "sha256:da1dc02657c00db39d83084880a957b079826c80df83fe6f5b7088d4c1ed0b8f",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:da1dc02657c00db39d83084880a957b079826c80df83fe6f5b7088d4c1ed0b8f",
+      "replayed_overlay_count": 4,
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T155258Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "checks_passed": [
+        "log_row_found",
+        "field_enums",
+        "governance_consistency",
+        "tenant_brand_consistency",
+        "retrieved_ids_resolve",
+        "byte_identical_bundle_hash"
+      ],
+      "i": 156,
+      "log_context_bundle_hash": "sha256:0b0abfe21e51539fe44b1c2ec5e08b1f3d49df9829e764673eefe60693058bac",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:0b0abfe21e51539fe44b1c2ec5e08b1f3d49df9829e764673eefe60693058bac",
+      "replayed_overlay_count": 0,
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T155258Z",
+      "status": "ok"
+    }
+  ],
+  "risky_flag_count": 0,
+  "started_at": "2026-05-14T16:07:58Z",
+  "total": 156,
+  "verdict": "PASS"
+}

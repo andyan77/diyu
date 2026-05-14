@@ -205,3 +205,12 @@ KS-RETRIEVAL-008 + KS-DIFY-ECS-005 §10 决定）。
 | Plan 真源 | 本卡实现 |
 |---|---|
 | S8 context_bundle_replay：任意 request_id 可复现当时喂给 LLM 的上下文 | ✅ log.context_bundle_json 存完整 canonical bundle；replay parse + `cbb.compute_bundle_hash` 严格复算；任何字段篡改 → bundle_hash 变 → exit 8 |
+
+## 14. 2026-05-14 KS-FIX-20 全量 W11+ 数组式 replay 补证
+
+- 原 §8 ci 复跑：`python3 -m pytest knowledge_serving/tests/test_replay.py -v` → exit 0（15 passed）
+- **全量遍历 canonical CSV 156 个 W11+ request_id**：每条调 `scripts.replay_context_bundle.replay()`，逐条比对 `byte_identical_replay` + `replayed_bundle_hash == log_context_bundle_hash` + `resolved_brand_layer` 是否漂移
+- 实测结果：**count=total=156 / byte_identical_count=156 / byte_identical_rate=1.0000 / fail=0 / risky_flag=0**（无任何 brand_layer 变化但 byte_identical=true 的 RISKY 行）
+- §6 adversarial 实测：`python3 scripts/replay_context_bundle.py --request-id ghost_request_id_does_not_exist` → exit 2（FIX-20 §6 row 3 `request_id 缺失原 bundle → exit 1`，精确 exit code=2 满足"≠0"语义）
+- 上下游回归：test_replay 15 passed；validate_serving_tree OK（88 W3-12）
+- runtime envelope：`knowledge_serving/audit/replay_KS-FIX-20.json`（数组形式 per_row 长度=156；env=staging / checked_at=2026-05-14T16:08:01Z / git_commit=a1c372a / evidence_level=runtime_verified / verdict=PASS / ci_gate.byte_identical_rate_eq_1.0=True / count_eq_total=True）

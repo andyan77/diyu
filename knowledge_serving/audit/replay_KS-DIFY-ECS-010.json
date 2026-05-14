@@ -4,6 +4,7 @@
     "domain_general"
   ],
   "byte_identical_replay": true,
+  "checked_at": "2026-05-14T16:13:34Z",
   "checks_passed": [
     "log_row_found",
     "field_enums",
@@ -12,7 +13,10 @@
     "retrieved_ids_resolve",
     "byte_identical_bundle_hash"
   ],
-  "finished_at": "2026-05-13T14:56:09Z",
+  "env": "local",
+  "evidence_level": "runtime_verified",
+  "finished_at": "2026-05-14T16:13:34Z",
+  "git_commit": "a1c372a60cde14363001c1f45a808499df02a268",
   "governance": {
     "compile_run_id": "5b5e5fc1f6199ec6",
     "source_manifest_hash": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2",
@@ -31,9 +35,10 @@
     "play_card_view": 5,
     "runtime_asset_view": 5
   },
-  "started_at": "2026-05-13T14:56:09Z",
+  "started_at": "2026-05-14T16:13:34Z",
   "status": "ok",
   "task_id": "KS-DIFY-ECS-010",
   "tenant_id": "tenant_faye_main",
+  "timestamp": "2026-05-14T16:13:34Z",
   "views_root": "/home/faye/diyu/knowledge_serving/views"
 }

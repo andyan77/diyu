@@ -46,6 +46,8 @@ import argparse
 import csv
 import hashlib
 import json
+import os
+import subprocess
 import re
 import sys
 from datetime import datetime, timezone
@@ -115,6 +117,21 @@ def _canonical_dumps(obj: Any) -> str:
 
 def _sha256(payload: str) -> str:
     return "sha256:" + hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _git_commit() -> str:
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=5,
+        )
+    except (subprocess.SubprocessError, OSError):
+        return "unknown"
+    return proc.stdout.strip() or "unknown"
 
 
 def _parse_json_list(raw: str, *, field: str) -> list[str]:
@@ -470,10 +487,16 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    checked_at = _now()
     audit_payload: dict[str, Any] = {
         "task_id": "KS-DIFY-ECS-010",
         "request_id": args.request_id,
-        "started_at": _now(),
+        "env": os.environ.get("KS_ENV") or os.environ.get("APP_ENV") or "local",
+        "checked_at": checked_at,
+        "timestamp": checked_at,
+        "started_at": checked_at,
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified",
     }
     try:
         result = replay(

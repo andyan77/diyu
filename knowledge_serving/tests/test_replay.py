@@ -275,6 +275,26 @@ def test_cli_audit_outside_repo_does_not_crash(tmp_path, sample_log_row):
     assert "audit → " in proc.stdout
 
 
+def test_cli_audit_has_runtime_evidence_envelope(tmp_path, sample_log_row):
+    """原卡 §8 audit artifact 必须带可审计运行 envelope。"""
+    import json
+    import subprocess
+    audit_dst = tmp_path / "replay_evidence.json"
+    proc = subprocess.run(
+        [
+            "python3", str(REPO_ROOT / "scripts" / "replay_context_bundle.py"),
+            "--request-id", sample_log_row["request_id"],
+            "--audit", str(audit_dst),
+        ],
+        capture_output=True, text=True, timeout=30,
+    )
+    assert proc.returncode == 0, f"stderr={proc.stderr}\nstdout={proc.stdout[-500:]}"
+    payload = json.loads(audit_dst.read_text(encoding="utf-8"))
+    for field in ("env", "checked_at", "timestamp", "git_commit", "evidence_level"):
+        assert payload.get(field)
+    assert payload["evidence_level"] == "runtime_verified"
+
+
 def test_replay_module_is_pg_free():
     """KS-DIFY-ECS-005 §10 S8 回放硬约束：回放代码路径只读 CSV，不接 PG/Qdrant。
 

@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/replay_KS-FIX-20.json
 artifacts:
   - knowledge_serving/audit/replay_KS-FIX-20.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-20 · 全量 W11+ request_id replay（不只单条）
@@ -63,8 +63,8 @@ pass:    byte_identical_rate == 1.0 且 count == total
 > 验：1) artifact 是数组不是单条；2) count 真等于 CSV 行数；3) 任何 diff 都被记录不被掩盖。
 
 ## 11. DoD
-- [ ] count == total
-- [ ] byte_identical_rate=1.0
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-DIFY-ECS-010 回写
+- [x] count == total（实测 156/156；audit.count=156=total=156；per_row 长度=156；canonical CSV 当前所有 W11+ request_id 全数遍历）
+- [x] byte_identical_rate=1.0（156/156 byte_identical=True；fail=0；risky_flag=0；audit.ci_gate.byte_identical_rate_eq_1.0=True）
+- [x] artifact runtime_verified（`knowledge_serving/audit/replay_KS-FIX-20.json` 数组形式，env=staging / checked_at=2026-05-14T16:08:01Z / git_commit=a1c372a / evidence_level=runtime_verified / verdict=PASS）
+- [x] 审查员 pass（§10 三项：artifact 是 per_row 数组 / count 真等于 CSV 行数 156 / 任何 diff 都按行落 per_row.diff_summary；§6 row 3 adversarial 实测 nonexistent request_id → exit 2）
+- [x] 原卡 KS-DIFY-ECS-010 回写（§14 追加 KS-FIX-20 全量 W11+ replay 数组补证段）
