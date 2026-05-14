@@ -161,3 +161,74 @@ python3 task_cards/validate_task_cards.py
 | C12 | §4 含 E7 旧快照核验（或传递依赖到含 E7 的祖先卡） |
 | C13 | §11 DoD 含原卡回写动作 |
 | C14 | 26 张 corrects 集合等于守护清单 |
+| C15 | status=done 卡的 creates/artifacts 必须真实存在（防 done 假绿） |
+| C16 | §6 表每行必含 AT-NN test_id + §11 DoD 必含 AT 映射（META-01 H1，仅 status!=done 严格） |
+| C17 | 每张卡必含 ## 16. 被纠卡同步 段（META-01 H3） |
+| C18 | 若被纠卡 frontmatter artifacts 含 runtime JSON，§16 必须声明双写或豁免（META-01 H4） |
+| C19 | FIX-25/26 status=done 前置：FIX-01..24 必须全部 done（防总闸提前起跑） |
+
+**分级机制 / severity grading**：
+- `status=not_started` → C16/C17/C18 issues 进 WARNINGS，validator 不阻塞
+- `status=in_progress` → C16/C17/C18 issues 进 ERRORS，validator fail-closed
+- `status=done` 且 tid ∈ {KS-FIX-01, KS-FIX-02} → 兼容性 WARNING
+- `status=done` 且 tid ∉ grandfather → ERRORS（新 done 卡必须满足新模板）
+
+## 9. META-01 模板硬化流程 / META-01 template hardening flow
+
+> 落盘日期：2026-05-14
+> 触发：KS-FIX-01 经历 4 轮外审反复（schema gate → wrapper 悬空 → ci_commands 漂移 → artifact 契约漂移）。根因 60% 在 FIX 卡描述"期望"未翻译成强制机器校验。
+> 详见 [META-01.md](META-01.md)。
+
+**H1-H6 硬约束** + **C16-C19 校验** 的对应关系：
+
+| Hardening | 落点 | 校验 |
+|---|---|---|
+| H1 §6 → pytest 1:1 映射（AT-NN） | [templates/fix_card_template.md §6 / §12](templates/fix_card_template.md) | C16 + `test_at_01_c16_missing_at_id_warns_for_not_started` |
+| H2 `creates:` 覆盖卡内引用 | 已存在 C9 | 已有 |
+| H3 §16 被纠卡同步 | [templates/fix_card_template.md §16](templates/fix_card_template.md) | C17 + `test_at_02_c17_missing_sec16` |
+| H4 artifact 双写契约 | 模板 §16 H4 双写表 | C18 + `test_at_03_c18_double_write_check` |
+| H5 干净 shell allowlist | `env -i PATH=$PATH HOME=$HOME USER=$USER SHELL=$SHELL bash -c '...'` | `test_at_05_clean_shell_allowlist_strips_secrets` |
+| H6 越界白名单溯源 | [knowledge_serving/tests/test_serving_tree_whitelist_provenance.py](../../knowledge_serving/tests/test_serving_tree_whitelist_provenance.py) | 已有 |
+
+**起跑流程**（任何 FIX-03..26 起跑前）：
+
+1. `cp task_cards/corrections/templates/fix_card_template.md task_cards/corrections/KS-FIX-NN.md` → 填实 11+5 节
+2. `cp task_cards/corrections/templates/test_fix_card_template.py knowledge_serving/tests/test_<card>_adversarial.py` → AT-NN 1:1 落实
+3. 把 §6 每行 AT-NN 同步到 §12 AT 映射表
+4. 填 §16 被纠卡同步表（即使无需同步也必须显式声明）
+5. `status` 改 `in_progress` 前先跑 `validate_corrections.py` + `test_corrections_meta.py` 确认 exit 0
+6. 起跑执行；完成后 `status=done` 再次复跑确认
+
+## 10. FIX-04 越界 23 项白名单复核表 / FIX-04 23-item provenance audit
+
+> 来源：KS-FIX-01 R2 外审 RISKY 收口阶段，用户裁决一次性把 W8-W12 共 23 项 `validate_serving_tree.py` EXTRA 加入白名单（[KS-FIX-01.md §14](KS-FIX-01.md#L161)）。
+> 本表登记每项 commit + 来源任务卡 + 是否合规。**不动白名单**——FIX-04 起跑时按此表逐项裁决移不移除。
+
+| # | 文件 | 加入白名单 wave | 首次 commit | 来源任务卡 | 合规初判 |
+|---:|---|---|---|---|---|
+| 1 | `serving/merge_context.py` | W8 | `4eaa37e` | KS-RETRIEVAL-007 | ✅ |
+| 2 | `serving/fallback_decider.py` | W8 | `4eaa37e` | KS-RETRIEVAL-007 | ✅ |
+| 3 | `serving/brand_overlay_retrieval.py` | W8 | `4eaa37e` | KS-RETRIEVAL-007 | ✅ |
+| 4 | `tests/test_merge_fallback.py` | W8 | `4eaa37e` | KS-RETRIEVAL-007 | ✅ |
+| 5 | `serving/context_bundle_builder.py` | W9 | `d58f2e0` | KS-RETRIEVAL-008 | ✅ |
+| 6 | `serving/log_writer.py` | W9 | `d58f2e0` | KS-RETRIEVAL-008 | ✅ |
+| 7 | `tests/test_bundle_log.py` | W9 | `d58f2e0` | KS-RETRIEVAL-008 | ✅ |
+| 8 | `scripts/run_context_retrieval_demo.py` | W10 | `df62d3c` | KS-RETRIEVAL-009 | ✅ |
+| 9 | `logs/retrieval_eval_sample.csv` | W10 | `df62d3c` | KS-RETRIEVAL-009 | ✅ |
+| 10 | `scripts/reconcile_context_bundle_log_mirror.py` | W10 | `fac113b` | KS-DIFY-ECS-005 | ✅ |
+| 11 | `tests/test_log_dual_write.py` | W10 | `fac113b` | KS-DIFY-ECS-005 | ✅ |
+| 12 | `tests/test_llm_assist_boundary.py` | W10 | `18d8ab8` | KS-PROD-003 | ✅ |
+| 13 | `control/context_bundle_log_outbox.jsonl` | W11 | `6e16a96` | KS-DIFY-ECS-006 | ✅ |
+| 14 | `serving/api/__init__.py` | W11 | `17e41d8` | KS-DIFY-ECS-007 | ✅ |
+| 15 | `serving/api/openapi.yaml` | W11 | `17e41d8` | KS-DIFY-ECS-007 | ✅ |
+| 16 | `serving/api/retrieve_context.py` | W11 | `17e41d8` | KS-DIFY-ECS-007 | ✅ |
+| 17 | `tests/test_api.py` | W11 | `17e41d8` | KS-DIFY-ECS-007 | ✅ |
+| 18 | `tests/test_replay.py` | W11 | `89f7f35` | KS-DIFY-ECS-010 | ✅ |
+| 19 | `scripts/tests/test_validate_dify_dsl.py` | W12 | `a6b3de0` | KS-DIFY-ECS-008 | ✅ |
+| 20 | `scripts/pg_mirror_context_bundle_log.ddl.sql` | W12 | `65408bb` | KS-CD-001 | ✅ |
+| 21 | `tests/test_tenant_isolation_e2e.py` | W12 | `f75a894` | KS-PROD-002 | ✅ |
+| 22 | `scripts/run_qdrant_health_check.sh` | W0 | `b45e25d` | KS-FIX-01 | ✅ |
+| 23 | `tests/test_qdrant_health_schema_gate.py` | W0 | `b45e25d` | KS-FIX-01 | ✅ |
+
+**初判结论**：23 项全部能交叉验证 (文件实存 + git provenance + 任务卡 ID commit message)。
+**FIX-04 起跑时仍需**：(a) 逐项确认是否仍属 "knowledge_serving/ 派生层 canonical 真源"；(b) 任意一项若被原卡撤回或重命名，必须同步白名单。

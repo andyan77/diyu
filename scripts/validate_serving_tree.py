@@ -75,6 +75,7 @@ EXPECTED_FILES_PRE_EXISTING = {
     "tests/test_qdrant_health_schema_gate.py",  # W0 KS-FIX-01 §13 · schema gate + wrapper cleanup 自动化用例
     "tests/test_task_card_ci_contract.py",       # W0 KS-FIX-01 §15 · 任务卡 ci_commands artifact 契约测试
     "tests/test_serving_tree_whitelist_provenance.py",  # W0 KS-FIX-01 §15 · 白名单溯源测试
+    "tests/test_corrections_meta.py",                    # META · META-01 通用机器校验（6 AT case）
 }
 
 # W3 已落白名单 / W3-landed allowlist

@@ -20,6 +20,10 @@ task_cards/corrections 元校验器 / corrections self-validator
   C13 §11 DoD 必须含"原卡回写"动作（token `回写` 或 `原卡`）
   C14 26 张 corrects 集合 == 守护清单 26 项（防漏 / 防多）
   C15 status==done 卡的 creates / artifacts 必须真实存在（防 done 假绿 + creates 悬空）
+  C16 §6 表每行必含 AT-NN test_id token + §11 DoD 必含 AT-NN 映射（H1，仅 status!=done）
+  C17 每张卡必含 ## 16. 被纠卡同步 段（H3，仅 status!=done）
+  C18 H4 双写契约：若被纠卡 frontmatter artifacts 含 runtime JSON，本卡 §16 必须显式声明双写或豁免理由（仅 status!=done）
+  C19 FIX-25/26 status=done 前置：FIX-01..24 必须全部 status=done（防总闸提前起跑）
 
 退出码 0 = 全绿；非 0 = 至少一项失败。
 """
@@ -137,6 +141,20 @@ def load_original_card_wave(corrects_id: str) -> str | None:
         return None
     w = fm.get("wave")
     return str(w) if w is not None else None
+
+
+def load_original_card_artifacts(corrects_id: str) -> list[str]:
+    """Read original card's `artifacts:` list. Used by C18 double-write check."""
+    p = TASK_CARDS_ROOT / f"{corrects_id}.md"
+    if not p.exists():
+        return []
+    fm = parse_frontmatter(p.read_text(encoding="utf-8"))
+    if not fm:
+        return []
+    arts = fm.get("artifacts", [])
+    if isinstance(arts, list):
+        return [str(a).strip().strip('"\' ') for a in arts]
+    return []
 
 
 def find_ci_command_block(text: str) -> str:
@@ -295,12 +313,90 @@ def main() -> int:
 
         # C13 DoD writeback
         m11 = re.search(
-            r"^##\s*11\.\s*[^\n]*\n(.*?)\Z",
+            r"^##\s*11\.\s*[^\n]*\n(.*?)(?:^##\s*1[2-9]\.|^##\s*[2-9]\d\.|\Z)",
             text, re.MULTILINE | re.DOTALL
         )
         body11 = m11.group(1) if m11 else ""
         if not ("回写" in body11 or "原卡" in body11):
             fail(tid, "C13 §11 DoD missing original-card writeback action")
+
+        # C16-C18 分级：
+        #   status=not_started → warning（卡尚未起跑，鼓励补但不阻塞）
+        #   status=in_progress → fail（起跑后必须满足 H1-H4 硬约束）
+        #   status=done & tid ∈ GRANDFATHER → warning（FIX-01/02 兼容豁免）
+        #   status=done & tid ∉ GRANDFATHER → fail（新 done 卡必须满足）
+        GRANDFATHER_DONE = {"KS-FIX-01", "KS-FIX-02"}
+        if status == "not_started":
+            issue_fn = warn
+        elif status == "done" and tid in GRANDFATHER_DONE:
+            issue_fn = warn
+        else:
+            issue_fn = fail
+
+        # 仅在非 "通过" 态时执行检查
+        if status in ("not_started", "in_progress", "done"):
+            # C16 §6 表每行 AT-NN + §11 DoD AT-NN 映射
+            m6_body = re.search(
+                r"^##\s*6\.\s*[^\n]*\n(.*?)(?:^##\s*7\.|\Z)",
+                text, re.MULTILINE | re.DOTALL
+            )
+            sec6 = m6_body.group(1) if m6_body else ""
+            sec6_rows = [ln for ln in sec6.splitlines()
+                         if ln.strip().startswith("|")
+                         and not ln.strip().startswith("|---")
+                         and not re.match(r"^\|\s*(测试|test|AT)\s*\|", ln)]
+            at_in_sec6 = re.findall(r"AT-\d+", sec6)
+            if not sec6_rows:
+                issue_fn(tid, "C16 §6 表为空（缺对抗性测试表）")
+            elif not at_in_sec6:
+                issue_fn(tid, "C16 §6 表缺 AT-NN test_id token")
+            sec_at_map = re.search(
+                r"^##\s*1[2-9]\.\s*AT\s*映射|^##\s*1[2-9]\.\s*test_id",
+                text, re.MULTILINE
+            )
+            at_in_map = re.findall(r"AT-\d+", text[sec_at_map.end():]) if sec_at_map else []
+            if at_in_sec6 and not at_in_map:
+                issue_fn(tid, "C16 缺 AT 映射段（## 1[2-9]. AT 映射 / test_id）")
+
+            # C17 §16 被纠卡同步段
+            has_sec16 = bool(re.search(
+                r"^##\s*16\.\s*被纠卡同步|^##\s*16\.\s*sync.*original",
+                text, re.MULTILINE
+            ))
+            if not has_sec16:
+                issue_fn(tid, "C17 缺 ## 16. 被纠卡同步 段（H3 同步清单）")
+
+            # C18 H4 双写契约
+            if corrects:
+                orig_arts = load_original_card_artifacts(corrects)
+                runtime_arts = [a for a in orig_arts
+                                if a.endswith(".json")
+                                or "/audit/" in a]
+                if runtime_arts:
+                    sec16_match = re.search(
+                        r"^##\s*16\.\s*[^\n]*\n(.*?)(?:^##\s*1[7-9]\.|^##\s*[2-9]\d\.|\Z)",
+                        text, re.MULTILINE | re.DOTALL
+                    )
+                    sec16_body = sec16_match.group(1) if sec16_match else ""
+                    missing_decl: list[str] = []
+                    for art in runtime_arts:
+                        # 双写声明的轻量识别：§16 内出现 art 路径，或本卡 artifacts/ creates / files_touched 引用同一路径
+                        art_referenced = (
+                            art in sec16_body
+                            or art in (fm.get("artifacts") or [])
+                            or art in declared_creates
+                        )
+                        # 豁免：§16 显式声明"无需同步"+ 含 art 名称
+                        exempt = (
+                            ("无需同步" in sec16_body or "豁免" in sec16_body
+                             or "no sync" in sec16_body.lower())
+                            and art in sec16_body
+                        )
+                        if not (art_referenced or exempt):
+                            missing_decl.append(art)
+                    if missing_decl:
+                        issue_fn(tid, f"C18 双写契约缺：被纠卡 {corrects} runtime artifact "
+                                  f"未在本卡 §16 声明双写或豁免: {missing_decl}")
 
     # C7 depends_on existence + DAG
     indeg = {t: 0 for t in fm_by_id}
@@ -370,6 +466,24 @@ def main() -> int:
         errors.append(f"[GLOBAL] C14 missing corrects: {sorted(miss)}")
     if extra:
         errors.append(f"[GLOBAL] C14 extra corrects: {sorted(extra)}")
+
+    # C19 FIX-25/26 status=done 前置硬约束
+    # 上线总闸 / S1-S13 总回归不允许在 FIX-01..24 全 done 之前 status=done
+    for gate_id in ("KS-FIX-25", "KS-FIX-26"):
+        if gate_id not in fm_by_id:
+            continue
+        if (fm_by_id[gate_id].get("status") or "").strip() != "done":
+            continue
+        prereq = [f"KS-FIX-{i:02d}" for i in range(1, 25)]
+        not_done = [
+            p for p in prereq
+            if (fm_by_id.get(p, {}).get("status") or "").strip() != "done"
+        ]
+        if not_done:
+            errors.append(
+                f"[GLOBAL] C19 {gate_id} status=done 但前置卡未全 done: "
+                f"{not_done[:5]}{'...' if len(not_done) > 5 else ''}"
+            )
 
     # Report
     if warnings:
