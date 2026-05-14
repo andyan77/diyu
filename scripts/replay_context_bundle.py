@@ -470,9 +470,121 @@ def replay(
     }
 
 
+def _bulk_replay(
+    *,
+    log_path: Optional[Path],
+    views_root: Optional[Path],
+    since: Optional[str],
+    strict: bool,
+    out_path: Path,
+) -> int:
+    """KS-FIX-20 全量 W11+ replay：遍历 canonical CSV 全部 request_id，每行 byte-identical 对账。
+
+    artifact 数组形式落 --out；ci_gate.byte_identical_rate_eq_1.0=True 才 PASS。
+    """
+    import csv as _csv
+    started_at = _now()
+    actual_log = log_path or lw.CANONICAL_LOG_PATH
+    with actual_log.open("r", encoding="utf-8", newline="") as f:
+        rows = list(_csv.DictReader(f))
+    total = len(rows)
+    per_row: list[dict[str, Any]] = []
+    bi_count = 0
+    fail_count = 0
+    risky_count = 0
+    t0_wall = _now()
+    for i, row in enumerate(rows, 1):
+        rid = row["request_id"]
+        log_brand = row.get("resolved_brand_layer", "")
+        entry: dict[str, Any] = {
+            "i": i,
+            "request_id": rid,
+            "log_resolved_brand_layer": log_brand,
+            "log_context_bundle_hash": row.get("context_bundle_hash", ""),
+        }
+        try:
+            result = replay(rid, log_path=log_path, views_root=views_root)
+            bi = bool(result.get("byte_identical_replay"))
+            entry["status"] = "ok"
+            entry["byte_identical"] = bi
+            entry["replayed_bundle_hash"] = (
+                result.get("replayed_bundle_hash") or result.get("replay_consistency_hash")
+            )
+            entry["replayed_brand_layer"] = result.get("resolved_brand_layer")
+            replayed_brand = entry["replayed_brand_layer"]
+            if bi and replayed_brand != log_brand:
+                entry["risky_flag"] = "brand_layer_changed_but_byte_identical"
+                risky_count += 1
+            if bi:
+                bi_count += 1
+            else:
+                fail_count += 1
+                entry["diff_summary"] = "byte_identical=False"
+        except ReplayError as e:
+            entry["status"] = "fail"
+            entry["byte_identical"] = False
+            entry["error_code"] = e.code
+            entry["error_message"] = str(e)
+            entry["diff_summary"] = f"ReplayError code={e.code}"
+            fail_count += 1
+        except Exception as e:  # noqa: BLE001
+            entry["status"] = "fail"
+            entry["byte_identical"] = False
+            entry["error_code"] = 9
+            entry["error_message"] = f"{type(e).__name__}: {e}"
+            fail_count += 1
+        per_row.append(entry)
+
+    finished_at = _now()
+    rate = (bi_count / total) if total else 0.0
+    all_pass = (bi_count == total) and (fail_count == 0)
+    audit = {
+        "audit_for": "KS-DIFY-ECS-010",
+        "issued_by": "KS-FIX-20",
+        "env": os.environ.get("KS_ENV") or os.environ.get("APP_ENV") or "staging",
+        "since": since or "W11",
+        "checked_at": finished_at,
+        "timestamp": finished_at,
+        "started_at": started_at,
+        "finished_at": finished_at,
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified",
+        "mode": "bulk",
+        "verdict": "PASS" if all_pass else "FAIL",
+        "count": total,
+        "total": total,
+        "byte_identical_count": bi_count,
+        "byte_identical_rate": rate,
+        "fail_count": fail_count,
+        "risky_flag_count": risky_count,
+        "ci_gate": {
+            "byte_identical_rate_eq_1.0": bi_count == total,
+            "count_eq_total": True,
+            "strict_mode": bool(strict),
+            "exit_code": 0 if all_pass else 1,
+        },
+        "per_row": per_row,
+    }
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(
+        json.dumps(audit, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    print(f"[bulk] total={total} byte_identical={bi_count} fail={fail_count} risky={risky_count}")
+    print(f"[bulk] byte_identical_rate={rate:.4f} verdict={audit['verdict']}")
+    try:
+        out_display = out_path.relative_to(REPO_ROOT)
+    except ValueError:
+        out_display = out_path
+    print(f"[bulk] audit → {out_display}")
+    if strict and not all_pass:
+        return 1
+    return 0 if all_pass else 1
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="KS-DIFY-ECS-010 context_bundle 日志回放")
-    parser.add_argument("--request-id", required=True, help="目标 request_id")
+    parser.add_argument("--request-id", required=False, default=None, help="目标 request_id（单条模式）")
     parser.add_argument(
         "--log-path", type=Path, default=None,
         help="canonical CSV 路径（默认 knowledge_serving/control/context_bundle_log.csv）",
@@ -483,9 +595,28 @@ def main() -> int:
     )
     parser.add_argument(
         "--audit", type=Path, default=None,
-        help="audit JSON 输出（默认 knowledge_serving/audit/replay_KS-DIFY-ECS-010.json）",
+        help="audit JSON 输出（单条模式；默认 knowledge_serving/audit/replay_KS-DIFY-ECS-010.json）",
     )
+    # KS-FIX-20 §8 全量 W11+ bulk replay 入口
+    parser.add_argument("--all", action="store_true", help="全量 replay（遍历 canonical CSV 全部 request_id）")
+    parser.add_argument("--since", default=None, help="bulk 起始波次 label（如 W11；当前 canonical CSV 即 W11+）")
+    parser.add_argument("--strict", action="store_true", help="bulk 严格模式：任一 byte_identical=False → exit 非 0")
+    parser.add_argument("--out", type=Path, default=None, help="bulk artifact 输出路径（per_row 数组）")
     args = parser.parse_args()
+
+    # KS-FIX-20 AT-01：必须指定 --request-id 或 --all 其中之一
+    if not args.all and not args.request_id:
+        parser.error("必须指定 --request-id <id> 或 --all（全量 W11+ replay）")
+
+    if args.all:
+        out_path = args.out or (REPO_ROOT / "knowledge_serving" / "audit" / "replay_KS-FIX-20.json")
+        return _bulk_replay(
+            log_path=args.log_path,
+            views_root=args.views_root,
+            since=args.since,
+            strict=args.strict,
+            out_path=out_path,
+        )
 
     checked_at = _now()
     audit_payload: dict[str, Any] = {

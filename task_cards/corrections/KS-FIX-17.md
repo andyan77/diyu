@@ -8,8 +8,11 @@ depends_on: [KS-FIX-13, KS-FIX-16]
 files_touched:
   - knowledge_serving/scripts/ecs_e2e_smoke.py
   - knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json
+  - knowledge_serving/tests/test_ecs_e2e_smoke_gate.py
 artifacts:
   - knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json
+creates:
+  - knowledge_serving/tests/test_ecs_e2e_smoke_gate.py
 status: done
 ---
 
@@ -40,12 +43,12 @@ status: done
 | `audit/ecs_e2e_smoke_KS-FIX-17.json` | json | 是 | 是 | runtime_verified |
 
 ## 6. 对抗性 / 边缘性测试
-| 测试 | 期望 |
-|---|---|
-| Qdrant down 但 smoke exit 0 | **fail-closed**：必须 exit 1 |
-| `qdrant_live_hit=false` 通过 | exit 1 |
-| PG degraded 通过 | exit 1 |
-| 三者 reachable 但业务断言失败 | exit 1（不能伪通过） |
+| AT | 测试 | 期望 |
+|---|---|---|
+| AT-01 | smoke 缺 `--enforce-external-deps` 入口（W11 假绿场景再现） | **fail-closed**：argparse 必须暴露该 flag |
+| AT-02 | 源码未把 qdrant / pg / vector_live 三信号接入 `external_deps_reachable` | **fail-closed**：source-scan 拦下 |
+| AT-03 | artifact 缺 `gates.external_deps_reachable=true` / `vector_evidence` | **fail-closed** exit 1（artifact 字段守门） |
+| AT-04 | artifact 缺 runtime envelope（checked_at/git_commit/evidence_level） | **fail-closed** exit 1（防 mock/offline 冒充） |
 
 ## 7. 治理语义一致性
 - 不调 LLM 判断。
@@ -69,3 +72,20 @@ pass:    external_deps_reachable=true 且 qdrant_live_hit=true 且 pg_status="ok
 - [x] artifact runtime_verified（smoke 脚本 audit dict 新增 `checked_at` + `git_commit` + `evidence_level=runtime_verified` 三字段；`knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json` 真实落盘）
 - [x] 审查员 pass（§10 四项 + fail-closed §6 row 1 adversarial 实测：tunnel down + enforce → exit 1）
 - [x] 原卡 KS-DIFY-ECS-006 回写（§14 追加 KS-FIX-17 external_deps_reachable gate 补证段）
+- [x] AT-01..AT-04 全 pass（`python3 -m pytest knowledge_serving/tests/test_ecs_e2e_smoke_gate.py -v` → 4 passed）
+
+## 12. AT 映射 / test_id 映射
+
+| AT | pytest function | 测试文件 |
+|---|---|---|
+| AT-01 | `test_at01_enforce_external_deps_flag_exists` | knowledge_serving/tests/test_ecs_e2e_smoke_gate.py |
+| AT-02 | `test_at02_source_wires_three_reachable_signals_into_gate` | knowledge_serving/tests/test_ecs_e2e_smoke_gate.py |
+| AT-03 | `test_at03_artifact_contains_external_deps_fields` | knowledge_serving/tests/test_ecs_e2e_smoke_gate.py |
+| AT-04 | `test_at04_artifact_runtime_envelope_three_fields` | knowledge_serving/tests/test_ecs_e2e_smoke_gate.py |
+
+## 16. 被纠卡同步 / sync original card
+
+- 被纠卡：**KS-DIFY-ECS-006**（W11 主卡 · ECS 端到端 smoke）。
+- 同步动作：原卡 §14 实施记录已追加 KS-FIX-17 external_deps_reachable gate 补证段（详见原卡 §14）。
+- 双写 runtime artifact：[knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json](../../knowledge_serving/audit/ecs_e2e_smoke_KS-FIX-17.json) **以及**被纠卡 §5 声明的 [knowledge_serving/audit/ecs_e2e_smoke_KS-DIFY-ECS-006.json](../../knowledge_serving/audit/ecs_e2e_smoke_KS-DIFY-ECS-006.json)（同一脚本 smoke 跑两次写两套；FIX-17 是加 enforce 模式的复跑证据）。两份 audit 同 evidence_level=runtime_verified，互为外部依赖 gate 反假绿的前后对照。
+- 同步时间戳：2026-05-14T17:34:59Z（`smoke_result=pass` / `gates.external_deps_reachable=true`）。

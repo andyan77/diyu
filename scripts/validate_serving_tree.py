@@ -221,6 +221,8 @@ EXPECTED_FILES_W7_FIX = {
     "tests/test_api_real_http.py",   # KS-FIX-16 · KS-DIFY-ECS-007 ECS staging real HTTP wire
     "tests/test_reconcile_exit_code.py",   # KS-FIX-14 · reconcile exit-code 反假绿 AT-01..AT-04
     "tests/test_retrieval_009_vector_path.py",   # KS-FIX-15 · default vector path AT-01..AT-03
+    "tests/test_replay_bulk_cli.py",   # KS-FIX-20 · bulk replay CLI AT-01..AT-05
+    "tests/test_ecs_e2e_smoke_gate.py",   # KS-FIX-17 · external_deps_reachable gate AT-01..AT-04
 }
 
 # W8 已落白名单 / W8-landed allowlist
