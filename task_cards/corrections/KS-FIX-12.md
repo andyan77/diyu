@@ -61,8 +61,14 @@ frontmatter_correction_note: |
 
 ## 8. CI 门禁
 ```
-command: python3 -m pytest knowledge_serving/tests/test_retrieval_006_staging.py -v --staging
-pass:    vector_hits > 0 且 fail=0
+command: source scripts/load_env.sh && bash scripts/qdrant_tunnel.sh up && python3 -m pytest knowledge_serving/tests/test_retrieval_006_staging.py -v
+pass:    4 case 全 pass（default mode=vector candidate_count>0 / structured_only 跳过 / Qdrant down 503 / 默认绝不静默退化）
+note:    test 用 pytest.skipif 守 QDRANT_URL_STAGING + DASHSCOPE_API_KEY 缺失时优雅跳；
+         env 注入即"staging 模式"，无需额外 --staging pytest flag（原 §8 含 --staging
+         是 spec 草稿期想法，未实现为 conftest fixture；env-gated skipif 等价且更稳）
+artifact: knowledge_serving/audit/retrieval_006_staging_KS-FIX-12.json
+followup: 真 HTTP wire 测试（uvicorn spawn + curl real socket）见同目录
+          retrieval_006_staging_KS-FIX-12.http.json，与 TestClient e2e 双轨互证
 ```
 
 ## 9. CD / 环境验证

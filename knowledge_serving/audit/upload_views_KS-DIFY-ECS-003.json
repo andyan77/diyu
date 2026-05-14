@@ -1,9 +1,9 @@
 {
   "task_card": "KS-DIFY-ECS-003",
-  "run_id": "9b62c672-be5b-4cd7-a0dd-dde1025d2c89",
-  "run_at": "2026-05-14T10:11:48Z",
-  "checked_at": "2026-05-14T10:11:48Z",
-  "git_commit": "3befe7452c1206304260a4c9246a12ceddabf3dc",
+  "run_id": "3968ae4d-d8e1-440d-a9cb-8503135f47c0",
+  "run_at": "2026-05-14T10:22:41Z",
+  "checked_at": "2026-05-14T10:22:41Z",
+  "git_commit": "04133964242403c1667fd1d5ff79966b7b52cd9c",
   "env": "staging",
   "mode": "apply",
   "evidence_level": "runtime_verified",
@@ -39,7 +39,7 @@
     "serving.field_requirement_matrix": 19,
     "serving.retrieval_policy_view": 18,
     "serving.merge_precedence_policy": 8,
-    "serving.context_bundle_log": 32
+    "serving.context_bundle_log": 34
   },
   "ddl_table_count": 12,
   "ddl_byte_size": 9022,
@@ -93,8 +93,8 @@
       "actual": 8
     },
     "serving.context_bundle_log": {
-      "expected": 32,
-      "actual": 32
+      "expected": 34,
+      "actual": 34
     }
   },
   "post_verify_status": "pass"

@@ -1,0 +1,57 @@
+{
+  "task_card": "KS-FIX-12",
+  "corrects": "KS-DIFY-ECS-007",
+  "env": "staging",
+  "checked_at": "2026-05-14T10:20:35Z",
+  "git_commit": "04133964242403c1667fd1d5ff79966b7b52cd9c",
+  "evidence_level": "runtime_verified",
+  "verdict": "pass",
+  "mode": "live_http_wire_three_track",
+  "transport": "uvicorn standalone process (port 18080/18081) + urllib real socket POST + real dashscope text-embedding-v3 + real ECS Qdrant via ssh tunnel",
+  "source_chunks_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
+  "uvicorn_command": "python3 -m uvicorn knowledge_serving.serving.api.retrieve_context:create_app --factory --host 127.0.0.1 --port 18080",
+  "cases": [
+    {
+      "id": "C1_default_path_real_http",
+      "description": "默认路径（structured_only 缺省）→ 真 socket POST → mode=vector",
+      "http_status": 200,
+      "elapsed_sec": 1.81,
+      "response_meta_vector_meta": {
+        "mode": "vector",
+        "candidate_count": 2,
+        "rerank_applied": false,
+        "collection_name": "ks_chunks_current"
+      },
+      "request_id": "req_api_20260514T102025Z_d44febfe",
+      "pass": true
+    },
+    {
+      "id": "C2_structured_only_real_http",
+      "description": "structured_only=True 显式开 → 真 socket POST → mode=structured_only_opt_in",
+      "http_status": 200,
+      "elapsed_sec": 0.026,
+      "response_meta_vector_meta": {
+        "mode": "structured_only_opt_in",
+        "candidate_count": 0
+      },
+      "pass": true
+    },
+    {
+      "id": "C3_qdrant_down_real_http_503",
+      "description": "独立 uvicorn 子进程 with QDRANT_URL=127.0.0.1:1 → 真 socket POST → 503 fail-closed",
+      "http_status": 503,
+      "elapsed_sec": 6.438,
+      "response_detail_error": "qdrant_unreachable",
+      "response_detail_reason": "qdrant_search_failed: ResponseHandlingException",
+      "request_id": "req_api_20260514T102028Z_79ffb07e",
+      "pass": true
+    }
+  ],
+  "pass_count": 3,
+  "fail_count": 0,
+  "transport_distinction": {
+    "in_process_TestClient_evidence": "knowledge_serving/audit/retrieval_006_staging_KS-FIX-12.json",
+    "real_http_wire_evidence": "knowledge_serving/audit/retrieval_006_staging_KS-FIX-12.http.json (this file)",
+    "dual_track_互证": "TestClient 走 ASGI 直调函数；本 audit 走 uvicorn 真 TCP socket；两者全 pass 才算 API 真路径 runtime_verified"
+  }
+}
