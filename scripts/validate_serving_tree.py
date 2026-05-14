@@ -210,6 +210,15 @@ EXPECTED_FILES_W7 = {
     "tests/test_guardrail.py",
 }
 
+# W7-FIX 收口债白名单 / W7-FIX follow-up allowlist
+# 注：与 EXPECTED_FILES_W7 分开维护（同 W3_FIX 先例）——本组来自 W7 之后的
+# KS-FIX-* 纠偏卡的 §5 artifact，不属于 W7 原始卡（KS-RETRIEVAL-006 / KS-VECTOR-003
+# / KS-DIFY-ECS-004 等）的 files_touched，混进 EXPECTED_FILES_W7 会让原卡
+# frontmatter 语义错位。
+EXPECTED_FILES_W7_FIX = {
+    "tests/test_retrieval_006_staging.py",   # KS-FIX-12 · API live vector 路径 staging e2e
+}
+
 # W8 已落白名单 / W8-landed allowlist
 # KS-RETRIEVAL-007 + KS-CD-002（commit 4eaa37e）
 EXPECTED_FILES_W8 = {
@@ -277,6 +286,7 @@ ALLOWED_FILES = (
     | EXPECTED_FILES_W5
     | EXPECTED_FILES_W6
     | EXPECTED_FILES_W7
+    | EXPECTED_FILES_W7_FIX
     | EXPECTED_FILES_W8
     | EXPECTED_FILES_W9
     | EXPECTED_FILES_W10
@@ -510,6 +520,7 @@ def _write_report_artifact(errors: list[str], exit_code: int) -> None:
         "whitelist_w5": len(EXPECTED_FILES_W5),
         "whitelist_w6": len(EXPECTED_FILES_W6),
         "whitelist_w7": len(EXPECTED_FILES_W7),
+        "whitelist_w7_fix": len(EXPECTED_FILES_W7_FIX),
         "whitelist_w8": len(EXPECTED_FILES_W8),
         "whitelist_w9": len(EXPECTED_FILES_W9),
         "whitelist_w10": len(EXPECTED_FILES_W10),

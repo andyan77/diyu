@@ -1,19 +1,27 @@
 ---
 task_id: KS-FIX-12
-corrects: KS-RETRIEVAL-006
-severity: RISKY
-phase: Retrieval
+corrects: KS-DIFY-ECS-007
+severity: FAIL
+phase: Dify-ECS
 wave: W7
 depends_on: [KS-FIX-11]
 files_touched:
   - knowledge_serving/serving/api/retrieve_context.py
-  - knowledge_serving/scripts/smoke_vector_retrieval.py
   - knowledge_serving/tests/test_retrieval_006_staging.py
 creates:
   - knowledge_serving/tests/test_retrieval_006_staging.py
 artifacts:
   - knowledge_serving/audit/retrieval_006_staging_KS-FIX-12.json
 status: not_started
+frontmatter_correction_note: |
+  原 frontmatter `corrects: KS-RETRIEVAL-006` 与正文 §1/§4 不一致——
+  正文明确要修 `/v1/retrieve_context` 真实调用 `vector_retrieve()` 并删除
+  `vector_res = None`，而 `/v1/retrieve_context` 是 KS-DIFY-ECS-007 的 §5
+  canonical artifact（retrieve_context.py），不是 KS-RETRIEVAL-006 的
+  vector_retrieval.py 模块。本次修正让 frontmatter 对齐正文真实 target；
+  severity RISKY → FAIL（生产 API 主路径未接 vector，S10 在生产侧从未真实
+  门控；非 RISKY 而是 production 功能缺口）；phase Retrieval → Dify-ECS
+  对齐被修正卡的 phase。
 ---
 
 # KS-FIX-12 · `/v1/retrieve_context` 真实 call vector_retrieve

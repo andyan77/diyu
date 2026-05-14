@@ -99,9 +99,21 @@ def main() -> int:
     gate_drift = [g for g in gates_hit if g != "active"]
     gran_drift = [g for g in grans_hit if g not in ("L1", "L2", "L3")]
 
+    checked_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    import subprocess as _sp
+    _gc = _sp.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=False)
+    git_commit = _gc.stdout.strip() if _gc.returncode == 0 else "unknown"
+    smoke_pass = (not cross_tenant_leak) and (not gate_drift) and (not gran_drift) \
+                 and res["mode"] == "vector" and len(cands) > 0
+
     audit = {
         "task_card": "KS-RETRIEVAL-006",
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "env": "staging",
+        "generated_at": checked_at,
+        "checked_at": checked_at,
+        "git_commit": git_commit,
+        "evidence_level": "runtime_verified" if smoke_pass else "runtime_verified_fail",
+        "verdict": "pass" if smoke_pass else "fail",
         "query": query,
         "allowed_layers": allowed_layers,
         "collection_name": res["_meta"]["collection_name"],

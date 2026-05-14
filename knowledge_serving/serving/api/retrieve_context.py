@@ -69,6 +69,18 @@ class NeedsReviewException(Exception):
         super().__init__(f"needs_review:{kind}:{reason}")
 
 
+class QdrantUnreachableException(Exception):
+    """KS-FIX-12：mode=vector（非 structured_only）+ Qdrant 不可达 → 503 fail-closed.
+
+    不静默退化为 structured_only；让调用方明确知道向量召回不可用，
+    由调用方决定重试 / 显式开 structured_only / 走 batch eval 离线路径。
+    """
+
+    def __init__(self, reason: str):
+        self.reason = reason
+        super().__init__(f"qdrant_unreachable: {reason}")
+
+
 # ============================================================
 # pydantic 入参模型 / request model
 # ============================================================
@@ -97,6 +109,10 @@ class RetrieveContextRequest(BaseModel):
     output_format: Optional[str] = Field(default=DEFAULT_OUTPUT_FORMAT, description="输出格式 / output format")
     fallback_mode: Optional[str] = Field(default=None, description="降级策略 hint；当前由 fallback_decider 自决，仅记录")
     business_brief: dict[str, Any] = Field(default_factory=dict, description="业务 brief（sku / category / season / channel 等）")
+    # KS-FIX-12: structured_only 显式开 → 不调 vector_retrieve（兼容模式，
+    # 用于已知 Qdrant 维护窗 / 客户合规要求只用关系召回）；缺省 False = 调 vector，
+    # Qdrant 不可达时 503 fail-closed（不静默 None）
+    structured_only: bool = Field(default=False, description="显式跳过 vector 召回；缺省 False=调 vector，Qdrant 不可达时 503")
 
     @field_validator("user_query")
     @classmethod
@@ -137,6 +153,53 @@ def _gen_request_id() -> str:
     """生成 API 请求级 unique request_id；含 utc 时间 + uuid4 短前缀。"""
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     return f"req_api_{ts}_{uuid.uuid4().hex[:8]}"
+
+
+def _call_vector_retrieve(
+    *,
+    query: str,
+    allowed_layers: list[str],
+    content_type: str,
+) -> dict[str, Any]:
+    """KS-FIX-12：API 主路径 vector_retrieve 真实调用包装.
+
+    - 默认行为：调 vector_retrieve（真 dashscope embed + 真 Qdrant search + payload hard filter）
+    - Qdrant 不可达：vector_retrieve 内部会降级返 mode=structured_only；本 wrapper 把这种
+      "API 主路径要 vector 但 Qdrant 给不出来" 翻译成 QdrantUnreachableException → 调用方 503
+    - dashscope 不可达 / 维度漂移 / embedding 失败：直接 propagate 异常 → 500（非 vector 故障）
+
+    红线 / red line：不允许此函数静默退化为 structured_only；那是 structured_only=True 显式入口
+    才能产生的状态。
+    """
+    from knowledge_serving.serving import vector_retrieval as vr  # noqa: E402
+    # 清 WSL2 SOCKS proxy（同 smoke / upload 脚本一致；防 httpx ValueError）
+    for k in ("ALL_PROXY", "all_proxy"):
+        if k in os.environ:
+            del os.environ[k]
+
+    def _embed(text: str) -> list[float]:
+        import dashscope
+        key = os.environ.get("DASHSCOPE_API_KEY")
+        if not key:
+            raise RuntimeError("DASHSCOPE_API_KEY 未注入；API 容器 env 缺配")
+        dashscope.api_key = key
+        resp = dashscope.TextEmbedding.call(model="text-embedding-v3", input=text)
+        if getattr(resp, "status_code", None) != 200:
+            raise RuntimeError(f"dashscope embedding 失败: status={getattr(resp,'status_code',None)}")
+        return list(resp.output["embeddings"][0]["embedding"])
+
+    res = vr.vector_retrieve(
+        query=query,
+        allowed_layers=allowed_layers,
+        embed_fn=_embed,
+        # qdrant_client=None → vr lazy 用 QdrantClient(QDRANT_URL_STAGING)
+        content_type=content_type,
+    )
+    if res.get("mode") != "vector":
+        # vector_retrieve 内部 fallback 触发（Qdrant 连不上 / 5xx / 客户端 init 失败）
+        reason = (res.get("_meta") or {}).get("fallback_reason") or "vector_retrieve fell back to structured_only"
+        raise QdrantUnreachableException(reason)
+    return res
 
 
 def _orchestrate(
@@ -209,8 +272,16 @@ def _orchestrate(
         allowed_layers=allowed_layers,
     )
 
-    # 8 vector：API 层默认 structured_only（live qdrant 由 smoke / batch eval 跑）
-    vector_res = None
+    # 8 vector：KS-FIX-12 收口——默认走 vector_retrieve 真实路径；
+    # structured_only=True 显式开则跳过；Qdrant 不可达 + mode=vector → 503 fail-closed（不静默 None）
+    if req.structured_only:
+        vector_res = None
+    else:
+        vector_res = _call_vector_retrieve(
+            query=req.user_query,
+            allowed_layers=allowed_layers,
+            content_type=content_type,
+        )
 
     # 9 overlay
     overlay = bovr.brand_overlay_retrieve(
@@ -280,6 +351,20 @@ def _orchestrate(
         blocked_reason=blocked_reason,
     )
 
+    # KS-FIX-12：把 vector 路径证据透出给响应 meta，便于 reviewer / 监控判断
+    # 默认路径是否真走了 vector。bundle 结构是 canonical 13-step 装配契约
+    # （含 domain_packs / play_cards / evidence 等 by view_type 切片），不动；
+    # vector_meta 仅作 API 层旁证 / observability。
+    if vector_res is None:
+        bundle_meta["vector_meta"] = {"mode": "structured_only_opt_in", "candidate_count": 0}
+    else:
+        bundle_meta["vector_meta"] = {
+            "mode": vector_res.get("mode"),
+            "candidate_count": len(vector_res.get("candidates") or []),
+            "rerank_applied": (vector_res.get("_meta") or {}).get("rerank_applied"),
+            "collection_name": (vector_res.get("_meta") or {}).get("collection_name"),
+        }
+
     return bundle, bundle_meta
 
 
@@ -326,6 +411,20 @@ def create_app() -> FastAPI:
                 status_code=403,
                 detail={"request_id": request_id, "error": "tenant_not_authorized", "message": str(e)},
             )
+        except QdrantUnreachableException as e:
+            # KS-FIX-12 §6：mode=vector + Qdrant 不可达 → 503 fail-closed（不静默 None）
+            sys.stderr.write(
+                f"[retrieve_context] qdrant_unreachable request_id={request_id} reason={e.reason}\n"
+            )
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "request_id": request_id,
+                    "error": "qdrant_unreachable",
+                    "reason": e.reason,
+                    "hint": "Qdrant 不可达且未开 structured_only；客户端可重试或显式传 structured_only=true 退化为关系召回",
+                },
+            )
         except HTTPException:
             raise
         except Exception as e:  # noqa: BLE001 — 5xx 兜底；request_id 必须随响应回传
@@ -353,6 +452,8 @@ def create_app() -> FastAPI:
                 "bundle_hash": bundle_meta["bundle_hash"],
                 "user_query_hash": bundle_meta["user_query_hash"],
                 "merged_overlay_payload_empty": bundle_meta["merged_overlay_payload_empty"],
+                # KS-FIX-12：vector 路径证据（mode / candidate_count / collection）
+                "vector_meta": bundle_meta.get("vector_meta", {}),
             },
         }
 
