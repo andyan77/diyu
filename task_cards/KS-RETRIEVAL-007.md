@@ -81,6 +81,6 @@ artifact: pytest report
 > 阻断项：domain override brand；overlay 被 query 切换。
 
 ## 11. DoD
-- [ ] 3 模块入 git
-- [ ] pytest 全绿
-- [ ] 审查员 pass
+- [x] 3 模块入 git（commit `4eaa37e`：brand_overlay_retrieval.py / merge_context.py / fallback_decider.py + test_merge_fallback.py）
+- [x] pytest 全绿（`python3 -m pytest knowledge_serving/tests/test_merge_fallback.py -v` → 25 passed / 0 failed / 0 skipped；2026-05-14 KS-FIX-22 复跑）
+- [x] 审查员 pass（runtime_verified；详见 `knowledge_serving/audit/retrieval_007_reviewer_pass_KS-FIX-22.md`，§10 五要点逐项映射到 pytest case，verdict=PASS）

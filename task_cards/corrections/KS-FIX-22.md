@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/retrieval_007_reviewer_pass_KS-FIX-22.md
 artifacts:
   - knowledge_serving/audit/retrieval_007_reviewer_pass_KS-FIX-22.md
-status: not_started
+status: done
 ---
 
 # KS-FIX-22 · KS-RETRIEVAL-007 外审复跑 + DoD 勾选
@@ -61,7 +61,7 @@ pass:    grep 命中 1+
 > 复跑 KS-RETRIEVAL-007 §10 reviewer prompt；若 pass 则签字；若 RISKY 则不勾 DoD 而是回退 status。
 
 ## 11. DoD
-- [ ] reviewer md 落盘
-- [ ] KS-RETRIEVAL-007 §11 DoD 勾选
-- [ ] 审查员 pass
-- [ ] 原卡 KS-RETRIEVAL-007 回写（本卡的目的即为此）
+- [x] reviewer md 落盘（`knowledge_serving/audit/retrieval_007_reviewer_pass_KS-FIX-22.md`，runtime_verified）
+- [x] KS-RETRIEVAL-007 §11 DoD 勾选（三项全 [x]）
+- [x] 审查员 pass（verdict=PASS，2026-05-14T20:44:23+08:00）
+- [x] 原卡 KS-RETRIEVAL-007 回写（本卡的目的即为此）
