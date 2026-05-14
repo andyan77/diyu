@@ -82,7 +82,12 @@ status: done
 | AT-05 | 干净 shell allowlist 跑 FIX 卡 ci_commands，泄漏 `QDRANT_URL_STAGING` env | test_clean_shell_ci_command_runs fail |
 | AT-06 | FIX-01/02 已 done 卡 grandfather 豁免，不应被 C16-C19 拦截 | validator 通过这两张卡 |
 
-**fail-closed** 总声明：C16-C19 任一命中 exit 1；通用 pytest 任一 fail exit 1。
+**fail-closed** 分级声明：
+- `status in {in_progress, done}`（grandfather FIX-01/02 除外）→ C16/C17/C18 任一命中 exit 1
+- `status == not_started` → C16/C17/C18 命中进 WARNINGS（提示但不阻塞 validator exit 0）
+- C19（FIX-25/26 status=done 前置）+ 通用 pytest → 任一命中 exit 1（无分级）
+
+**核心流程硬约束**：任何 FIX 卡从 `not_started` 改为 `in_progress` 或 `done` 之前，C16-C18 warnings 必须先清零（否则 status 变更即触发 validator fail-closed）。这是 H1-H4 起跑前的强制门槛。
 
 ## 7. 治理语义一致性
 

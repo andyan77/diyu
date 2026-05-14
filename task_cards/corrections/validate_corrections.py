@@ -354,9 +354,46 @@ def main() -> int:
                 r"^##\s*1[2-9]\.\s*AT\s*映射|^##\s*1[2-9]\.\s*test_id",
                 text, re.MULTILINE
             )
-            at_in_map = re.findall(r"AT-\d+", text[sec_at_map.end():]) if sec_at_map else []
+            # 取 AT 映射段到下一个 ## 1N. 或文末
+            if sec_at_map:
+                map_body = text[sec_at_map.end():]
+                next_sec = re.search(r"\n##\s+\d+", map_body)
+                if next_sec:
+                    map_body = map_body[:next_sec.start()]
+            else:
+                map_body = ""
+            at_in_map = re.findall(r"AT-\d+", map_body)
             if at_in_sec6 and not at_in_map:
                 issue_fn(tid, "C16 缺 AT 映射段（## 1[2-9]. AT 映射 / test_id）")
+
+            # C16+ 增强：AT 映射表里引用的 pytest function 必须能在该 test 文件里 grep 到
+            # 期望表行形如：| AT-01 | `test_xxx` | knowledge_serving/tests/test_yyy.py |
+            map_rows = re.findall(
+                r"\|\s*AT-(\d+)\s*\|\s*`([a-zA-Z_][a-zA-Z0-9_]*)`\s*\|\s*([A-Za-z0-9_/\.\-]+\.py)\s*\|",
+                map_body,
+            )
+            referenced_set = set()
+            for at_num, fn_name, test_file in map_rows:
+                referenced_set.add(f"AT-{at_num}")
+                test_path = REPO_ROOT / test_file.strip()
+                # 文件存在性：若在 creates 中且尚未落地 → 跳过（卡未起跑场景）
+                if not test_path.exists():
+                    if test_file.strip() in declared_creates:
+                        continue
+                    issue_fn(tid, f"C16+ AT-{at_num} 映射的 test 文件不存在: {test_file}")
+                    continue
+                # function 真实存在校验：grep `def <fn_name>(`
+                try:
+                    content = test_path.read_text(encoding="utf-8")
+                except OSError:
+                    continue
+                if not re.search(rf"^def\s+{re.escape(fn_name)}\s*\(", content, re.MULTILINE):
+                    issue_fn(tid, f"C16+ AT-{at_num} 映射的 pytest function `{fn_name}` 在 {test_file} 中不存在")
+            # 同时校验：§6 出现的 AT-NN 必须全部在映射表里
+            sec6_set = set(at_in_sec6)
+            unmapped = sec6_set - referenced_set
+            if sec6_set and referenced_set and unmapped:
+                issue_fn(tid, f"C16+ §6 出现但 AT 映射段未登记: {sorted(unmapped)}")
 
             # C17 §16 被纠卡同步段
             has_sec16 = bool(re.search(

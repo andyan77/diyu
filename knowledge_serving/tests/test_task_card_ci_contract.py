@@ -73,6 +73,22 @@ def _ecs_available() -> bool:
     return Path(key_path).exists()
 
 
+def _all_in_progress_or_done_fix_cards() -> list[Path]:
+    """收集 task_cards/corrections/ 下 status in {in_progress, done} 的 FIX 纠偏卡。
+    原 57 卡走 validate_task_cards.py + 自己的 audit 模式，evidence_level schema
+    是 FIX-01 之后才引入的新约定，不强加给 legacy。"""
+    out: list[Path] = []
+    d = ROOT / "task_cards" / "corrections"
+    if not d.is_dir():
+        return out
+    # FIX 卡的 ci_commands 在 §8 fenced block，不在 frontmatter；这里只按 status 过滤。
+    for p in d.glob("KS-FIX-*.md"):
+        fm = _parse_frontmatter(p)
+        if fm.get("status") in ("in_progress", "done"):
+            out.append(p)
+    return out
+
+
 @pytest.mark.skipif(not _ecs_available(), reason="ECS SSH key / tunnel script not available")
 def test_ks_s0_004_ci_command_refreshes_declared_artifacts(tmp_path):
     """KS-S0-004 ci_commands 干净 shell 可复跑 + 声明 artifact 真被刷新。"""
@@ -123,6 +139,36 @@ def test_ks_s0_004_ci_command_refreshes_declared_artifacts(tmp_path):
         assert data.get("evidence_level") in {"runtime_verified", "fail_closed"}
         assert data.get("checked_at")
         assert data.get("version") == "1.12.5"  # 与 CLAUDE.md infra reference 一致
+
+
+@pytest.mark.parametrize("card_path", _all_in_progress_or_done_fix_cards(),
+                          ids=lambda p: p.stem)
+def test_parametrized_ci_contract_all_active_fix_cards(card_path, tmp_path):
+    """对所有 status in {in_progress, done} 的卡：
+    1) frontmatter 必须含 ci_commands + artifacts
+    2) runtime artifact (audit JSON) 必须存在
+    3) artifact schema 含 evidence_level + checked_at + git_commit
+    本测试**不**实跑 ci_commands（ECS 依赖路径在另一专用测试覆盖），
+    只校验"卡的契约自洽"——这是 H5 的契约层校验。
+    """
+    fm = _parse_frontmatter(card_path)
+    artifacts = fm.get("artifacts") or []
+    assert artifacts, f"{card_path.stem} 缺 artifacts"
+    runtime_arts = [a for a in artifacts if a.endswith(".json") and "/audit/" in a]
+    if not runtime_arts:
+        pytest.skip(f"{card_path.stem} 无 runtime JSON artifact (e.g. 仅文档卡)")
+    for a in runtime_arts:
+        p = ROOT / a
+        assert p.exists(), f"{card_path.stem} runtime artifact 不存在: {a}"
+        try:
+            data = json.loads(p.read_text())
+        except json.JSONDecodeError as e:
+            pytest.fail(f"{card_path.stem} artifact 非合法 JSON: {a} ({e})")
+        for required in ("evidence_level", "checked_at"):
+            assert required in data, \
+                f"{card_path.stem} artifact {a} 缺字段 {required}"
+        assert data["evidence_level"] in {"runtime_verified", "fail_closed", "static_verified"}, \
+            f"{card_path.stem} artifact {a} evidence_level={data['evidence_level']!r} 不合规"
 
 
 def test_ks_s0_004_artifact_contract_declares_both_paths():

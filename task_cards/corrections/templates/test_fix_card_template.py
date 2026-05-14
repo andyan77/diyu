@@ -27,19 +27,19 @@ def staging_available() -> bool:
 # AT-NN 测试函数（按需复制 + 改名）
 # ──────────────────────────────────────────────────────────────────────
 
-def test_at_01_<descriptive_name>(staging_available):
+# 注：以下是模板示例函数，**复制到具体 FIX 卡测试文件后必须改名**为
+# 描述性命名（如 test_at_01_empty_collections_fail_closed），并删除 pytest.skip。
+# 本模板文件本身被 pytest 收集时跳过，避免占位符干扰。
+
+
+def test_at_01_template_placeholder(staging_available):
     """AT-01: <从 §6 表抄写测试描述>"""
-    if not staging_available:
-        pytest.skip("staging deps unreachable")
-    # TODO: 跑命令，断言 fail-closed
-    raise NotImplementedError("AT-01 待落地")
+    pytest.skip("template placeholder — replace before use")
 
 
-def test_at_02_<descriptive_name>(staging_available):
+def test_at_02_template_placeholder(staging_available):
     """AT-02: <...>"""
-    if not staging_available:
-        pytest.skip("staging deps unreachable")
-    raise NotImplementedError("AT-02 待落地")
+    pytest.skip("template placeholder — replace before use")
 
 
 # 复制以上模式继续 AT-03..AT-NN

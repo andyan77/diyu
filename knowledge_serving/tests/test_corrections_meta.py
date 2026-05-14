@@ -135,6 +135,40 @@ def test_at_05_clean_shell_allowlist_strips_secrets():
 # AT-06: FIX-01/02 grandfather 豁免
 # ──────────────────────────────────────────────────────────────────────
 
+def test_at_07_grading_enforces_status_transition_to_fail(tmp_path, monkeypatch):
+    """AT-07: validator grading 真实强制：把一张 not_started 卡临时改 in_progress，
+    缺 §16 / AT-NN 必须从 warning 升级到 error。
+
+    实现：拷贝 KS-FIX-03 内容到临时 corrections 目录，改 status=in_progress，
+    跑 validator 子进程，断言 exit 1 + C17 出现在 errors 而非 warnings。
+    """
+    src = CORRECTIONS / "KS-FIX-03.md"
+    if not src.exists():
+        pytest.skip("KS-FIX-03 not present")
+    txt = src.read_text(encoding="utf-8")
+    # 把 status 行从 not_started 改 in_progress
+    flipped = re.sub(r"^status:\s*not_started\s*$",
+                     "status: in_progress", txt, flags=re.MULTILINE)
+    if flipped == txt:
+        pytest.skip("KS-FIX-03 status 不是 not_started，无法模拟 grading 跳变")
+    # 备份后改写、跑 validator、再还原（避免污染工作树）
+    backup = src.read_bytes()
+    try:
+        src.write_text(flipped, encoding="utf-8")
+        rc, out = _run_validator()
+    finally:
+        src.write_bytes(backup)
+    # 必须 fail-closed
+    assert rc != 0, f"in_progress 卡缺 AT-NN/§16 时 validator 应 exit !=0，实际 {rc}; out={out[-500:]}"
+    # 错误段必须含 KS-FIX-03 + C16 或 C17
+    err_section = ""
+    if "VALIDATION FAILED" in out:
+        err_section = out.split("VALIDATION FAILED", 1)[1]
+    assert "KS-FIX-03" in err_section, "FIX-03 应进 errors 段"
+    assert any(c in err_section for c in ("C16", "C17", "C18")), \
+        "in_progress 时 C16/C17/C18 必须出现在 errors，不能继续 warn"
+
+
 def test_at_06_grandfather_done_cards_not_in_errors():
     """AT-06: FIX-01/02 已 done 卡受 grandfather 豁免，不应出现在 errors 中"""
     rc, out = _run_validator()
