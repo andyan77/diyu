@@ -9,7 +9,9 @@ files_touched:
   - scripts/load_env.sh
   - scripts/qdrant_tunnel.sh
   - scripts/check_qdrant_health.py
+  - scripts/validate_serving_tree.py
   - knowledge_serving/scripts/run_qdrant_health_check.sh
+  - knowledge_serving/tests/test_qdrant_health_schema_gate.py
   - knowledge_serving/audit/qdrant_health_KS-FIX-01.json
   - task_cards/KS-S0-004.md
 artifacts:
@@ -155,3 +157,51 @@ fail-closed: tunnel 未起 → exit 1（不允许 exit 0 + skip）
 - 本次补漏仅改：[scripts/check_qdrant_health.py](../../scripts/check_qdrant_health.py)（schema gate 收紧）、新建 [knowledge_serving/scripts/run_qdrant_health_check.sh](../../knowledge_serving/scripts/run_qdrant_health_check.sh)、刷新 [knowledge_serving/audit/qdrant_health_KS-FIX-01.json](../../knowledge_serving/audit/qdrant_health_KS-FIX-01.json)、本节追加
 - 未改：clean_output / Compiler / Schema / Policy / Retrieval / 其他 FIX 卡
 - 未顺手起 FIX-02
+
+## 14. 外审 RISKY 第二轮收口 / 2026-05-14 11:00 UTC+8
+
+> **触发**：第二轮外审给出 RISKY，三个 blocker：
+> 1. 原卡 KS-S0-004 `ci_commands` 仍裸命令，干净 shell exit 2（未纠偏到底）
+> 2. `validate_serving_tree.py` 23 个 EXTRA（其中 1 个为本卡新增 wrapper）
+> 3. 工作树脏，需分离 FIX-01 相关与无关刷新
+> 用户裁决：A·ci_commands 换 wrapper；加全 23 项白名单；加 pytest；仅 commit FIX-01 相关 dirty。
+
+### 三 blocker 处置
+
+**Blocker 1 · KS-S0-004 ci_commands 切 wrapper**
+- 改前：`python3 scripts/check_qdrant_health.py --strict --env staging`（干净 shell exit 2）
+- 改后：`bash knowledge_serving/scripts/run_qdrant_health_check.sh`（干净 shell exit 0，含 load_env + tunnel up + strict + cleanup）
+- §8 同步：command / artifact 双路径声明 / note 段保留历史失败证据
+- **不动 status / DoD ticks / §12 5 项解锁条件**——历史失败点证据继续保留在 §12 第 96 行
+
+**Blocker 2 · validate_serving_tree.py 白名单加全 23 项**（**越界登记**）
+- 用户授权越界进入 FIX-04（目录契约 / coverage）领域，一次性把 W8-W12 已落盘 23 个文件加入白名单
+- 新增白名单分桶：`EXPECTED_FILES_W8`（4）/ `W9`（3）/ `W10`（6）/ `W11`（6）/ `W12`（3）+ W0 KS-FIX-01（wrapper + 本节新增 pytest）
+- 每个文件按 commit hash + 来源任务卡溯源标注
+- 改前 `validate_serving_tree.py` exit 1（23 extras）→ 改后 exit 0
+- **越界声明**：本次范围本应只清 FIX-01 自身贡献的 1 项；按用户裁决一次性清完，登记此节。FIX-04 起跑前需复查此白名单的攻击面（每个文件溯源是否真实合规）。
+
+**Blocker 3 · 工作树分离**
+- 仅 commit：FIX-01 相关本次改动 + 外审重跑刷新的 `qdrant_health_KS-FIX-01.json` / `qdrant_health_KS-S0-004.json`
+- 不 commit：FIX-02 territory（`ecs_mirror_dryrun_KS-FIX-02.json`）+ Group C（clean_output renderer 副刷 / smoke 副刷）
+
+### 新增自动化用例 / [knowledge_serving/tests/test_qdrant_health_schema_gate.py](../../knowledge_serving/tests/test_qdrant_health_schema_gate.py)
+- `test_empty_collections_fail_closed`：空 collections → strict exit 1，`evidence_level=fail_closed`，`warnings=['empty_collections']`
+- `test_missing_version_fail_closed`：缺 version → strict exit 1，`warnings=['missing_version']`
+- `test_healthy_runtime_verified`：正向对照
+- `test_wrapper_cleanup_on_failure`：wrapper 失败时 trap EXIT 真实触发 tunnel down（用 stub script 记录 up/down 顺序）
+- 4/4 PASS · 0 forbidden tokens（无 dry-run / mock / TestClient 冒充真实验收——本测试只验证 schema gate 与 trap 行为本身）
+
+### 第二轮收口验证 / 2026-05-14 11:00 UTC+8
+
+| 检查 | 命令 | exit | 备注 |
+|---|---|---|---|
+| 1 | `python3 scripts/validate_serving_tree.py` | **0** | 23 EXTRA 清零 |
+| 2 | `python3 task_cards/validate_task_cards.py` | **0** | 57 cards, DAG closed |
+| 3 | `python3 task_cards/corrections/validate_corrections.py` | **0** | 26 FIX cards, DAG closed |
+| 4 | `python3 -m pytest knowledge_serving/tests/test_qdrant_health_schema_gate.py -v` | **0** | 4 passed |
+| 5 | `bash knowledge_serving/scripts/run_qdrant_health_check.sh`（KS-S0-004 新 ci_commands） | **0** | 真 staging 4/4 probes 200，runtime_verified |
+
+### 待办 / outstanding（不在本卡范围）
+- 任务卡 CI 契约检查器（ci_commands 干净 shell 可复跑校验）——单独 FIX 卡，建议归入 FIX-04 或新增
+- `validate_serving_tree.py` 白名单 22 项越界登记的合规性复核——FIX-04 必查项

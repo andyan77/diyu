@@ -71,6 +71,8 @@ EXPECTED_FILES_PLAN = {
 EXPECTED_FILES_PRE_EXISTING = {
     "control/content_type_canonical.csv",   # W0 KS-S0-007
     "policies/qdrant_fallback.yaml",         # W0 KS-S0-006
+    "scripts/run_qdrant_health_check.sh",    # W0 KS-FIX-01 · staging Qdrant health 外审 wrapper
+    "tests/test_qdrant_health_schema_gate.py",  # W0 KS-FIX-01 §13 · schema gate + wrapper cleanup 自动化用例
 }
 
 # W3 已落白名单 / W3-landed allowlist
@@ -190,7 +192,63 @@ EXPECTED_FILES_W7 = {
     "tests/test_guardrail.py",
 }
 
-# 全部允许文件 = §11 + W0/W1 + W3 + W4 + W5 + W6 + W7 白名单 + .gitkeep 占位
+# W8 已落白名单 / W8-landed allowlist
+# KS-RETRIEVAL-007 + KS-CD-002（commit 4eaa37e）
+EXPECTED_FILES_W8 = {
+    "serving/merge_context.py",           # KS-RETRIEVAL-007
+    "serving/fallback_decider.py",        # KS-RETRIEVAL-007
+    "serving/brand_overlay_retrieval.py", # KS-RETRIEVAL-007
+    "tests/test_merge_fallback.py",       # KS-RETRIEVAL-007
+}
+
+# W9 已落白名单 / W9-landed allowlist
+# KS-RETRIEVAL-008（commit d58f2e0）
+EXPECTED_FILES_W9 = {
+    "serving/context_bundle_builder.py",
+    "serving/log_writer.py",
+    "tests/test_bundle_log.py",
+}
+
+# W10 已落白名单 / W10-landed allowlist
+# KS-RETRIEVAL-009 / KS-DIFY-ECS-005 / KS-PROD-003
+EXPECTED_FILES_W10 = {
+    # KS-RETRIEVAL-009（commit df62d3c）· 端到端 13 步召回 demo
+    "scripts/run_context_retrieval_demo.py",
+    "logs/retrieval_eval_sample.csv",
+    "logs/run_context_retrieval_demo.log",  # demo runtime log（与 demo 同卡产物）
+    # KS-DIFY-ECS-005（commit fac113b）· context_bundle_log CSV+PG mirror 双写
+    "scripts/reconcile_context_bundle_log_mirror.py",
+    "tests/test_log_dual_write.py",
+    # KS-PROD-003（commit 18d8ab8）· LLM assist 边界回归
+    "tests/test_llm_assist_boundary.py",
+}
+
+# W11 已落白名单 / W11-landed allowlist
+# KS-DIFY-ECS-006 / KS-DIFY-ECS-007 / KS-DIFY-ECS-010
+EXPECTED_FILES_W11 = {
+    # KS-DIFY-ECS-006（commit 6e16a96）· ECS 端到端冒烟 outbox
+    "control/context_bundle_log_outbox.jsonl",
+    # KS-DIFY-ECS-007（commit 17e41d8）· retrieve_context HTTP API wrapper
+    "serving/api/__init__.py",
+    "serving/api/openapi.yaml",
+    "serving/api/retrieve_context.py",
+    "tests/test_api.py",
+    # KS-DIFY-ECS-010（commit 89f7f35）· context_bundle 日志回放
+    "tests/test_replay.py",
+}
+
+# W12 已落白名单 / W12-landed allowlist
+# KS-DIFY-ECS-008 / KS-CD-001 / KS-PROD-002
+EXPECTED_FILES_W12 = {
+    # KS-DIFY-ECS-008（commit a6b3de0）· Dify Chatflow 10 节点 DSL 校验
+    "scripts/tests/test_validate_dify_dsl.py",
+    # KS-CD-001（commit 65408bb）· PG mirror DDL
+    "scripts/pg_mirror_context_bundle_log.ddl.sql",
+    # KS-PROD-002（commit f75a894）· 跨租户隔离 e2e 回归
+    "tests/test_tenant_isolation_e2e.py",
+}
+
+# 全部允许文件 = §11 + W0/W1 + W3..W12 白名单 + .gitkeep 占位
 ALLOWED_FILES = (
     EXPECTED_FILES_PLAN
     | EXPECTED_FILES_PRE_EXISTING
@@ -199,6 +257,11 @@ ALLOWED_FILES = (
     | EXPECTED_FILES_W5
     | EXPECTED_FILES_W6
     | EXPECTED_FILES_W7
+    | EXPECTED_FILES_W8
+    | EXPECTED_FILES_W9
+    | EXPECTED_FILES_W10
+    | EXPECTED_FILES_W11
+    | EXPECTED_FILES_W12
     | EXPECTED_GITKEEPS
 )
 

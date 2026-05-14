@@ -3,7 +3,7 @@
   "env": "staging",
   "base_url": "http://127.0.0.1:6333",
   "qdrant_url": "http://127.0.0.1:6333",
-  "checked_at": "2026-05-14 03:00:44",
+  "checked_at": "2026-05-14 10:29:47",
   "overall": "healthy",
   "version": "1.12.5",
   "collections": [
@@ -11,14 +11,14 @@
   ],
   "evidence_level": "runtime_verified",
   "warnings": [],
-  "git_commit": "f75a8943de1b954164ed79094a3e550aefd98e32",
+  "git_commit": "05dcdcb4ff8a71b78a3b13a07955a1d28a8fa240",
   "probes": [
     {
       "path": "/",
       "label": "service banner",
       "http_code": 200,
       "ok": true,
-      "elapsed_ms": 118,
+      "elapsed_ms": 95,
       "body_preview": "{\"title\":\"qdrant - vector search engine\",\"version\":\"1.12.5\",\"commit\":\"27260abda78509e1a3e8822c8d8819c4fe189f5b\"}"
     },
     {
@@ -26,7 +26,7 @@
       "label": "healthz endpoint",
       "http_code": 200,
       "ok": true,
-      "elapsed_ms": 154,
+      "elapsed_ms": 125,
       "body_preview": "healthz check passed"
     },
     {
@@ -34,7 +34,7 @@
       "label": "readyz endpoint",
       "http_code": 200,
       "ok": true,
-      "elapsed_ms": 153,
+      "elapsed_ms": 126,
       "body_preview": "all shards are ready"
     },
     {
@@ -42,8 +42,8 @@
       "label": "collections list",
       "http_code": 200,
       "ok": true,
-      "elapsed_ms": 154,
-      "body_preview": "{\"result\":{\"collections\":[{\"name\":\"ks_chunks__mp_20260512_002\"}]},\"status\":\"ok\",\"time\":4.385e-6}"
+      "elapsed_ms": 126,
+      "body_preview": "{\"result\":{\"collections\":[{\"name\":\"ks_chunks__mp_20260512_002\"}]},\"status\":\"ok\",\"time\":4.581e-6}"
     }
   ],
   "fallback_signal": "none"
