@@ -467,6 +467,12 @@ def create_app() -> FastAPI:
             content={"error": "bad_request", "detail": exc.errors()},
         )
 
+    # KS-CD-003 · 挂载 guardrail / log_write wrapper（旁挂独立 endpoint，不动业务逻辑）
+    from knowledge_serving.serving.api.guardrail_endpoint import router as _guardrail_router
+    from knowledge_serving.serving.api.log_write_endpoint import router as _log_write_router
+    app.include_router(_guardrail_router)
+    app.include_router(_log_write_router)
+
     return app
 
 

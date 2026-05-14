@@ -1,0 +1,13 @@
+{
+  "task_id": "KS-CD-003",
+  "env": "staging",
+  "checked_at": "2026-05-14T13:40:17Z",
+  "git_commit": "fd2474077498",
+  "mode": "dry-run",
+  "evidence_level": "dry_run",
+  "image_tag": "diyu-serving:fd2474077498",
+  "ecs_host": "8.217.175.36",
+  "host_port": "8005",
+  "container_port": "8000",
+  "extra": {"port_probe": "free"}
+}

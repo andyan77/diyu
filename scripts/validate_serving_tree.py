@@ -276,6 +276,20 @@ EXPECTED_FILES_W12 = {
     "tests/test_tenant_isolation_e2e.py",
 }
 
+# W13 已落白名单 / W13-landed allowlist
+# KS-CD-003 · 旁挂独立 serving 容器（Dockerfile + 两条 endpoint wrapper + 部署脚本测试）
+EXPECTED_FILES_W13 = {
+    # 容器镜像构建
+    "serving/api/Dockerfile",
+    "serving/api/requirements.txt",
+    # HTTP wrapper（包既有纯函数，不动业务模块本体）
+    "serving/api/guardrail_endpoint.py",
+    "serving/api/log_write_endpoint.py",
+    # 对抗性 + 边缘性测试
+    "tests/test_ks_cd_003_deploy_static.py",
+    "tests/test_ks_cd_003_endpoints.py",
+}
+
 # 全部允许文件 = §11 + W0/W1 + W3..W12 白名单 + .gitkeep 占位
 ALLOWED_FILES = (
     EXPECTED_FILES_PLAN
@@ -292,6 +306,7 @@ ALLOWED_FILES = (
     | EXPECTED_FILES_W10
     | EXPECTED_FILES_W11
     | EXPECTED_FILES_W12
+    | EXPECTED_FILES_W13
     | EXPECTED_GITKEEPS
 )
 
