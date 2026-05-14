@@ -187,18 +187,87 @@ workflow:
           code_language: python3
           code: |
             def main(content_type_hint: str) -> dict:
-                # 真生产改成 HTTP 调 retrieve_context API 内部映射；
-                # 这里用最小内嵌表（与 content_type_canonical.csv 对齐子集）
+                # 与 knowledge_serving/control/content_type_canonical.csv 全集对齐（17 canonical + aliases）
+                # 真生产改成 HTTP 调 retrieve_context API 内部映射
+                CANONICAL = {
+                    "behind_the_scenes", "daily_fragment", "emotion_expression",
+                    "event_documentary", "founder_ip", "humor_content", "knowledge_sharing",
+                    "lifestyle_expression", "outfit_of_the_day", "personal_vlog",
+                    "process_trace", "product_copy_general", "product_journey",
+                    "product_review", "role_work_vlog", "store_daily",
+                    "talent_showcase", "training_material",
+                }
                 ALIASES = {
-                    "product_review": "product_review", "评测": "product_review",
-                    "store_daily":    "store_daily",    "门店日常": "store_daily",
-                    "founder_ip":     "founder_ip",     "创始人ip": "founder_ip",
-                    "behind_the_scenes": "behind_the_scenes",
+                    # behind_the_scenes
+                    "幕后": "behind_the_scenes", "后台": "behind_the_scenes",
+                    "behind_scene": "behind_the_scenes", "后台揭秘": "behind_the_scenes",
+                    # daily_fragment
+                    "日常": "daily_fragment", "碎片": "daily_fragment", "片段": "daily_fragment",
+                    "daily_clip": "daily_fragment",
+                    # emotion_expression
+                    "情绪": "emotion_expression", "抒情": "emotion_expression",
+                    "情感表达": "emotion_expression", "mood": "emotion_expression",
+                    # event_documentary
+                    "事件记录": "event_documentary", "活动纪实": "event_documentary",
+                    "event_record": "event_documentary", "纪实": "event_documentary",
+                    # founder_ip
+                    "创始人内容": "founder_ip", "老板人设": "founder_ip",
+                    "founder_persona": "founder_ip", "创始人 ip": "founder_ip",
+                    # humor_content
+                    "搞笑": "humor_content", "段子": "humor_content",
+                    "幽默": "humor_content", "funny": "humor_content",
+                    # knowledge_sharing
+                    "干货": "knowledge_sharing", "科普": "knowledge_sharing",
+                    "知识": "knowledge_sharing", "分享": "knowledge_sharing",
+                    "tips": "knowledge_sharing",
+                    # lifestyle_expression
+                    "生活方式": "lifestyle_expression", "lifestyle": "lifestyle_expression",
+                    "品味": "lifestyle_expression", "生活美学": "lifestyle_expression",
+                    # outfit_of_the_day（最常用）
+                    "ootd": "outfit_of_the_day", "穿搭": "outfit_of_the_day",
+                    "今日穿搭": "outfit_of_the_day", "搭配": "outfit_of_the_day",
+                    "look_of_the_day": "outfit_of_the_day",
+                    # personal_vlog
+                    "vlog": "personal_vlog", "个人视频": "personal_vlog",
+                    "个人记录": "personal_vlog", "personal_video": "personal_vlog",
+                    # process_trace
+                    "工艺记录": "process_trace", "过程展示": "process_trace",
+                    "process_record": "process_trace", "制作过程": "process_trace",
+                    # product_copy_general
+                    "商品介绍": "product_copy_general", "商品文案": "product_copy_general",
+                    "product_intro": "product_copy_general", "product_copy": "product_copy_general",
+                    # product_journey
+                    "商品故事": "product_journey", "溯源": "product_journey",
+                    "product_story": "product_journey", "journey": "product_journey",
+                    # product_review
+                    "测评": "product_review", "种草测评": "product_review",
+                    "好物测评": "product_review", "product_eval": "product_review",
+                    "评测": "product_review",
+                    # role_work_vlog
+                    "工作 vlog": "role_work_vlog", "岗位 vlog": "role_work_vlog",
+                    "职场 vlog": "role_work_vlog", "work_vlog": "role_work_vlog",
+                    "role_vlog": "role_work_vlog",
+                    # store_daily
+                    "门店动态": "store_daily", "店日常": "store_daily",
+                    "daily_store": "store_daily", "门店内容": "store_daily",
+                    "门店日常": "store_daily",
+                    # talent_showcase
+                    "才艺": "talent_showcase", "表演": "talent_showcase",
+                    "talent_show": "talent_showcase", "showcase": "talent_showcase",
+                    # training_material
+                    "培训": "training_material", "内训": "training_material",
+                    "岗位培训": "training_material", "training": "training_material",
+                    "training_doc": "training_material",
                 }
                 key = (content_type_hint or "").strip().lower()
+                # 1) canonical 直接通
+                if key in CANONICAL:
+                    return {"content_type": key, "content_type_status": "ok"}
+                # 2) alias 映射
                 ct = ALIASES.get(key)
                 if ct:
                     return {"content_type": ct, "content_type_status": "ok"}
+                # 3) 非法 → needs_review（content_type 留空让 n5 400 fail-closed）
                 return {"content_type": "", "content_type_status": "needs_review"}
           variables:
             - variable: content_type_hint
@@ -392,11 +461,26 @@ workflow:
           code_language: python3
           code: |
             import json
+            def _coerce_dict(v):
+                # 上游可能传 dict（成功）/ str（n5 4xx 错误体）/ None
+                if isinstance(v, dict):
+                    return v
+                if isinstance(v, str):
+                    try:
+                        parsed = json.loads(v)
+                        return parsed if isinstance(parsed, dict) else {}
+                    except Exception:
+                        return {}
+                return {}
             def main(generated_text: str, bundle, business_brief) -> dict:
+                b = _coerce_dict(bundle)
+                # 如果 bundle 实际是 4xx 错误体（顶层有 error 字段），抽 bundle.bundle 或当空
+                if "error" in b and "bundle" not in b:
+                    b = {}
                 body = {
                     "generated_text": generated_text or "",
-                    "bundle": bundle if isinstance(bundle, dict) else (bundle or {}),
-                    "business_brief": business_brief if isinstance(business_brief, dict) else (business_brief or {}),
+                    "bundle": b,
+                    "business_brief": _coerce_dict(business_brief),
                 }
                 return {"body_json": json.dumps(body, ensure_ascii=False)}
           variables:
@@ -516,12 +600,32 @@ workflow:
           code_language: python3
           code: |
             import json
-            def main(rc_response, classified_intent: str, final_output_text: str, fallback_status: str) -> dict:
+            def _coerce_dict(v):
+                if isinstance(v, dict):
+                    return v
+                if isinstance(v, str):
+                    try:
+                        parsed = json.loads(v)
+                        return parsed if isinstance(parsed, dict) else {}
+                    except Exception:
+                        return {}
+                return {}
+            def main(rc_response, classified_intent: str, final_output_text: str, fallback_status) -> dict:
+                # n5 上游可能返回 dict（成功）/ str（4xx 错误体）；都归一为 dict，
+                # log_write_endpoint server 内部能从 rc_response.bundle 拆出 request_id；
+                # 若 n5 4xx，rc_response 顶层 error/detail，rc_response.bundle 缺失，
+                # log_write 会 400 missing_bundle ——这是预期 fail-closed 行为。
+                rc = _coerce_dict(rc_response)
+                fs = ""
+                if isinstance(fallback_status, str):
+                    fs = fallback_status
+                elif isinstance(fallback_status, dict):
+                    fs = str(fallback_status.get("fallback_status", ""))
                 body = {
-                    "retrieve_context_response": rc_response if isinstance(rc_response, dict) else {},
+                    "retrieve_context_response": rc,
                     "classified_intent": classified_intent or "disabled",
                     "final_output_text": final_output_text or "",
-                    "blocked_reason": fallback_status if fallback_status and fallback_status.startswith("blocked_") else None,
+                    "blocked_reason": fs if fs.startswith("blocked_") else None,
                 }
                 return {"body_json": json.dumps(body, ensure_ascii=False)}
           variables:
