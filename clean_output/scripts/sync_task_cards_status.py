@@ -156,11 +156,25 @@ def main():
         return 1
     new_text = pattern.sub(new_section.rstrip() + "\n", text, count=1)
 
-    # 不再创建 .bak（W7 reviewer F5 纪律：clean_output 不留任何 bak 残留）
-    TC.write_text(new_text, encoding="utf-8")
+    # 幂等写入 / idempotent write（KS-DIFY-ECS-011 镜像闭环要求）：
+    # 模板里有 "AUTO-SYNCED at {ts}" 抖动；把该行替换成占位后做比对，
+    # 语义相等即跳过 write，避免给 ECS mirror 制造无意义 drift。
+    def _strip_ts(s: str) -> str:
+        return re.sub(r"AUTO-SYNCED at [^\n]*", "AUTO-SYNCED at <TS>", s)
+    if TC.exists() and _strip_ts(TC.read_text(encoding="utf-8")) == _strip_ts(new_text):
+        print(f"已写 (幂等跳过 / idempotent skip): {TC}")
+        skipped = True
+    else:
+        # 不再创建 .bak（W7 reviewer F5 纪律：clean_output 不留任何 bak 残留）
+        TC.write_text(new_text, encoding="utf-8")
+        skipped = False
 
+    if skipped:
+        print(f"[幂等跳过 / idempotent skip — semantic equal]")
     print(f"已完成卡: {sorted(completed)}")
     print(f"实时数字: {live}")
+    # 末行保持稳定（full_audit.py 用 stdout 末行作 gate summary，
+    # skip/write 两条路径必须输出完全一致的末行）
     print(f"已写: {TC}")
     return 0
 

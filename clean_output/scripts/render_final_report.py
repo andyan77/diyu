@@ -341,7 +341,28 @@ def main():
     md.append("- ✅ ID 复跑稳定 / 9 张表全部 PK 唯一 + sha256 一致")
     md.append("")
 
-    OUT.write_text("\n".join(md), encoding="utf-8")
+    new_text = "\n".join(md)
+    # 幂等写入 / idempotent write（KS-DIFY-ECS-011 镜像闭环要求）：
+    # 渲染头部含 "自动生成于 {ts}" 和 "时间戳同步：{ts}"，每跑必抖；
+    # 把这两行时间戳替换成占位再做比对，语义相等就跳过 write。
+    import re as _re
+    def _strip_ts(s: str) -> str:
+        s = _re.sub(r"自动生成于 [^\s·]+(?: [^\s·]+)?", "自动生成于 <TS>", s)
+        s = _re.sub(r"时间戳同步：[^\n]*", "时间戳同步：<TS>", s)
+        return s
+    will_write = True
+    if OUT.exists():
+        try:
+            old_text = OUT.read_text(encoding="utf-8")
+            if _strip_ts(old_text) == _strip_ts(new_text):
+                will_write = False
+        except OSError:
+            pass
+    if not will_write:
+        print(f"[幂等跳过 / idempotent skip — semantic equal]")
+    else:
+        OUT.write_text(new_text, encoding="utf-8")
+    # 末行保持稳定（full_audit.py / 其他 caller 可能用 stdout 末行作 summary）
     print(f"final_report → {OUT}")
     print(f"  9 表合计: {sum(nine_counts.values())} 行")
     print(f"  candidates: {total_packs} 个 ({cand_counts})")
