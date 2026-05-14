@@ -1,0 +1,19 @@
+{
+  "task_card": "KS-VECTOR-001",
+  "checked_at": "2026-05-14T08:18:13Z",
+  "env": "local",
+  "git_commit": "f318971e32e3064558fc4d6ebb49179c3275e8f9",
+  "evidence_level": "runtime_verified",
+  "mode": "rebuild",
+  "artifact_path": "knowledge_serving/vector_payloads/qdrant_chunks.jsonl",
+  "artifact_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
+  "artifact_byte_size": 11758478,
+  "rows": 498,
+  "embedding_model": "text-embedding-v3",
+  "embedding_model_version": "v3",
+  "embedding_dimension": 1024,
+  "index_version": "idx::mp_20260512_002::text-embedding-v3::v3::dim1024",
+  "embedding_api_call_count": 50,
+  "embedding_input_count": 498,
+  "evidence_note": "runtime_verified means this run called the configured embedding endpoint; dry_run_auxiliary is never production completion evidence"
+}
