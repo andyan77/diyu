@@ -1,7 +1,7 @@
 {
   "task_card": "KS-FIX-02",
   "corrects": "KS-DIFY-ECS-011",
-  "run_id": "ecs_mirror_push_20260514T030118Z",
+  "run_id": "ecs_mirror_push_20260514T032836Z",
   "mode": "dry_run",
   "env": "staging",
   "ecs_host": "8.217.175.36",
@@ -1806,6 +1806,6 @@
   "post_verify_rc": null,
   "status": "dry_run_strict_pass",
   "writes_clean_output": false,
-  "checked_at": "2026-05-14 03:01:21 UTC",
-  "git_commit": "1cc271502e3bddab75d13f0d68b1eb163ef46d49"
+  "checked_at": "2026-05-14 03:28:38 UTC",
+  "git_commit": "60b1988843d21cc5695b7ab981f0f84f62293912"
 }

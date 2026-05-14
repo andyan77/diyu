@@ -123,3 +123,12 @@ fail-closed:
 | B. KS-FIX-03 §8 指向不存在的 `knowledge_serving/scripts/ecs_mirror_verify.py`（creates 悬空） | §8 改回已存在的 `scripts/verify_ecs_mirror.py`；为它加 `--out / --fail-on-drift`（路径白名单守护）；删除 FIX-03 frontmatter 的 `creates:` 悬空声明 | `test_fix03_ci_command_runnable` PASS；`scripts/verify_ecs_mirror.py --out` 现支持落 canonical artifact |
 | C. validate_corrections 假绿（不拦"creates 悬空 + status==done"组合） | 加 C15 校验：`status: done` 时 declared `creates:` 与 `artifacts:` 必须真实存在 | 26 张卡 PASS，C15 已生效 |
 | D. KS-FIX-01 wrapper 复跑写脏 `clean_output/audit/qdrant_health_KS-S0-004.json` → FIX-02 前置反复失效 | `check_qdrant_health.py` 加 `_semantic_view` 幂等写入：剔除 `checked_at` / `git_commit` / per-probe `elapsed_ms` / `body_preview`（含 Qdrant per-request `time` 抖动），语义无变化跳过 write | `bash run_qdrant_health_check.sh` 复跑后 `git status` 空；`test_qdrant_health_idempotent_when_unchanged` PASS |
+
+## 15. 外审 CONDITIONAL_PASS 四轮收口 / external review round 4
+
+外审第 4 轮在第 3 轮基础上识别两个非阻断但必须收口的工程隐患：
+
+| 外审隐患 | 收口动作 | 实测证据 |
+|---|---|---|
+| E. pytest 网络不可达时硬失败（env 注入但 SSH 出网被阻断的沙箱里 `test_fix0{2,3}_ci_command_runnable` 直接 fail） | 加 `_ssh_reachable()` 轻量探针（5s ConnectTimeout BatchMode），SSH 不可达时把 integration 用例 skip，不硬失败；env-only 用例（dirty preflight）保持仅 env_ready 判据 | `ECS_HOST=192.0.2.1 pytest` → 4 passed, 3 skipped, 0 failed；`pytest` 含可达 SSH → 7/7 PASS |
+| F. 缺 "FIX-01 wrapper 复跑后 `clean_output/` 语义不漂移" 的回归用例 | 新增 `test_fix01_wrapper_semantic_pollution_only`：wrapper 现在用 `--force-write`（H4 双写契约需要 mtime 刷新），允许 mtime/timestamp 抖动，但坚持 wrapper 复跑后 `qdrant_health_KS-S0-004.json` 与 git HEAD 的**语义视图**（剥离 checked_at/git_commit/elapsed_ms/body_preview）必须完全相等；出现 http_code/overall/collections/version 真实漂移即 fail-closed | SSH 可达时 PASS；SSH 不可达时 skip |

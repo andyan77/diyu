@@ -1,5 +1,5 @@
 {
-  "run_id": "ecs_mirror_check_20260514T030121Z",
+  "run_id": "ecs_mirror_check_20260514T032838Z",
   "source_of_truth_direction": "local clean_output/ → ECS /data/clean_output/ (one-way mirror)",
   "ecs_host": "8.217.175.36",
   "ecs_remote_mirror_dir": "/data/clean_output",
