@@ -6,10 +6,8 @@ phase: Dify-ECS
 wave: W1
 depends_on: [KS-FIX-02]
 files_touched:
-  - knowledge_serving/scripts/ecs_mirror_verify.py
+  - scripts/verify_ecs_mirror.py
   - knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
-creates:
-  - knowledge_serving/scripts/ecs_mirror_verify.py
 artifacts:
   - knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
 status: not_started
@@ -55,19 +53,22 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: python3 knowledge_serving/scripts/ecs_mirror_verify.py --env staging --fail-on-drift --out knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
-pass:    drift_count == 0
-fail-closed: drift_count > 0 → exit 1；SSH/tunnel 不通 → exit 2
+command: source scripts/load_env.sh && python3 scripts/verify_ecs_mirror.py --env staging --dry-run --fail-on-drift --out knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
+pass:    drift_total == 0
+fail-closed:
+  - drift_total > 0 → exit 1
+  - SSH/tunnel 不通 / 缺 env → exit 2
+  - --env prod → exit 2
 ```
 
-> **接口契约 / interface contract**：本卡的 §files_touched 已声明 `knowledge_serving/scripts/ecs_mirror_verify.py` 是本卡产出的薄 wrapper。
-> 它包装 `scripts/verify_ecs_mirror.py`（已存在，跑 sha256 双 manifest 对账）：
-> - `--env {staging,prod}`：透传
-> - `--fail-on-drift`：drift_count != 0 时 exit 1（默认即此，flag 仅为可读性显式声明）
-> - `--out PATH`：把 canonical drift 报告写到指定路径（runtime_verified）
->
-> 历史接口漂移修正：早期草稿写成 `scripts/push_to_ecs_mirror.py --verify`，
-> 与 push 脚本实际能力不符；本卡显式纠回 wrapper 路径，与 §files_touched 一致。
+> **接口契约 / interface contract**：本卡直接复用已存在的 `scripts/verify_ecs_mirror.py`，
+> 不再创建薄 wrapper（早期草稿写 `knowledge_serving/scripts/ecs_mirror_verify.py` 是悬空 wrapper，
+> 外审第 3 轮指出"creates 文件不存在 → 卡片不可复跑"，本轮直接消除该悬空声明）。
+> 现存脚本的可用 flag：
+> - `--env {staging,prod}`：环境（prod 拒绝）
+> - `--dry-run`：不触发任何修复，仅生成 drift 报告（FIX-03 是 verify-only 卡）
+> - `--fail-on-drift`：drift_total != 0 时 exit 1（默认即此，flag 仅为可读性）
+> - `--out PATH`：把 canonical drift 报告复制到指定 audit 路径（KS-FIX-02 本轮新增，硬限定写入路径白名单）
 
 ## 9. CD / 环境验证
 - staging：ECS。

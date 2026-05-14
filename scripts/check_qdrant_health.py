@@ -184,12 +184,40 @@ def main() -> int:
         "probes": results,
         "fallback_signal": "structured_only" if not final_pass else "none",
     }
-    audit_path.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8")
+    # 幂等写入 / idempotent write（KS-FIX-02 外审第 3 轮收口 blocker D）：
+    # 如果磁盘上既有 audit 的语义字段（剥离 checked_at / git_commit / per-probe elapsed_ms）与本次相同，
+    # 跳过 write，避免 mirror drift 源头无意义重写 clean_output/。
+    def _semantic_view(a: dict) -> dict:
+        # 剥离非语义字段：checked_at / git_commit / per-probe elapsed_ms 与 body_preview。
+        # body_preview 含 Qdrant 内部 "time":4.385e-6 这种 per-request 抖动值，
+        # 不能作为"健康状态是否变化"的判据；http_code + ok + path 才是真信号。
+        v = {k: a[k] for k in a if k not in ("checked_at", "git_commit")}
+        v["probes"] = [
+            {k: p[k] for k in p if k not in ("elapsed_ms", "body_preview")}
+            for p in a.get("probes", [])
+        ]
+        return v
+
+    new_view = _semantic_view(audit)
+    will_write = True
+    if audit_path.exists():
+        try:
+            old = json.loads(audit_path.read_text(encoding="utf-8"))
+            if _semantic_view(old) == new_view:
+                will_write = False
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    if will_write:
+        audit_path.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8")
+        action = "落盘 / artifact"
+    else:
+        action = "幂等跳过 / idempotent skip (semantic fields unchanged)"
     try:
         rel = audit_path.relative_to(ROOT)
-        print(f"\n落盘 / artifact: {rel}")
+        print(f"\n{action}: {rel}")
     except ValueError:
-        print(f"\n落盘 / artifact: {audit_path}")
+        print(f"\n{action}: {audit_path}")
 
     if args.strict and not final_pass:
         return 1

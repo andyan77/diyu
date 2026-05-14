@@ -52,10 +52,17 @@ status: done
 
 ## 8. CI 门禁
 ```
-command: python3 scripts/push_to_ecs_mirror.py --dry-run --strict --manifest-out knowledge_serving/audit/ecs_mirror_dryrun_KS-FIX-02.json
+command: source scripts/load_env.sh && python3 scripts/push_to_ecs_mirror.py --env staging --dry-run --strict --manifest-out knowledge_serving/audit/ecs_mirror_dryrun_KS-FIX-02.json
 pass:    diff_count == 0
-fail-closed: dirty worktree → exit 2
+fail-closed:
+  - dirty clean_output/ → exit 2（preflight 拒绝）
+  - sha256 diff_count != 0 → exit 1（strict 拒绝）
+  - --env prod / 缺 env / 缺 SSH key → exit 2
 ```
+
+> **接口契约 / interface contract**：早期草稿漏写 `--env staging`，复跑会被 argparse `required=True` 拦下；
+> 本卡命令必须从干净 shell（`source scripts/load_env.sh` 先注入 ECS_HOST/USER/SSH_KEY_PATH）跑起，
+> 才符合 §4 步骤 1 的 E7 核验语义。
 
 ## 9. CD / 环境验证
 - staging：ECS 实例 `/data/clean_output/`。
@@ -102,6 +109,17 @@ fail-closed: dirty worktree → exit 2
 | C. 缺自动用例守住 fail-closed 语义（dirty / prod / 缺 args） | 新增 `knowledge_serving/tests/test_ecs_mirror_fail_closed.py` 3 个测试 | 3/3 PASS |
 
 **遗留长期风险（不阻 FIX-02 PASS，记入 FIX-25/26 范围）**：
-`scripts/check_qdrant_health.py` 等审计脚本每次跑都会更新 `clean_output/audit/*` 时间戳，让 ECS mirror 几小时就重新 drift。
-治本路径：审计输出移出 `clean_output/`，或加 idempotency（时间戳无变化时不重写）。
-本卡范围只验"脚本能力 + 流程闭环"，不解决 drift 源头。
+~~`scripts/check_qdrant_health.py` 等审计脚本每次跑都会更新 `clean_output/audit/*` 时间戳~~
+→ 已在外审第 3 轮 blocker D 收口：`check_qdrant_health.py` 加 `_semantic_view` 幂等写入，
+语义字段（http_code / ok / collections / version）无变化时跳过 write，clean_output 不再被无意义重写。
+
+## 14. 外审 RISKY 三轮收口 / external review round 3
+
+外审第 3 轮在第 2 轮基础上又指出四个阻断，逐项收口：
+
+| 外审阻断 | 收口动作 | 实测证据 |
+|---|---|---|
+| A. KS-FIX-02 §8 命令缺 `--env staging` + `source scripts/load_env.sh` → 复跑 exit 2 | 重写 §8 命令字面文本 | `test_fix02_ci_command_runnable` PASS |
+| B. KS-FIX-03 §8 指向不存在的 `knowledge_serving/scripts/ecs_mirror_verify.py`（creates 悬空） | §8 改回已存在的 `scripts/verify_ecs_mirror.py`；为它加 `--out / --fail-on-drift`（路径白名单守护）；删除 FIX-03 frontmatter 的 `creates:` 悬空声明 | `test_fix03_ci_command_runnable` PASS；`scripts/verify_ecs_mirror.py --out` 现支持落 canonical artifact |
+| C. validate_corrections 假绿（不拦"creates 悬空 + status==done"组合） | 加 C15 校验：`status: done` 时 declared `creates:` 与 `artifacts:` 必须真实存在 | 26 张卡 PASS，C15 已生效 |
+| D. KS-FIX-01 wrapper 复跑写脏 `clean_output/audit/qdrant_health_KS-S0-004.json` → FIX-02 前置反复失效 | `check_qdrant_health.py` 加 `_semantic_view` 幂等写入：剔除 `checked_at` / `git_commit` / per-probe `elapsed_ms` / `body_preview`（含 Qdrant per-request `time` 抖动），语义无变化跳过 write | `bash run_qdrant_health_check.sh` 复跑后 `git status` 空；`test_qdrant_health_idempotent_when_unchanged` PASS |

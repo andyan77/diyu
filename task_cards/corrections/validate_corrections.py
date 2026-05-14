@@ -19,6 +19,7 @@ task_cards/corrections 元校验器 / corrections self-validator
   C12 §4 第 1 步必须含 E7 旧快照核验（token `git status` / `git log`）
   C13 §11 DoD 必须含"原卡回写"动作（token `回写` 或 `原卡`）
   C14 26 张 corrects 集合 == 守护清单 26 项（防漏 / 防多）
+  C15 status==done 卡的 creates / artifacts 必须真实存在（防 done 假绿 + creates 悬空）
 
 退出码 0 = 全绿；非 0 = 至少一项失败。
 """
@@ -279,6 +280,18 @@ def main() -> int:
             or "KS-FIX-01" in deps or "KS-FIX-02" in deps or "KS-FIX-03" in deps
         ):
             fail(tid, "C12 §4 missing E7 baseline verification (git status / git log / E7 token) and no transitive baseline dep")
+
+        # C15 status==done → creates: 与 artifacts: 必须真实存在
+        # （外审第 3 轮收口：防"creates 悬空 + status 假绿"）
+        status = (fm.get("status") or "").strip()
+        if status == "done":
+            for c in declared_creates:
+                if not (REPO_ROOT / c).exists():
+                    fail(tid, f"C15 status=done 但 creates 路径不存在 / dangling create: {c!r}")
+            for art in fm.get("artifacts", []):
+                art_clean = str(art).strip().strip('"\' ')
+                if not (REPO_ROOT / art_clean).exists():
+                    fail(tid, f"C15 status=done 但 artifact 不存在 / missing artifact: {art_clean!r}")
 
         # C13 DoD writeback
         m11 = re.search(

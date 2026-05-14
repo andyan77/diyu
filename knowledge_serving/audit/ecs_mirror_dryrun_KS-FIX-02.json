@@ -1,8 +1,8 @@
 {
   "task_card": "KS-FIX-02",
   "corrects": "KS-DIFY-ECS-011",
-  "run_id": "ecs_mirror_push_20260514T024450Z",
-  "mode": "apply",
+  "run_id": "ecs_mirror_push_20260514T030118Z",
+  "mode": "dry_run",
   "env": "staging",
   "ecs_host": "8.217.175.36",
   "local_clean_output": "clean_output",
@@ -1799,13 +1799,13 @@
   },
   "rsync_preview_counts": {
     "add": 0,
-    "modify": 4,
+    "modify": 0,
     "delete": 0
   },
-  "backup_path": "/data/clean_output.bak_ecs_mirror_push_20260514T024450Z",
-  "post_verify_rc": 0,
-  "status": "apply_strict_pass",
+  "backup_path": null,
+  "post_verify_rc": null,
+  "status": "dry_run_strict_pass",
   "writes_clean_output": false,
-  "checked_at": "2026-05-14 02:44:58 UTC",
-  "git_commit": "c880943cd0495c93c2175616960cbf3a3ce077b9"
+  "checked_at": "2026-05-14 03:01:21 UTC",
+  "git_commit": "1cc271502e3bddab75d13f0d68b1eb163ef46d49"
 }

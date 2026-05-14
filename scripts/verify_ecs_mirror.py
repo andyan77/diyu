@@ -200,6 +200,11 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true",
                         help="只列两端文件计数与少量样本，不写完整 drift 报告（仍生成 _staging 目录与一个最小 stub）")
     parser.add_argument("--run-id", default=None, help="可选 / optional explicit run_id")
+    parser.add_argument("--out", default=None,
+                        help="KS-FIX-03：把 canonical drift 报告复制一份到指定路径（除 _staging 之外的稳定 audit 锚点）。"
+                             "路径必须落在 knowledge_serving/audit/ 下；不允许写 clean_output/。")
+    parser.add_argument("--fail-on-drift", action="store_true",
+                        help="显式声明 drift_total != 0 时 exit 1（默认即此，flag 仅用于卡片可读性）")
     args = parser.parse_args()
 
     if args.env == "prod":
@@ -231,6 +236,26 @@ def main() -> int:
 
     report = _write_report(staging_dir, env, local, ecs, drift, dry_run=args.dry_run)
     _ok(f"drift report: {report.relative_to(REPO_ROOT)}")
+
+    # KS-FIX-03：把 canonical 报告复制到 --out 指定的稳定 audit 路径
+    if args.out:
+        import shutil  # 局部 import，主路径不变
+        out_path = Path(args.out)
+        if not out_path.is_absolute():
+            out_path = REPO_ROOT / out_path
+        # 治理护栏 / governance guard：禁止写 clean_output 子树
+        if str(out_path.resolve()).startswith(str(LOCAL_CLEAN_OUTPUT.resolve())):
+            _die("--out 拒绝指向 clean_output/ 子树 / clean_output is SSOT, not audit sink.")
+        # 必须落在 knowledge_serving/audit/ 或 task_cards/corrections/audit/
+        allowed_roots = [
+            (REPO_ROOT / "knowledge_serving" / "audit").resolve(),
+            (REPO_ROOT / "task_cards" / "corrections" / "audit").resolve(),
+        ]
+        if not any(str(out_path.resolve()).startswith(str(r)) for r in allowed_roots):
+            _die(f"--out 路径不在允许的 audit 目录下 / illegal audit sink: {out_path}")
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(report, out_path)
+        _ok(f"canonical out: {out_path.relative_to(REPO_ROOT)}")
 
     if drift_total == 0:
         _ok("ECS 镜像与本地真源完全一致 / ECS mirror matches local SSOT exactly.")
