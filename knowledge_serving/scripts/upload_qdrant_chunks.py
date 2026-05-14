@@ -34,6 +34,7 @@ import argparse
 import hashlib
 import json
 import os
+import subprocess
 import sys
 import time
 import urllib.error
@@ -63,6 +64,14 @@ POINT_ID_NAMESPACE = uuid.UUID("6f9b0b54-1a3a-4e2a-9bd0-1d2b8b4f0e51")  # 固定
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _git_commit() -> str:
+    proc = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        capture_output=True, text=True, check=False,
+    )
+    return proc.stdout.strip() if proc.returncode == 0 else "unknown"
 
 
 def err(msg: str, code: int = 2):
@@ -336,10 +345,14 @@ def base_audit(policy: Dict[str, Any], stats: Dict[str, Any],
                collection_name: str, env: str, mode: str) -> Dict[str, Any]:
     chunks_bytes = CHUNKS_PATH.read_bytes()
     policy_bytes = POLICY_PATH.read_bytes()
+    checked_at = now_iso()
     return {
         "task_card": "KS-DIFY-ECS-004",
         "run_id": str(uuid.uuid4()),
-        "run_at": now_iso(),
+        "run_at": checked_at,
+        "checked_at": checked_at,
+        "git_commit": _git_commit(),
+        "evidence_level": "dry_run_auxiliary" if mode == "dry_run" else "runtime_verified",
         "env": env,
         "mode": mode,
         "model_policy_version": policy["model_policy_version"],
