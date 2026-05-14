@@ -3,7 +3,7 @@
 task_cards/corrections 元校验器 / corrections self-validator
 
 防"纠偏卡退化为旁挂规划卡"——堵守护意见的 5 个阻断口：
-  C1  26 张 FIX 覆盖完整（KS-FIX-01..26）+ 无缺失 / 无重复
+  C1  27 张 FIX 覆盖完整（KS-FIX-01..27）+ 无缺失 / 无重复
   C2  每张 FIX 11 节齐全且顺序正确
   C3  frontmatter 必填：task_id / corrects / severity / phase / wave / depends_on / status / files_touched / artifacts
   C4  corrects 字段指向 task_cards/ 下真实存在的原卡
@@ -36,7 +36,7 @@ ROOT = Path(__file__).parent
 TASK_CARDS_ROOT = ROOT.parent
 REPO_ROOT = TASK_CARDS_ROOT.parent
 
-EXPECTED_FIX_IDS = [f"KS-FIX-{i:02d}" for i in range(1, 27)]
+EXPECTED_FIX_IDS = [f"KS-FIX-{i:02d}" for i in range(1, 28)]
 
 EXPECTED_CORRECTS = {
     "KS-S0-004", "KS-SCHEMA-005", "KS-COMPILER-002", "KS-COMPILER-010",

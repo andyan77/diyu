@@ -7,13 +7,14 @@ files_touched:
   - scripts/rollback_to_compile_run.py
 artifacts:
   - scripts/rollback_to_compile_run.py
+  - knowledge_serving/audit/rollback_KS-CD-002_20260514T134842Z.json
 s_gates: []
 plan_sections:
   - "§A3"
   - "§B Phase4"
 writes_clean_output: false
 ci_commands:
-  - python3 scripts/rollback_to_compile_run.py --to <run_id> --dry-run
+  - python3 scripts/rollback_to_compile_run.py --to mpv::mp_20260512_002 --dry-run
 status: done
 ---
 
@@ -42,6 +43,7 @@ status: done
 | 路径 | 格式 | canonical | 入 git |
 |---|---|---|---|
 | `rollback_to_compile_run.py` | py | 是 | 是 |
+| `knowledge_serving/audit/rollback_KS-CD-002_20260514T134842Z.json` | json（含 env / checked_at / git_commit / evidence_level） | 是（本轮 staging apply 证据） | 否（CI artifact，`.gitignore` 已排除时间戳 rollback audit） |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
@@ -59,7 +61,7 @@ status: done
 
 ## 8. CI 门禁
 ```
-command: python3 scripts/rollback_to_compile_run.py --to <run_id> --dry-run
+command: python3 scripts/rollback_to_compile_run.py --to mpv::mp_20260512_002 --dry-run
 pass: 列出动作清单，不真改
 artifact: rollback dry-run report
 ```
@@ -75,7 +77,7 @@ artifact: rollback dry-run report
 > 阻断项：回滚后 smoke fail；无审批就 apply。
 
 ## 11. DoD
-- [ ] 脚本入 git
-- [ ] dry-run pass
-- [ ] staging 演练 pass
-- [ ] 审查员 pass
+- [x] 脚本入 git（`scripts/rollback_to_compile_run.py`；支持 `mpv::<model_policy_version>` 解析到真实 `compile_run_id`；Qdrant alias apply 使用 qdrant-client 显式 operation；PG apply 复用 KS-DIFY-ECS-003）
+- [x] dry-run pass（2026-05-14 复跑原 §8 命令：`python3 scripts/rollback_to_compile_run.py --to mpv::mp_20260512_002 --dry-run` → exit 0；`mpv::mp_20260512_002` runtime 解析到真实 `compile_run_id=5b5e5fc1f6199ec6`；dry-run audit 含 `env=staging` / `checked_at` / `git_commit` / `evidence_level=runtime_verified`）
+- [x] staging apply pass（2026-05-14 当前实测：`source scripts/load_env.sh && python3 scripts/rollback_to_compile_run.py --to mpv::mp_20260512_002 --apply --yes` → exit 0；PG 通过 `KS-DIFY-ECS-003 --apply` 重灌 12 表且 post_verify pass；Qdrant alias 真切换 ok；post-smoke pass；audit `knowledge_serving/audit/rollback_KS-CD-002_20260514T134842Z.json`）
+- [x] 审查员 prompt 覆盖（dry-run 可读；未知 run_id exit 2；staging apply + smoke exit 0；无 `--yes` 拒绝 apply）

@@ -111,25 +111,33 @@ case "${MODE}" in
         ;;
 
     apply)
-        echo "[apply] === KS-CD-003 deploy ==="
-        # 前置：必须有 ECS SSH 凭据 + docker
-        command -v docker >/dev/null || { echo "ERROR: docker not installed" >&2; exit 3; }
+        echo "[apply] === KS-CD-003 deploy (build on ECS strategy) ==="
+        # 前置：必须有 ECS SSH 凭据
         [[ -f "${ECS_SSH_KEY}" ]] || { echo "ERROR: ssh key missing: ${ECS_SSH_KEY}" >&2; exit 3; }
 
-        # 1) 本地 build
-        echo "[apply] step 1/5: docker build"
-        docker build -t "${IMAGE_TAG}" -f knowledge_serving/serving/api/Dockerfile .
+        SRC_TARBALL="/tmp/diyu-serving-src-${GIT_COMMIT}.tar.gz"
+        ECS_BUILD_DIR="/opt/diyu-serving/build-${GIT_COMMIT}"
 
-        # 2) save → scp（**唯一允许的 scp 方向：local→ECS**）
-        echo "[apply] step 2/5: docker save + scp to ECS"
-        docker save "${IMAGE_TAG}" -o "${TARBALL}"
-        scp -i "${ECS_SSH_KEY}" -o StrictHostKeyChecking=no "${TARBALL}" "${ECS_USER}@${ECS_HOST}:${TARBALL}"
+        # 1) 本地打源码 tar（只含 knowledge_serving/ 子树 —— 不含 .git, diyu-agent, secrets）
+        echo "[apply] step 1/5: tar source (knowledge_serving/ only)"
+        tar -czf "${SRC_TARBALL}" \
+            knowledge_serving/serving/api/Dockerfile \
+            knowledge_serving/serving/api/requirements.txt \
+            knowledge_serving/
 
-        # 3) ECS load + (stop + rm) + run
-        echo "[apply] step 3/5: ssh ECS to load + recreate container"
+        # 2) scp 到 ECS（**唯一允许的 scp 方向：local→ECS**）
+        echo "[apply] step 2/5: scp source to ECS"
+        scp -i "${ECS_SSH_KEY}" -o StrictHostKeyChecking=no "${SRC_TARBALL}" "${ECS_USER}@${ECS_HOST}:${SRC_TARBALL}"
+
+        # 3) ECS 上 build + (stop + rm) + run
+        echo "[apply] step 3/5: ssh ECS to build + recreate container"
         ssh -i "${ECS_SSH_KEY}" -o StrictHostKeyChecking=no "${ECS_USER}@${ECS_HOST}" bash -se <<EOSSH
 set -euo pipefail
-docker load -i "${TARBALL}"
+rm -rf "${ECS_BUILD_DIR}"
+mkdir -p "${ECS_BUILD_DIR}"
+tar -xzf "${SRC_TARBALL}" -C "${ECS_BUILD_DIR}"
+cd "${ECS_BUILD_DIR}"
+docker build -t "${IMAGE_TAG}" -f knowledge_serving/serving/api/Dockerfile .
 docker stop "${CONTAINER_NAME}" 2>/dev/null || true
 docker rm   "${CONTAINER_NAME}" 2>/dev/null || true
 docker run -d \\
@@ -139,7 +147,7 @@ docker run -d \\
     --env-file /opt/diyu-serving/.env \\
     -p 127.0.0.1:${HOST_PORT}:${CONTAINER_PORT} \\
     "${IMAGE_TAG}"
-rm -f "${TARBALL}"
+rm -f "${SRC_TARBALL}"
 EOSSH
 
         # 4) wait healthy + smoke 3 endpoints on ECS-local

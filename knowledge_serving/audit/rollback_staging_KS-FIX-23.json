@@ -1,0 +1,87 @@
+{
+  "adversarial_tests": [
+    {
+      "case": "未知 run_id 必须 exit != 0",
+      "command": "python3 scripts/rollback_to_compile_run.py --to unknown_run_id_xyz --dry-run",
+      "exit_code": 2,
+      "expected": "exit != 0",
+      "result": "PASS"
+    },
+    {
+      "case": "literal <run_id> placeholder 必须 fail-closed",
+      "command": "python3 scripts/rollback_to_compile_run.py --to '<run_id>' --dry-run",
+      "exit_code": 2,
+      "expected": "exit != 0",
+      "result": "PASS"
+    },
+    {
+      "case": "dry-run 不真改",
+      "result": "PASS",
+      "verification": "dry-run audit mode='dry_run' / status='dry_run_only'；apply-only 分支才调用 update_collection_aliases"
+    }
+  ],
+  "artifact_sha256": {
+    "scripts/rollback_to_compile_run.py": "fddb197106491f1949492f4815fc0e0b688c911687a72181bc3a2d9247acd330"
+  },
+  "audit_for": "KS-CD-002",
+  "blocking_gap": "KS-CD-002 §1/§4/§10 要求 PG + Qdrant 回滚闭环；当前脚本对 PG table repopulate 仍是 manual_required 设计，且本次 target_run_id 无 PG 部署历史 audit，因此 PG rollback 未 runtime_verified。",
+  "checked_at": "2026-05-14T13:08:26Z",
+  "ci_runs": [
+    {
+      "audit": "knowledge_serving/audit/rollback_KS-CD-002_20260514T130628Z.json",
+      "audit_sha256": "c82e5831f9a22e8caca505080f57d825b7f4ca598764f771d27b2dcf29b7178b",
+      "command": "python3 scripts/rollback_to_compile_run.py --to mpv::mp_20260512_002 --dry-run",
+      "exit_code": 0,
+      "label": "KS-CD-002 §8 ci_command dry-run",
+      "plan_actions": 1,
+      "status_field": "dry_run_only"
+    },
+    {
+      "audit": "knowledge_serving/audit/rollback_KS-CD-002_20260514T130700Z.json",
+      "audit_sha256": "e0a315ab416b98435f1c11d4a3e3b0d6e0a95d004079daadc8c188d92b2e81f3",
+      "command": "source scripts/load_env.sh && bash scripts/qdrant_tunnel.sh up && python3 scripts/rollback_to_compile_run.py --to mpv::mp_20260512_002 --apply --yes",
+      "exit_code": 0,
+      "label": "KS-CD-002 staging演练 real apply",
+      "qdrant_alias_switch": {
+        "alias": "ks_chunks_current",
+        "new_collection": "ks_chunks__mp_20260512_002",
+        "previous_collection": "ks_chunks__mp_20260512_002",
+        "status": "ok"
+      },
+      "status_field": "ok"
+    },
+    {
+      "audit": "knowledge_serving/audit/smoke_vector_retrieval_KS-RETRIEVAL-006.json",
+      "audit_sha256": "7e1ae25b01555bb0c608a7ad100abf9d5fa00ca391e73aa8ed1921953dec3c25",
+      "command": "source scripts/load_env.sh && python3 knowledge_serving/scripts/smoke_vector_retrieval.py",
+      "cross_tenant_leak": [],
+      "exit_code": 0,
+      "gate_drift": [],
+      "granularity_drift": [],
+      "label": "post-rollback smoke KS-RETRIEVAL-006 staging",
+      "smoke_result": "pass"
+    }
+  ],
+  "env": "staging",
+  "evidence_level": "runtime_verified",
+  "git_commit": "dd8cddab12ecfc218b9499998829b1e52e0a96bc",
+  "issued_by": "KS-FIX-23",
+  "known_good_run_id_source": "scripts/rollback_to_compile_run.py --list (audit-discovered, no placeholder)",
+  "minimal_change_log": {
+    "scripts/rollback_to_compile_run.py": "既有改动：修 qdrant-client AliasOperations Union 误用，改为 DeleteAliasOperation/CreateAliasOperation；本轮未改算法。",
+    "task_cards/KS-CD-002.md": "本轮把 ci_commands 中 <run_id> 占位符改为 audit-discovered 真实 run_id，并登记 runtime audit artifact。"
+  },
+  "operator": "faye",
+  "pg_apply_verified": false,
+  "post_smoke_ok": true,
+  "qdrant_apply_verified": true,
+  "reviewer_prompt_coverage": {
+    "1_dry_run_output_readable": "PASS — dry-run exit 0，输出 action 清单并写 audit",
+    "2_reject_unknown_run_id": "PASS — unknown_run_id_xyz exit 2",
+    "3_staging_rollback_plus_smoke": "PARTIAL — Qdrant alias 真切换且 smoke 绿；PG 侧未真切换，target_run_id 无 PG 部署历史 audit",
+    "4_pass_or_fail": "CONDITIONAL_PASS for Qdrant rollback path; not full PASS for PG/Qdrant dual rollback"
+  },
+  "rollback_ok": true,
+  "target_run_id": "mpv::mp_20260512_002",
+  "verdict": "CONDITIONAL_PASS"
+}

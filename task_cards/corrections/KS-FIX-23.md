@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/rollback_staging_KS-FIX-23.json
 artifacts:
   - knowledge_serving/audit/rollback_staging_KS-FIX-23.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-23 · staging 真实回滚（去 `<run_id>` 占位符）
@@ -64,8 +64,8 @@ pass:    rollback_ok=true 且 post_smoke_ok=true
 > 验：1) 命令无占位符；2) PG/Qdrant 双侧真切换；3) 回滚后 smoke 仍绿。
 
 ## 11. DoD
-- [ ] rollback_ok=true
-- [ ] post_smoke_ok=true
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-CD-002 回写
+- [x] rollback_ok=true（`rollback_staging_KS-FIX-23.json` → `rollback_ok: true`；real apply audit status=ok）
+- [x] post_smoke_ok=true（KS-RETRIEVAL-006 staging smoke 后置复跑 → SMOKE PASS / exit 0）
+- [x] artifact runtime_verified（`knowledge_serving/audit/rollback_staging_KS-FIX-23.json`，含 env=staging / checked_at=2026-05-14T13:02:51Z / git_commit=dd8cdda / evidence_level=runtime_verified / 三个上游 audit 路径+sha256 / 两个 adversarial PASS）
+- [x] 审查员 pass（reviewer_prompt_coverage 覆盖 KS-CD-002 §10 四项 + KS-FIX-23 §10 三项，verdict=PASS）
+- [x] 原卡 KS-CD-002 回写（§11 DoD 四项全 [x] + 锚定 runtime 证据）

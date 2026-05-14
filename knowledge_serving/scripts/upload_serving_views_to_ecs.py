@@ -50,6 +50,8 @@ AUDIT_DIR = REPO_ROOT / "knowledge_serving" / "audit"
 # 防止 CI dry-run 静默抹掉 prod apply 的可回放证据（governor finding 修复）。
 AUDIT_PATH_APPLY = AUDIT_DIR / "upload_views_KS-DIFY-ECS-003.json"          # 仅 --apply 写
 AUDIT_PATH_DRY_RUN = AUDIT_DIR / "upload_views_KS-DIFY-ECS-003.dry_run.json"  # 仅 --dry-run 写
+DEPLOY_LEDGER_PATH = AUDIT_DIR / "deploy_ledger.jsonl"  # KS-FIX-27 C1：append-only deploy 历史
+MODEL_POLICY_PATH = REPO_ROOT / "knowledge_serving" / "policies" / "model_policy.yaml"
 
 TARGET_SCHEMA = "serving"  # 新建；与 legacy knowledge.* 物理隔离
 PG_CONTAINER = "diyu-infra-postgres-1"
@@ -412,6 +414,19 @@ def main() -> int:
     run_id = str(uuid.uuid4())
     mode = "dry_run" if args.dry_run else "apply"
 
+    # KS-FIX-27 B1：--model-policy-version 省略时回退 model_policy.yaml canonical 值
+    # 目的：让 PG audit 和 Qdrant audit 通过 mpv 关联到同一 compile_run_id（rollback 联动）
+    resolved_mpv: Optional[str] = args.model_policy_version
+    if resolved_mpv is None and MODEL_POLICY_PATH.exists():
+        try:
+            import yaml as _yaml
+            _pol = _yaml.safe_load(MODEL_POLICY_PATH.read_text(encoding="utf-8")) or {}
+            mpv_fallback = _pol.get("model_policy_version")
+            if isinstance(mpv_fallback, str) and mpv_fallback.strip():
+                resolved_mpv = mpv_fallback.strip()
+        except Exception:
+            resolved_mpv = None
+
     checked_at = now_iso()
     audit: Dict[str, object] = {
         "task_card": "KS-DIFY-ECS-003",
@@ -439,7 +454,7 @@ def main() -> int:
         "ddl_byte_size": len(ddl_sql.encode("utf-8")),
         "ddl_sha256": hashlib.sha256(ddl_sql.encode("utf-8")).hexdigest(),
         "human_signoff": None,
-        "model_policy_version": args.model_policy_version,
+        "model_policy_version": resolved_mpv,
         "read_only_legacy_guarantee": "脚本拒绝任何引用 knowledge.* 的 SQL；只写 serving.*",
     }
 
@@ -496,9 +511,33 @@ def main() -> int:
         json.dumps(audit, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+
+    # KS-FIX-27 C1：post_verify pass 才追加 ledger；mpv 必须非空（fail-closed for AT-01）
+    if audit["post_verify_status"] == "pass":
+        if not resolved_mpv:
+            err("KS-FIX-27 AT-01：ledger 拒绝空 model_policy_version；显式给 --model-policy-version 或修 model_policy.yaml", code=2)
+        ledger_entry = {
+            "side": "pg",
+            "task_card": "KS-DIFY-ECS-003",
+            "env": args.env,
+            "compile_run_id": compile_run_id,
+            "model_policy_version": resolved_mpv,
+            "source_manifest_hash": manifest_hash,
+            "view_schema_version": view_schema_version,
+            "run_at": checked_at,
+            "git_commit": git_commit(),
+            "audit_path": str(AUDIT_PATH_APPLY.relative_to(REPO_ROOT)),
+            "table_count": len(inventory),
+            "view_tables": sorted(inventory.keys()),
+        }
+        with DEPLOY_LEDGER_PATH.open("a", encoding="utf-8") as fp:
+            fp.write(json.dumps(ledger_entry, ensure_ascii=False, sort_keys=True) + "\n")
+
     print(f"[apply] env={args.env} tables={len(inventory)} "
           f"post_verify={audit['post_verify_status']}")
     print(f"[apply] audit → {AUDIT_PATH_APPLY.relative_to(REPO_ROOT)}")
+    if audit["post_verify_status"] == "pass":
+        print(f"[apply] ledger → {DEPLOY_LEDGER_PATH.relative_to(REPO_ROOT)} (+1 entry)")
     return 0 if audit["post_verify_status"] == "pass" else 1
 
 

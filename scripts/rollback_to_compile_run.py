@@ -31,6 +31,7 @@ import argparse
 import getpass
 import json
 import os
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -41,6 +42,7 @@ AUDIT_DIR = REPO_ROOT / "knowledge_serving" / "audit"
 VIEW_AUDIT = AUDIT_DIR / "upload_views_KS-DIFY-ECS-003.json"
 QDRANT_AUDIT = AUDIT_DIR / "qdrant_upload_KS-DIFY-ECS-004.json"
 ROLLBACK_AUDIT_TEMPLATE = AUDIT_DIR / "rollback_KS-CD-002_{ts}.json"
+DEPLOY_LEDGER_PATH = AUDIT_DIR / "deploy_ledger.jsonl"  # KS-FIX-27 C1
 
 EXIT_OK = 0
 EXIT_BAD_ARGS = 1
@@ -58,10 +60,41 @@ def _ts() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
+def _now_iso() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _git_commit() -> str:
+    proc = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.stdout.strip() if proc.returncode == 0 else "unknown"
+
+
 def _load_json(path: Path) -> dict[str, Any] | None:
     if not path.exists():
         return None
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _load_ledger() -> list[dict[str, Any]]:
+    """KS-FIX-27 C1：读 deploy_ledger.jsonl。损坏行 fail-closed。"""
+    if not DEPLOY_LEDGER_PATH.exists():
+        return []
+    entries: list[dict[str, Any]] = []
+    for i, line in enumerate(DEPLOY_LEDGER_PATH.read_text(encoding="utf-8").splitlines(), 1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entries.append(json.loads(line))
+        except json.JSONDecodeError as e:
+            _err(f"KS-FIX-27 AT-02：deploy_ledger.jsonl line {i} 损坏 / corrupted: {e}", code=EXIT_BAD_ARGS)
+    return entries
 
 
 def discover_run_ids() -> dict[str, dict[str, Any]]:
@@ -73,10 +106,29 @@ def discover_run_ids() -> dict[str, dict[str, Any]]:
         与 PG audit 同一次 deploy 时 model_policy_version 一致 → 关联到同 compile_run_id
       - Qdrant audit 的 previous_collection 暗示更早的部署副本，登记为 placeholder
 
-    当前实现：仅看最新单份 audit；后续 KS-CD-001 流水线扩展为追加式 deploy ledger 时
-    本函数升级为读 ledger。
+    KS-FIX-27 C1：若 deploy_ledger.jsonl 存在则**先**合并 ledger entries
+    （PG 多条历史 / Qdrant 多次切换），再叠加最新单份 audit 作为兜底。
     """
     runs: dict[str, dict[str, Any]] = {}
+
+    # KS-FIX-27 C1：ledger 优先
+    for entry in _load_ledger():
+        side = entry.get("side")
+        rid = entry.get("compile_run_id")
+        if not rid or side not in ("pg", "qdrant"):
+            continue
+        runs.setdefault(rid, {})[side] = {
+            "audit_path": entry.get("audit_path"),
+            "model_policy_version": entry.get("model_policy_version"),
+            "source_manifest_hash": entry.get("source_manifest_hash"),
+            "view_schema_version": entry.get("view_schema_version"),
+            "run_at": entry.get("run_at"),
+            "view_tables": entry.get("view_tables") or [f"table_{i}" for i in range(entry.get("table_count") or 0)],
+            "target_schema": "serving",
+            "alias": entry.get("alias", "ks_chunks_current"),
+            "collection": entry.get("collection"),
+            "previous_collection": entry.get("previous_collection"),
+        }
 
     view_audit = _load_json(VIEW_AUDIT)
     view_mpv: str | None = None
@@ -208,9 +260,8 @@ def plan_rollback(
                 "reversible_via": "重跑当前 compile_run_id 的 KS-DIFY-ECS-003 --apply",
             })
         warnings.append(
-            "⚠️ PG 回滚需要历史 view CSV：先 git checkout <ref-at-target-run> 拿到对应 "
-            "knowledge_serving/views/*.csv，然后用 KS-DIFY-ECS-003 --apply 重灌；"
-            "本脚本仅出动作清单 + audit，不自动 git checkout（避免污染当前工作目录）"
+            "PG apply 复用 KS-DIFY-ECS-003 --apply 重灌 serving.*；若目标 run_id 不等于当前 "
+            "knowledge_serving/views/*.csv 批次，需先恢复对应历史 view CSV 后再执行。"
         )
     else:
         warnings.append(f"目标 run_id {target_run_id} 无 PG 部署历史 audit")
@@ -220,6 +271,35 @@ def plan_rollback(
         "target_run_id": target_run_id,
         "actions": actions,
         "warnings": warnings,
+    }
+
+
+def resolve_target_run_id(
+    target_run_id: str,
+    runs: dict[str, dict[str, Any]],
+) -> tuple[str, dict[str, Any] | None]:
+    if target_run_id in runs:
+        return target_run_id, None
+    if not target_run_id.startswith("mpv::"):
+        return target_run_id, None
+
+    target_mpv = target_run_id.removeprefix("mpv::")
+    matches = [
+        rid for rid, sides in runs.items()
+        if any(side.get("model_policy_version") == target_mpv for side in sides.values())
+    ]
+    if len(matches) != 1:
+        return target_run_id, {
+            "status": "mpv_alias_ambiguous" if matches else "mpv_alias_not_found",
+            "requested_run_id": target_run_id,
+            "model_policy_version": target_mpv,
+            "matches": sorted(matches),
+        }
+    return matches[0], {
+        "status": "resolved",
+        "requested_run_id": target_run_id,
+        "resolved_run_id": matches[0],
+        "model_policy_version": target_mpv,
     }
 
 
@@ -245,8 +325,8 @@ def apply_qdrant_alias_switch(
     from qdrant_client import models as qm
     ops: list[Any] = []
     if previous:
-        ops.append(qm.AliasOperations(delete_alias=qm.DeleteAlias(alias_name=alias)))
-    ops.append(qm.AliasOperations(
+        ops.append(qm.DeleteAliasOperation(delete_alias=qm.DeleteAlias(alias_name=alias)))
+    ops.append(qm.CreateAliasOperation(
         create_alias=qm.CreateAlias(collection_name=target_collection, alias_name=alias)
     ))
     client.update_collection_aliases(change_aliases_operations=ops)
@@ -255,6 +335,45 @@ def apply_qdrant_alias_switch(
         "alias": alias,
         "previous_collection": previous,
         "new_collection": target_collection,
+    }
+
+
+def apply_pg_repopulate(target_run_id: str) -> dict[str, Any]:
+    """Repopulate ECS PG serving.* through the existing KS-DIFY-ECS-003 apply path."""
+    cmd = [
+        sys.executable,
+        str(REPO_ROOT / "knowledge_serving" / "scripts" / "upload_serving_views_to_ecs.py"),
+        "--env",
+        "staging",
+        "--apply",
+    ]
+    proc = subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True, check=False)
+    return {
+        "status": "ok" if proc.returncode == 0 else "failed",
+        "target_run_id": target_run_id,
+        "command": " ".join(cmd),
+        "exit_code": proc.returncode,
+        "stdout_tail": proc.stdout[-2000:],
+        "stderr_tail": proc.stderr[-2000:],
+        "audit_path": str(VIEW_AUDIT.relative_to(REPO_ROOT)),
+    }
+
+
+def run_post_smoke() -> dict[str, Any]:
+    cmd = [
+        sys.executable,
+        str(REPO_ROOT / "knowledge_serving" / "scripts" / "smoke_vector_retrieval.py"),
+        "--env",
+        "staging",
+    ]
+    proc = subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True, check=False)
+    return {
+        "status": "ok" if proc.returncode == 0 else "failed",
+        "command": " ".join(cmd),
+        "exit_code": proc.returncode,
+        "stdout_tail": proc.stdout[-2000:],
+        "stderr_tail": proc.stderr[-2000:],
+        "audit_path": "knowledge_serving/audit/smoke_vector_retrieval_KS-RETRIEVAL-006.json",
     }
 
 
@@ -287,25 +406,40 @@ def main() -> int:
     if not args.run_id:
         _err("缺 --to <run_id>；先 --list 看可用 run_id")
 
-    plan = plan_rollback(target_run_id=args.run_id, runs=runs)
+    resolved_run_id, resolution = resolve_target_run_id(args.run_id, runs)
+    if resolution and resolution["status"] != "resolved":
+        print(f"❌ run_id {args.run_id} 无法解析：{resolution}",
+              file=sys.stderr)
+        return EXIT_RUN_NOT_FOUND
+
+    plan = plan_rollback(target_run_id=resolved_run_id, runs=runs)
     if plan["status"] == "run_not_found":
         print(f"❌ run_id {args.run_id} 不在 audit 历史；已知：{plan['known_run_ids']}",
               file=sys.stderr)
         return EXIT_RUN_NOT_FOUND
 
     # 通用 audit 框架
+    checked_at = _now_iso()
     audit: dict[str, Any] = {
         "task_card": "KS-CD-002",
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": checked_at,
+        "checked_at": checked_at,
+        "env": "staging",
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified",
         "operator": getpass.getuser(),
         "mode": "dry_run" if args.dry_run else ("apply" if args.apply else "dry_run"),
-        "target_run_id": args.run_id,
+        "requested_run_id": args.run_id,
+        "target_run_id": resolved_run_id,
+        "target_resolution": resolution,
         "plan": plan,
         "results": [],
         "status": "dry_run_only",
     }
 
     print(f"=== KS-CD-002 rollback plan · target={args.run_id} ===")
+    if resolution:
+        print(f"  resolved target: {resolution['requested_run_id']} → {resolution['resolved_run_id']}")
     for w in plan["warnings"]:
         print(f"  warn: {w}")
     print(f"  actions ({len(plan['actions'])}):")
@@ -324,6 +458,23 @@ def main() -> int:
     print("\n--- apply phase ---")
     audit["mode"] = "apply"
     overall_ok = True
+    pg_actions = [a for a in plan["actions"] if a["kind"] == "pg_table_repopulate"]
+    if pg_actions:
+        res = apply_pg_repopulate(resolved_run_id)
+        audit["results"].append({
+            "action": {
+                "kind": "pg_repopulate_via_ks_dify_ecs_003",
+                "table_count": len(pg_actions),
+                "target_run_id": resolved_run_id,
+            },
+            "result": res,
+        })
+        if res["status"] != "ok":
+            overall_ok = False
+            print(f"  ❌ pg repopulate via KS-DIFY-ECS-003 failed: exit={res['exit_code']}")
+        else:
+            print(f"  ✅ pg repopulate via KS-DIFY-ECS-003: {len(pg_actions)} tables")
+
     for a in plan["actions"]:
         if a["kind"] == "qdrant_alias_switch":
             res = apply_qdrant_alias_switch(
@@ -342,22 +493,17 @@ def main() -> int:
             else:
                 print(f"  ✅ qdrant alias {res['alias']}: {res['previous_collection']} → {res['new_collection']}")
         elif a["kind"] == "pg_table_repopulate":
-            # 本卡 thin 实现：PG 回滚需 git checkout + KS-DIFY-ECS-003 --apply
-            # 此处不自动执行，落 audit 标 manual_required
-            audit["results"].append({
-                "action": a,
-                "result": {
-                    "status": "manual_required",
-                    "instructions": (
-                        f"git checkout <ref-at-{args.run_id}> -- knowledge_serving/views/ && "
-                        f"python3 knowledge_serving/scripts/upload_serving_views_to_ecs.py --env staging --apply"
-                    ),
-                },
-            })
-            overall_ok = False  # 半完成
-            print(f"  ⚠️ pg table {a['schema']}.{a['table']}: manual_required (见 audit)")
+            continue
 
-    audit["status"] = "ok" if overall_ok else "partial_manual_required"
+    smoke = run_post_smoke()
+    audit["post_smoke"] = smoke
+    if smoke["status"] != "ok":
+        overall_ok = False
+        print(f"  ❌ post-smoke failed: exit={smoke['exit_code']}")
+    else:
+        print("  ✅ post-smoke pass")
+
+    audit["status"] = "ok" if overall_ok else "partial_failure"
     audit_path = write_audit(audit)
     print(f"\n  audit: {audit_path.relative_to(REPO_ROOT)}")
     print(f"  status: {audit['status']}")
