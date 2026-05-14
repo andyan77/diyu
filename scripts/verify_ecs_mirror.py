@@ -173,15 +173,33 @@ def _diff(local: dict[str, str], ecs: dict[str, str]) -> dict:
     }
 
 
-def _write_report(staging_dir: Path, env: dict, local: dict, ecs: dict, drift: dict, dry_run: bool) -> Path:
+def _git_commit() -> str:
+    try:
+        proc = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if proc.returncode == 0:
+            return proc.stdout.strip()
+    except Exception:
+        pass
+    return "unknown"
+
+
+def _write_report(staging_dir: Path, env: dict, env_name: str, local: dict, ecs: dict, drift: dict, dry_run: bool) -> Path:
+    drift_total = len(drift["only_local"]) + len(drift["only_ecs"]) + len(drift["hash_mismatch"])
     payload = {
         "run_id": staging_dir.name,
+        "checked_at": _dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "env": env_name,
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified" if drift_total == 0 else "runtime_verified_with_drift",
         "source_of_truth_direction": SSOT_DIRECTION_LITERAL,
         "ecs_host": env["ECS_HOST"],
         "ecs_remote_mirror_dir": ECS_REMOTE_MIRROR_DIR,
         "local_file_count": len(local),
         "ecs_file_count": len(ecs),
-        "drift_total": len(drift["only_local"]) + len(drift["only_ecs"]) + len(drift["hash_mismatch"]),
+        "drift_total": drift_total,
         "only_local": drift["only_local"],
         "only_ecs": drift["only_ecs"],
         "hash_mismatch": drift["hash_mismatch"],
@@ -234,7 +252,7 @@ def main() -> int:
     drift = _diff(local, ecs)
     drift_total = len(drift["only_local"]) + len(drift["only_ecs"]) + len(drift["hash_mismatch"])
 
-    report = _write_report(staging_dir, env, local, ecs, drift, dry_run=args.dry_run)
+    report = _write_report(staging_dir, env, args.env, local, ecs, drift, dry_run=args.dry_run)
     _ok(f"drift report: {report.relative_to(REPO_ROOT)}")
 
     # KS-FIX-03：把 canonical 报告复制到 --out 指定的稳定 audit 路径

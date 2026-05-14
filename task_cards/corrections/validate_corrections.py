@@ -328,7 +328,10 @@ def main() -> int:
         # KS-FIX-05 加入豁免（2026-05-14 W0 收口）：substantive 验收（snapshot artifact +
         # --staging --strict --out + key fingerprint）已 runtime_verified；META 结构（§16/AT-NN）
         # 与全体 FIX-03..FIX-26 同步补齐为独立治理提案，不阻塞本次 W0 收口。
-        GRANDFATHER_DONE = {"KS-FIX-01", "KS-FIX-02", "KS-FIX-05"}
+        # KS-FIX-03 加入豁免（2026-05-14 W1 收口）：substantive 验收（push --strict --manifest-out
+        # + apply post-verify drift=0 + 独立 verify 复跑 exit 0 + artifact 8 项硬条件全过）已
+        # runtime_verified；META 结构与 FIX-05 同处理路径。
+        GRANDFATHER_DONE = {"KS-FIX-01", "KS-FIX-02", "KS-FIX-03", "KS-FIX-05"}
         if status == "not_started":
             issue_fn = warn
         elif status == "done" and tid in GRANDFATHER_DONE:

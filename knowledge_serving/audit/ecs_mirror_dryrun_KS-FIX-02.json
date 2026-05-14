@@ -1,7 +1,7 @@
 {
   "task_card": "KS-FIX-02",
   "corrects": "KS-DIFY-ECS-011",
-  "run_id": "ecs_mirror_push_20260514T032836Z",
+  "run_id": "ecs_mirror_push_20260514T055943Z",
   "mode": "dry_run",
   "env": "staging",
   "ecs_host": "8.217.175.36",
@@ -593,7 +593,7 @@
       "audit/pack_layer_register.csv": "a14a33a8734da44afc5a34b9f26dac1e673add71cc91c8fee42504bfc10fd4bd",
       "audit/pack_review_must.csv": "e88af28fecdb2ebdce79e27040e3f3d9decec7bbdbf2e1703f6281fc2a894fc5",
       "audit/phase_a_review.md": "b223af9d3c3f15242456bdcbd72e32dce5a73e198ee1bd435955b32bac3ddf4a",
-      "audit/qdrant_health_KS-S0-004.json": "432979543587557ff0eb6f9db3bd6a1f2e0cd37e440cdbceaf71c56afdd79042",
+      "audit/qdrant_health_KS-S0-004.json": "8852c8c8eda8243e1f2de3c070808fd9c9742669795df3e149a821da7a5f3956",
       "audit/review_must.csv": "cdd545d677f4476fb498272241216ff48bdc5ad7be21dcb1cc2a2834a5bac90d",
       "audit/review_sample.csv": "797a0fbedff34aef9df3d5095130a2ebf5808e9696c6a651dedcc33eb5b67637",
       "audit/schema_extension_register.csv": "55ef2d218e6d8abbe9a5bd745a7f2f72a0b369cf9d881f1f716eb3b50ad8f64d",
@@ -861,7 +861,7 @@
       "scripts/dify_consume_demo.py": "ada12440bfc0d3f679401cae5938347a1dc6ede057f6b3b300ab879065e5fed8",
       "scripts/fix_register_csv.py": "49896a43a8e0d8a47d73dbd19c29f55d3e728a7d6fb4972c87d82fe89c6373d1",
       "scripts/freeze_snapshot_docs.py": "a722f6078caa702704aa97eed77a44a29ad10d894feab3c3e088dc6c0a4bb18d",
-      "scripts/full_audit.py": "78b459e98f0d49809b3d25264d3722dc4eee42fd74b3586d21b1fb03e6b0fce4",
+      "scripts/full_audit.py": "ac8000047aa9c0e14ba3ae7e5f0c0fe4a28565b56589f45757d3d5babda12b6c",
       "scripts/load_to_sqlite.py": "996a5d902beb13fdbc6fd16244c4aae7d0b98736d7c2181c5ca333d50a920c65",
       "scripts/merge_patches.py": "d767276828d6103ae45fdeb1b804302a990b12437f4207d4151a75a1e9671297",
       "scripts/parse_md_source_units.py": "b485c4f9d10c49e27b731248ae337bf0796fb49f04ab71d2acc157a0baf691ed",
@@ -869,7 +869,7 @@
       "scripts/patch_full.py": "45320d1a4c40d8b566cde6c181d8dd4bad2ba79d054e85c9a2aca45127d3fb2f",
       "scripts/project_w13a_packs_to_9tables.py": "7cc19dd4262eb840c15a76709c3c5c43a30b317b9972bb92bdcde4ce272db97b",
       "scripts/render_coverage_report.py": "fcc807e90b87860d235fad6c88c6c916761ee424bb185a7ef25edbe2a5f9a915",
-      "scripts/render_final_report.py": "32953844959e6c66da4094dde4a6c53ca93df55e53e429296d224adfdd1b4583",
+      "scripts/render_final_report.py": "9848802ca101ccbcda8dd517535906b405eb2ae0b49e0aaac00f18671473fe31",
       "scripts/repair_inference_level.py": "2650a94b486bc448b52f0afa8e7636ad681d1515df77ba9ac512bd5093442f29",
       "scripts/run_w10_adversarial_tests.py": "e31353f765917c364a8d6a8fbfbd140de8fb5ceec0368d425964a3d57e45d5eb",
       "scripts/run_w11_adversarial_tests.py": "f1c4e71c1fe2df1c0e221ba56997756c90f72ba442a1c1196e57a34b4f5a2fd8",
@@ -880,7 +880,7 @@
       "scripts/sqlite_demo.py": "7fb9695056f51a00eb05cba18189eea2108447cb704baff24a60ff375ded162b",
       "scripts/stage4_repair.py": "68c4da2af4c128285fc311652b0f997dc8c0fca6ad1b8cd057dc40a2599b7d70",
       "scripts/stage5_repair.py": "557f28f8f7df717a0f2ba7220ed579dd370a140004f647a6ba7d81b1686f0aa9",
-      "scripts/sync_task_cards_status.py": "b758f0fedf11b58cc4a00fa0397fa20b9cd392945fa7c66e20803a544e33fd70",
+      "scripts/sync_task_cards_status.py": "e7737c82f41e78fce6a96d7d0cb48215f349ba9a53ca4e1f01cca5ac5d4ecc53",
       "scripts/validate_csv_strict.py": "cd782210c8551971d23a98b04f8e244c4bb86378ae71d2b3113c8f055d09dfb0",
       "scripts/validate_register_enum.py": "c72748c881f8fc5d23141f59f37725d56fbda2acee9996193c87d35894647b09",
       "scripts/verify_anchor_quote_authenticity.py": "2e15636631d9719eb3d075998153833feaef5c690db12acc034463fc48b6a8c7",
@@ -1752,7 +1752,7 @@
       "scripts/dify_consume_demo.py": "ada12440bfc0d3f679401cae5938347a1dc6ede057f6b3b300ab879065e5fed8",
       "scripts/fix_register_csv.py": "49896a43a8e0d8a47d73dbd19c29f55d3e728a7d6fb4972c87d82fe89c6373d1",
       "scripts/freeze_snapshot_docs.py": "a722f6078caa702704aa97eed77a44a29ad10d894feab3c3e088dc6c0a4bb18d",
-      "scripts/full_audit.py": "78b459e98f0d49809b3d25264d3722dc4eee42fd74b3586d21b1fb03e6b0fce4",
+      "scripts/full_audit.py": "ac8000047aa9c0e14ba3ae7e5f0c0fe4a28565b56589f45757d3d5babda12b6c",
       "scripts/load_to_sqlite.py": "996a5d902beb13fdbc6fd16244c4aae7d0b98736d7c2181c5ca333d50a920c65",
       "scripts/merge_patches.py": "d767276828d6103ae45fdeb1b804302a990b12437f4207d4151a75a1e9671297",
       "scripts/parse_md_source_units.py": "b485c4f9d10c49e27b731248ae337bf0796fb49f04ab71d2acc157a0baf691ed",
@@ -1760,7 +1760,7 @@
       "scripts/patch_full.py": "45320d1a4c40d8b566cde6c181d8dd4bad2ba79d054e85c9a2aca45127d3fb2f",
       "scripts/project_w13a_packs_to_9tables.py": "7cc19dd4262eb840c15a76709c3c5c43a30b317b9972bb92bdcde4ce272db97b",
       "scripts/render_coverage_report.py": "fcc807e90b87860d235fad6c88c6c916761ee424bb185a7ef25edbe2a5f9a915",
-      "scripts/render_final_report.py": "32953844959e6c66da4094dde4a6c53ca93df55e53e429296d224adfdd1b4583",
+      "scripts/render_final_report.py": "9848802ca101ccbcda8dd517535906b405eb2ae0b49e0aaac00f18671473fe31",
       "scripts/repair_inference_level.py": "2650a94b486bc448b52f0afa8e7636ad681d1515df77ba9ac512bd5093442f29",
       "scripts/run_w10_adversarial_tests.py": "e31353f765917c364a8d6a8fbfbd140de8fb5ceec0368d425964a3d57e45d5eb",
       "scripts/run_w11_adversarial_tests.py": "f1c4e71c1fe2df1c0e221ba56997756c90f72ba442a1c1196e57a34b4f5a2fd8",
@@ -1771,7 +1771,7 @@
       "scripts/sqlite_demo.py": "7fb9695056f51a00eb05cba18189eea2108447cb704baff24a60ff375ded162b",
       "scripts/stage4_repair.py": "68c4da2af4c128285fc311652b0f997dc8c0fca6ad1b8cd057dc40a2599b7d70",
       "scripts/stage5_repair.py": "557f28f8f7df717a0f2ba7220ed579dd370a140004f647a6ba7d81b1686f0aa9",
-      "scripts/sync_task_cards_status.py": "b758f0fedf11b58cc4a00fa0397fa20b9cd392945fa7c66e20803a544e33fd70",
+      "scripts/sync_task_cards_status.py": "e7737c82f41e78fce6a96d7d0cb48215f349ba9a53ca4e1f01cca5ac5d4ecc53",
       "scripts/validate_csv_strict.py": "cd782210c8551971d23a98b04f8e244c4bb86378ae71d2b3113c8f055d09dfb0",
       "scripts/validate_register_enum.py": "c72748c881f8fc5d23141f59f37725d56fbda2acee9996193c87d35894647b09",
       "scripts/verify_anchor_quote_authenticity.py": "2e15636631d9719eb3d075998153833feaef5c690db12acc034463fc48b6a8c7",
@@ -1792,20 +1792,26 @@
     }
   },
   "diff": {
-    "diff_count": 0,
+    "diff_count": 1,
     "only_local": [],
     "only_ecs": [],
-    "hash_mismatch": []
+    "hash_mismatch": [
+      {
+        "path": "audit/qdrant_health_KS-S0-004.json",
+        "local_sha256": "8852c8c8eda8243e1f2de3c070808fd9c9742669795df3e149a821da7a5f3956",
+        "ecs_sha256": "432979543587557ff0eb6f9db3bd6a1f2e0cd37e440cdbceaf71c56afdd79042"
+      }
+    ]
   },
   "rsync_preview_counts": {
     "add": 0,
-    "modify": 0,
+    "modify": 1,
     "delete": 0
   },
   "backup_path": null,
   "post_verify_rc": null,
-  "status": "dry_run_strict_pass",
+  "status": "dry_run_strict_diff",
   "writes_clean_output": false,
-  "checked_at": "2026-05-14 03:28:38 UTC",
-  "git_commit": "60b1988843d21cc5695b7ab981f0f84f62293912"
+  "checked_at": "2026-05-14 05:59:47 UTC",
+  "git_commit": "22ea484033d19a24f17398529fa2b2083539c5a0"
 }

@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
 artifacts:
   - knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-03 · 消除 ECS 镜像 drift
@@ -78,7 +78,7 @@ fail-closed:
 > 验：1) ECS 与 local sha256 全等；2) drift 修复方向必须 local→ECS；3) 任一反向迁移须有 user signoff。
 
 ## 11. DoD
-- [ ] drift_count=0
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-DIFY-ECS-001 回写
+- [x] drift_count=0（2026-05-14：local 886 == ECS 886；only_local / only_ecs / hash_mismatch 全空）
+- [x] artifact runtime_verified（含 env=staging / checked_at / git_commit=22ea484 / evidence_level=runtime_verified）
+- [x] 审查员 pass（push 走 --strict --manifest-out 留证 + apply 后 post-verify drift=0 + 独立 verify 复跑 exit 0）
+- [x] 原卡 KS-DIFY-ECS-001 回写（原卡 §11 DoD 全 [x]，本卡修复后 ECS 镜像 verify 复跑 exit 0；方向 local→ECS 不变）
