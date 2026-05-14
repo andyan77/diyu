@@ -10,6 +10,7 @@ files_touched:
 artifacts:
   - knowledge_serving/serving/api/retrieve_context.py
   - knowledge_serving/serving/api/openapi.yaml
+  - knowledge_serving/audit/api_ecs_deployment_KS-FIX-16.json
 s_gates: []
 plan_sections:
   - "§5"
@@ -47,6 +48,7 @@ status: done
 | `retrieve_context.py` | py | 是 | 是 |
 | `openapi.yaml` | yaml | 是 | 是 |
 | `test_api.py` | py | 是 | 是 |
+| `knowledge_serving/audit/api_ecs_deployment_KS-FIX-16.json` | json（含 env / checked_at / git_commit / evidence_level） | 是（staging real HTTP 证据） | 是 |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
@@ -172,3 +174,12 @@ note: 仓库 / 本项目 venv 未在 PATH 暴露 `pytest` 入口，必须用 `py
 - 本卡只交付 HTTP wrapper + OpenAPI + 单元测试；不交付 Dify 节点（KS-DIFY-ECS-008）
 - live Qdrant 召回路径走 KS-DIFY-ECS-006 smoke；本 API 默认 structured_only
 - replay / 回放一致性 → KS-DIFY-ECS-010
+
+## 14. 2026-05-14 KS-FIX-16 real HTTP wire 补证
+
+- 原 §8 ci_command 复跑：`python3 -m pytest knowledge_serving/tests/test_api.py -v` → exit 0（15 passed）
+- ECS staging 部署状态：`diyu-serving` 容器 Up（healthy） / 容器 /healthz=200 / nginx 三条 location 已 include
+- **真 HTTP wire 测**：新增 `knowledge_serving/tests/test_api_real_http.py`（4 case：base_url 黑名单守门 / vector_res=None unguarded 源码扫描 / 5 distinct query × HTTPS POST → 全 200 + vector_meta.candidate_count>0 / ECS 容器 /healthz 真返 200）；`source scripts/load_env.sh && STAGING_API_BASE=https://kb.diyuai.cc python3 -m pytest knowledge_serving/tests/test_api_real_http.py -v` → exit 0（4 passed in 32.44s）
+- 公网 6 探针手工跑：6/6 HTTP 200，6/6 vector_mode=vector / candidate_count=2 / collection=ks_chunks_current
+- 上游回归：test_api.py 15 passed；validate_serving_tree OK（88 W3-12 白名单含新 test）
+- runtime envelope：`knowledge_serving/audit/api_ecs_deployment_KS-FIX-16.json`（env=staging / checked_at=2026-05-14T15:31:58Z / git_commit=4240cdd555d49c8220974d19efa9a9911a6e9498 / evidence_level=runtime_verified / verdict=PASS）

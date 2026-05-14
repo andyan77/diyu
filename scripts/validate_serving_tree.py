@@ -218,6 +218,7 @@ EXPECTED_FILES_W7 = {
 EXPECTED_FILES_W7_FIX = {
     "tests/test_retrieval_006_staging.py",   # KS-FIX-12 · API live vector 路径 staging e2e
     "tests/test_rollback_pg_drill_adversarial.py",   # KS-FIX-27 · KS-CD-002 PG-side rollback 真演练 AT-01..AT-04
+    "tests/test_api_real_http.py",   # KS-FIX-16 · KS-DIFY-ECS-007 ECS staging real HTTP wire
 }
 
 # W8 已落白名单 / W8-landed allowlist

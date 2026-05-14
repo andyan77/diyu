@@ -1,0 +1,101 @@
+{
+  "audit_for": "KS-DIFY-ECS-007",
+  "issued_by": "KS-FIX-16",
+  "env": "staging",
+  "checked_at": "2026-05-14T15:31:58Z",
+  "timestamp": "2026-05-14T15:31:58Z",
+  "git_commit": "4240cdd555d49c8220974d19efa9a9911a6e9498",
+  "evidence_level": "runtime_verified",
+  "operator": "faye",
+  "verdict": "PASS",
+  "primary_gate": {
+    "label": "KS-DIFY-ECS-007 §8 ci_command (official)",
+    "command": "python3 -m pytest knowledge_serving/tests/test_api.py -v",
+    "exit_code": 0,
+      "result": "15 passed / 0 failed / 0 skipped / 2 pydantic warnings (rerun 2026-05-14T15:31Z)"
+  },
+  "real_http_wire_drill": {
+    "label": "FIX-16 §1 strict closure：删 vector_res=None 兜底 + ECS staging 部署 + 真 HTTP 测",
+    "ecs_deployment": {
+      "public_url": "https://kb.diyuai.cc",
+      "container": "diyu-serving (docker, internal port 8000 → host 127.0.0.1:8005)",
+      "nginx_routes": ["/v1/retrieve_context", "/v1/guardrail", "/internal/context_bundle_log"],
+      "container_status": "Up 7 minutes (healthy)",
+      "container_healthz": "http://127.0.0.1:8005/healthz → 200 (via SSH from ECS_HOST=8.217.175.36)"
+    },
+    "real_http_probes": {
+      "command": "source scripts/load_env.sh && STAGING_API_BASE=https://kb.diyuai.cc python3 -m pytest knowledge_serving/tests/test_api_real_http.py -v",
+      "exit_code": 0,
+      "result": "4 passed in 32.44s (rerun 2026-05-14T15:31Z)",
+      "cases": {
+        "test_base_url_not_testclient": "PASS — base_url=https://kb.diyuai.cc 非 testserver/localhost/127.0.0.1",
+        "test_no_unguarded_vector_res_none_in_source": "PASS — vector_res=None 仅在 `if req.structured_only:` 显式开关分支",
+        "test_real_http_200_at_least_5": "PASS — 5 distinct queries × 真 HTTPS POST → 全部 200 + vector_meta.candidate_count=2 each",
+        "test_ecs_container_healthz_via_ssh": "PASS — 容器 /healthz 真返 200"
+      },
+      "manual_6_probe_run": {
+        "command": "python3 /tmp/fix16_real_http_probes.py",
+        "probes_total": 6,
+        "http_200": 6,
+        "vector_hits_gt_0": 6,
+        "all_via_public_https": true,
+        "request_ids": [
+          "req_api_20260514T151752Z_d53d0a1e",
+          "req_api_20260514T152015Z_2c3bcd0f",
+          "req_api_20260514T152034Z_b0420c98",
+          "req_api_20260514T152035Z_67d8661c",
+          "req_api_20260514T152046Z_575c9fb2"
+        ],
+        "vector_meta_consistent": "mode=vector / candidate_count=2 / collection_name=ks_chunks_current for all probes"
+      }
+    },
+    "vector_res_none_audit": {
+      "command": "grep -n 'vector_res = None' knowledge_serving/serving/api/retrieve_context.py",
+      "hits": 1,
+      "location": "line 302 (inside `if req.structured_only:` guard)",
+      "verdict": "ACCEPTABLE — 兜底已删除，仅保留 KS-FIX-12 §6 设计中的显式 opt-in 分支（请求显式 `structured_only=True` 时才跳过 vector）",
+      "static_test_anchor": "test_no_unguarded_vector_res_none_in_source PASS"
+    }
+  },
+  "adversarial_test_coverage": [
+    {"at": "KS-FIX-16 §6 row 1 — TestClient 冒充 → fail-closed",
+     "pytest": "test_base_url_not_testclient",
+     "verification": "base_url black-list: testserver / localhost / 127.0.0.1；https://kb.diyuai.cc 通过",
+     "result": "PASS"},
+    {"at": "KS-FIX-16 §6 row 2 — vector_res=None 仍存 → grep CI 拦下",
+     "pytest": "test_no_unguarded_vector_res_none_in_source",
+     "verification": "source grep + ±4 行窗口扫描 structured_only guard；唯一命中位于 line 302 受 req.structured_only 保护",
+     "result": "PASS"},
+    {"at": "KS-FIX-16 §6 row 3 — /healthz down → exit 1",
+     "pytest": "test_ecs_container_healthz_via_ssh",
+     "verification": "ssh ECS curl 容器 /healthz 必须返 200，否则 assertion fail",
+     "result": "PASS (返 200)"}
+  ],
+  "reviewer_prompt_coverage": {
+    "ks_dify_ecs_007_section_10": {
+      "1_openapi_no_brand_layer": "PASS — test_openapi_yaml_has_no_brand_layer_in_request_schema + test_runtime_openapi_excludes_brand_layer",
+      "2_brand_override_does_not_switch": "PASS — test_brand_override_in_user_query_does_not_switch_brand",
+      "3_pass_or_fail": "PASS"
+    },
+    "ks_fix_16_section_10": {
+      "1_base_url_真打_ECS": "PASS — STAGING_API_BASE=https://kb.diyuai.cc，DNS 解析到 ECS 公网；request_id 真实由 ECS 容器生成（前缀 req_api_20260514T1517-152046Z）",
+      "2_vector_res_None_0_unguarded_hit": "PASS — 唯一命中受 req.structured_only 保护",
+      "3_healthz_真返_200": "PASS — 容器 healthz=200 / docker status=healthy",
+      "4_ECS_进程_ps": "PASS — docker ps 显示 diyu-serving | Up 7 minutes (healthy)"
+    }
+  },
+  "upstream_downstream_runtime": [
+    {"label": "上游 KS-RETRIEVAL-009 / KS-FIX-15 vector path",
+     "command": "python3 -m pytest knowledge_serving/tests/test_api.py -q",
+     "exit_code": 0, "summary": "15 passed"},
+    {"label": "knowledge_serving 树健康",
+     "command": "python3 scripts/validate_serving_tree.py",
+     "exit_code": 0, "summary": "OK · 88 W3-12 / 8 W0-1 / 2 .gitkeep"}
+  ],
+  "artifact_sha256": {
+    "knowledge_serving/serving/api/retrieve_context.py": "a89943b84a2ddbb57eb33417776149b00a3ac70190986de2fdc57bd1be302bb2",
+    "knowledge_serving/tests/test_api.py": "9ac616c8d86c4b5734752aa8df7a99b0ab90c0cbe53c4e97e9bf3053b661a1de",
+    "knowledge_serving/tests/test_api_real_http.py": "421ddffb24a745fca5de5187cfb5f727271ac27acd7288ab956fd9aaeb0a93cc"
+  },
+  "outstanding_gap": "FIX-16 §5 创建 knowledge_serving/deploy/ecs_service.yaml 未实施 — ECS 部署由 KS-CD-003 (sidecar serving container) 完成，物理形态是 docker compose + ops/nginx/serving.location.conf，不是 yaml；scope 已由 KS-CD-003 接管，不在本卡最小改动范围内。"
+}
