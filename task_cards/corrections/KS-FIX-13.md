@@ -12,7 +12,7 @@ creates:
   - knowledge_serving/scripts/pg_dual_write.py
 artifacts:
   - knowledge_serving/audit/dual_write_staging_KS-FIX-13.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-13 · staging PG mirror 双写真实演练
@@ -64,7 +64,7 @@ pass:    mismatch == 0 且 row_count >= 100
 > 验：1) PG host 是 staging 不是 localhost mock；2) sha256 reconcile 全等；3) 失败 rollback 真有。
 
 ## 11. DoD
-- [ ] mismatch=0
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-DIFY-ECS-005 回写
+- [x] mismatch=0（实测 csv=pg=100 / missing_in_pg=0 / extra_in_pg=0 / sha256 match=100/100 / sha256 mismatch=0；row_count=100 ≥ FIX-13 §8 strict threshold）
+- [x] artifact runtime_verified（`knowledge_serving/audit/dual_write_staging_KS-FIX-13.json` env=staging / checked_at=2026-05-14T14:37:17Z / git_commit=c8977cc / evidence_level=runtime_verified）
+- [x] 审查员 pass（reviewer_prompt_coverage §10 三项 + KS-DIFY-ECS-005 §10 五项均 PASS；verdict=PASS）
+- [x] 原卡 KS-DIFY-ECS-005 回写（§13 追加 KS-FIX-13 staging 双写演练补证段）

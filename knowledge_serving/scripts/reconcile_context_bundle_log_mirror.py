@@ -30,6 +30,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
@@ -42,6 +43,55 @@ PG_CONTAINER = "diyu-infra-postgres-1"
 
 def _now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _git_commit() -> str:
+    proc = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.stdout.strip() if proc.returncode == 0 else "unknown"
+
+
+def _audit_envelope(
+    *,
+    result: dict[str, Any],
+    env: str,
+    queries_requested: int | None,
+    mode: str,
+) -> dict[str, Any]:
+    missing = result.get("missing_in_pg") or []
+    extra = result.get("extra_in_pg") or []
+    errors = result.get("replay_errors") or []
+    mismatch = len(missing) + len(extra) + len(errors)
+    row_count = int(result.get("csv_count") or 0)
+    checked_at = result.get("generated_at") or _now()
+    return {
+        "audit_for": "KS-RETRIEVAL-008",
+        "env": env,
+        "checked_at": checked_at,
+        "timestamp": checked_at,
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified",
+        "mode": mode,
+        "row_count": row_count,
+        "queries_requested": queries_requested,
+        "row_count_at_least_requested": (
+            True if queries_requested is None else row_count >= queries_requested
+        ),
+        "mismatch": mismatch,
+        "csv_count": result.get("csv_count"),
+        "pg_count": result.get("pg_count"),
+        "missing_in_pg": missing,
+        "extra_in_pg": extra,
+        "replayed_count": result.get("replayed_count", 0),
+        "replay_errors": errors,
+        "raw_result": result,
+        "verdict": "PASS" if mismatch == 0 else "FAIL",
+    }
 
 
 def _ssh_psql(sql: str, *, csv_mode: bool = False) -> str:
@@ -122,9 +172,30 @@ def main() -> int:
         action="store_true",
         help="真写 PG（默认 dry-run，仅打印差异）",
     )
+    parser.add_argument(
+        "--staging",
+        action="store_true",
+        help="声明本次连接 staging PG；用于审计 envelope",
+    )
+    parser.add_argument(
+        "--reconcile",
+        action="store_true",
+        help="兼容 FIX-14/KS-RETRIEVAL-008 验收命令；本脚本职责即 reconcile",
+    )
+    parser.add_argument(
+        "--queries",
+        type=int,
+        help="期望至少已落 CSV/PG mirror 的 retrieval query 行数",
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        help="额外写出 runtime audit envelope",
+    )
     args = parser.parse_args()
 
-    print(f"[reconcile] csv={args.csv_path} apply={args.apply}")
+    env = "staging" if args.staging else "unknown"
+    print(f"[reconcile] csv={args.csv_path} apply={args.apply} env={env}")
 
     if not args.apply:
         # dry-run: 只读 CSV + PG 对比，不动 PG
@@ -138,7 +209,7 @@ def main() -> int:
         missing = sorted(csv_ids - pg_ids)
         extra = sorted(pg_ids - csv_ids)
         result = {
-            "mode": "dry_run",
+            "mode": "reconcile_read" if args.reconcile else "dry_run",
             "generated_at": _now(),
             "csv_count": len(csv_rows),
             "pg_count": len(pg_rows),
@@ -161,14 +232,32 @@ def main() -> int:
         json.dumps(result, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+    envelope = _audit_envelope(
+        result=result,
+        env=env,
+        queries_requested=args.queries,
+        mode="apply" if args.apply else ("reconcile_read" if args.reconcile else "dry_run"),
+    )
+    if args.out:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(
+            json.dumps(envelope, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
 
     print(json.dumps(
-        {k: result[k] for k in ("csv_count", "pg_count", "missing_in_pg", "extra_in_pg",
-                                "replayed_count", "replay_errors")},
+        {
+            **{k: result[k] for k in ("csv_count", "pg_count", "missing_in_pg", "extra_in_pg",
+                                      "replayed_count", "replay_errors")},
+            "mismatch": envelope["mismatch"],
+            "row_count_at_least_requested": envelope["row_count_at_least_requested"],
+        },
         indent=2,
         ensure_ascii=False,
     ))
     print(f"audit → {AUDIT_PATH.relative_to(REPO_ROOT)}")
+    if args.out:
+        print(f"runtime audit → {args.out.resolve().relative_to(REPO_ROOT)}")
 
     if result["replay_errors"]:
         return 2

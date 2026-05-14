@@ -1,0 +1,43 @@
+{
+  "after": {
+    "common_count": 104,
+    "csv_count": 104,
+    "mismatch_request_ids": [],
+    "only_csv": 0,
+    "only_pg": 0,
+    "pg_count": 104,
+    "sha256_match": 104,
+    "sha256_mismatch": 0
+  },
+  "audit_for": "KS-DIFY-ECS-005",
+  "before": {
+    "common_count": 104,
+    "csv_count": 104,
+    "mismatch_request_ids": [],
+    "only_csv": 0,
+    "only_pg": 0,
+    "pg_count": 104,
+    "sha256_match": 104,
+    "sha256_mismatch": 0
+  },
+  "checked_at": "2026-05-14T14:44:49Z",
+  "env": "staging",
+  "evidence_level": "runtime_verified",
+  "git_commit": "c8977cc61544599445b0a76b85f8fb5b3b40154c",
+  "issued_by": "KS-FIX-13",
+  "mismatch": 0,
+  "mode": "strict_reconcile",
+  "reconcile": {
+    "skipped": true
+  },
+  "row_count": 104,
+  "staging_host_verification": {
+    "ECS_HOST": "8.217.175.36",
+    "ECS_SSH_KEY_PATH": "set",
+    "PG_DATABASE": "diyu_brand_faye",
+    "PG_USER": "set",
+    "transport": "SSH + docker exec psql"
+  },
+  "timestamp": "2026-05-14T14:44:49Z",
+  "verdict": "PASS"
+}

@@ -247,6 +247,7 @@ EXPECTED_FILES_W10 = {
     # 不入白名单（由下文 logs/*.log 排除规则放行）
     # KS-DIFY-ECS-005（commit fac113b）· context_bundle_log CSV+PG mirror 双写
     "scripts/reconcile_context_bundle_log_mirror.py",
+    "scripts/pg_dual_write.py",
     "tests/test_log_dual_write.py",
     # KS-PROD-003（commit 18d8ab8）· LLM assist 边界回归
     "tests/test_llm_assist_boundary.py",

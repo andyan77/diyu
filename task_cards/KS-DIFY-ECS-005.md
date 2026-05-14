@@ -5,9 +5,12 @@ wave: W10
 depends_on: [KS-DIFY-ECS-003, KS-RETRIEVAL-008]
 files_touched:
   - knowledge_serving/serving/log_writer.py
+  - knowledge_serving/scripts/pg_dual_write.py
   - knowledge_serving/tests/test_log_dual_write.py
 artifacts:
   - knowledge_serving/serving/log_writer.py
+  - knowledge_serving/scripts/pg_dual_write.py
+  - knowledge_serving/audit/dual_write_staging_KS-FIX-13.json
 s_gates: [S8]
 plan_sections:
   - "§4.5"
@@ -44,7 +47,9 @@ status: done
 | 路径 | 格式 | canonical | 入 git |
 |---|---|---|---|
 | `log_writer.py`（修改） | py | 是 | 是 |
+| `pg_dual_write.py` | py | 是 | 是 |
 | `test_log_dual_write.py` | py | 是 | 是 |
+| `knowledge_serving/audit/dual_write_staging_KS-FIX-13.json` | json（含 env / checked_at / timestamp / git_commit / evidence_level） | 是（staging dual-write runtime 证据） | 是 |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
@@ -133,3 +138,16 @@ artifact: pytest report
   部署阶段建表，不属本卡范围；当前 reconcile 脚本的 dry-run 模式可在表存在后立即跑通
 - `--live` reconcile 真实跑需要 `ECS_HOST` / `PG_USER` / `PG_DATABASE` / `ECS_SSH_KEY_PATH` env，
   与 KS-DIFY-ECS-003 同款约定，无新增 secrets
+
+## 13. 2026-05-14 KS-FIX-13 staging 双写演练补证
+
+- 原 §8 pytest 复跑：`python3 -m pytest knowledge_serving/tests/test_log_dual_write.py -v` → exit 0（11 passed，含 RFC4180 csv-newline + column-count drift fail-closed 用例）
+- staging 真实 dual-write drill：本轮 uvicorn /v1/retrieve_context POST × 34 distinct queries 全部 attempt-1 ok → canonical CSV 累计 100 行 → `reconcile_context_bundle_log_mirror.py --apply` replayed=34 / replay_errors=0 → post-verify csv=pg=100 / missing=0 / extra=0 / mismatch=0
+- **sha256 双侧逐行比对** (FIX-13 §1 strict)：对 100 行公共 request_id × 28 LOG_FIELDS canonical json sha256，CSV vs PG match=100 / mismatch=0 / exit 0
+- staging host 真值校验：ECS_HOST=8.217.175.36（公网 staging IP）；transport=_ssh_psql via SSH+docker exec psql，非 localhost mock
+- runtime envelope：`knowledge_serving/audit/dual_write_staging_KS-FIX-13.json`（env=staging / checked_at=2026-05-14T14:37:17Z / git_commit=c8977cc / evidence_level=runtime_verified / verdict=PASS）
+
+### 2026-05-14 本轮复跑收口
+
+- `source scripts/load_env.sh && python3 knowledge_serving/scripts/pg_dual_write.py --staging --reconcile --strict` → exit 0；row_count=104 / pg_count=104 / only_csv=0 / only_pg=0 / sha256_mismatch=0
+- runtime envelope 刷新：`knowledge_serving/audit/dual_write_staging_KS-FIX-13.json`（env=staging / checked_at=2026-05-14T14:44:49Z / timestamp=2026-05-14T14:44:49Z / git_commit=c8977cc61544599445b0a76b85f8fb5b3b40154c / evidence_level=runtime_verified / verdict=PASS）
