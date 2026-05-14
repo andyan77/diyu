@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/retrieval_008_staging_KS-FIX-14.json
 artifacts:
   - knowledge_serving/audit/retrieval_008_staging_KS-FIX-14.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-14 · staging PG mirror e2e bundle/log reconcile
@@ -60,7 +60,7 @@ pass:    row_count == 30 且 mismatch=0
 > 验：1) 30 条 query 真实落 PG；2) sha256 一致；3) host 是 staging。
 
 ## 11. DoD
-- [ ] 30 row + mismatch=0
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-RETRIEVAL-008 回写
+- [x] 30 row + mismatch=0（**严格口径补证 2026-05-14T14:19:13Z**：本轮新跑 30 distinct queries via uvicorn /v1/retrieve_context；30 个新 request_id 全部落 canonical CSV；reconcile --apply replayed=30 errors=0；post csv=pg=66 / mismatch=0；baseline 36 → +30）
+- [x] artifact runtime_verified（`knowledge_serving/audit/retrieval_008_staging_KS-FIX-14.json` 现 env=staging / checked_at=2026-05-14T14:19:13Z / git_commit=d0b9bcb / evidence_level=runtime_verified / 含 30 rid 完整清单）
+- [x] 审查员 pass（reviewer_prompt_coverage §10 三项 + KS-RETRIEVAL-008 §10 四项均 PASS；verdict=PASS）
+- [x] 原卡 KS-RETRIEVAL-008 回写（§12 实施记录追加 KS-FIX-14 staging mirror 闭环证据）

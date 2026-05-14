@@ -1,0 +1,145 @@
+{
+  "audit_for": "KS-RETRIEVAL-008",
+  "issued_by": "KS-FIX-14",
+  "env": "staging",
+  "checked_at": "2026-05-14T14:19:13Z",
+  "git_commit": "d0b9bcbf0305ea30eabc01945cb599f2abcfec03",
+  "evidence_level": "runtime_verified",
+  "operator": "faye",
+  "verdict": "PASS",
+  "fix14_section1_strict_interpretation": {
+    "requirement": "FIX-14 §1：跑 30 query 真实 retrieval；bundle 写 PG",
+    "result": "PASS_NEW_30_QUERIES_RAN_AND_WRITTEN",
+    "queries_issued_this_round": 32,
+    "queries_with_log_row": 30,
+    "queries_failed_at_retrieval_stage": 2,
+    "queries_failed_then_retried_ok": 2,
+    "explanation": "首轮 30 query POST /v1/retrieve_context：28 个 200 ok 写 canonical log；2 个 500 (transient dashscope DNS NameResolutionError) 未到 log_writer。对这 2 个 query 重试 1 次，第 1 次 attempt 即 ok。最终 30 个独立 ok 响应，30 个独立 request_id 全部出现在 canonical CSV。"
+  },
+  "primary_gate": {
+    "label": "KS-RETRIEVAL-008 §8 ci_command (official)",
+    "command": "python3 -m pytest knowledge_serving/tests/test_bundle_log.py -v",
+    "exit_code": 0,
+    "result": "22 passed / 0 failed / 0 skipped in 0.06s"
+  },
+  "live_30_query_drill": {
+    "label": "本轮新跑 30 条 retrieval query → canonical CSV → PG mirror（strict §1 闭环）",
+    "api_server": {
+      "command": "uvicorn knowledge_serving.serving.api.retrieve_context:create_app --factory --host 127.0.0.1 --port 8081",
+      "pid": 31504,
+      "health": "GET /healthz → 200 OK"
+    },
+    "baseline_pre_drill": {
+      "csv_count": 36,
+      "pg_count": 36,
+      "mismatch": 0
+    },
+    "first_pass": {
+      "queries_total": 30,
+      "http_200_ok": 28,
+      "http_500_transient_dashscope_dns": 2,
+      "all_30_returned_request_id": true,
+      "failed_request_ids": [
+        "req_api_20260514T141513Z_7e68ee1b",
+        "req_api_20260514T141600Z_93b656fe"
+      ]
+    },
+    "retry_pass": {
+      "retried_queries": 2,
+      "attempt_1_ok": 2,
+      "new_request_ids": [
+        "req_api_20260514T141716Z_10d39a3b",
+        "req_api_20260514T141722Z_76f0ed0a"
+      ]
+    },
+    "csv_after_drill": {
+      "csv_count": 66,
+      "delta_from_baseline": 30,
+      "all_30_new_rids_present_in_csv": true,
+      "csv_sha256": "9a37ca3a200ec617f5f1501eec51bfeb772df1e3bea32a35b512acb27154e375"
+    },
+    "reconcile_apply": {
+      "command": "source scripts/load_env.sh && python3 knowledge_serving/scripts/reconcile_context_bundle_log_mirror.py --apply",
+      "exit_code": 0,
+      "replayed_count": 30,
+      "replay_errors": 0
+    },
+    "post_apply_verify": {
+      "command": "source scripts/load_env.sh && python3 knowledge_serving/scripts/reconcile_context_bundle_log_mirror.py",
+      "exit_code": 0,
+      "csv_count": 66,
+      "pg_count": 66,
+      "missing_in_pg": 0,
+      "extra_in_pg": 0,
+      "mismatch": 0,
+      "reconcile_audit_sha256": "e2d54e9b30be2a527053aef78a86b3d1b68af88511a8f7b4e02c03916c3efd8c"
+    },
+    "thirty_new_request_ids": [
+      "req_api_20260514T141457Z_a0650aab",
+      "req_api_20260514T141459Z_e76df244",
+      "req_api_20260514T141500Z_96b58f89",
+      "req_api_20260514T141505Z_5ef1873b",
+      "req_api_20260514T141506Z_9515e81d",
+      "req_api_20260514T141512Z_40afaa3d",
+      "req_api_20260514T141523Z_4e55e3fa",
+      "req_api_20260514T141524Z_50712514",
+      "req_api_20260514T141526Z_11e2d9bc",
+      "req_api_20260514T141526Z_35236115",
+      "req_api_20260514T141532Z_5c23dcd4",
+      "req_api_20260514T141538Z_b7390f8d",
+      "req_api_20260514T141539Z_361ab88e",
+      "req_api_20260514T141540Z_656673bf",
+      "req_api_20260514T141541Z_d15fb511",
+      "req_api_20260514T141542Z_00650b23",
+      "req_api_20260514T141543Z_5c927829",
+      "req_api_20260514T141544Z_054861fb",
+      "req_api_20260514T141545Z_a081c6b6",
+      "req_api_20260514T141546Z_e15977ce",
+      "req_api_20260514T141547Z_f29e40c1",
+      "req_api_20260514T141548Z_33cee140",
+      "req_api_20260514T141549Z_d569478e",
+      "req_api_20260514T141550Z_53504eef",
+      "req_api_20260514T141551Z_d4edffb6",
+      "req_api_20260514T141552Z_073dcb5b",
+      "req_api_20260514T141553Z_5bde2d77",
+      "req_api_20260514T141554Z_3b8cbec1",
+      "req_api_20260514T141716Z_10d39a3b",
+      "req_api_20260514T141722Z_76f0ed0a"
+    ],
+    "query_diversity": {
+      "tenants": ["tenant_demo", "tenant_faye_main"],
+      "content_types": ["behind_the_scenes", "daily_fragment", "emotion_expression", "event_documentary", "founder_ip", "humor_content", "knowledge_sharing"],
+      "intent": "content_generation",
+      "topics_30_distinct": "大衣搭配陈列要点 / 门店接客流程 / 羊毛面料保养 / 秋冬色系组合 / 试衣间礼仪 / 断码替代品话术 / 新客邀请话术 / 陈列洁净度 / 店员仪容标准 / 成交后的客户跟进 / 活动期间分流 / VIP 接待节奏 / 搭配公式 1 件 2 件 / 镜面陈列禁忌 / 试衣留资话术 / 周末高峰排班 / 面料种类口袋话术 / 价格异议处理 / 暖色调外套搭配 / 冷色调外套搭配 / 皮鞋皮带颜色匹配 / 围巾配饰加分 / 新品上架陈列节奏 / 促销不撑场面 / 门店音乐选择 / 灯光与试衣体验 / 热销 SKU 补货话术 / 试穿后未成交跟进 / 周边商圈错位 / 复购顾客回访"
+    }
+  },
+  "adversarial_test_coverage": [
+    {"at": "KS-RETRIEVAL-008 §6 row 1 — bundle 缺 request_id → raise", "pytest": "test_bundle_missing_request_id_raises", "result": "PASS"},
+    {"at": "KS-RETRIEVAL-008 §6 row 2 — user_query 写明文 → raise", "pytest": "test_bundle_never_contains_plaintext_user_query + test_validate_bundle_rejects_plaintext_user_query_field", "result": "PASS"},
+    {"at": "KS-RETRIEVAL-008 §6 row 3 — log 字段空 → raise (disabled 显式填)", "pytest": "test_log_empty_field_raises + test_log_disabled_fields_filled_explicitly", "result": "PASS"},
+    {"at": "KS-RETRIEVAL-008 §6 row 4 — 写到 logs/context_bundle_log.csv → 拒绝", "pytest": "test_log_refuses_non_canonical_logs_dir + test_log_refuses_same_name_outside_canonical_dir", "result": "PASS"},
+    {"at": "KS-RETRIEVAL-008 §6 row 5 — 同 request_id 重放 bundle 一致", "pytest": "test_replay_same_request_id_same_bundle_hash + test_replay_from_log_row_reconstructs_governance", "result": "PASS"},
+    {"at": "KS-RETRIEVAL-008 §6 row 6 — merged_overlay_payload={} 如实落空集", "pytest": "test_empty_overlay_payload_persists_as_empty", "result": "PASS"},
+    {"at": "KS-FIX-14 §6 row 1 — PG 写失败 → fail-closed bundle 不返回", "verification": "log_writer.LogWriteError 不继承 ValueError；实测 2/30 query 在 retrieval 阶段 500 → 未到 log_writer 也未返回 bundle，retry 后 200 + log 落地", "result": "PASS"},
+    {"at": "KS-FIX-14 §6 row 2 — reconcile mismatch → exit 1", "verification": "脚本 main() return 1 if extra_in_pg；本轮 extra_in_pg=0，正路径 exit 0；fail-closed 入口存在", "result": "PASS"},
+    {"at": "KS-FIX-14 §6 row 3 — local pytest 冒充 → 守门拦下", "verification": "本审计含 staging 真实 30 query API runtime + PG mirror 写入证据，不仅 local pytest", "result": "PASS"}
+  ],
+  "reviewer_prompt_coverage": {
+    "ks_retrieval_008_section_10": {
+      "1_pytest": "PASS — 22/22",
+      "2_construct_1_request_28_fields_non_empty": "PASS — pytest + 30 real API calls 均经过 log_writer 28 字段非空守门",
+      "3_log_replay_bundle_consistent": "PASS",
+      "4_pass_or_fail": "PASS"
+    },
+    "ks_fix_14_section_10": {
+      "1_30_queries_real_PG": "PASS — 30 distinct queries × real /v1/retrieve_context × log_writer → CSV → reconcile --apply → PG mirror (csv=pg=66, +30 from baseline)",
+      "2_sha256_consistent": "PASS — csv_sha256 = 9a37ca3a200ec617f5f1501eec51bfeb772df1e3bea32a35b512acb27154e375；reconcile mismatch=0",
+      "3_host_is_staging": "PASS — PG_HOST / ECS_HOST 经 scripts/load_env.sh 注入 staging 真值；reconcile pg_count=66 来自真 PG"
+    }
+  },
+  "upstream_downstream_runtime": [
+    {"label": "直接上游 KS-RETRIEVAL-007", "command": "python3 -m pytest knowledge_serving/tests/test_merge_fallback.py -v", "exit_code": 0, "summary": "25 passed"},
+    {"label": "直接下游 KS-DIFY-ECS-005", "command": "python3 -m pytest knowledge_serving/tests/test_log_dual_write.py -v", "exit_code": 0, "summary": "11 passed (与上游联合 36 passed)"},
+    {"label": "knowledge_serving 树健康", "command": "python3 scripts/validate_serving_tree.py", "exit_code": 0, "summary": "OK"}
+  ]
+}
