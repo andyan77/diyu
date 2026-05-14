@@ -144,3 +144,22 @@ note: 命令自带 `source scripts/load_env.sh`；空白 shell 直跑会因缺 E
 - [x] 至少一次 `--apply` 实测：21 项 staging 漂移 → 0 项；落 push_audit.json；备份目录在 ECS 上可见
 - [x] push_audit.json 含 `partitions` 数组，且 `backup_only.consumable=false` 字面可见
 - [x] 审查员 pass
+
+## 12. 真实通过证据 / runtime pass evidence (KS-FIX-02 回写)
+
+| 项 | 值 |
+|---|---|
+| 复跑日期 | 2026-05-14 |
+| §8 ci_command 字面 | `bash -c 'source scripts/load_env.sh && python3 scripts/push_to_ecs_mirror.py --dry-run --env staging'` |
+| exit code | 0 |
+| run_id | `ecs_mirror_push_20260514T035550Z` |
+| preview.txt | `_staging/ecs_mirror_push/ecs_mirror_push_20260514T035550Z/preview.txt`（add=0/modify=0/delete=0） |
+| push_audit.json | `_staging/ecs_mirror_push/ecs_mirror_push_20260514T035550Z/push_audit.json` |
+| status | `dry_run_only` |
+| evidence_level | `runtime_verified`（本轮 KS-FIX-02 补齐 audit 必填字段） |
+| git_commit | `ab56447`（本轮 KS-FIX-02 补齐 audit 必填字段） |
+| partitions | 4 项齐：current_trusted_mirror / backup_only(consumable=false) / legacy_runtime_db(owned_by_card=KS-DIFY-ECS-002) / clean_vector_store |
+| §10 reviewer 7 项 | P1 exit 0 + audit 4 分区；P2 git diff clean_output/ 空；P3 反向 grep 0 命中；P4 --env prod 拒绝 exit 2；P5 partitions 字面合规；P6 secrets grep 0 命中；P7 pass |
+| §8 post_check | `git diff --stat clean_output/` 空；ECS `/data/clean_output` mtime `1778600438`（dry-run 未触改） |
+| 上游链路 / KS-DIFY-ECS-001 | `verify_ecs_mirror.py --env staging --dry-run` → exit 0, drift=0, local=886, ecs=886 |
+| 下游链路 / KS-FIX-03 §8 | `verify_ecs_mirror.py --env staging --dry-run --fail-on-drift --out ...` → exit 0, drift_total=0 |

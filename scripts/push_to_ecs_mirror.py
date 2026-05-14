@@ -219,6 +219,16 @@ def _build_partitions(backup_path: str | None, verify_rc: int | None) -> list[di
 def _write_audit(staging_dir: Path, env: dict, run_id: str, preview_text: str,
                  counts: dict, mode: str, backup_path: str | None,
                  verify_rc: int | None, status: str) -> Path:
+    # evidence_level / 证据等级：dry-run 完成、apply 后 post-verify drift=0 才算 runtime_verified；
+    # 失败状态降级为 fail_closed。仅在两类语义下声明 runtime_verified，避免假绿。
+    if status in ("dry_run_only", "success") or status.endswith("_strict_pass"):
+        evidence_level = "runtime_verified"
+    else:
+        evidence_level = "fail_closed"
+    git_commit_sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=str(REPO_ROOT),
+        capture_output=True, text=True,
+    ).stdout.strip() or None
     audit = {
         "task_card": "KS-DIFY-ECS-011",
         "run_id": run_id,
@@ -232,6 +242,8 @@ def _write_audit(staging_dir: Path, env: dict, run_id: str, preview_text: str,
         "backup_path": backup_path,
         "post_verify_rc": verify_rc,
         "status": status,
+        "evidence_level": evidence_level,
+        "git_commit": git_commit_sha,
         "rollback_command": (
             f"ssh {env['ECS_USER']}@{env['ECS_HOST']} 'rm -rf {ECS_REMOTE_MIRROR_DIR} && "
             f"mv {backup_path} {ECS_REMOTE_MIRROR_DIR}'"
