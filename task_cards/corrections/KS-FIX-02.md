@@ -74,13 +74,13 @@ fail-closed: dirty worktree → exit 2
 
 | 项 | 值 |
 |---|---|
-| run_id | `ecs_mirror_push_20260514T021522Z` |
+| run_id | `ecs_mirror_push_20260514T024450Z`（外审 RISKY 二轮收口后复跑） |
 | mode | `apply` |
 | status | `apply_strict_pass` |
 | diff_count | `0`（only_local=0 / only_ecs=0 / hash_mismatch=0） |
 | local files | 886 |
 | ecs files | 886 |
-| ECS 备份 | `/data/clean_output.bak_ecs_mirror_push_20260514T021522Z` |
+| ECS 备份 | `/data/clean_output.bak_ecs_mirror_push_20260514T024450Z`（前一份 bak_20260514T021522Z 保留） |
 | post_verify_rc | 0（verify_ecs_mirror.py 走完 drift=0） |
 | git_commit | `ce7afd1` |
 | audit artifact | `knowledge_serving/audit/ecs_mirror_dryrun_KS-FIX-02.json` |
@@ -90,3 +90,18 @@ fail-closed: dirty worktree → exit 2
 - dirty worktree（FIX-02 之前 11 处未提交改动）→ preflight 直接 exit 2 / refused；本卡先靠 `ce7afd1` 收口 worktree 才进入实跑路径。
 - dry-run strict @ 51 file lag → exit 1（实测：apply 前同一命令 fail-closed，符合 §6 期望）。
 - apply 后 sha256 双 manifest 完全一致 → 治理方向 local→ECS 单向 mirror 已 runtime_verified。
+
+## 13. 外审 RISKY 二轮收口 / external review round 2
+
+外审指出三个未达生产级 PASS 的阻断，已分别收口：
+
+| 外审阻断 | 收口动作 | 证据 |
+|---|---|---|
+| A. clean_output dirty + ECS drift=2（audit_status.json / task_cards.md / final_report.md 时间戳漂移） | `c880943` commit 时间戳刷新 + re-apply mirror（run_id `20260514T024450Z`） | local=886 / ecs=886 / diff_count=0 |
+| B. KS-FIX-03 §8 命令 `push_to_ecs_mirror.py --verify --fail-on-drift --out` 不可运行（脚本无此 flag） | KS-FIX-03 §8 改为调本卡 §files_touched 已声明的 wrapper `knowledge_serving/scripts/ecs_mirror_verify.py`，frontmatter 加 `creates:` 显式登记 | KS-FIX-03.md §8 |
+| C. 缺自动用例守住 fail-closed 语义（dirty / prod / 缺 args） | 新增 `knowledge_serving/tests/test_ecs_mirror_fail_closed.py` 3 个测试 | 3/3 PASS |
+
+**遗留长期风险（不阻 FIX-02 PASS，记入 FIX-25/26 范围）**：
+`scripts/check_qdrant_health.py` 等审计脚本每次跑都会更新 `clean_output/audit/*` 时间戳，让 ECS mirror 几小时就重新 drift。
+治本路径：审计输出移出 `clean_output/`，或加 idempotency（时间戳无变化时不重写）。
+本卡范围只验"脚本能力 + 流程闭环"，不解决 drift 源头。

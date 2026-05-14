@@ -8,6 +8,8 @@ depends_on: [KS-FIX-02]
 files_touched:
   - knowledge_serving/scripts/ecs_mirror_verify.py
   - knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
+creates:
+  - knowledge_serving/scripts/ecs_mirror_verify.py
 artifacts:
   - knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
 status: not_started
@@ -53,9 +55,19 @@ status: not_started
 
 ## 8. CI 门禁
 ```
-command: python3 scripts/push_to_ecs_mirror.py --verify --fail-on-drift --out knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
+command: python3 knowledge_serving/scripts/ecs_mirror_verify.py --env staging --fail-on-drift --out knowledge_serving/audit/ecs_mirror_verify_KS-FIX-03.json
 pass:    drift_count == 0
+fail-closed: drift_count > 0 → exit 1；SSH/tunnel 不通 → exit 2
 ```
+
+> **接口契约 / interface contract**：本卡的 §files_touched 已声明 `knowledge_serving/scripts/ecs_mirror_verify.py` 是本卡产出的薄 wrapper。
+> 它包装 `scripts/verify_ecs_mirror.py`（已存在，跑 sha256 双 manifest 对账）：
+> - `--env {staging,prod}`：透传
+> - `--fail-on-drift`：drift_count != 0 时 exit 1（默认即此，flag 仅为可读性显式声明）
+> - `--out PATH`：把 canonical drift 报告写到指定路径（runtime_verified）
+>
+> 历史接口漂移修正：早期草稿写成 `scripts/push_to_ecs_mirror.py --verify`，
+> 与 push 脚本实际能力不符；本卡显式纠回 wrapper 路径，与 §files_touched 一致。
 
 ## 9. CD / 环境验证
 - staging：ECS。
