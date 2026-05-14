@@ -67,8 +67,8 @@ status: done
 | 路径 | 格式 | canonical | 入 git | CI artifact |
 |---|---|---|---|---|
 | `knowledge_serving/scripts/upload_serving_views_to_ecs.py` | py | 是 | 是 | — |
-| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json` | json | 是（**仅 apply 写**的可回放证据） | 是 | 是 |
-| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.dry_run.json` | json | 是（**仅 dry-run 写**的 sidecar，永不覆盖 apply 证据） | 是 | 是 |
+| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json` | json（含 env / checked_at / git_commit / evidence_level） | 是（**仅 apply 写**的可回放证据） | 是 | 是 |
+| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.dry_run.json` | json（含 env / checked_at / git_commit / evidence_level，辅助证据） | 是（**仅 dry-run 写**的 sidecar，永不覆盖 apply 证据） | 是 | 是 |
 | `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.ddl.sql` | sql | 是（dry-run 副产） | 是 | 是 |
 
 ## 6. 对抗性 / 边缘性测试
@@ -142,7 +142,7 @@ artifact: knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json
 - [x] KS-COMPILER-013 前置门禁负样本（report 缺失 / 任一 S 门 fail / CSV compile_run_id 漂移 / source_manifest_hash 漂移）全部 fail-closed
 - [x] CSV 治理三联缺列负样本（删 `pack_view.compile_run_id` 实测）fail-closed
 - [x] `knowledge.*` 拦截负样本 fail-closed
-- [x] staging apply pass — 2026-05-13 实测：`--env staging --apply` exit 0；`post_verify_status=pass`；12/12 表行数对齐（pack=201 / ct=18 / recipe=18 / play=29 / runtime=24 / overlay=7 / evidence=201 / tenant=2 / frm=19 / retrieval=18 / merge=8 / bundle_log=0）
+- [x] staging apply pass — 2026-05-14 实测：`--env staging --apply` exit 0；`post_verify_status=pass`；`evidence_level=runtime_verified`；audit 含 `env=staging` / `checked_at=2026-05-14T07:16:16Z` / `git_commit=a2f7416d78f7a9b579c284f710f2660022f324eb`；12/12 表行数对齐（pack=201 / ct=18 / recipe=18 / play=29 / runtime=24 / overlay=7 / evidence=201 / tenant=2 / frm=19 / retrieval=18 / merge=8 / bundle_log=12）
 - [x] prod apply pass — 2026-05-13 实测：`--env prod --apply --signoff faye --model-policy-version mp_20260512_002` exit 0；`post_verify_status=pass`；audit 双签落 `human_signoff={signed_by:faye, signed_at:2026-05-12T18:27:13Z}` + `model_policy_version=mp_20260512_002`；prod 闸门 negative 路径（缺 signoff / 缺 model_policy_version）已在前轮 fail-closed 实测
 - [x] ECS 端独立旁路验证 — `pg_class` + `obj_description` 直接回读，12 张表 `COMMENT ON TABLE` 全部含 `compile_run_id=5b5e5fc1f6199ec6;source_manifest_hash=b3967bca…adfc2;view_schema_version=3c0863a75967;task_card=KS-DIFY-ECS-003`
 - [x] 审查员 finding 1/2/3 全部闭环（治理列硬门 / spec 对齐 4 policy 表口径 / 状态收口）

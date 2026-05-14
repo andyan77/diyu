@@ -273,6 +273,7 @@ CREATE TABLE IF NOT EXISTS serving.context_bundle_log (
   rerank_model_version TEXT,
   llm_assist_model TEXT,
   model_policy_version TEXT,
-  created_at TEXT
+  created_at TEXT,
+  context_bundle_json TEXT
 );
 COMMENT ON TABLE serving.context_bundle_log IS E'compile_run_id=5b5e5fc1f6199ec6;source_manifest_hash=b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2;view_schema_version=3c0863a75967;task_card=KS-DIFY-ECS-003';

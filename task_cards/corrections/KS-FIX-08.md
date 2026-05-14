@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/pg_apply_KS-FIX-08.json
 artifacts:
   - knowledge_serving/audit/pg_apply_KS-FIX-08.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-08 · staging --apply 真实灌 serving.* PG

@@ -1,9 +1,12 @@
 {
   "task_card": "KS-DIFY-ECS-003",
-  "run_id": "d5415636-3263-45ab-9ecd-828ab7ba4858",
-  "run_at": "2026-05-13T01:22:34Z",
+  "run_id": "0d35132c-76ef-481d-9b96-345b68322fcc",
+  "run_at": "2026-05-14T07:26:30Z",
+  "checked_at": "2026-05-14T07:26:30Z",
+  "git_commit": "a2f7416d78f7a9b579c284f710f2660022f324eb",
   "env": "staging",
   "mode": "dry_run",
+  "evidence_level": "dry_run_verified_auxiliary",
   "target_schema": "serving",
   "partition_reference": "KS-DIFY-ECS-011 §0.1 row 3→new serving.* (NOT legacy knowledge.*)",
   "prerequisite_gate": {
@@ -36,11 +39,11 @@
     "serving.field_requirement_matrix": 19,
     "serving.retrieval_policy_view": 18,
     "serving.merge_precedence_policy": 8,
-    "serving.context_bundle_log": 0
+    "serving.context_bundle_log": 16
   },
   "ddl_table_count": 12,
-  "ddl_byte_size": 8994,
-  "ddl_sha256": "4b0f9ea236991c4d918ff7782b40385b54a7b4fe6493cbc902f4d677e1bbf441",
+  "ddl_byte_size": 9022,
+  "ddl_sha256": "90045aa669ed65a1fa65ea7538bb5d79b2173c7dd782ae0c493ea3eb954eeffc",
   "human_signoff": null,
   "model_policy_version": null,
   "read_only_legacy_guarantee": "脚本拒绝任何引用 knowledge.* 的 SQL；只写 serving.*",

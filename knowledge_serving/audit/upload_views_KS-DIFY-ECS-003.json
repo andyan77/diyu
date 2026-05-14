@@ -1,9 +1,12 @@
 {
   "task_card": "KS-DIFY-ECS-003",
-  "run_id": "b3a15813-b4c9-44bd-8d59-e7ad093d4704",
-  "run_at": "2026-05-12T18:27:13Z",
-  "env": "prod",
+  "run_id": "efb5d351-37c2-47f1-b674-f3725f41edaf",
+  "run_at": "2026-05-14T07:16:16Z",
+  "checked_at": "2026-05-14T07:16:16Z",
+  "git_commit": "a2f7416d78f7a9b579c284f710f2660022f324eb",
+  "env": "staging",
   "mode": "apply",
+  "evidence_level": "runtime_verified",
   "target_schema": "serving",
   "partition_reference": "KS-DIFY-ECS-011 §0.1 row 3→new serving.* (NOT legacy knowledge.*)",
   "prerequisite_gate": {
@@ -36,16 +39,13 @@
     "serving.field_requirement_matrix": 19,
     "serving.retrieval_policy_view": 18,
     "serving.merge_precedence_policy": 8,
-    "serving.context_bundle_log": 0
+    "serving.context_bundle_log": 12
   },
   "ddl_table_count": 12,
-  "ddl_byte_size": 8994,
-  "ddl_sha256": "4b0f9ea236991c4d918ff7782b40385b54a7b4fe6493cbc902f4d677e1bbf441",
-  "human_signoff": {
-    "signed_by": "faye",
-    "signed_at": "2026-05-12T18:27:13Z"
-  },
-  "model_policy_version": "mp_20260512_002",
+  "ddl_byte_size": 9022,
+  "ddl_sha256": "90045aa669ed65a1fa65ea7538bb5d79b2173c7dd782ae0c493ea3eb954eeffc",
+  "human_signoff": null,
+  "model_policy_version": null,
   "read_only_legacy_guarantee": "脚本拒绝任何引用 knowledge.* 的 SQL；只写 serving.*",
   "post_verify": {
     "serving.pack_view": {
@@ -93,8 +93,8 @@
       "actual": 8
     },
     "serving.context_bundle_log": {
-      "expected": 0,
-      "actual": 0
+      "expected": 12,
+      "actual": 12
     }
   },
   "post_verify_status": "pass"

@@ -101,6 +101,17 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def git_commit() -> str:
+    proc = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.stdout.strip() if proc.returncode == 0 else "unknown"
+
+
 def err(msg: str, code: int = 2):
     print(f"[ERROR] {msg}", file=sys.stderr)
     sys.exit(code)
@@ -401,12 +412,16 @@ def main() -> int:
     run_id = str(uuid.uuid4())
     mode = "dry_run" if args.dry_run else "apply"
 
+    checked_at = now_iso()
     audit: Dict[str, object] = {
         "task_card": "KS-DIFY-ECS-003",
         "run_id": run_id,
-        "run_at": now_iso(),
+        "run_at": checked_at,
+        "checked_at": checked_at,
+        "git_commit": git_commit(),
         "env": args.env,
         "mode": mode,
+        "evidence_level": "dry_run_verified_auxiliary" if args.dry_run else "runtime_verified",
         "target_schema": TARGET_SCHEMA,
         "partition_reference": "KS-DIFY-ECS-011 §0.1 row 3→new serving.* (NOT legacy knowledge.*)",
         "prerequisite_gate": {
