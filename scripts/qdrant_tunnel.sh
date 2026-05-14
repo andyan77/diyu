@@ -34,10 +34,10 @@ case "${1:-status}" in
     fi
     # 起 + 最多 retry 一次（IPv6 双栈 / 残留 socket / WSL2 网络栈瞬时抖动）
     attempt_tunnel() {
-      ssh -i "$ECS_SSH_KEY_PATH" -N -L "127.0.0.1:${LOCAL_PORT}:127.0.0.1:${REMOTE_PORT}" \
+      nohup ssh -i "$ECS_SSH_KEY_PATH" -N -L "127.0.0.1:${LOCAL_PORT}:127.0.0.1:${REMOTE_PORT}" \
           -o ExitOnForwardFailure=yes -o ServerAliveInterval=60 \
           -o AddressFamily=inet \
-          "$ECS_USER@$ECS_HOST" &
+          "$ECS_USER@$ECS_HOST" </dev/null >/tmp/qdrant_tunnel.log 2>&1 &
       TUNNEL_PID=$!
       sleep 2
       if kill -0 "$TUNNEL_PID" 2>/dev/null \

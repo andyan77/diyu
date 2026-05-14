@@ -11,7 +11,7 @@ files_touched:
   - knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json
 artifacts:
   - knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-15 · demo / API 默认走 vector path（去 `structured_only_offline`）
@@ -63,8 +63,8 @@ pass:    default_mode=vector_enabled 且 vector_hits > 0
 > 验：1) 默认配置不是 structured_only_offline；2) bundle 含 vector_res；3) offline 必须显式标志。
 
 ## 11. DoD
-- [ ] default 走 vector
-- [ ] vector_hits > 0
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-RETRIEVAL-009 回写
+- [x] default 走 vector（**production API 路径**：grep 0 `structured_only_offline` 出现在 API / vector_retrieval；4 API 探针全部 vector_meta.mode=vector）
+- [x] vector_hits > 0（4 API 探针 candidate_count=2 each；demo --live 3/4 case 走 vector）
+- [x] artifact runtime_verified（`knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json` env=staging / checked_at=2026-05-14T14:55:42Z / git_commit=5440990 / evidence_level=runtime_verified）
+- [x] 审查员 pass（reviewer_prompt_coverage §10 三项 + KS-RETRIEVAL-009 §10 四项均 PASS；verdict=PASS）
+- [x] 原卡 KS-RETRIEVAL-009 回写（§13 追加 KS-FIX-15 vector path 补证段）
