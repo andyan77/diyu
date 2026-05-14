@@ -26,6 +26,15 @@ import subprocess
 import sys
 from pathlib import Path
 
+# 复用 verify_ecs_mirror 的 sha256 双 manifest 计算 / reuse dual-manifest hashing
+# （KS-FIX-02 §1 要求 dry-run 与 apply 两侧产 sha256 manifest 并比对一致）
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from verify_ecs_mirror import (  # noqa: E402
+    _local_hashes as _vem_local_hashes,
+    _ecs_hashes as _vem_ecs_hashes,
+    _diff as _vem_diff,
+)
+
 # 路径常量 · 硬编码 / hardcoded path constants（KS-DIFY-ECS-011 §7 安全要求）
 REPO_ROOT = Path(__file__).resolve().parent.parent
 LOCAL_CLEAN_OUTPUT = REPO_ROOT / "clean_output"
@@ -236,13 +245,81 @@ def _write_audit(staging_dir: Path, env: dict, run_id: str, preview_text: str,
     return out
 
 
+def _compute_dual_manifests(env: dict) -> tuple[dict, dict, dict]:
+    """KS-FIX-02：计算 local + ECS 双侧 sha256 manifest 并 diff。
+
+    返回 (local_table, ecs_table, drift) — drift 含 only_local/only_ecs/hash_mismatch。
+    复用 verify_ecs_mirror 已经实现的 SSH 完整性校验路径，避免重复实现。
+    """
+    _info("计算 local sha256 manifest / hashing local SSOT ...")
+    local = _vem_local_hashes()
+    _ok(f"local files = {len(local)}")
+    _info("拉取 ECS sha256 manifest / fetching remote hashes ...")
+    ecs = _vem_ecs_hashes(env)
+    _ok(f"ecs files = {len(ecs)}")
+    drift = _vem_diff(local, ecs)
+    return local, ecs, drift
+
+
+def _write_fix02_manifest(out_path: Path, env: dict, run_id: str, mode: str,
+                          local: dict, ecs: dict, drift: dict,
+                          counts: dict, backup_path: str | None,
+                          verify_rc: int | None, status: str) -> None:
+    """KS-FIX-02 canonical audit artifact —— 双 manifest + diff_count + 治理元数据."""
+    diff_count = (len(drift["only_local"]) + len(drift["only_ecs"])
+                  + len(drift["hash_mismatch"]))
+    payload = {
+        "task_card": "KS-FIX-02",
+        "corrects": "KS-DIFY-ECS-011",
+        "run_id": run_id,
+        "mode": mode,
+        "env": "staging",
+        "ecs_host": env["ECS_HOST"],
+        "local_clean_output": str(LOCAL_CLEAN_OUTPUT.relative_to(REPO_ROOT)),
+        "ecs_remote_mirror_dir": ECS_REMOTE_MIRROR_DIR,
+        "source_of_truth_direction": SSOT_DIRECTION_LITERAL,
+        "evidence_level": "runtime_verified",
+        "local_manifest": {
+            "file_count": len(local),
+            "sha256_table": local,
+        },
+        "ecs_manifest": {
+            "file_count": len(ecs),
+            "sha256_table": ecs,
+        },
+        "diff": {
+            "diff_count": diff_count,
+            "only_local": drift["only_local"],
+            "only_ecs": drift["only_ecs"],
+            "hash_mismatch": drift["hash_mismatch"],
+        },
+        "rsync_preview_counts": counts,
+        "backup_path": backup_path,
+        "post_verify_rc": verify_rc,
+        "status": status,
+        "writes_clean_output": False,
+        "checked_at": _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "git_commit": subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=str(REPO_ROOT),
+            capture_output=True, text=True,
+        ).stdout.strip(),
+    }
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    _ok(f"FIX-02 manifest 落盘 / written: {out_path}")
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="local→ECS one-way mirror push (KS-DIFY-ECS-011)")
+    parser = argparse.ArgumentParser(description="local→ECS one-way mirror push (KS-DIFY-ECS-011 / KS-FIX-02)")
     parser.add_argument("--env", required=True, choices=["staging", "prod"],
                         help="运行环境 / environment")
     mode_grp = parser.add_mutually_exclusive_group(required=True)
     mode_grp.add_argument("--dry-run", action="store_true", help="预览 / preview only")
     mode_grp.add_argument("--apply", action="store_true", help="真推送 + 备份 + 校验")
+    parser.add_argument("--strict", action="store_true",
+                        help="KS-FIX-02：diff_count != 0 即 exit 1；dirty worktree 已经 fail-closed exit 2")
+    parser.add_argument("--manifest-out", dest="manifest_out", default=None,
+                        help="KS-FIX-02：把 sha256 双 manifest + diff 写到指定路径（json）")
     args = parser.parse_args()
 
     if args.env == "prod":
@@ -271,9 +348,38 @@ def main() -> int:
     _ok(f"preview file: {preview_path.relative_to(REPO_ROOT)}")
 
     if args.dry_run:
+        # KS-FIX-02：strict/manifest-out 任一开启时计算双 sha256 manifest
+        dual_local: dict = {}
+        dual_ecs: dict = {}
+        dual_drift = {"only_local": [], "only_ecs": [], "hash_mismatch": []}
+        if args.strict or args.manifest_out:
+            dual_local, dual_ecs, dual_drift = _compute_dual_manifests(env)
+            diff_count = (len(dual_drift["only_local"]) + len(dual_drift["only_ecs"])
+                          + len(dual_drift["hash_mismatch"]))
+            _ok(f"sha256 diff_count = {diff_count}")
+            status = "dry_run_strict_pass" if diff_count == 0 else "dry_run_strict_diff"
+        else:
+            status = "dry_run_only"
+
         _write_audit(staging_dir, env, run_id, preview_text, counts,
                      mode="dry_run", backup_path=None, verify_rc=None,
-                     status="dry_run_only")
+                     status=status)
+
+        if args.manifest_out:
+            out_path = Path(args.manifest_out)
+            if not out_path.is_absolute():
+                out_path = REPO_ROOT / out_path
+            _write_fix02_manifest(out_path, env, run_id, "dry_run",
+                                  dual_local, dual_ecs, dual_drift,
+                                  counts, backup_path=None, verify_rc=None,
+                                  status=status)
+
+        if args.strict:
+            diff_count = (len(dual_drift["only_local"]) + len(dual_drift["only_ecs"])
+                          + len(dual_drift["hash_mismatch"]))
+            if diff_count != 0:
+                _die(f"--strict 拒绝 / refused: sha256 diff_count={diff_count} (≠0)", code=1)
+
         _info("dry-run 模式：未对 ECS 产生任何写入。下一步：检查 preview.txt 后跑 --apply。")
         return 0
 
@@ -300,6 +406,22 @@ def main() -> int:
                  status="success")
     _ok(f"push 完成 + drift=0 / done. backup retained: {backup_path}")
     _info(f"audit: {(staging_dir / 'push_audit.json').relative_to(REPO_ROOT)}")
+
+    # KS-FIX-02：apply 后也算一次双 manifest，落到 manifest-out（如指定）
+    if args.manifest_out:
+        dual_local, dual_ecs, dual_drift = _compute_dual_manifests(env)
+        out_path = Path(args.manifest_out)
+        if not out_path.is_absolute():
+            out_path = REPO_ROOT / out_path
+        diff_count = (len(dual_drift["only_local"]) + len(dual_drift["only_ecs"])
+                      + len(dual_drift["hash_mismatch"]))
+        apply_status = "apply_strict_pass" if diff_count == 0 else "apply_strict_diff"
+        _write_fix02_manifest(out_path, env, run_id, "apply",
+                              dual_local, dual_ecs, dual_drift,
+                              counts, backup_path=backup_path, verify_rc=verify_rc,
+                              status=apply_status)
+        if args.strict and diff_count != 0:
+            _die(f"--strict apply 后仍有 sha256 diff_count={diff_count}", code=1)
     return 0
 
 

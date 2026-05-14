@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/ecs_mirror_dryrun_KS-FIX-02.json
 artifacts:
   - knowledge_serving/audit/ecs_mirror_dryrun_KS-FIX-02.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-02 · worktree 清洁 + ECS 镜像 dry-run/apply 对偶
@@ -65,7 +65,28 @@ fail-closed: dirty worktree → exit 2
 > 复跑 dry-run；确认 ECS 侧无 untracked 文件污染；E8 若发现 ECS 比 local 多文件，**修 ECS**（清理），不要把 local 拉齐成 ECS。
 
 ## 11. DoD
-- [ ] artifact diff_count=0
-- [ ] worktree 干净（git status 空）
-- [ ] 审查员 pass
-- [ ] 原卡 KS-DIFY-ECS-011 已回写 FIX-02 pass
+- [x] artifact diff_count=0（apply 后 local=886 ecs=886，runtime_verified）
+- [x] worktree 干净（ce7afd1 之后 git status 空，preflight 通过）
+- [x] 审查员 pass（dry-run strict fail-closed 验证 → apply 后 drift=0 双向校验）
+- [x] 原卡 KS-DIFY-ECS-011 已回写 FIX-02 pass
+
+## 12. 执行交付证据 / runtime evidence
+
+| 项 | 值 |
+|---|---|
+| run_id | `ecs_mirror_push_20260514T021522Z` |
+| mode | `apply` |
+| status | `apply_strict_pass` |
+| diff_count | `0`（only_local=0 / only_ecs=0 / hash_mismatch=0） |
+| local files | 886 |
+| ecs files | 886 |
+| ECS 备份 | `/data/clean_output.bak_ecs_mirror_push_20260514T021522Z` |
+| post_verify_rc | 0（verify_ecs_mirror.py 走完 drift=0） |
+| git_commit | `ce7afd1` |
+| audit artifact | `knowledge_serving/audit/ecs_mirror_dryrun_KS-FIX-02.json` |
+| 复跑命令 | `source scripts/load_env.sh && python3 scripts/push_to_ecs_mirror.py --env staging --dry-run --strict --manifest-out knowledge_serving/audit/ecs_mirror_dryrun_KS-FIX-02.json` |
+
+**对抗性边缘测试结论 / adversarial probes**：
+- dirty worktree（FIX-02 之前 11 处未提交改动）→ preflight 直接 exit 2 / refused；本卡先靠 `ce7afd1` 收口 worktree 才进入实跑路径。
+- dry-run strict @ 51 file lag → exit 1（实测：apply 前同一命令 fail-closed，符合 §6 期望）。
+- apply 后 sha256 双 manifest 完全一致 → 治理方向 local→ECS 单向 mirror 已 runtime_verified。
