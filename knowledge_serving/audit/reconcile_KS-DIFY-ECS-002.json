@@ -1,9 +1,9 @@
 {
   "task_card": "KS-DIFY-ECS-002",
-  "run_id": "a956976e-cbfa-4b48-a6fd-529030d9c02d",
-  "run_at": "2026-05-14T07:17:28Z",
-  "checked_at": "2026-05-14T07:17:28Z",
-  "git_commit": "a2f7416d78f7a9b579c284f710f2660022f324eb",
+  "run_id": "47d64eb5-5596-4d98-9678-dcf8bdc84728",
+  "run_at": "2026-05-14T07:30:28Z",
+  "checked_at": "2026-05-14T07:30:28Z",
+  "git_commit": "47687b9f3f0bb26fbfcc0d40abbf06ac3259d874",
   "evidence_level": "runtime_verified",
   "env": "staging",
   "ecs_host": "8.217.175.36",
@@ -42,7 +42,7 @@
     "compliance_rule": 0,
     "content_blueprint": 45,
     "content_type": 3,
-    "context_bundle_log": 12,
+    "context_bundle_log": 16,
     "enterprise_narrative_example": 0,
     "global_knowledge": 1394,
     "narrative_arc": 0,
@@ -65,6 +65,6 @@
   "read_only_guarantee": "本脚本只跑 SELECT；任何 INSERT/UPDATE/DELETE/DROP/CREATE/ALTER/TRUNCATE 在执行前会被拦截。",
   "human_signoff": {
     "signed_by": "faye",
-    "signed_at": "2026-05-14T07:17:28Z"
+    "signed_at": "2026-05-14T07:30:28Z"
   }
 }
