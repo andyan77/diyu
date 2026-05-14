@@ -117,6 +117,15 @@ EXPECTED_FILES_W3 = {
     "scripts/tests/test_lint_no_duplicate_log.py",
 }
 
+# W3-FIX 收口债白名单 / W3-FIX follow-up allowlist
+# 注：与 EXPECTED_FILES_W3 分开维护——这两个文件来自 W3 之后的 KS-FIX-* 纠偏卡，
+# 不属于 W3 原始编译卡（KS-COMPILER-001~012）的产物；混进 EXPECTED_FILES_W3
+# 会让 W3 原始卡的 frontmatter `files_touched` 与白名单语义不一致。
+EXPECTED_FILES_W3_FIX = {
+    "scripts/rerank_runtime_check.py",          # KS-FIX-21 · rerank runtime 探针（commit a2f7416）
+    "tests/test_compiler_coverage.py",          # KS-FIX-06 · compile_run_id coverage 断言（commit a2f7416）
+}
+
 # W4 已落白名单 / W4-landed allowlist
 # W4 共 6 张卡：
 #   KS-COMPILER-003     · generation_recipe_view 编译
@@ -263,6 +272,7 @@ ALLOWED_FILES = (
     EXPECTED_FILES_PLAN
     | EXPECTED_FILES_PRE_EXISTING
     | EXPECTED_FILES_W3
+    | EXPECTED_FILES_W3_FIX
     | EXPECTED_FILES_W4
     | EXPECTED_FILES_W5
     | EXPECTED_FILES_W6
@@ -495,6 +505,7 @@ def _write_report_artifact(errors: list[str], exit_code: int) -> None:
         "expected_plan_files": len(EXPECTED_FILES_PLAN),
         "whitelist_w0w1": len(EXPECTED_FILES_PRE_EXISTING),
         "whitelist_w3": len(EXPECTED_FILES_W3),
+        "whitelist_w3_fix": len(EXPECTED_FILES_W3_FIX),
         "whitelist_w4": len(EXPECTED_FILES_W4),
         "whitelist_w5": len(EXPECTED_FILES_W5),
         "whitelist_w6": len(EXPECTED_FILES_W6),
