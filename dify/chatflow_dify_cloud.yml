@@ -1,0 +1,663 @@
+# KS-DIFY-ECS-008 · Dify Cloud importable Chatflow DSL
+#
+# 与 dify/chatflow.dsl（项目内 validator 抽象）语义一一对应。
+# 直接 import 到 cloud.dify.ai：Studio → Create App → Import DSL file → 选本文件
+#
+# 红线 / red lines:
+#   - intent_hint + content_type_hint 由 Start 表单强制收集（input-first）
+#   - tenant_resolution / intent_canonical_check / content_type_canonical_map /
+#     fallback_status_branch 全部 type=code 或 if-else，禁 LLM 节点
+#   - retrieve_context_call 走 HTTP API（不直查 9 表）
+#   - guardrail 严格晚于 llm_generation
+#   - business_brief_check 与 llm_generation 中间必经 fallback_status_branch
+#
+# 导入前请把以下占位替换成真实值（也可以在 Dify Studio → 环境变量 里改）：
+#   - 环境变量 SERVING_API_BASE = https://kb.diyuai.cc（KS-CD-003 部署，ECS 旁挂 diyu-serving 容器）
+#   - LLM 节点 model.provider / model.name 按你的 Dify Cloud 已接入的模型替换
+#     （示例填 langgenius/tongyi/tongyi + qwen-plus；如用 OpenAI 改成 openai + gpt-4o）
+
+app:
+  mode: advanced-chat
+  name: knowledge-serving-chatflow
+  description: |
+    KS-DIFY-ECS-008 · 笛语 retrieve_context 主控 Chatflow。
+    Start 表单收集 tenant_id_hint / intent_hint / content_type_hint / business_brief；
+    10 节点 pipeline 落 context_bundle_log。
+  icon: "📚"
+  icon_background: "#E4FBCC"
+  use_icon_as_answer_icon: false
+
+dependencies: []
+kind: app
+version: "0.5.0"
+
+workflow:
+  conversation_variables: []
+  environment_variables:
+    - name: SERVING_API_BASE
+      value: "https://kb.diyuai.cc"
+      value_type: string
+      description: KS-DIFY-ECS-007 retrieve_context HTTP API base URL（staging placeholder；prod 由 KS-CD-002 切换）
+  features:
+    file_upload:
+      enabled: false
+    opening_statement: ""
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+  graph:
+    viewport:
+      x: 0
+      y: 0
+      zoom: 0.55
+
+    # ------------------------------------------------------------------
+    # 节点 / nodes
+    # ------------------------------------------------------------------
+    nodes:
+      # ----- Start 节点 -----
+      - id: start_node
+        type: custom
+        position: { x: 80, y: 300 }
+        positionAbsolute: { x: 80, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 320
+        width: 244
+        data:
+          type: start
+          title: 开始
+          desc: 强制收集 tenant / intent / content_type / brief（input-first 红线）
+          variables:
+            - variable: tenant_id_hint
+              label: tenant_id_hint
+              type: text-input
+              required: true
+              max_length: 200
+              options: []
+              hint: "租户身份；后端按 tenant_scope_resolver 推断 brand_layer"
+            - variable: intent_hint
+              label: intent_hint
+              type: select
+              required: true
+              max_length: 64
+              options:
+                - content_generation
+                - retrieval_only
+                - qa
+              hint: "意图 canonical 枚举；中间件只做确定性校验，禁 LLM"
+            - variable: content_type_hint
+              label: content_type_hint
+              type: text-input
+              required: true
+              max_length: 64
+              options: []
+              hint: "content_type canonical id 或 alias；中间件只做确定性 alias→canonical"
+            - variable: business_brief_json
+              label: business_brief（JSON 字符串）
+              type: paragraph
+              required: false
+              max_length: 4000
+              options: []
+              hint: '业务输入；如 {"sku":"FAYE-001","category":"outerwear","season":"winter","channel":["xiaohongshu"]}'
+
+      # ----- n1 tenant_resolution -----
+      - id: n1_tenant_resolution
+        type: custom
+        position: { x: 380, y: 300 }
+        positionAbsolute: { x: 380, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 100
+        width: 244
+        data:
+          type: code
+          title: n1 · 租户识别 / tenant_resolution
+          desc: 由 tenant_id_hint 解析 brand_layer + allowed_layers；不调 LLM
+          code_language: python3
+          code: |
+            def main(tenant_id: str) -> dict:
+                # KS-RETRIEVAL-001 · tenant_scope_resolver 等价实现（Dify 沙箱版）
+                # 真生产建议改成 HTTP 节点调 retrieve_context API 内部的 tenant 接口
+                registry = {
+                    "tenant_faye_main": {"brand_layer": "brand_faye", "allowed_layers": ["domain_general", "brand_faye"]},
+                    "tenant_demo":      {"brand_layer": "domain_general", "allowed_layers": ["domain_general"]},
+                }
+                row = registry.get((tenant_id or "").strip())
+                if not row:
+                    return {"resolved_brand_layer": "", "allowed_layers": [], "tenant_ok": False}
+                return {"resolved_brand_layer": row["brand_layer"], "allowed_layers": row["allowed_layers"], "tenant_ok": True}
+          variables:
+            - variable: tenant_id
+              value_selector: [start_node, tenant_id_hint]
+          outputs:
+            resolved_brand_layer: { type: string, children: null }
+            allowed_layers:       { type: "array[string]", children: null }
+            tenant_ok:            { type: boolean, children: null }
+
+      # ----- n2 intent_canonical_check -----
+      - id: n2_intent_canonical_check
+        type: custom
+        position: { x: 680, y: 300 }
+        positionAbsolute: { x: 680, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 100
+        width: 244
+        data:
+          type: code
+          title: n2 · intent canonical 校验
+          desc: 在 canonical 枚举内透传；否则置 needs_review；禁 LLM
+          code_language: python3
+          code: |
+            def main(intent_hint: str) -> dict:
+                CANONICAL = {"content_generation", "retrieval_only", "qa"}
+                v = (intent_hint or "").strip()
+                if v in CANONICAL:
+                    return {"classified_intent": v, "intent_status": "ok"}
+                return {"classified_intent": "", "intent_status": "needs_review"}
+          variables:
+            - variable: intent_hint
+              value_selector: [start_node, intent_hint]
+          outputs:
+            classified_intent: { type: string, children: null }
+            intent_status:     { type: string, children: null }
+
+      # ----- n3 content_type_canonical_map -----
+      - id: n3_content_type_canonical_map
+        type: custom
+        position: { x: 980, y: 300 }
+        positionAbsolute: { x: 980, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 100
+        width: 244
+        data:
+          type: code
+          title: n3 · content_type alias→canonical
+          desc: 走 content_type_canonical.csv 确定性映射；非法 → needs_review；禁 LLM
+          code_language: python3
+          code: |
+            def main(content_type_hint: str) -> dict:
+                # 真生产改成 HTTP 调 retrieve_context API 内部映射；
+                # 这里用最小内嵌表（与 content_type_canonical.csv 对齐子集）
+                ALIASES = {
+                    "product_review": "product_review", "评测": "product_review",
+                    "store_daily":    "store_daily",    "门店日常": "store_daily",
+                    "founder_ip":     "founder_ip",     "创始人ip": "founder_ip",
+                    "behind_the_scenes": "behind_the_scenes",
+                }
+                key = (content_type_hint or "").strip().lower()
+                ct = ALIASES.get(key)
+                if ct:
+                    return {"content_type": ct, "content_type_status": "ok"}
+                return {"content_type": "", "content_type_status": "needs_review"}
+          variables:
+            - variable: content_type_hint
+              value_selector: [start_node, content_type_hint]
+          outputs:
+            content_type:        { type: string, children: null }
+            content_type_status: { type: string, children: null }
+
+      # ----- n4 business_brief_check -----
+      - id: n4_business_brief_check
+        type: custom
+        position: { x: 1280, y: 300 }
+        positionAbsolute: { x: 1280, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 100
+        width: 244
+        data:
+          type: code
+          title: n4 · business_brief 检查
+          desc: 按 content_type 检查 brief 必填字段；缺即标 missing；禁 LLM
+          code_language: python3
+          code: |
+            import json
+            def main(brief_json: str, content_type: str) -> dict:
+                # 与 serving/business_brief_checker.py 同源 hard fields 子集
+                HARD = {
+                    "product_review":      ["sku", "category", "season"],
+                    "store_daily":         ["category"],
+                    "founder_ip":          ["founder_profile"],
+                    "behind_the_scenes":   ["category"],
+                }
+                try:
+                    brief = json.loads(brief_json) if brief_json else {}
+                except Exception:
+                    brief = {}
+                needed = HARD.get(content_type, [])
+                missing = [k for k in needed if not brief.get(k)]
+                status = "complete" if not missing else "missing"
+                return {
+                    "business_brief": brief,
+                    "business_brief_missing_fields": missing,
+                    "business_brief_status": status,
+                }
+          variables:
+            - variable: brief_json
+              value_selector: [start_node, business_brief_json]
+            - variable: content_type
+              value_selector: [n3_content_type_canonical_map, content_type]
+          outputs:
+            business_brief:                { type: object, children: null }
+            business_brief_missing_fields: { type: "array[string]", children: null }
+            business_brief_status:         { type: string, children: null }
+
+      # ----- n5 retrieve_context_call -----
+      - id: n5_retrieve_context_call
+        type: custom
+        position: { x: 1580, y: 300 }
+        positionAbsolute: { x: 1580, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 180
+        width: 244
+        data:
+          type: http-request
+          title: n5 · retrieve_context API（不绕 tenant filter / 不直查 9 表）
+          desc: POST /v1/retrieve_context；KS-DIFY-ECS-007 红线传导
+          method: post
+          url: "{{#env.SERVING_API_BASE#}}/v1/retrieve_context"
+          authorization:
+            type: no-auth
+            config: null
+          headers: |-
+            Content-Type:application/json
+          params: ""
+          body:
+            type: raw-text
+            data:
+              - id: rc-body
+                key: ""
+                type: text
+                value: |
+                  {
+                    "tenant_id": "{{#start_node.tenant_id_hint#}}",
+                    "user_query": "{{#sys.query#}}",
+                    "content_type": "{{#n3_content_type_canonical_map.content_type#}}",
+                    "intent_hint": "{{#n2_intent_canonical_check.classified_intent#}}",
+                    "business_brief": {{#n4_business_brief_check.business_brief#}},
+                    "structured_only": false
+                  }
+          timeout:
+            max_connect_timeout: 0
+            max_read_timeout: 0
+            max_write_timeout: 0
+          retry_config:
+            max_retries: 0
+            retry_enabled: false
+            retry_interval: 100
+          ssl_verify: true
+          variables: []
+
+      # ----- n6 fallback_status_branch -----
+      - id: n6_fallback_status_branch
+        type: custom
+        position: { x: 1880, y: 300 }
+        positionAbsolute: { x: 1880, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 180
+        width: 244
+        data:
+          type: if-else
+          title: n6 · fallback_status 分流
+          desc: blocked_* 直接走 output_evidence + answer，不进 LLM
+          cases:
+            - case_id: blocked
+              logical_operator: or
+              conditions:
+                - id: cond-blocked-bbrief
+                  comparison_operator: contains
+                  varType: string
+                  variable_selector: [n5_retrieve_context_call, body]
+                  value: "blocked_missing_business_brief"
+                - id: cond-blocked-brand
+                  comparison_operator: contains
+                  varType: string
+                  variable_selector: [n5_retrieve_context_call, body]
+                  value: "blocked_missing_required_brand_fields"
+
+      # ----- n7 llm_generation -----
+      - id: n7_llm_generation
+        type: custom
+        position: { x: 2180, y: 180 }
+        positionAbsolute: { x: 2180, y: 180 }
+        sourcePosition: right
+        targetPosition: left
+        height: 120
+        width: 244
+        data:
+          type: llm
+          title: n7 · LLM 生成 / draft_output
+          desc: 仅消费 context_bundle 出文案；不接管任何治理判断
+          model:
+            provider: langgenius/tongyi/tongyi
+            name: qwen-plus
+            mode: chat
+            completion_params:
+              temperature: 0.6
+              max_tokens: 2000
+              top_p: 0.9
+          prompt_template:
+            - role: system
+              text: |
+                你是基于结构化检索结果的内容生成助手。
+                严格规则：
+                1) 只能使用 context_bundle 中的 evidence；禁止编造任何创始人、SKU、价格、库存事实。
+                2) 输出语种与用户 query 保持一致。
+                3) 不输出推理过程；只输出最终文案。
+            - role: user
+              text: |
+                用户问题：{{#sys.query#}}
+                content_type：{{#n3_content_type_canonical_map.content_type#}}
+                resolved_brand_layer：{{#n1_tenant_resolution.resolved_brand_layer#}}
+                fallback_status: 从 n5 响应中读取
+                bundle（API 返回）：{{#n5_retrieve_context_call.body#}}
+                请基于以上 bundle 输出符合品牌调性的文案。
+          context: { enabled: false, variable_selector: null }
+          memory:
+            role_prefix: { user: "", assistant: "" }
+            window: { enabled: false, size: 10 }
+          vision: { enabled: false }
+          structured_output: null
+          structured_output_enabled: false
+
+      # ----- n8 guardrail -----
+      - id: n8_guardrail
+        type: custom
+        position: { x: 2480, y: 180 }
+        positionAbsolute: { x: 2480, y: 180 }
+        sourcePosition: right
+        targetPosition: left
+        height: 180
+        width: 244
+        data:
+          type: http-request
+          title: n8 · guardrail 后置审核
+          desc: POST 调本仓 guardrail wrapper（KS-DIFY-ECS-009 模块）；不调 LLM
+          method: post
+          url: "{{#env.SERVING_API_BASE#}}/v1/guardrail"
+          authorization:
+            type: no-auth
+            config: null
+          headers: |-
+            Content-Type:application/json
+          params: ""
+          body:
+            type: raw-text
+            data:
+              - id: gr-body
+                key: ""
+                type: text
+                value: |
+                  {
+                    "generated_text": "{{#n7_llm_generation.text#}}",
+                    "bundle": {{#n5_retrieve_context_call.body#}},
+                    "business_brief": {{#n4_business_brief_check.business_brief#}}
+                  }
+          timeout:
+            max_connect_timeout: 0
+            max_read_timeout: 0
+            max_write_timeout: 0
+          retry_config:
+            max_retries: 0
+            retry_enabled: false
+            retry_interval: 100
+          ssl_verify: true
+          variables: []
+
+      # ----- n9 output_evidence -----
+      - id: n9_output_evidence
+        type: custom
+        position: { x: 2780, y: 180 }
+        positionAbsolute: { x: 2780, y: 180 }
+        sourcePosition: right
+        targetPosition: left
+        height: 120
+        width: 244
+        data:
+          type: template-transform
+          title: n9 · 拼最终响应（含 evidence 摘要）
+          desc: 把 draft_output + evidence_ids 拼成最终给前端的字段
+          template: |
+            {
+              "text": {{ draft_output | tojson }},
+              "evidence_summary": "based on bundle evidence_ids (see bundle.evidence[].evidence_id)",
+              "guardrail": {{ guardrail_resp | tojson }}
+            }
+          variables:
+            - variable: draft_output
+              value_selector: [n7_llm_generation, text]
+            - variable: guardrail_resp
+              value_selector: [n8_guardrail, body]
+
+      # ----- n9b output_evidence for blocked path -----
+      - id: n9b_output_evidence_blocked
+        type: custom
+        position: { x: 2180, y: 460 }
+        positionAbsolute: { x: 2180, y: 460 }
+        sourcePosition: right
+        targetPosition: left
+        height: 120
+        width: 244
+        data:
+          type: template-transform
+          title: n9b · blocked 路径直出 needs_review
+          desc: fallback_status=blocked_* 时绕过 LLM，直接拼 needs_review 响应
+          template: |
+            {
+              "status": "needs_review",
+              "reason": "fallback_status indicates blocked_missing_*",
+              "bundle_excerpt": {{ bundle_body | tojson }}
+            }
+          variables:
+            - variable: bundle_body
+              value_selector: [n5_retrieve_context_call, body]
+
+      # ----- n10 log_write -----
+      - id: n10_log_write
+        type: custom
+        position: { x: 3080, y: 300 }
+        positionAbsolute: { x: 3080, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 180
+        width: 244
+        data:
+          type: http-request
+          title: n10 · 写 context_bundle_log
+          desc: POST 到本仓 log_writer wrapper；落 29 字段 canonical CSV + PG mirror outbox
+          method: post
+          url: "{{#env.SERVING_API_BASE#}}/internal/context_bundle_log"
+          authorization:
+            type: no-auth
+            config: null
+          headers: |-
+            Content-Type:application/json
+          params: ""
+          body:
+            type: raw-text
+            data:
+              - id: log-body
+                key: ""
+                type: text
+                value: |
+                  {
+                    "source": "dify_chatflow",
+                    "tenant_id": "{{#start_node.tenant_id_hint#}}",
+                    "user_query": "{{#sys.query#}}",
+                    "content_type": "{{#n3_content_type_canonical_map.content_type#}}",
+                    "classified_intent": "{{#n2_intent_canonical_check.classified_intent#}}",
+                    "resolved_brand_layer": "{{#n1_tenant_resolution.resolved_brand_layer#}}",
+                    "bundle": {{#n5_retrieve_context_call.body#}}
+                  }
+          timeout:
+            max_connect_timeout: 0
+            max_read_timeout: 0
+            max_write_timeout: 0
+          retry_config:
+            max_retries: 0
+            retry_enabled: false
+            retry_interval: 100
+          ssl_verify: true
+          variables: []
+
+      # ----- answer 终端节点（Dify chatflow 必需）-----
+      - id: answer_ok
+        type: custom
+        position: { x: 3380, y: 180 }
+        positionAbsolute: { x: 3380, y: 180 }
+        sourcePosition: right
+        targetPosition: left
+        height: 107
+        width: 244
+        data:
+          type: answer
+          title: 输出 / Answer OK
+          answer: "{{#n9_output_evidence.output#}}"
+
+      - id: answer_blocked
+        type: custom
+        position: { x: 3380, y: 460 }
+        positionAbsolute: { x: 3380, y: 460 }
+        sourcePosition: right
+        targetPosition: left
+        height: 107
+        width: 244
+        data:
+          type: answer
+          title: 输出 / Answer needs_review
+          answer: "{{#n9b_output_evidence_blocked.output#}}"
+
+    # ------------------------------------------------------------------
+    # 边 / edges
+    # ------------------------------------------------------------------
+    edges:
+      - id: start_node-n1_tenant_resolution-source-target
+        source: start_node
+        sourceHandle: source
+        target: n1_tenant_resolution
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: start, targetType: code, isInIteration: false, isInLoop: false }
+
+      - id: n1-n2-source-target
+        source: n1_tenant_resolution
+        sourceHandle: source
+        target: n2_intent_canonical_check
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: code, targetType: code, isInIteration: false, isInLoop: false }
+
+      - id: n2-n3-source-target
+        source: n2_intent_canonical_check
+        sourceHandle: source
+        target: n3_content_type_canonical_map
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: code, targetType: code, isInIteration: false, isInLoop: false }
+
+      - id: n3-n4-source-target
+        source: n3_content_type_canonical_map
+        sourceHandle: source
+        target: n4_business_brief_check
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: code, targetType: code, isInIteration: false, isInLoop: false }
+
+      - id: n4-n5-source-target
+        source: n4_business_brief_check
+        sourceHandle: source
+        target: n5_retrieve_context_call
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: code, targetType: http-request, isInIteration: false, isInLoop: false }
+
+      - id: n5-n6-source-target
+        source: n5_retrieve_context_call
+        sourceHandle: source
+        target: n6_fallback_status_branch
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: http-request, targetType: if-else, isInIteration: false, isInLoop: false }
+
+      # n6 if-else 分流：blocked case → n9b（answer_blocked 走），default → n7
+      - id: n6-n9b-blocked-target
+        source: n6_fallback_status_branch
+        sourceHandle: blocked
+        target: n9b_output_evidence_blocked
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: if-else, targetType: template-transform, isInIteration: false, isInLoop: false }
+
+      - id: n6-n7-default-target
+        source: n6_fallback_status_branch
+        sourceHandle: "false"
+        target: n7_llm_generation
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: if-else, targetType: llm, isInIteration: false, isInLoop: false }
+
+      - id: n7-n8-source-target
+        source: n7_llm_generation
+        sourceHandle: source
+        target: n8_guardrail
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: llm, targetType: http-request, isInIteration: false, isInLoop: false }
+
+      - id: n8-n9-source-target
+        source: n8_guardrail
+        sourceHandle: source
+        target: n9_output_evidence
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: http-request, targetType: template-transform, isInIteration: false, isInLoop: false }
+
+      - id: n9-n10-source-target
+        source: n9_output_evidence
+        sourceHandle: source
+        target: n10_log_write
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: template-transform, targetType: http-request, isInIteration: false, isInLoop: false }
+
+      - id: n10-answer_ok-source-target
+        source: n10_log_write
+        sourceHandle: source
+        target: answer_ok
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: http-request, targetType: answer, isInIteration: false, isInLoop: false }
+
+      - id: n9b-answer_blocked-source-target
+        source: n9b_output_evidence_blocked
+        sourceHandle: source
+        target: answer_blocked
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: template-transform, targetType: answer, isInIteration: false, isInLoop: false }

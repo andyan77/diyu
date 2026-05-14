@@ -143,7 +143,7 @@ docker rm   "${CONTAINER_NAME}" 2>/dev/null || true
 docker run -d \\
     --name "${CONTAINER_NAME}" \\
     --restart unless-stopped \\
-    --network diyu_default \\
+    --network diyu-prod \\
     --env-file /opt/diyu-serving/.env \\
     -p 127.0.0.1:${HOST_PORT}:${CONTAINER_PORT} \\
     "${IMAGE_TAG}"
