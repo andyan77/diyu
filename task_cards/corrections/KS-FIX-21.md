@@ -12,7 +12,7 @@ creates:
   - knowledge_serving/scripts/rerank_runtime_check.py
 artifacts:
   - knowledge_serving/audit/rerank_runtime_KS-FIX-21.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-21 · rerank runtime 真实被调验证
@@ -64,7 +64,7 @@ pass:    rerank_invoked_count == 5 且 score_changed_count >= 4
 > 验：1) trace 真有 rerank；2) score 改变；3) policy 关掉本测 fail（反向校验）。
 
 ## 11. DoD
-- [ ] rerank_invoked 5/5
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-COMPILER-010 回写
+- [x] rerank_invoked **10/10**（用户审查员路径 B 裁决：换企业叙事/品牌存在感/长期主义 10 题，阈值 60%；实测 10/10 真调 DashScope gte-rerank）
+- [x] artifact runtime_verified（`rerank_runtime_KS-FIX-21.json`：env=staging, git_commit=36cb4c3, evidence_level=runtime_verified, pass_condition_met=True, topk_order_changed=10/10）
+- [x] 审查员 pass（路径 A 圆桌测试 noop → 用户裁决换叙事 query → 10/10 真正改变 top10 顺序；script 加 3 次 transient retry 但不降低 strict 闸；artifact 含每 query before/after top10 候选 ID + qdrant_score + rerank_score）
+- [x] 原卡 KS-COMPILER-010 回写（原卡 retrieval_policy_view.csv 声明 rerank_strategy；本卡 runtime 证据补齐"声明 → 真调用"链路）

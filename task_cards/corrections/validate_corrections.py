@@ -335,9 +335,13 @@ def main() -> int:
         # purity_check_KS-FIX-04.json 真实落盘含 e8_decision；守门 --out=clean_output → exit 2。
         # KS-FIX-07 加入豁免（2026-05-14 W2 收口）：legacy_pg_decision_KS-FIX-07.md 落盘（7 章
         # ADR + user signoff + 4 项 rollback）；validate_w3_input_whitelist.py --strict exit 0。
+        # KS-FIX-06 / 21 加入豁免（2026-05-14 W3 收口）：
+        #   FIX-06 路径 A 真实 pytest + e8_decision；FIX-21 路径 B 用户裁决换企业叙事 10 题，
+        #   真调 DashScope gte-rerank 10/10 invoked + 10/10 topk_order_changed pass_condition_met=True。
         GRANDFATHER_DONE = {
             "KS-FIX-01", "KS-FIX-02", "KS-FIX-03",
-            "KS-FIX-04", "KS-FIX-05", "KS-FIX-07",
+            "KS-FIX-04", "KS-FIX-05", "KS-FIX-06",
+            "KS-FIX-07", "KS-FIX-21",
         }
         if status == "not_started":
             issue_fn = warn

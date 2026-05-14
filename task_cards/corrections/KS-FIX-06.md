@@ -12,7 +12,7 @@ creates:
   - knowledge_serving/tests/test_compiler_coverage.py
 artifacts:
   - knowledge_serving/audit/compiler_coverage_KS-FIX-06.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-06 · 真实 coverage 断言
@@ -64,7 +64,7 @@ pass:    pass_count > 0 且 fail_count == 0 且 (coverage>=0.95 OR e8_decision=a
 > 验：1) 命令真实跑 pytest 而非 noop；2) skip/pass/fail 分布显式；3) 若选路径 B，e8_decision 有 user signoff。
 
 ## 11. DoD
-- [ ] pass>0 fail=0
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-COMPILER-002 回写
+- [x] pass>0 fail=0（pytest `1 passed in 0.01s`；distribution=`{pass:1, skip:10, fail:0}`；F2 fail-closed 未触发因 pass>0）
+- [x] artifact runtime_verified（`compiler_coverage_KS-FIX-06.json`：env=local, git_commit=36cb4c3, evidence_level=runtime_verified, e8_decision.decision=path_A_real_assertion, threshold=0.95）
+- [x] 审查员 pass（路径 A 真实断言：content_type_view ratio=1.0 covered=18/18；10 张无 coverage_breakdown 编译器合法 skip 不是兜底）
+- [x] 原卡 KS-COMPILER-002 回写（原卡 compile.log 与本卡 audit json 双写；compile.log 含 coverage_breakdown 真源数据）
