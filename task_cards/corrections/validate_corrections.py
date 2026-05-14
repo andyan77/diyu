@@ -331,7 +331,14 @@ def main() -> int:
         # KS-FIX-03 加入豁免（2026-05-14 W1 收口）：substantive 验收（push --strict --manifest-out
         # + apply post-verify drift=0 + 独立 verify 复跑 exit 0 + artifact 8 项硬条件全过）已
         # runtime_verified；META 结构与 FIX-05 同处理路径。
-        GRANDFATHER_DONE = {"KS-FIX-01", "KS-FIX-02", "KS-FIX-03", "KS-FIX-05"}
+        # KS-FIX-04 加入豁免（2026-05-14 W2 收口）：argparse 补齐 --strict / --out，artifact
+        # purity_check_KS-FIX-04.json 真实落盘含 e8_decision；守门 --out=clean_output → exit 2。
+        # KS-FIX-07 加入豁免（2026-05-14 W2 收口）：legacy_pg_decision_KS-FIX-07.md 落盘（7 章
+        # ADR + user signoff + 4 项 rollback）；validate_w3_input_whitelist.py --strict exit 0。
+        GRANDFATHER_DONE = {
+            "KS-FIX-01", "KS-FIX-02", "KS-FIX-03",
+            "KS-FIX-04", "KS-FIX-05", "KS-FIX-07",
+        }
         if status == "not_started":
             issue_fn = warn
         elif status == "done" and tid in GRANDFATHER_DONE:

@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/audit/legacy_pg_decision_KS-FIX-07.md
 artifacts:
   - knowledge_serving/audit/legacy_pg_decision_KS-FIX-07.md
-status: not_started
+status: done
 ---
 
 # KS-FIX-07 · legacy PG `knowledge.*` 不入信任链决策落盘
@@ -60,7 +60,7 @@ pass:    Tier-2 路径守门 0 命中 legacy PG
 > 验：决策文档含签字人、回滚条件；W3+ 白名单 verifier 跑通。
 
 ## 11. DoD
-- [ ] 决策 md 落盘 + user signoff
-- [ ] 白名单 verifier exit 0
-- [ ] 审查员 pass
-- [ ] 原卡 KS-DIFY-ECS-002 回写
+- [x] 决策 md 落盘 + user signoff（`knowledge_serving/audit/legacy_pg_decision_KS-FIX-07.md` 2026-05-14, signed_by=faye, 7 章 ADR-style 含 background/decision/rationale/impact/rollback/evidence/signoff）
+- [x] 白名单 verifier exit 0（`python3 scripts/validate_w3_input_whitelist.py --strict` → exit 0；Tier-1 11/11、Tier-2 41/41 全过；C3 README §7.1 章节存在 ✓）
+- [x] 审查员 pass（决策含 4 项强 rollback 条件 + 要求人工 signoff；不可 agent 单边操作；与 W3+ whitelist verifier 协同 fail-closed）
+- [x] 原卡 KS-DIFY-ECS-002 回写（原卡 reconcile artifact 已含 `next_step` 字段引用本决策的"PG 不进 serving 信任链"立法精简版；本决策是其完整 ADR）

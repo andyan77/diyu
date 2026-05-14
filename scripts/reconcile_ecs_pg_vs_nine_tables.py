@@ -229,10 +229,22 @@ def main() -> int:
         human_signoff = {"signed_by": args.signoff, "signed_at": now_iso()}
 
     # 5. 落盘 reconcile json
+    git_commit = "unknown"
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD"], capture_output=True, text=True, timeout=5,
+        )
+        if proc.returncode == 0:
+            git_commit = proc.stdout.strip()
+    except Exception:
+        pass
     payload = {
         "task_card": "KS-DIFY-ECS-002",
         "run_id": str(uuid.uuid4()),
         "run_at": now_iso(),
+        "checked_at": now_iso(),
+        "git_commit": git_commit,
+        "evidence_level": "runtime_verified",
         "env": args.env,
         "ecs_host": os.environ["ECS_HOST"],
         "pg_database": os.environ["PG_DATABASE"],

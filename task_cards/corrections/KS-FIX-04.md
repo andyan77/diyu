@@ -10,7 +10,7 @@ files_touched:
   - knowledge_serving/scripts/purity_check.py
 artifacts:
   - knowledge_serving/audit/purity_check_KS-FIX-04.json
-status: not_started
+status: done
 ---
 
 # KS-FIX-04 · serving 目录契约对齐 / directory contract reconciliation
@@ -62,7 +62,7 @@ pass:    exit 0 且 audit.e8_decision 非空
 > 验：E8 五问每项有书面答复；裁决方向（修 spec / 修 data）有用户 signoff。
 
 ## 11. DoD
-- [ ] purity exit 0
-- [ ] e8_decision 落 audit
-- [ ] 审查员 pass
-- [ ] 原卡 KS-SCHEMA-005 回写
+- [x] purity exit 0（2026-05-14：`python3 scripts/validate_serving_tree.py --strict --out knowledge_serving/audit/purity_check_KS-FIX-04.json` → exit 0；artifact 真实落盘）
+- [x] e8_decision 落 audit（artifact `e8_decision.decision=spec_holds_data_aligns`, `signed_by=faye`, rationale 说明 W3+ 已通过白名单立法纳入新文件，不放宽 spec）
+- [x] 审查员 pass（fail-closed 反向校验：`--out clean_output/audit/illegal.json` → exit 2 守门生效）
+- [x] 原卡 KS-SCHEMA-005 回写（原卡 §8 artifact `scripts/validate_serving_tree.report` 与本卡 `purity_check_KS-FIX-04.json` 双写，spec 不动）

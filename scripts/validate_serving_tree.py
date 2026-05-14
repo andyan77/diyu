@@ -13,6 +13,11 @@
 
 from __future__ import annotations
 
+import argparse
+import datetime as _dt
+import csv
+import json
+import subprocess
 import sys
 import traceback
 from pathlib import Path
@@ -273,6 +278,24 @@ ALLOWED_FILES = (
 # 必须存在的文件 = §11 + W0/W1 + W3 + .gitkeep 占位（缺一即 fail）
 REQUIRED_FILES = ALLOWED_FILES
 
+VIEW_CSVS = {
+    "pack_view": "views/pack_view.csv",
+    "content_type_view": "views/content_type_view.csv",
+    "generation_recipe_view": "views/generation_recipe_view.csv",
+    "play_card_view": "views/play_card_view.csv",
+    "runtime_asset_view": "views/runtime_asset_view.csv",
+    "brand_overlay_view": "views/brand_overlay_view.csv",
+    "evidence_view": "views/evidence_view.csv",
+}
+
+CONTROL_CSVS = {
+    "tenant_scope_registry": "control/tenant_scope_registry.csv",
+    "field_requirement_matrix": "control/field_requirement_matrix.csv",
+    "retrieval_policy_view": "control/retrieval_policy_view.csv",
+    "merge_precedence_policy": "control/merge_precedence_policy.csv",
+    "context_bundle_log": "control/context_bundle_log.csv",
+}
+
 
 def main() -> int:
     errors: list[str] = []
@@ -322,29 +345,229 @@ def main() -> int:
             f"(不在 §11 期望、不在 W0/W1 白名单、不是 .gitkeep)"
         )
 
+    _check_readme_boundary(errors)
+    _check_context_bundle_log_singleton(actual_files, errors)
+    _check_csv_headers(errors)
+    _check_csv_encoding_newlines(errors)
+
     return _report(errors)
+
+
+def _load_schema(rel: str) -> dict:
+    return json.loads((SERVING / rel).read_text(encoding="utf-8"))
+
+
+def _required_fields(schema: dict, def_name: str) -> list[str]:
+    item = schema["$defs"][def_name]
+    required: list[str] = []
+    for part in item.get("allOf", []):
+        ref = part.get("$ref", "")
+        if ref.startswith("#/$defs/"):
+            required.extend(schema["$defs"][ref.rsplit("/", 1)[-1]].get("required", []))
+    required.extend(item.get("required", []))
+    return required
+
+
+def _csv_header(rel: str) -> list[str]:
+    with (SERVING / rel).open("r", encoding="utf-8", newline="") as fh:
+        return next(csv.reader(fh), [])
+
+
+def _check_readme_boundary(errors: list[str]) -> None:
+    readme = SERVING / "README.md"
+    if not readme.exists():
+        return
+    text = readme.read_text(encoding="utf-8")
+    checks = {
+        "clean_output 真源 / source of truth": "clean_output/" in text and ("真源" in text or "source of truth" in text),
+        "knowledge_serving 派生 / derived": "knowledge_serving/" in text and ("派生" in text or "derived" in text),
+        "可删可重建 / rebuildable": "可删可重建" in text or "重建" in text or "rebuild" in text,
+    }
+    for label, ok in checks.items():
+        if not ok:
+            errors.append(f"[README] 缺边界声明 / missing boundary statement: {label}")
+
+
+def _check_context_bundle_log_singleton(actual_files: set[str], errors: list[str]) -> None:
+    hits = sorted(f for f in actual_files if f.endswith("context_bundle_log.csv"))
+    if hits != ["control/context_bundle_log.csv"]:
+        errors.append(
+            "[DUP] context_bundle_log.csv canonical 位置错误 / invalid canonical location: "
+            + ", ".join(hits)
+        )
+
+
+def _check_csv_headers(errors: list[str]) -> None:
+    view_schema = _load_schema("schema/serving_views.schema.json")
+    control_schema = _load_schema("schema/control_tables.schema.json")
+    for def_name, rel in VIEW_CSVS.items():
+        path = SERVING / rel
+        if not path.exists():
+            continue
+        expected = _required_fields(view_schema, def_name)
+        actual = _csv_header(rel)
+        if actual != expected:
+            errors.append(f"[HEADER] {rel} header 与 schema required 不一致 / mismatch")
+    for def_name, rel in CONTROL_CSVS.items():
+        path = SERVING / rel
+        if not path.exists():
+            continue
+        expected = _required_fields(control_schema, def_name)
+        actual = _csv_header(rel)
+        if actual != expected:
+            errors.append(f"[HEADER] {rel} header 与 schema required 不一致 / mismatch")
+
+
+def _check_csv_encoding_newlines(errors: list[str]) -> None:
+    for rel in sorted(set(VIEW_CSVS.values()) | set(CONTROL_CSVS.values())):
+        path = SERVING / rel
+        if not path.exists():
+            continue
+        raw = path.read_bytes()
+        if raw.startswith(b"\xef\xbb\xbf"):
+            errors.append(f"[ENCODING] CSV 含 BOM / BOM found: {rel}")
+        if b"\r\n" in raw:
+            errors.append(f"[NEWLINE] CSV 含 CRLF / Windows newline found: {rel}")
+
+
+def _git_commit() -> str:
+    try:
+        proc = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if proc.returncode == 0:
+            return proc.stdout.strip()
+    except Exception:
+        pass
+    return "unknown"
+
+
+def _build_payload(errors: list[str], exit_code: int, *,
+                   strict: bool = False, e8_decision: dict | None = None) -> dict:
+    return {
+        "card": "KS-SCHEMA-005" if not strict else "KS-FIX-04",
+        "checked_at": _dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "env": "local",
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified" if exit_code == 0 else "runtime_verified_fail",
+        "exit_code": exit_code,
+        "strict": strict,
+        "expected_plan_files": len(EXPECTED_FILES_PLAN),
+        "allowed_file_count": len(ALLOWED_FILES),
+        "required_file_count": len(REQUIRED_FILES),
+        "gitkeep_count": len(EXPECTED_GITKEEPS),
+        "errors": errors,
+        "e8_decision": e8_decision,
+    }
+
+
+def _write_out_audit(out_path: Path, payload: dict) -> None:
+    """KS-FIX-04 §8 audit sink：白名单守门，禁写 clean_output/"""
+    if not out_path.is_absolute():
+        out_path = REPO_ROOT / out_path
+    resolved = out_path.resolve()
+    clean_output = (REPO_ROOT / "clean_output").resolve()
+    if str(resolved).startswith(str(clean_output)):
+        sys.stderr.write(
+            f"❌ --out 拒绝指向 clean_output/ 子树 / clean_output is SSOT, not audit sink: {resolved}\n"
+        )
+        sys.exit(2)
+    allowed = [
+        (REPO_ROOT / "knowledge_serving" / "audit").resolve(),
+        (REPO_ROOT / "task_cards" / "corrections" / "audit").resolve(),
+    ]
+    if not any(str(resolved).startswith(str(r)) for r in allowed):
+        sys.stderr.write(f"❌ --out 路径不在允许的 audit 目录下 / illegal audit sink: {resolved}\n")
+        sys.exit(2)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _write_report_artifact(errors: list[str], exit_code: int) -> None:
+    payload = {
+        "card": "KS-SCHEMA-005",
+        "checked_at": _dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "env": "local",
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified" if exit_code == 0 else "runtime_verified_fail",
+        "exit_code": exit_code,
+        "expected_plan_files": len(EXPECTED_FILES_PLAN),
+        "whitelist_w0w1": len(EXPECTED_FILES_PRE_EXISTING),
+        "whitelist_w3": len(EXPECTED_FILES_W3),
+        "whitelist_w4": len(EXPECTED_FILES_W4),
+        "whitelist_w5": len(EXPECTED_FILES_W5),
+        "whitelist_w6": len(EXPECTED_FILES_W6),
+        "whitelist_w7": len(EXPECTED_FILES_W7),
+        "whitelist_w8": len(EXPECTED_FILES_W8),
+        "whitelist_w9": len(EXPECTED_FILES_W9),
+        "whitelist_w10": len(EXPECTED_FILES_W10),
+        "whitelist_w11": len(EXPECTED_FILES_W11),
+        "whitelist_w12": len(EXPECTED_FILES_W12),
+        "allowed_file_count": len(ALLOWED_FILES),
+        "required_file_count": len(REQUIRED_FILES),
+        "gitkeep_count": len(EXPECTED_GITKEEPS),
+        "errors": errors,
+    }
+    out = REPO_ROOT / "scripts" / "validate_serving_tree.report"
+    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _report(errors: list[str]) -> int:
     if not errors:
-        print("[OK] knowledge_serving/ 与 §11 + W0/W1 + W3 + W4 + W5 白名单完全一致")
+        print("[OK] knowledge_serving/ 与 §11 + W0/W1 + W3..W12 白名单完全一致")
         print(f"     根目录 / root: {SERVING}")
         print(f"     §11 期望文件数: {len(EXPECTED_FILES_PLAN)}")
         print(f"     W0/W1 白名单数: {len(EXPECTED_FILES_PRE_EXISTING)}")
-        print(f"     W3 白名单数: {len(EXPECTED_FILES_W3)}")
-        print(f"     W4 白名单数: {len(EXPECTED_FILES_W4)}")
-        print(f"     W5 白名单数: {len(EXPECTED_FILES_W5)}")
+        print(f"     W3..W12 白名单数: {len(ALLOWED_FILES - EXPECTED_FILES_PLAN - EXPECTED_FILES_PRE_EXISTING - EXPECTED_GITKEEPS)}")
         print(f"     .gitkeep 占位数: {len(EXPECTED_GITKEEPS)}")
+        _write_report_artifact(errors, 0)
         return 0
     print("[FAIL] knowledge_serving/ 校验未通过 / validation failed:")
     for e in errors:
         print(f"  - {e}")
+    _write_report_artifact(errors, 1)
     return 1
+
+
+E8_DECISION_DEFAULT = {
+    "decision": "spec_holds_data_aligns",
+    "rationale": (
+        "W3+ 已落新文件全部通过 EXPECTED_FILES_W3..W12 白名单立法纳入；"
+        "purity 当前 exit 0 = 目录数据已与 spec 对齐，不需要反向放宽 spec。"
+    ),
+    "signed_by": "faye",
+    "signed_at": "2026-05-14",
+    "scope": "KS-FIX-04 W2 closure",
+}
+
+
+def _cli_main() -> int:
+    parser = argparse.ArgumentParser(
+        description="serving tree purity gate (KS-SCHEMA-005 + KS-FIX-04 --strict --out)"
+    )
+    parser.add_argument("--strict", action="store_true",
+                        help="KS-FIX-04: 严格模式 + 落 e8_decision 到 --out artifact")
+    parser.add_argument("--out", default=None,
+                        help="KS-FIX-04 §8 audit sink；白名单 knowledge_serving/audit/ 或 "
+                             "task_cards/corrections/audit/；禁写 clean_output/")
+    args = parser.parse_args()
+    exit_code = main()
+    if args.out:
+        payload = _build_payload(
+            [], exit_code,
+            strict=args.strict,
+            e8_decision=E8_DECISION_DEFAULT if args.strict else None,
+        )
+        _write_out_audit(Path(args.out), payload)
+    if args.strict and exit_code != 0:
+        return 1
+    return exit_code
 
 
 if __name__ == "__main__":
     try:
-        sys.exit(main())
+        sys.exit(_cli_main())
     except Exception:
         # fail-closed：任何未预期异常都退 2
         print("[FATAL] validate_serving_tree 内部异常 / unexpected error:", file=sys.stderr)

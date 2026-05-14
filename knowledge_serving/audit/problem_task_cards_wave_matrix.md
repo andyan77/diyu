@@ -17,7 +17,7 @@
 | # | wave | task_id | current status | severity | core issue | minimal correction |
 |---:|---|---|---|---|---|---|
 | 1 | W0 | KS-S0-004 | done | FAIL | Raw `ci_commands` lacks `QDRANT_URL_STAGING`; current run exited 2, no current real Qdrant health evidence. | Run after `source scripts/load_env.sh`, hit real staging Qdrant, and write audit artifact. |
-| 2 | W2 | KS-SCHEMA-005 | done | FAIL | Purity check exits 1 because current files exceed plan §11 directory contract. | Update the directory contract or roll status back. |
+| 2 | W2 | KS-SCHEMA-005 | done | ~~FAIL~~ → **RESOLVED 2026-05-14** | ~~Purity check exits 1 because current files exceed plan §11 directory contract.~~ Closed by **KS-FIX-04**: argparse 补齐 `--strict / --out`，`purity_check_KS-FIX-04.json` 真实落盘含 `e8_decision=spec_holds_data_aligns`（W3+ 白名单立法已纳入新文件，不放宽 spec）. | ~~Update the directory contract or roll status back.~~ Done. |
 | 3 | W3 | KS-COMPILER-002 | done | RISKY | Coverage is fully missing while command exits 0. | Decide whether `coverage=missing` is allowed; if not, add real assertions. |
 | 4 | W3 | KS-COMPILER-010 | done | CONDITIONAL_PASS | Rerank is declared in policy but not actually called. | Keep policy card done; validate rerank in runtime acceptance. |
 | 5 | W0 | KS-POLICY-005 | done | CONDITIONAL_PASS | `model_policy` validation warned about missing `DEEPSEEK_API_KEY`; no staging model-policy runtime snapshot. | Add staging env-backed policy snapshot evidence. |
@@ -27,7 +27,7 @@
 | 9 | W6 | KS-VECTOR-001 | done | RISKY | `--check` validates existing chunks; no current staging rebuild proof for embedding calls. | Rebuild embeddings in staging and record run artifact with call evidence and timestamp. |
 | 10 | W7 | KS-VECTOR-003 | done | FAIL | Original command uses `--offline` smoke, not real Qdrant. | Replace/augment with staging Qdrant filter test. |
 | 11 | W1 | KS-DIFY-ECS-001 | done | ~~FAIL~~ → **RESOLVED 2026-05-14** | ~~Real staging mirror check exits 1 with ECS mirror drift.~~ Closed by **KS-FIX-03**: push --apply landed local→ECS, `drift_total=0`, artifact `ecs_mirror_verify_KS-FIX-03.json` evidence_level=runtime_verified. | ~~Fix ECS mirror drift and rerun.~~ Done. |
-| 12 | W2 | KS-DIFY-ECS-002 | done | CONDITIONAL_PASS | Staging PG reconcile exits 0, but result is `schema_misalignment` with overlap 0. | Keep the explicit decision that legacy PG is not in the serving trust chain. |
+| 12 | W2 | KS-DIFY-ECS-002 | done | ~~CONDITIONAL_PASS~~ → **RESOLVED 2026-05-14** | ~~Staging PG reconcile exits 0, but result is `schema_misalignment` with overlap 0.~~ Closed by **KS-FIX-07**: ADR `legacy_pg_decision_KS-FIX-07.md` 落盘（7 章 + faye signoff + 4 项 rollback 条件），明文立法 legacy PG `knowledge.*` 不进 serving 信任链；`validate_w3_input_whitelist.py --strict` exit 0 协同 fail-closed. | ~~Keep the explicit decision that legacy PG is not in the serving trust chain.~~ Done. |
 | 13 | W6 | KS-DIFY-ECS-003 | done | FAIL | Original command is `--dry-run`; apply evidence is not current staging acceptance. | Run staging `--apply` for `serving.*` PG upload. |
 | 14 | W7 | KS-DIFY-ECS-004 | done | FAIL | Original command is `--dry-run`, which cannot stand in for Qdrant upload acceptance. | Run staging `--apply` and verify via live Qdrant search. |
 | 15 | W10 | KS-DIFY-ECS-005 | done | RISKY | Dual-write is covered by local pytest only; PG was not exercised in staging. | Create staging PG mirror table, write rows, and reconcile. |
