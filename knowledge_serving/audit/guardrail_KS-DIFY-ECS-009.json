@@ -1,0 +1,32 @@
+{
+  "boundary": "原卡 KS-DIFY-ECS-009 是 guardrail.py 确定性运行时模块验收；Dify staging app graph 集成不是原卡 §5 artifact。",
+  "checked_at": "2026-05-14T11:50:01Z",
+  "ci_command": "python3 -m pytest knowledge_serving/tests/test_guardrail.py -v",
+  "ci_exit_code": 0,
+  "env": "local",
+  "evidence_level": "runtime_verified",
+  "git_commit": "86d4d36dfe4bf8938c8829772449bf49316f2112",
+  "module_path": "knowledge_serving/serving/guardrail.py",
+  "module_sha256": "86fc0512698596ba1d3dff161f302d41fdb9f07b26a9d8bb3b138469c578ed9e",
+  "reviewer_prompt_coverage": {
+    "clean_text_pass": "test_clean_text_passes",
+    "empty_text_blocked": "test_empty_text_blocked",
+    "forbidden_pattern_blocked": "test_inventory_fabrication_blocked",
+    "founder_fabrication_blocked": "test_founder_fabrication_blocked",
+    "no_llm_decision": "test_no_llm_in_source",
+    "sku_not_in_brief_blocked": "test_sku_not_in_brief_blocked / test_alphanumeric_sku_not_in_brief_blocked / test_huohao_alphanumeric_not_in_brief_blocked"
+  },
+  "task_card": "KS-DIFY-ECS-009",
+  "test_fail_count": 0,
+  "test_pass_count": 19,
+  "test_path": "knowledge_serving/tests/test_guardrail.py",
+  "test_sha256": "dfb02fc26ee83dc0846bba60e45c95a545924c28792e6f99073def5e32340fa9",
+  "test_summary": "============================== 19 passed in 0.04s ==============================",
+  "upstream_policy_path": "knowledge_serving/policies/guardrail_policy.yaml",
+  "upstream_policy_pytest": {
+    "command": "python3 -m pytest knowledge_serving/scripts/tests/test_validate_guardrail_policy.py",
+    "exit_code": 0
+  },
+  "upstream_policy_sha256": "13ad0575f5106f3c72b4c45cb38b10045a0d5164ebd35d585f8cb71254107cd3",
+  "verdict": "pass"
+}
