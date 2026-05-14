@@ -73,6 +73,8 @@ EXPECTED_FILES_PRE_EXISTING = {
     "policies/qdrant_fallback.yaml",         # W0 KS-S0-006
     "scripts/run_qdrant_health_check.sh",    # W0 KS-FIX-01 · staging Qdrant health 外审 wrapper
     "tests/test_qdrant_health_schema_gate.py",  # W0 KS-FIX-01 §13 · schema gate + wrapper cleanup 自动化用例
+    "tests/test_task_card_ci_contract.py",       # W0 KS-FIX-01 §15 · 任务卡 ci_commands artifact 契约测试
+    "tests/test_serving_tree_whitelist_provenance.py",  # W0 KS-FIX-01 §15 · 白名单溯源测试
 }
 
 # W3 已落白名单 / W3-landed allowlist
@@ -215,7 +217,8 @@ EXPECTED_FILES_W10 = {
     # KS-RETRIEVAL-009（commit df62d3c）· 端到端 13 步召回 demo
     "scripts/run_context_retrieval_demo.py",
     "logs/retrieval_eval_sample.csv",
-    "logs/run_context_retrieval_demo.log",  # demo runtime log（与 demo 同卡产物）
+    # 注：logs/run_context_retrieval_demo.log 是 *.log gitignore 命中的 runtime log，
+    # 不入白名单（由下文 logs/*.log 排除规则放行）
     # KS-DIFY-ECS-005（commit fac113b）· context_bundle_log CSV+PG mirror 双写
     "scripts/reconcile_context_bundle_log_mirror.py",
     "tests/test_log_dual_write.py",
@@ -310,6 +313,8 @@ def main() -> int:
     for f in sorted(extra_files):
         if f.startswith("audit/"):
             continue  # audit/ 内容由下游卡按需追加 runtime 证据，不参与骨架校验
+        if f.startswith("logs/") and f.endswith(".log"):
+            continue  # logs/*.log 是运行时日志（.gitignore 命中），不参与骨架校验
         errors.append(
             f"[EXTRA] 多文件 / unexpected file: knowledge_serving/{f} "
             f"(不在 §11 期望、不在 W0/W1 白名单、不是 .gitkeep)"

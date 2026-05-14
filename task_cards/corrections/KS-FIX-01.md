@@ -12,7 +12,10 @@ files_touched:
   - scripts/validate_serving_tree.py
   - knowledge_serving/scripts/run_qdrant_health_check.sh
   - knowledge_serving/tests/test_qdrant_health_schema_gate.py
+  - knowledge_serving/tests/test_task_card_ci_contract.py
+  - knowledge_serving/tests/test_serving_tree_whitelist_provenance.py
   - knowledge_serving/audit/qdrant_health_KS-FIX-01.json
+  - clean_output/audit/qdrant_health_KS-S0-004.json
   - task_cards/KS-S0-004.md
 artifacts:
   - knowledge_serving/audit/qdrant_health_KS-FIX-01.json
@@ -203,5 +206,56 @@ fail-closed: tunnel 未起 → exit 1（不允许 exit 0 + skip）
 | 5 | `bash knowledge_serving/scripts/run_qdrant_health_check.sh`（KS-S0-004 新 ci_commands） | **0** | 真 staging 4/4 probes 200，runtime_verified |
 
 ### 待办 / outstanding（不在本卡范围）
-- 任务卡 CI 契约检查器（ci_commands 干净 shell 可复跑校验）——单独 FIX 卡，建议归入 FIX-04 或新增
-- `validate_serving_tree.py` 白名单 22 项越界登记的合规性复核——FIX-04 必查项
+- ~~任务卡 CI 契约检查器~~ — **已在 §15 落地** [test_task_card_ci_contract.py](../../knowledge_serving/tests/test_task_card_ci_contract.py)
+- ~~validate_serving_tree.py 白名单 22 项越界合规性复核~~ — **已在 §15 落地** [test_serving_tree_whitelist_provenance.py](../../knowledge_serving/tests/test_serving_tree_whitelist_provenance.py)（git provenance + 任务卡 ID 双校验）
+
+## 15. 外审 CONDITIONAL_PASS 三轮收口 / 2026-05-14 11:30 UTC+8
+
+> **触发**：第三轮外审 CONDITIONAL_PASS。指出：
+> 1. 非阻断 · KS-S0-004 frontmatter artifact 契约漂移（wrapper 默认刷新 FIX-01 artifact，未刷新原卡声明的 clean_output/audit/qdrant_health_KS-S0-004.json）
+> 2. 非阻断 · 建议加 ci_commands 契约测试 + 白名单溯源测试
+> 用户裁决：A · wrapper 双写；加 2 项 pytest；Group C 不动。
+
+### 处置
+
+**1) wrapper 双写**（[run_qdrant_health_check.sh](../../knowledge_serving/scripts/run_qdrant_health_check.sh)）
+- 跑 `check_qdrant_health.py` 两次（同 tunnel 复用）：
+  - 第一次 `--task-card KS-FIX-01 --out knowledge_serving/audit/qdrant_health_KS-FIX-01.json`
+  - 第二次 `--task-card KS-S0-004 --out clean_output/audit/qdrant_health_KS-S0-004.json`
+- 双 artifact 均 `evidence_level=runtime_verified`，task_card 字段分别对应两张卡
+- 满足两张卡 frontmatter `artifacts:` 契约
+
+**2) 新增 2 项 pytest**
+- [test_task_card_ci_contract.py](../../knowledge_serving/tests/test_task_card_ci_contract.py)（2 case）
+  - `test_ks_s0_004_ci_command_refreshes_declared_artifacts`：解析 KS-S0-004 frontmatter `ci_commands` + `artifacts`，干净 shell 跑命令，验证 runtime artifact mtime > 调用时间 + JSON schema 合规（evidence_level / checked_at / version）。ECS 不可达时 pytest.skip 不假绿。
+  - `test_ks_s0_004_artifact_contract_declares_both_paths`：frontmatter 须含 `qdrant_health_KS-S0-004.json`。
+- [test_serving_tree_whitelist_provenance.py](../../knowledge_serving/tests/test_serving_tree_whitelist_provenance.py)（3 case）
+  - `test_whitelisted_files_exist`：W8-W12 + W0(FIX-01) 越界白名单文件必须真实存在
+  - `test_whitelisted_files_have_git_provenance`：每个文件 `git log --diff-filter=A` 必有首次提交
+  - `test_whitelist_commit_messages_reference_task_card`：首次 commit message 必须含 `KS-XXX-NNN` 或 `W\d+` 任务卡 ID
+
+**3) 越界白名单微调**
+- 移除 `logs/run_context_retrieval_demo.log`——`.gitignore` `*.log` 命中，是 runtime log
+- [validate_serving_tree.py](../../scripts/validate_serving_tree.py) 新增 `logs/*.log` 排除规则（与 `audit/` 同级别 runtime exemption）
+
+### 第三轮验证 / 2026-05-14 11:30 UTC+8
+
+| 检查 | exit | 结果 |
+|---|---|---|
+| `bash run_qdrant_health_check.sh` 真 staging | **0** | 双 artifact 同时刷新，task_card 字段正确 |
+| `validate_serving_tree.py` | **0** | 0 EXTRA |
+| `validate_task_cards.py` | **0** | 57 cards |
+| `validate_corrections.py` | **0** | 26 FIX cards |
+| 9 个 pytest（schema_gate 4 + ci_contract 2 + provenance 3） | **0** | **9 passed** |
+
+### 双 artifact 实测对照
+
+| artifact | task_card | evidence_level | version | collections |
+|---|---|---|---|---|
+| `knowledge_serving/audit/qdrant_health_KS-FIX-01.json` | KS-FIX-01 | runtime_verified | 1.12.5 | `['ks_chunks__mp_20260512_002']` |
+| `clean_output/audit/qdrant_health_KS-S0-004.json` | KS-S0-004 | runtime_verified | 1.12.5 | `['ks_chunks__mp_20260512_002']` |
+
+### 边界 / scope
+- 本次仅改：wrapper / validate_serving_tree.py / 新建 2 个 pytest / KS-FIX-01.md / 双 artifact 刷新
+- 未改：clean_output 真源结构、Compiler / Schema / Policy / Retrieval、其他 FIX 卡
+- Group C 5 项 dirty 保留不动（用户裁决）：renderer 副刷 / FIX-02 territory / smoke 副刷
