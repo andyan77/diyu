@@ -120,6 +120,7 @@ KS-DIFY-ECS-007..010   (API / Chatflow / Guardrail / Replay)
       ↓
 KS-CD-001 (流水线，依赖以上全部)
 KS-CD-002 (回滚)
+KS-CD-003 (旁挂 serving 容器部署到 ECS)
       ↓
 KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 ```
@@ -150,9 +151,9 @@ KS-PROD-001..003 (S1-S13 总回归 / 跨租户 / LLM 边界)
 | **W10** | 3 | 召回 13 步全链汇总 + ECS API 集成 + LLM 边界回归 | KS-RETRIEVAL-009, KS-DIFY-ECS-005, KS-PROD-003 | ✅ **done (3/3)** |
 | **W11** | 3 | 端到端冒烟 + Chatflow + replay | KS-DIFY-ECS-006/007/010 | ✅ **done (3/3)**（006/007/010 全部 status=done；审查员 pass 由各卡 §13 W11 外审收口分别勾选）|
 | **W12** | 2 | guardrail 集成 + 跨租户回归 | KS-DIFY-ECS-008, KS-PROD-002 | ⬜ not_started |
-| **W13** | 1 | **CI/CD 流水线总闸（S0-S13 全绿）** | KS-CD-001 | ⬜ not_started |
+| **W13** | 2 | **CI/CD 流水线总闸（S0-S13 全绿）+ 旁挂 serving 容器部署** | KS-CD-001, KS-CD-003 | ⬜ not_started |
 | **W14** | 1 | **S1-S13 上线总回归** | KS-PROD-001 | ⬜ not_started |
-| **合计** | **57** | — | — | **53/57 done = 92.9%** |
+| **合计** | **58** | — | — | **53/58 done = 91.4%** |
 
 ## 7.1 W3+ serving 输入白名单（**最高优先 · 不可违反 · 跨 W3-W14 全部卡**）
 
