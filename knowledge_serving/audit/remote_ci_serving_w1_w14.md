@@ -102,5 +102,5 @@ main 上的 push 触发了完整三 job 跑，包括之前因 PR 上下文级联
 ## 8. 后续 / Next Steps
 
 1. 若用户决定补真 `remote_full_pass`：在 GitHub Actions secrets 后台配齐 `STAGING_API_BASE / DIFY_API_URL / DIFY_APP_TOKEN / DIFY_APP_ID / DASHSCOPE_API_KEY`，然后开 `release/serving-full-gate-recert` 分支用 `workflow_dispatch mode=full` 跑真链路
-2. DIFY token rotate：用户已确认会 rotate（public 仓兜底）；新 key 仅写本地 `.env`，不入 git
-3. 本地 backup 分支 `backup/pre-redact-rebase-ad61296` 仍含旧 token，**永不推远程**；rotate 后旧 token 作废，该分支可保留（无害）或在确认本次合并稳定后删除
+2. DIFY token rotate：**用户明确选择不 rotate**——理由：token 未离开本地、单人项目、频繁换 key 反而增加操作复杂度。已通过 rebase 把 token 从远程史脱敏（`app-<REDACTED>`），剩余风险由用户知情承担
+3. 本地 backup 分支 `backup/pre-redact-rebase-ad61296` 仍含旧 token，**永不推远程**；该分支可保留（无害）或在确认本次合并稳定后由用户决定删除
