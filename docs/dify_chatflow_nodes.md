@@ -36,10 +36,11 @@
 
 | # | 节点 id | role (canonical) | type | 职责 / 关键约束 |
 |---|---|---|---|---|
-| 1 | `n1_tenant_resolution` | `tenant_resolution` | code | 由 `tenant_id_hint` 解析 `resolved_brand_layer` + `allowed_layers`；禁 LLM/Agent |
-| 2 | `n2_intent_canonical_check` | `intent_canonical_check` | code | `intent_hint` 落在 canonical 枚举内则透传；否则 `needs_review`；禁 LLM/Agent（input-first 红线）|
-| 3 | `n3_content_type_canonical_map` | `content_type_canonical_map` | code | 走 `content_type_canonical.csv` alias→canonical 确定性映射；禁 LLM/Agent（input-first 红线）|
-| 4 | `n4_business_brief_check` | `business_brief_check` | code | 按 content_type 检查 `business_brief` 必填字段；输出 `business_brief_missing_fields` |
+| 0 | `n0_preflight_call` | `preflight_call` | http_request | **KS-CD-003-A 单源化入口**：POST `${SERVING_API_BASE}/v1/input_preflight`；服务端组合 4 个 deterministic 模块（tenant_scope_resolver / intent_classifier / content_type_router / field_requirement_matrix）；禁 LLM/Agent |
+| 1 | `n1_tenant_resolution` | `tenant_resolution` | code | 透传 `n0.tenant`（**真源在 server 端 tenant_scope_registry.csv**）；禁 LLM/Agent；DSL 内禁内联 registry |
+| 2 | `n2_intent_canonical_check` | `intent_canonical_check` | code | 透传 `n0.intent`（**真源 = intent_classifier.INTENT_ENUM 5 类**）；禁 LLM/Agent；DSL 内禁硬编码 intent 枚举 |
+| 3 | `n3_content_type_canonical_map` | `content_type_canonical_map` | code | 透传 `n0.content_type`（**真源 = content_type_canonical.csv 18 canonical + aliases**）；禁 LLM/Agent；DSL 内禁内联 alias 大表 |
+| 4 | `n4_business_brief_check` | `business_brief_check` | code | 透传 `n0.business_brief`（**真源 = field_requirement_matrix.csv per-content_type HARD**）；输出 `business_brief_missing_fields` |
 | 5 | `n5_retrieve_context_call` | `retrieve_context_call` | http_request | POST `${SERVING_API_BASE}/v1/retrieve_context`；必须 `uses_tenant_filter=true` + `no_direct_table_query=true`；禁直查 9 表 view |
 | 6 | `n6_fallback_status_branch` | `fallback_status_branch` | if_else | 按 `fallback_status` 分流；`blocked_*` 直接绕过 LLM 走 output_evidence；禁 LLM/Agent |
 | 7 | `n7_llm_generation` | `llm_generation` | llm | 仅消费 `context_bundle` 输出 `draft_output`；不接管任何治理判断 |
@@ -51,14 +52,14 @@
 
 ```
 start
-  └─▶ n1 ─▶ n2 ─▶ n3 ─▶ n4 ─▶ n5 ─▶ n6
-                                          ├─▶ (blocked_*) ─▶ n9 ─▶ n10
-                                          └─▶ n7 ─▶ n8 ─▶ n9 ─▶ n10
+  └─▶ n0 ─▶ n1 ─▶ n2 ─▶ n3 ─▶ n4 ─▶ n5 ─▶ n6
+                                               ├─▶ (blocked_*) ─▶ n9 ─▶ n10
+                                               └─▶ n7 ─▶ n8 ─▶ n9 ─▶ n10
 ```
 
 ## 校验门 / validator gates
 
-`scripts/validate_dify_dsl.py` 跑 11 道门 V1–V11，分别对应 [`scripts/validate_dify_dsl.py`](../scripts/validate_dify_dsl.py) 文档头：role 覆盖 / 拓扑顺序 / LLM-Agent 类型约束 / guardrail 位置 / log_write 存在性 / tenant_filter + no_direct_table_query / 9 表 view 直查禁用 / fallback 必经路径 / Agent off-path 限制 / start 表单字段 input-first。
+`scripts/validate_dify_dsl.py` 跑 13 道门 V1–V13：role 覆盖 / 拓扑顺序 / LLM-Agent 类型约束 / guardrail 位置 / log_write 存在性 / tenant_filter + no_direct_table_query / 9 表 view 直查禁用 / fallback 必经路径 / Agent off-path 限制 / start 表单字段 input-first / **V12 single-source 红线（n1-n4 必须引用 n0_preflight_call.*）** / **V13 chatflow_dify_cloud.yml 内联代码体积+关键字闸（防 registry/alias 大表回潮）**。
 
 ## 对抗性测试覆盖
 

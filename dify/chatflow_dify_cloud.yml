@@ -110,6 +110,44 @@ workflow:
               hint: '业务输入；如 {"sku":"FAYE-001","category":"outerwear","season":"winter","channel":["xiaohongshu"]}'
 
       # ----- n1 tenant_resolution -----
+      # ----- n0 input_preflight HTTP call (KS-CD-003-A · 单源化 / single-source) -----
+      # 把原 n1-n4 内联硬编码（135 行 tenant registry / intent enum /
+      # content_type alias / per-content_type HARD 映射）下沉到本仓 deterministic
+      # endpoint /v1/input_preflight。Dify 侧 n1-n4 退化为薄透传节点（只抽字段，
+      # 不再做任何业务判断）。SSOT 唯一：tenant_scope_registry.csv /
+      # content_type_canonical.csv / field_requirement_matrix.csv（serving 容器侧）。
+      - id: n0_preflight_call
+        type: custom
+        position: { x: 230, y: 300 }
+        positionAbsolute: { x: 230, y: 300 }
+        sourcePosition: right
+        targetPosition: left
+        height: 100
+        width: 244
+        data:
+          type: http-request
+          title: n0 · input_preflight HTTP
+          desc: 单点调用 deterministic 端点，砸碎 n1-n4 双源漂移
+          method: post
+          url: "{{#env.SERVING_API_BASE#}}/v1/input_preflight"
+          headers: |
+            Content-Type: application/json
+          params: ""
+          body:
+            type: json
+            data:
+              - type: text
+                value: |-
+                  {
+                    "tenant_id_hint":   "{{#start_node.tenant_id_hint#}}",
+                    "intent_hint":      "{{#start_node.intent_hint#}}",
+                    "content_type_hint":"{{#start_node.content_type_hint#}}",
+                    "business_brief":   {{#start_node.business_brief_json#}}
+                  }
+          timeout: { max_connect_timeout: 10, max_read_timeout: 30, max_write_timeout: 30 }
+          uses_tenant_filter: false
+          no_direct_table_query: true
+
       - id: n1_tenant_resolution
         type: custom
         position: { x: 380, y: 300 }
@@ -120,24 +158,20 @@ workflow:
         width: 244
         data:
           type: code
-          title: n1 · 租户识别 / tenant_resolution
-          desc: 由 tenant_id_hint 解析 brand_layer + allowed_layers；不调 LLM
+          title: n1 · 租户识别 / tenant_resolution (透传 / passthrough)
+          desc: 只抽字段不做判断；真源 = serving 容器 /v1/input_preflight
           code_language: python3
           code: |
-            def main(tenant_id: str) -> dict:
-                # KS-RETRIEVAL-001 · tenant_scope_resolver 等价实现（Dify 沙箱版）
-                # 真生产建议改成 HTTP 节点调 retrieve_context API 内部的 tenant 接口
-                registry = {
-                    "tenant_faye_main": {"brand_layer": "brand_faye", "allowed_layers": ["domain_general", "brand_faye"]},
-                    "tenant_demo":      {"brand_layer": "domain_general", "allowed_layers": ["domain_general"]},
+            def main(p) -> dict:
+                t = (p or {}).get("tenant") or {}
+                return {
+                    "resolved_brand_layer": t.get("resolved_brand_layer") or "",
+                    "allowed_layers": t.get("allowed_layers") or [],
+                    "tenant_ok": bool(t.get("tenant_ok")),
                 }
-                row = registry.get((tenant_id or "").strip())
-                if not row:
-                    return {"resolved_brand_layer": "", "allowed_layers": [], "tenant_ok": False}
-                return {"resolved_brand_layer": row["brand_layer"], "allowed_layers": row["allowed_layers"], "tenant_ok": True}
           variables:
-            - variable: tenant_id
-              value_selector: [start_node, tenant_id_hint]
+            - variable: p
+              value_selector: [n0_preflight_call, body]
           outputs:
             resolved_brand_layer: { type: string, children: null }
             allowed_layers:       { type: "array[string]", children: null }
@@ -154,19 +188,19 @@ workflow:
         width: 244
         data:
           type: code
-          title: n2 · intent canonical 校验
-          desc: 在 canonical 枚举内透传；否则置 needs_review；禁 LLM
+          title: n2 · intent canonical 校验 (透传 / passthrough)
+          desc: 只抽字段不做判断；真源 = intent_classifier.INTENT_ENUM (5 类)
           code_language: python3
           code: |
-            def main(intent_hint: str) -> dict:
-                CANONICAL = {"content_generation", "retrieval_only", "qa"}
-                v = (intent_hint or "").strip()
-                if v in CANONICAL:
-                    return {"classified_intent": v, "intent_status": "ok"}
-                return {"classified_intent": "", "intent_status": "needs_review"}
+            def main(p) -> dict:
+                i = (p or {}).get("intent") or {}
+                return {
+                    "classified_intent": i.get("classified_intent") or "",
+                    "intent_status": i.get("intent_status") or "needs_review",
+                }
           variables:
-            - variable: intent_hint
-              value_selector: [start_node, intent_hint]
+            - variable: p
+              value_selector: [n0_preflight_call, body]
           outputs:
             classified_intent: { type: string, children: null }
             intent_status:     { type: string, children: null }
@@ -182,96 +216,19 @@ workflow:
         width: 244
         data:
           type: code
-          title: n3 · content_type alias→canonical
-          desc: 走 content_type_canonical.csv 确定性映射；非法 → needs_review；禁 LLM
+          title: n3 · content_type alias→canonical (透传 / passthrough)
+          desc: 只抽字段不做判断；真源 = content_type_canonical.csv (18 canonical + aliases)
           code_language: python3
           code: |
-            def main(content_type_hint: str) -> dict:
-                # 与 knowledge_serving/control/content_type_canonical.csv 全集对齐（17 canonical + aliases）
-                # 真生产改成 HTTP 调 retrieve_context API 内部映射
-                CANONICAL = {
-                    "behind_the_scenes", "daily_fragment", "emotion_expression",
-                    "event_documentary", "founder_ip", "humor_content", "knowledge_sharing",
-                    "lifestyle_expression", "outfit_of_the_day", "personal_vlog",
-                    "process_trace", "product_copy_general", "product_journey",
-                    "product_review", "role_work_vlog", "store_daily",
-                    "talent_showcase", "training_material",
+            def main(p) -> dict:
+                c = (p or {}).get("content_type") or {}
+                return {
+                    "content_type": c.get("content_type") or "",
+                    "content_type_status": c.get("content_type_status") or "needs_review",
                 }
-                ALIASES = {
-                    # behind_the_scenes
-                    "幕后": "behind_the_scenes", "后台": "behind_the_scenes",
-                    "behind_scene": "behind_the_scenes", "后台揭秘": "behind_the_scenes",
-                    # daily_fragment
-                    "日常": "daily_fragment", "碎片": "daily_fragment", "片段": "daily_fragment",
-                    "daily_clip": "daily_fragment",
-                    # emotion_expression
-                    "情绪": "emotion_expression", "抒情": "emotion_expression",
-                    "情感表达": "emotion_expression", "mood": "emotion_expression",
-                    # event_documentary
-                    "事件记录": "event_documentary", "活动纪实": "event_documentary",
-                    "event_record": "event_documentary", "纪实": "event_documentary",
-                    # founder_ip
-                    "创始人内容": "founder_ip", "老板人设": "founder_ip",
-                    "founder_persona": "founder_ip", "创始人 ip": "founder_ip",
-                    # humor_content
-                    "搞笑": "humor_content", "段子": "humor_content",
-                    "幽默": "humor_content", "funny": "humor_content",
-                    # knowledge_sharing
-                    "干货": "knowledge_sharing", "科普": "knowledge_sharing",
-                    "知识": "knowledge_sharing", "分享": "knowledge_sharing",
-                    "tips": "knowledge_sharing",
-                    # lifestyle_expression
-                    "生活方式": "lifestyle_expression", "lifestyle": "lifestyle_expression",
-                    "品味": "lifestyle_expression", "生活美学": "lifestyle_expression",
-                    # outfit_of_the_day（最常用）
-                    "ootd": "outfit_of_the_day", "穿搭": "outfit_of_the_day",
-                    "今日穿搭": "outfit_of_the_day", "搭配": "outfit_of_the_day",
-                    "look_of_the_day": "outfit_of_the_day",
-                    # personal_vlog
-                    "vlog": "personal_vlog", "个人视频": "personal_vlog",
-                    "个人记录": "personal_vlog", "personal_video": "personal_vlog",
-                    # process_trace
-                    "工艺记录": "process_trace", "过程展示": "process_trace",
-                    "process_record": "process_trace", "制作过程": "process_trace",
-                    # product_copy_general
-                    "商品介绍": "product_copy_general", "商品文案": "product_copy_general",
-                    "product_intro": "product_copy_general", "product_copy": "product_copy_general",
-                    # product_journey
-                    "商品故事": "product_journey", "溯源": "product_journey",
-                    "product_story": "product_journey", "journey": "product_journey",
-                    # product_review
-                    "测评": "product_review", "种草测评": "product_review",
-                    "好物测评": "product_review", "product_eval": "product_review",
-                    "评测": "product_review",
-                    # role_work_vlog
-                    "工作 vlog": "role_work_vlog", "岗位 vlog": "role_work_vlog",
-                    "职场 vlog": "role_work_vlog", "work_vlog": "role_work_vlog",
-                    "role_vlog": "role_work_vlog",
-                    # store_daily
-                    "门店动态": "store_daily", "店日常": "store_daily",
-                    "daily_store": "store_daily", "门店内容": "store_daily",
-                    "门店日常": "store_daily",
-                    # talent_showcase
-                    "才艺": "talent_showcase", "表演": "talent_showcase",
-                    "talent_show": "talent_showcase", "showcase": "talent_showcase",
-                    # training_material
-                    "培训": "training_material", "内训": "training_material",
-                    "岗位培训": "training_material", "training": "training_material",
-                    "training_doc": "training_material",
-                }
-                key = (content_type_hint or "").strip().lower()
-                # 1) canonical 直接通
-                if key in CANONICAL:
-                    return {"content_type": key, "content_type_status": "ok"}
-                # 2) alias 映射
-                ct = ALIASES.get(key)
-                if ct:
-                    return {"content_type": ct, "content_type_status": "ok"}
-                # 3) 非法 → needs_review（content_type 留空让 n5 400 fail-closed）
-                return {"content_type": "", "content_type_status": "needs_review"}
           variables:
-            - variable: content_type_hint
-              value_selector: [start_node, content_type_hint]
+            - variable: p
+              value_selector: [n0_preflight_call, body]
           outputs:
             content_type:        { type: string, children: null }
             content_type_status: { type: string, children: null }
@@ -287,36 +244,27 @@ workflow:
         width: 244
         data:
           type: code
-          title: n4 · business_brief 检查
-          desc: 按 content_type 检查 brief 必填字段；缺即标 missing；禁 LLM
+          title: n4 · business_brief 检查 (透传 / passthrough)
+          desc: 只抽字段不做判断；真源 = field_requirement_matrix.csv (per content_type HARD)
           code_language: python3
           code: |
             import json
-            def main(brief_json: str, content_type: str) -> dict:
-                # 与 serving/business_brief_checker.py 同源 hard fields 子集
-                HARD = {
-                    "product_review":      ["sku", "category", "season"],
-                    "store_daily":         ["category"],
-                    "founder_ip":          ["founder_profile"],
-                    "behind_the_scenes":   ["category"],
-                }
+            def main(p, brief_json: str) -> dict:
+                b = (p or {}).get("business_brief") or {}
                 try:
                     brief = json.loads(brief_json) if brief_json else {}
                 except Exception:
                     brief = {}
-                needed = HARD.get(content_type, [])
-                missing = [k for k in needed if not brief.get(k)]
-                status = "complete" if not missing else "missing"
                 return {
                     "business_brief": brief,
-                    "business_brief_missing_fields": missing,
-                    "business_brief_status": status,
+                    "business_brief_missing_fields": b.get("missing_fields") or [],
+                    "business_brief_status": b.get("business_brief_status") or "needs_review",
                 }
           variables:
+            - variable: p
+              value_selector: [n0_preflight_call, body]
             - variable: brief_json
               value_selector: [start_node, business_brief_json]
-            - variable: content_type
-              value_selector: [n3_content_type_canonical_map, content_type]
           outputs:
             business_brief:                { type: object, children: null }
             business_brief_missing_fields: { type: "array[string]", children: null }
@@ -710,14 +658,23 @@ workflow:
     # 边 / edges
     # ------------------------------------------------------------------
     edges:
-      - id: start_node-n1_tenant_resolution-source-target
+      - id: start_node-n0_preflight_call-source-target
         source: start_node
+        sourceHandle: source
+        target: n0_preflight_call
+        targetHandle: target
+        type: custom
+        zIndex: 0
+        data: { sourceType: start, targetType: http-request, isInIteration: false, isInLoop: false }
+
+      - id: n0-n1-source-target
+        source: n0_preflight_call
         sourceHandle: source
         target: n1_tenant_resolution
         targetHandle: target
         type: custom
         zIndex: 0
-        data: { sourceType: start, targetType: code, isInIteration: false, isInLoop: false }
+        data: { sourceType: http-request, targetType: code, isInIteration: false, isInLoop: false }
 
       - id: n1-n2-source-target
         source: n1_tenant_resolution

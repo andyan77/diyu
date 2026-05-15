@@ -34,8 +34,8 @@ start:
     - name: intent_hint
       type: select
       required: true
-      options: [content_generation, retrieval_only, qa]
-      description: intent canonical 枚举；中间件只做确定性校验，禁 LLM
+      options: [content_generation, quality_check, strategy_advice, training, sales_script]
+      description: intent canonical 枚举（与 serving/intent_classifier.INTENT_ENUM 单源对齐）；中间件只做确定性校验，禁 LLM
     - name: content_type_hint
       type: text
       required: true
@@ -49,38 +49,56 @@ start:
 # 10-node pipeline
 # ----------------------------------------------------------------------
 nodes:
+  # KS-CD-003-A · 单源化 / single-source：把原 n1-n4 内联硬编码
+  # （tenant registry / intent enum / content_type alias / per-content_type HARD）
+  # 下沉到 serving deterministic endpoint /v1/input_preflight；n1-n4 退化为透传节点。
+  - id: n0_preflight_call
+    role: preflight_call
+    type: http_request
+    description: deterministic 单点入口，组合 tenant/intent/content_type/business_brief 四段判定结果（不调 LLM）
+    method: POST
+    url: "${SERVING_API_BASE}/v1/input_preflight"
+    uses_tenant_filter: false
+    no_direct_table_query: true
+    inputs:
+      - source: start.tenant_id_hint
+      - source: start.intent_hint
+      - source: start.content_type_hint
+      - source: start.business_brief
+    outputs: [preflight_status, tenant, intent, content_type, business_brief]
+
   - id: n1_tenant_resolution
     role: tenant_resolution
     type: code
-    description: 根据 tenant_id_hint 解析 resolved_brand_layer + allowed_layers
+    description: 透传 n0.tenant；只抽字段不做判断（真源 = tenant_scope_registry.csv）
     inputs:
-      - source: start.tenant_id_hint
-    outputs: [resolved_brand_layer, allowed_layers]
+      - source: n0_preflight_call.tenant
+    outputs: [resolved_brand_layer, allowed_layers, tenant_ok]
 
   - id: n2_intent_canonical_check
     role: intent_canonical_check
     type: code
-    description: intent_hint 在 canonical 枚举内则透传 classified_intent；否则 needs_review
+    description: 透传 n0.intent；只抽字段不做判断（真源 = intent_classifier.INTENT_ENUM 5 类）
     inputs:
-      - source: start.intent_hint
-    outputs: [classified_intent]
+      - source: n0_preflight_call.intent
+    outputs: [classified_intent, intent_status]
 
   - id: n3_content_type_canonical_map
     role: content_type_canonical_map
     type: code
-    description: 走 content_type_canonical.csv 做确定性 alias→canonical 映射
+    description: 透传 n0.content_type；只抽字段不做判断（真源 = content_type_canonical.csv 18 canonical + aliases）
     inputs:
-      - source: start.content_type_hint
-    outputs: [content_type]
+      - source: n0_preflight_call.content_type
+    outputs: [content_type, content_type_status]
 
   - id: n4_business_brief_check
     role: business_brief_check
     type: code
-    description: 检查 business_brief 是否满足 content_type 所需字段集
+    description: 透传 n0.business_brief；只抽字段不做判断（真源 = field_requirement_matrix.csv per content_type HARD）
     inputs:
+      - source: n0_preflight_call.business_brief
       - source: start.business_brief
-      - source: n3_content_type_canonical_map.content_type
-    outputs: [business_brief_missing_fields]
+    outputs: [business_brief, business_brief_missing_fields, business_brief_status]
 
   - id: n5_retrieve_context_call
     role: retrieve_context_call
@@ -152,6 +170,7 @@ nodes:
 # 边 / edges：严格按 ORDERED_ROLES 顺序
 # ----------------------------------------------------------------------
 edges:
+  - { from: n0_preflight_call,             to: n1_tenant_resolution }
   - { from: n1_tenant_resolution,         to: n2_intent_canonical_check }
   - { from: n2_intent_canonical_check,    to: n3_content_type_canonical_map }
   - { from: n3_content_type_canonical_map, to: n4_business_brief_check }

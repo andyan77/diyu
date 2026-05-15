@@ -130,6 +130,83 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /v1/input_preflight:
+    post:
+      summary: deterministic input preflight / 单源化输入预检
+      description: |
+        KS-CD-003-A · 把 Dify chatflow n1-n4 原硬编码 (tenant registry / intent enum /
+        content_type alias / per-content_type HARD) 下沉到本仓 deterministic endpoint，
+        组合调用 tenant_scope_resolver / intent_classifier / content_type_router 与
+        field_requirement_matrix.csv 真源。**不调 LLM，不写真源**。
+      operationId: inputPreflight
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [tenant_id_hint, intent_hint, content_type_hint]
+              properties:
+                tenant_id_hint:    { type: string, minLength: 1 }
+                intent_hint:       { type: string, minLength: 1 }
+                content_type_hint: { type: string, minLength: 1 }
+                business_brief:    { type: object, nullable: true }
+      responses:
+        "200":
+          description: 预检结果（preflight_status / tenant / intent / content_type / business_brief 四段）
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [preflight_status, tenant, intent, content_type, business_brief]
+                properties:
+                  preflight_status:
+                    type: string
+                    enum: [ok, needs_review, blocked]
+                  tenant:
+                    type: object
+                    required: [tenant_ok, resolved_brand_layer, allowed_layers]
+                    properties:
+                      tenant_ok:            { type: boolean }
+                      resolved_brand_layer: { type: string, nullable: true }
+                      allowed_layers:
+                        type: array
+                        items: { type: string }
+                  intent:
+                    type: object
+                    required: [classified_intent, intent_status]
+                    properties:
+                      classified_intent: { type: string }
+                      intent_status:     { type: string }
+                  content_type:
+                    type: object
+                    required: [content_type, content_type_status]
+                    properties:
+                      content_type:        { type: string }
+                      content_type_status: { type: string }
+                      matched_alias:       { type: string, nullable: true }
+                  business_brief:
+                    type: object
+                    required: [business_brief_status, missing_fields]
+                    properties:
+                      business_brief_status: { type: string }
+                      missing_fields:
+                        type: array
+                        items: { type: string }
+        "400":
+          description: 入参校验失败
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: 内部错（如 registry corrupted）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     # 注：入参 **没有** brand_layer 字段。下面用 additionalProperties=false 防 override 漏入。

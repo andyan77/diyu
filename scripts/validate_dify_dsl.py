@@ -278,6 +278,98 @@ def validate(dsl: dict[str, Any]) -> list[str]:
                 "中间必经 fallback_status_branch（拓扑位置应满足 bbc < fsb < llm）"
             )
 
+    # V12 单源化 / single-source（KS-CD-003-A）:
+    #   n1-n4 (tenant_resolution / intent_canonical_check / content_type_canonical_map /
+    #   business_brief_check) 必须**至少有一条** input 来自 n0_preflight_call.*；
+    #   防止有人把硬编码 registry / alias 移回 DSL 内联代码。
+    PREFLIGHT_DEPENDENT_ROLES = {
+        "tenant_resolution", "intent_canonical_check",
+        "content_type_canonical_map", "business_brief_check",
+    }
+    has_preflight_call = any(n.get("role") == "preflight_call" for n in nodes)
+    if not has_preflight_call:
+        errors.append(
+            "V12 single-source 红线：缺 preflight_call 节点（KS-CD-003-A）；"
+            "n1-n4 必须依赖 /v1/input_preflight，不许内联 registry/alias"
+        )
+    for n in nodes:
+        if n.get("role") not in PREFLIGHT_DEPENDENT_ROLES:
+            continue
+        sources = [(inp or {}).get("source", "") for inp in (n.get("inputs") or [])]
+        if not any(isinstance(s, str) and s.startswith("n0_preflight_call.") for s in sources):
+            errors.append(
+                f"V12 single-source：role={n.get('role')} (id={n.get('id')}) "
+                "未引用 n0_preflight_call.*；可能内联了硬编码 registry/alias"
+            )
+
+    return errors
+
+
+# ----------------------------------------------------------------------
+# V13 · Dify YAML 内联代码体积/关键字闸（防 n1-n4 内联 alias 大表回潮）
+# ----------------------------------------------------------------------
+
+# canonical content_type 全集（18 类）—— 出现 ≥ 10 个在单节点 code 中 → 视为内联大表
+_CT_CANONICAL_NAMES = (
+    "behind_the_scenes", "daily_fragment", "emotion_expression",
+    "event_documentary", "founder_ip", "humor_content", "knowledge_sharing",
+    "lifestyle_expression", "outfit_of_the_day", "personal_vlog",
+    "process_trace", "product_copy_general", "product_journey",
+    "product_review", "role_work_vlog", "store_daily",
+    "talent_showcase", "training_material",
+)
+
+V13_TARGET_NODES = {
+    "n1_tenant_resolution", "n2_intent_canonical_check",
+    "n3_content_type_canonical_map", "n4_business_brief_check",
+}
+
+
+def validate_dify_yaml_inline(yml_path: Path) -> list[str]:
+    """检查 chatflow_dify_cloud.yml 内 n1-n4 code 节点是否回潮硬编码。
+
+    红线 / red lines:
+      - 单个 n1-n4 节点 code 文本长度 > 1500 字符 → 视为内联了 registry/alias
+      - 单个 n1-n4 节点 code 中出现 ≥ 5 个 canonical content_type 名 → 视为内联大表
+    """
+    errors: list[str] = []
+    if not yml_path.is_file():
+        return errors  # 可选 file；不存在则跳过
+    try:
+        data = yaml.safe_load(yml_path.read_text(encoding="utf-8"))
+    except yaml.YAMLError as e:
+        errors.append(f"V13 chatflow_dify_cloud.yml 解析失败: {e}")
+        return errors
+    workflow = ((data or {}).get("workflow") or {}).get("graph") or (data or {}).get("graph") or {}
+    nodes = workflow.get("nodes") or []
+    for n in nodes:
+        nid = n.get("id")
+        if nid not in V13_TARGET_NODES:
+            continue
+        data_block = n.get("data") or {}
+        code_text = data_block.get("code") or ""
+        if not isinstance(code_text, str):
+            continue
+        # 字符长度闸
+        if len(code_text) > 1500:
+            errors.append(
+                f"V13 内联代码体积超闸：{nid} code length={len(code_text)} (>1500) — "
+                "疑似回潮硬编码 registry/alias；应只做 n0 透传"
+            )
+        # canonical content_type 名出现次数闸
+        hits = sum(1 for name in _CT_CANONICAL_NAMES if name in code_text)
+        if hits >= 5:
+            errors.append(
+                f"V13 内联 canonical content_type 名 = {hits} (>=5) in {nid}: "
+                "疑似内联 alias 大表；真源应在 content_type_canonical.csv"
+            )
+        # 显式 tenant_id 字面量闸（registry 回潮探测）
+        for tid_literal in ("tenant_faye_main", "tenant_demo"):
+            if tid_literal in code_text:
+                errors.append(
+                    f"V13 节点 {nid} code 出现 tenant_id 字面量 {tid_literal!r}: "
+                    "registry 回潮；真源应在 tenant_scope_registry.csv"
+                )
     return errors
 
 
@@ -302,6 +394,12 @@ def main() -> int:
         return 2
 
     errors = validate(dsl)
+
+    # V13 · 额外校验 Dify-flavored YAML（如 dify/chatflow_dify_cloud.yml 存在）
+    yml_path = REPO_ROOT / "dify" / "chatflow_dify_cloud.yml"
+    yml_errors = validate_dify_yaml_inline(yml_path) if yml_path.is_file() else []
+    errors.extend(yml_errors)
+
     if errors:
         print(f"❌ {args.dsl.name} 校验失败 / validation failed ({len(errors)} errors):", file=sys.stderr)
         for e in errors:
@@ -310,6 +408,8 @@ def main() -> int:
 
     print(f"✅ {args.dsl.name} 校验通过 / validation passed")
     print(f"   roles checked: {len(ORDERED_ROLES)}")
+    if yml_path.is_file():
+        print(f"   chatflow_dify_cloud.yml V13 inline check: passed")
     return 0
 
 
