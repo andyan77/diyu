@@ -74,12 +74,33 @@
 
 ## 6. 合并决策 / Merge Decision
 
-**未合并**。等待用户裁决：
-- (a) squash merge → main 历史只多一个收口 commit
-- (b) merge commit → 保留 72 commit 语义
+✅ **已合并** via `merge commit`：`357617d8785a53a6bed69a75488c51bdf5e43aa7`（保留 72 commit 历史）。
 
-## 7. 后续 / Next Steps
+## 7. 合并后 push to main 真实运行 / Post-merge Main Push Evidence
 
-1. 用户裁决合并方式 → 合 PR → push to main 触发 `release_gate_full` job
-2. `release_gate_full` 因 secrets 缺失会 `BLOCKED check` 步骤 fail-closed exit 1，形成 `remote_full_blocked_missing_secrets` 证据；这本身**不是回归**，是设计内的诚实拒绝
-3. 若用户决定补 full 章，另开 `release/serving-full-gate-recert` 分支 + 先配 GitHub Actions secrets，再用 `workflow_dispatch mode=full` 跑真链路
+main 上的 push 触发了完整三 job 跑，包括之前因 PR 上下文级联 skipped 的 `release_gate_full`：
+
+| Job | Conclusion | 含义 |
+|---|---|---|
+| 1·lint task_cards + DSL | ✅ success | 与 PR 时一致 |
+| 2·release_gate static (audit ledger verdicts) | ✅ success | verdict=PASS, 24/24 stages |
+| 3·release_gate full (live staging smokes) | ❌ **failure** at `BLOCKED check` step | **设计内 fail-closed**：检测到 `STAGING_API_BASE / DIFY_API_URL / DIFY_APP_TOKEN` 3 个 secrets 全空，refuses auto-PASS |
+
+**Run URL**: https://github.com/andyan77/diyu/actions/runs/25910577686
+
+**关键 log 行**（`3·release_gate full` 的 `BLOCKED check` step）：
+```
+##[error]missing secrets: STAGING_API_BASE DIFY_API_URL DIFY_APP_TOKEN — release_gate_full BLOCKED, refuses auto-PASS
+##[error]Process completed with exit code 1.
+```
+
+### 本次正式留下的档位
+
+✅ **`remote_static_pass`** —— PR + main 两轮都 PASS
+✅ **`remote_full_blocked_missing_secrets`** —— main push 触发，fail-closed 诚实拒绝，不是回归
+
+## 8. 后续 / Next Steps
+
+1. 若用户决定补真 `remote_full_pass`：在 GitHub Actions secrets 后台配齐 `STAGING_API_BASE / DIFY_API_URL / DIFY_APP_TOKEN / DIFY_APP_ID / DASHSCOPE_API_KEY`，然后开 `release/serving-full-gate-recert` 分支用 `workflow_dispatch mode=full` 跑真链路
+2. DIFY token rotate：用户已确认会 rotate（public 仓兜底）；新 key 仅写本地 `.env`，不入 git
+3. 本地 backup 分支 `backup/pre-redact-rebase-ad61296` 仍含旧 token，**永不推远程**；rotate 后旧 token 作废，该分支可保留（无害）或在确认本次合并稳定后删除
