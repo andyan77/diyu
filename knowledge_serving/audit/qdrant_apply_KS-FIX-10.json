@@ -1,0 +1,112 @@
+{
+  "task_card": "KS-FIX-10",
+  "corrects": "KS-DIFY-ECS-004",
+  "checked_at": "2026-05-14T08:42:06Z",
+  "env": "staging",
+  "mode": "live_search_post_apply",
+  "git_commit": "3abce2f3baa232c32f49a2e5909c75b109beb59f",
+  "evidence_level": "runtime_verified",
+  "collection_name": "ks_chunks__mp_20260512_002",
+  "alias": "ks_chunks_current",
+  "qdrant_endpoint_label": "QDRANT_URL_STAGING",
+  "collection_points_count": 498,
+  "collection_vectors_count": null,
+  "source_chunks_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
+  "source_apply_audit": "knowledge_serving/audit/qdrant_upload_KS-DIFY-ECS-004.json",
+  "live_search_queries": [
+    {
+      "query_view_type": "brand_overlay_view",
+      "query_chunk_id": "brand_overlay_view::BO-product_attribute-faye-brand-tone-core",
+      "hit_count": 5,
+      "top_score": 1.0,
+      "top_hit_payload_keys": [
+        "brand_layer",
+        "chunk_id",
+        "chunk_text_hash",
+        "compile_run_id",
+        "content_type",
+        "default_call_pool",
+        "embedding_dimension",
+        "embedding_model",
+        "embedding_model_version",
+        "evidence_ids",
+        "gate_status",
+        "granularity_layer",
+        "index_version",
+        "pack_type",
+        "source_manifest_hash",
+        "source_pack_id",
+        "view_schema_version",
+        "view_type"
+      ],
+      "payload_governance_columns_ok": true,
+      "hit_compile_run_ids": [
+        "5b5e5fc1f6199ec6"
+      ]
+    },
+    {
+      "query_view_type": "content_type_view",
+      "query_chunk_id": "content_type_view::behind_the_scenes",
+      "hit_count": 5,
+      "top_score": 1.0000001,
+      "top_hit_payload_keys": [
+        "brand_layer",
+        "chunk_id",
+        "chunk_text_hash",
+        "compile_run_id",
+        "content_type",
+        "default_call_pool",
+        "embedding_dimension",
+        "embedding_model",
+        "embedding_model_version",
+        "evidence_ids",
+        "gate_status",
+        "granularity_layer",
+        "index_version",
+        "pack_type",
+        "source_manifest_hash",
+        "source_pack_id",
+        "view_schema_version",
+        "view_type"
+      ],
+      "payload_governance_columns_ok": true,
+      "hit_compile_run_ids": [
+        "5b5e5fc1f6199ec6"
+      ]
+    },
+    {
+      "query_view_type": "evidence_view",
+      "query_chunk_id": "evidence_view::EV-KP-craft_quality-brushing-napping-aging-speed",
+      "hit_count": 5,
+      "top_score": 0.99999994,
+      "top_hit_payload_keys": [
+        "brand_layer",
+        "chunk_id",
+        "chunk_text_hash",
+        "compile_run_id",
+        "content_type",
+        "default_call_pool",
+        "embedding_dimension",
+        "embedding_model",
+        "embedding_model_version",
+        "evidence_ids",
+        "gate_status",
+        "granularity_layer",
+        "index_version",
+        "pack_type",
+        "source_manifest_hash",
+        "source_pack_id",
+        "view_schema_version",
+        "view_type"
+      ],
+      "payload_governance_columns_ok": true,
+      "hit_compile_run_ids": [
+        "5b5e5fc1f6199ec6"
+      ]
+    }
+  ],
+  "live_search_total_hits": 15,
+  "live_search_all_governance_ok": true,
+  "payload_schema_ok": true,
+  "live_search_pass": true
+}

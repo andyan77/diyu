@@ -1,0 +1,101 @@
+{
+  "task_card": "KS-DIFY-ECS-003",
+  "run_id": "a307b5f9-4bc4-4849-9f1a-44bcb1f5f795",
+  "run_at": "2026-05-14T13:48:21Z",
+  "checked_at": "2026-05-14T13:48:21Z",
+  "git_commit": "d881f550d73e8cfda9dd47da6674e3c3db68baeb",
+  "env": "staging",
+  "mode": "apply",
+  "evidence_level": "runtime_verified",
+  "target_schema": "serving",
+  "partition_reference": "KS-DIFY-ECS-011 §0.1 row 3→new serving.* (NOT legacy knowledge.*)",
+  "prerequisite_gate": {
+    "task_card": "KS-COMPILER-013",
+    "report": "knowledge_serving/audit/validate_serving_governance.report",
+    "compile_run_id": "5b5e5fc1f6199ec6",
+    "gates": {
+      "S1": "pass",
+      "S2": "pass",
+      "S3": "pass",
+      "S4": "pass",
+      "S5": "pass",
+      "S6": "pass",
+      "S7": "pass"
+    },
+    "status": "pass"
+  },
+  "source_manifest_hash": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2",
+  "compile_run_id": "5b5e5fc1f6199ec6",
+  "view_schema_version": "3c0863a75967",
+  "tables": {
+    "serving.pack_view": 201,
+    "serving.content_type_view": 18,
+    "serving.generation_recipe_view": 18,
+    "serving.play_card_view": 29,
+    "serving.runtime_asset_view": 24,
+    "serving.brand_overlay_view": 7,
+    "serving.evidence_view": 201,
+    "serving.tenant_scope_registry": 2,
+    "serving.field_requirement_matrix": 19,
+    "serving.retrieval_policy_view": 18,
+    "serving.merge_precedence_policy": 8,
+    "serving.context_bundle_log": 36
+  },
+  "ddl_table_count": 12,
+  "ddl_byte_size": 9022,
+  "ddl_sha256": "90045aa669ed65a1fa65ea7538bb5d79b2173c7dd782ae0c493ea3eb954eeffc",
+  "human_signoff": null,
+  "model_policy_version": "mp_20260512_002",
+  "read_only_legacy_guarantee": "脚本拒绝任何引用 knowledge.* 的 SQL；只写 serving.*",
+  "post_verify": {
+    "serving.pack_view": {
+      "expected": 201,
+      "actual": 201
+    },
+    "serving.content_type_view": {
+      "expected": 18,
+      "actual": 18
+    },
+    "serving.generation_recipe_view": {
+      "expected": 18,
+      "actual": 18
+    },
+    "serving.play_card_view": {
+      "expected": 29,
+      "actual": 29
+    },
+    "serving.runtime_asset_view": {
+      "expected": 24,
+      "actual": 24
+    },
+    "serving.brand_overlay_view": {
+      "expected": 7,
+      "actual": 7
+    },
+    "serving.evidence_view": {
+      "expected": 201,
+      "actual": 201
+    },
+    "serving.tenant_scope_registry": {
+      "expected": 2,
+      "actual": 2
+    },
+    "serving.field_requirement_matrix": {
+      "expected": 19,
+      "actual": 19
+    },
+    "serving.retrieval_policy_view": {
+      "expected": 18,
+      "actual": 18
+    },
+    "serving.merge_precedence_policy": {
+      "expected": 8,
+      "actual": 8
+    },
+    "serving.context_bundle_log": {
+      "expected": 36,
+      "actual": 36
+    }
+  },
+  "post_verify_status": "pass"
+}

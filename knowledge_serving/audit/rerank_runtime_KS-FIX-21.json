@@ -1,0 +1,1109 @@
+{
+  "card": "KS-FIX-21",
+  "checked_at": "2026-05-14T07:06:25Z",
+  "env": "staging",
+  "git_commit": "a2f7416d78f7a9b579c284f710f2660022f324eb",
+  "evidence_level": "runtime_verified",
+  "queries_total": 10,
+  "rerank_invoked_count": 10,
+  "topk_order_changed_count": 10,
+  "required_order_change_threshold": 6,
+  "threshold_pct": 0.6,
+  "pass_condition_met": true,
+  "metric_note": "topk_order_changed 测的是前 10 候选 ID 顺序是否被 rerank 改变；rerank_score_spread_top10 是 rerank 返回分数的 max-min，反映 rerank 是否给出有分辨力的分差。rerank 不改 qdrant_score 字段是预期（qdrant_score 是原始余弦分），分变体现在 rerank_score 字段。",
+  "rerank_invocation_log": [
+    {
+      "query": "我们想讲品牌为什么存在，不要像卖货文案",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "创始人经历怎么讲，才能和品牌气质连起来",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "门店团队的日常怎么讲，才有温度但不鸡汤",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "想表达长期主义，怎么避免空泛口号",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "品牌想讲审美标准，应该从什么故事切入",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "顾客信任不是靠打折建立的，这个观点怎么讲",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "想写一篇企业价值观内容，但不要像公司公告",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "新店开业怎么讲品牌和城市的关系",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "团队坚持做一件小事很多年，适合怎么变成品牌故事",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    },
+    {
+      "query": "怎么把创始人的个人判断，转成品牌的方法论",
+      "ok": true,
+      "candidates_in": 30,
+      "candidates_out": 30
+    }
+  ],
+  "per_query": [
+    {
+      "query": "我们想讲品牌为什么存在，不要像卖货文案",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.0,
+      "topk_before": [
+        {
+          "id": "45dfd8c0-84d8-55e2-94b2-ecb9efbdd914",
+          "qdrant_score": 0.5830798,
+          "rerank_score": null
+        },
+        {
+          "id": "d88665f7-d868-5782-831e-1b22c2bde149",
+          "qdrant_score": 0.5828254,
+          "rerank_score": null
+        },
+        {
+          "id": "291a078c-f4b5-58da-b6e4-0ec23345e2d7",
+          "qdrant_score": 0.577504,
+          "rerank_score": null
+        },
+        {
+          "id": "c037e7b7-1702-5fbf-8740-dcb793591f84",
+          "qdrant_score": 0.5720441,
+          "rerank_score": null
+        },
+        {
+          "id": "3479edf0-bd24-52df-ac37-e9eb49dc8388",
+          "qdrant_score": 0.56983775,
+          "rerank_score": null
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.56807953,
+          "rerank_score": null
+        },
+        {
+          "id": "b2ab6e4e-4351-5687-a686-65f144744c22",
+          "qdrant_score": 0.5674371,
+          "rerank_score": null
+        },
+        {
+          "id": "b1ef0652-5c11-5de7-b8e3-5cb8110a1adf",
+          "qdrant_score": 0.5664819,
+          "rerank_score": null
+        },
+        {
+          "id": "4812be03-41d5-5816-a063-6d37a947c65d",
+          "qdrant_score": 0.564783,
+          "rerank_score": null
+        },
+        {
+          "id": "8a6f1321-8ad0-541a-ae4b-5ceed9fc8cea",
+          "qdrant_score": 0.5647547,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "45dfd8c0-84d8-55e2-94b2-ecb9efbdd914",
+          "qdrant_score": 0.5830798,
+          "rerank_score": 0.24216993561144706
+        },
+        {
+          "id": "d88665f7-d868-5782-831e-1b22c2bde149",
+          "qdrant_score": 0.5828254,
+          "rerank_score": 0.24216993561144706
+        },
+        {
+          "id": "291a078c-f4b5-58da-b6e4-0ec23345e2d7",
+          "qdrant_score": 0.577504,
+          "rerank_score": 0.24216993561144706
+        },
+        {
+          "id": "c037e7b7-1702-5fbf-8740-dcb793591f84",
+          "qdrant_score": 0.5720441,
+          "rerank_score": 0.24216993561144706
+        },
+        {
+          "id": "3479edf0-bd24-52df-ac37-e9eb49dc8388",
+          "qdrant_score": 0.56983775,
+          "rerank_score": 0.24216993561144706
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.56807953,
+          "rerank_score": 0.24216993561144706
+        },
+        {
+          "id": "b2ab6e4e-4351-5687-a686-65f144744c22",
+          "qdrant_score": 0.5674371,
+          "rerank_score": 0.24216993561144706
+        },
+        {
+          "id": "b1ef0652-5c11-5de7-b8e3-5cb8110a1adf",
+          "qdrant_score": 0.5664819,
+          "rerank_score": 0.24216993561144706
+        }
+      ]
+    },
+    {
+      "query": "创始人经历怎么讲，才能和品牌气质连起来",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.157987,
+      "topk_before": [
+        {
+          "id": "fe6605eb-2a41-52f9-9a99-9666a8862873",
+          "qdrant_score": 0.6286665,
+          "rerank_score": null
+        },
+        {
+          "id": "23b5a140-aa3d-5e86-b30c-a3854c73bd0d",
+          "qdrant_score": 0.61555517,
+          "rerank_score": null
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.6101182,
+          "rerank_score": null
+        },
+        {
+          "id": "ee93d38c-5b4d-5054-aedf-34e89a35a659",
+          "qdrant_score": 0.6059488,
+          "rerank_score": null
+        },
+        {
+          "id": "3a6b4db9-d24e-528a-b811-37b632314b86",
+          "qdrant_score": 0.60384256,
+          "rerank_score": null
+        },
+        {
+          "id": "258c4310-2161-5eb4-aba3-e6d30255f96c",
+          "qdrant_score": 0.6014006,
+          "rerank_score": null
+        },
+        {
+          "id": "cceaece5-e41c-5343-b07e-81408d3706a3",
+          "qdrant_score": 0.5988183,
+          "rerank_score": null
+        },
+        {
+          "id": "6bd38bf7-86d5-5fcf-b8de-1a1e62b62f8d",
+          "qdrant_score": 0.5974324,
+          "rerank_score": null
+        },
+        {
+          "id": "f9ce331e-30ad-5321-ad1f-b13a1a603ec9",
+          "qdrant_score": 0.59488857,
+          "rerank_score": null
+        },
+        {
+          "id": "48c0aac0-9582-51d8-a32f-52eccb79718b",
+          "qdrant_score": 0.5835654,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "77f25b64-6aee-5fdd-ac80-f0303965da8e",
+          "qdrant_score": 0.5718226,
+          "rerank_score": 0.1868502708434459
+        },
+        {
+          "id": "71dfd703-6d92-5df4-8cd6-259317d922cc",
+          "qdrant_score": 0.56093717,
+          "rerank_score": 0.14988989846011225
+        },
+        {
+          "id": "fe6605eb-2a41-52f9-9a99-9666a8862873",
+          "qdrant_score": 0.6286665,
+          "rerank_score": 0.028862888037898365
+        },
+        {
+          "id": "23b5a140-aa3d-5e86-b30c-a3854c73bd0d",
+          "qdrant_score": 0.61555517,
+          "rerank_score": 0.028862888037898365
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.6101182,
+          "rerank_score": 0.028862888037898365
+        },
+        {
+          "id": "ee93d38c-5b4d-5054-aedf-34e89a35a659",
+          "qdrant_score": 0.6059488,
+          "rerank_score": 0.028862888037898365
+        },
+        {
+          "id": "3a6b4db9-d24e-528a-b811-37b632314b86",
+          "qdrant_score": 0.60384256,
+          "rerank_score": 0.028862888037898365
+        },
+        {
+          "id": "258c4310-2161-5eb4-aba3-e6d30255f96c",
+          "qdrant_score": 0.6014006,
+          "rerank_score": 0.028862888037898365
+        }
+      ]
+    },
+    {
+      "query": "门店团队的日常怎么讲，才有温度但不鸡汤",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.261215,
+      "topk_before": [
+        {
+          "id": "24e28890-5345-5671-b289-dd35d5ce9396",
+          "qdrant_score": 0.6720059,
+          "rerank_score": null
+        },
+        {
+          "id": "f4e8d550-d827-555a-8218-9ccb55aa2446",
+          "qdrant_score": 0.66701263,
+          "rerank_score": null
+        },
+        {
+          "id": "44ec9bbd-66a4-53a1-9d2a-3ba610b94993",
+          "qdrant_score": 0.64682937,
+          "rerank_score": null
+        },
+        {
+          "id": "b91c96bf-d415-5b95-9309-6c98bb2c39aa",
+          "qdrant_score": 0.6376449,
+          "rerank_score": null
+        },
+        {
+          "id": "b1c6710d-760e-587d-9a87-55f4d67865fe",
+          "qdrant_score": 0.63412297,
+          "rerank_score": null
+        },
+        {
+          "id": "48c0aac0-9582-51d8-a32f-52eccb79718b",
+          "qdrant_score": 0.63072056,
+          "rerank_score": null
+        },
+        {
+          "id": "64d16394-4cab-573c-9202-b93a69154d00",
+          "qdrant_score": 0.62888855,
+          "rerank_score": null
+        },
+        {
+          "id": "225884af-8562-5f69-b116-adb31f01074e",
+          "qdrant_score": 0.6205348,
+          "rerank_score": null
+        },
+        {
+          "id": "cceaece5-e41c-5343-b07e-81408d3706a3",
+          "qdrant_score": 0.62032413,
+          "rerank_score": null
+        },
+        {
+          "id": "1a49a2c9-4aaf-53ee-8025-088b725eda12",
+          "qdrant_score": 0.6189107,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "b1c6710d-760e-587d-9a87-55f4d67865fe",
+          "qdrant_score": 0.63412297,
+          "rerank_score": 0.35677904169702346
+        },
+        {
+          "id": "b91c96bf-d415-5b95-9309-6c98bb2c39aa",
+          "qdrant_score": 0.6376449,
+          "rerank_score": 0.2998334423170248
+        },
+        {
+          "id": "24e28890-5345-5671-b289-dd35d5ce9396",
+          "qdrant_score": 0.6720059,
+          "rerank_score": 0.09556356968135596
+        },
+        {
+          "id": "f4e8d550-d827-555a-8218-9ccb55aa2446",
+          "qdrant_score": 0.66701263,
+          "rerank_score": 0.09556356968135596
+        },
+        {
+          "id": "44ec9bbd-66a4-53a1-9d2a-3ba610b94993",
+          "qdrant_score": 0.64682937,
+          "rerank_score": 0.09556356968135596
+        },
+        {
+          "id": "48c0aac0-9582-51d8-a32f-52eccb79718b",
+          "qdrant_score": 0.63072056,
+          "rerank_score": 0.09556356968135596
+        },
+        {
+          "id": "64d16394-4cab-573c-9202-b93a69154d00",
+          "qdrant_score": 0.62888855,
+          "rerank_score": 0.09556356968135596
+        },
+        {
+          "id": "225884af-8562-5f69-b116-adb31f01074e",
+          "qdrant_score": 0.6205348,
+          "rerank_score": 0.09556356968135596
+        }
+      ]
+    },
+    {
+      "query": "想表达长期主义，怎么避免空泛口号",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.0,
+      "topk_before": [
+        {
+          "id": "d88665f7-d868-5782-831e-1b22c2bde149",
+          "qdrant_score": 0.5688215,
+          "rerank_score": null
+        },
+        {
+          "id": "886cafb3-1866-5d34-b5c1-c9f9509ebc29",
+          "qdrant_score": 0.56024826,
+          "rerank_score": null
+        },
+        {
+          "id": "600c2f47-53f2-5d4b-9a14-da8306cd9078",
+          "qdrant_score": 0.55266106,
+          "rerank_score": null
+        },
+        {
+          "id": "77e5b419-6e37-5417-a80a-7fbc083fc421",
+          "qdrant_score": 0.5517088,
+          "rerank_score": null
+        },
+        {
+          "id": "df10840a-019a-5bac-8626-7b6d16acb876",
+          "qdrant_score": 0.5511664,
+          "rerank_score": null
+        },
+        {
+          "id": "691f5b29-cd87-5894-ad3c-d5de95929e1f",
+          "qdrant_score": 0.5506426,
+          "rerank_score": null
+        },
+        {
+          "id": "39186c69-eb29-51ad-b718-868bf047fc13",
+          "qdrant_score": 0.54535323,
+          "rerank_score": null
+        },
+        {
+          "id": "7603afa2-795a-5b1b-84b7-a7c3d2e38303",
+          "qdrant_score": 0.541394,
+          "rerank_score": null
+        },
+        {
+          "id": "2ca14b9f-cfd3-50e8-97f2-512215f8a1df",
+          "qdrant_score": 0.538482,
+          "rerank_score": null
+        },
+        {
+          "id": "1a49a2c9-4aaf-53ee-8025-088b725eda12",
+          "qdrant_score": 0.5377376,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "d88665f7-d868-5782-831e-1b22c2bde149",
+          "qdrant_score": 0.5688215,
+          "rerank_score": 0.06647103013045419
+        },
+        {
+          "id": "886cafb3-1866-5d34-b5c1-c9f9509ebc29",
+          "qdrant_score": 0.56024826,
+          "rerank_score": 0.06647103013045419
+        },
+        {
+          "id": "600c2f47-53f2-5d4b-9a14-da8306cd9078",
+          "qdrant_score": 0.55266106,
+          "rerank_score": 0.06647103013045419
+        },
+        {
+          "id": "77e5b419-6e37-5417-a80a-7fbc083fc421",
+          "qdrant_score": 0.5517088,
+          "rerank_score": 0.06647103013045419
+        },
+        {
+          "id": "df10840a-019a-5bac-8626-7b6d16acb876",
+          "qdrant_score": 0.5511664,
+          "rerank_score": 0.06647103013045419
+        },
+        {
+          "id": "691f5b29-cd87-5894-ad3c-d5de95929e1f",
+          "qdrant_score": 0.5506426,
+          "rerank_score": 0.06647103013045419
+        },
+        {
+          "id": "2ca14b9f-cfd3-50e8-97f2-512215f8a1df",
+          "qdrant_score": 0.538482,
+          "rerank_score": 0.06647103013045419
+        },
+        {
+          "id": "1a49a2c9-4aaf-53ee-8025-088b725eda12",
+          "qdrant_score": 0.5377376,
+          "rerank_score": 0.06647103013045419
+        }
+      ]
+    },
+    {
+      "query": "品牌想讲审美标准，应该从什么故事切入",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.0,
+      "topk_before": [
+        {
+          "id": "600c2f47-53f2-5d4b-9a14-da8306cd9078",
+          "qdrant_score": 0.6441105,
+          "rerank_score": null
+        },
+        {
+          "id": "d88665f7-d868-5782-831e-1b22c2bde149",
+          "qdrant_score": 0.6385664,
+          "rerank_score": null
+        },
+        {
+          "id": "d56d8ca2-6941-5dba-9bca-629eedd2da59",
+          "qdrant_score": 0.6210096,
+          "rerank_score": null
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.62074274,
+          "rerank_score": null
+        },
+        {
+          "id": "9dc81e93-ffb5-5bf2-83da-4ad8926463f9",
+          "qdrant_score": 0.6193263,
+          "rerank_score": null
+        },
+        {
+          "id": "6054a98e-4d1f-5c0d-9f7c-a404499268a0",
+          "qdrant_score": 0.6110268,
+          "rerank_score": null
+        },
+        {
+          "id": "55622b66-00a5-5714-b4ce-85647207093f",
+          "qdrant_score": 0.60966116,
+          "rerank_score": null
+        },
+        {
+          "id": "3a6b4db9-d24e-528a-b811-37b632314b86",
+          "qdrant_score": 0.60933566,
+          "rerank_score": null
+        },
+        {
+          "id": "240db42e-85b8-5356-9cf7-c195be49db7b",
+          "qdrant_score": 0.60376,
+          "rerank_score": null
+        },
+        {
+          "id": "612728e1-3522-52d3-8fce-d5e097669adb",
+          "qdrant_score": 0.6037177,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "600c2f47-53f2-5d4b-9a14-da8306cd9078",
+          "qdrant_score": 0.6441105,
+          "rerank_score": 0.05545815311472479
+        },
+        {
+          "id": "d88665f7-d868-5782-831e-1b22c2bde149",
+          "qdrant_score": 0.6385664,
+          "rerank_score": 0.05545815311472479
+        },
+        {
+          "id": "d56d8ca2-6941-5dba-9bca-629eedd2da59",
+          "qdrant_score": 0.6210096,
+          "rerank_score": 0.05545815311472479
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.62074274,
+          "rerank_score": 0.05545815311472479
+        },
+        {
+          "id": "9dc81e93-ffb5-5bf2-83da-4ad8926463f9",
+          "qdrant_score": 0.6193263,
+          "rerank_score": 0.05545815311472479
+        },
+        {
+          "id": "6054a98e-4d1f-5c0d-9f7c-a404499268a0",
+          "qdrant_score": 0.6110268,
+          "rerank_score": 0.05545815311472479
+        },
+        {
+          "id": "55622b66-00a5-5714-b4ce-85647207093f",
+          "qdrant_score": 0.60966116,
+          "rerank_score": 0.05545815311472479
+        },
+        {
+          "id": "3a6b4db9-d24e-528a-b811-37b632314b86",
+          "qdrant_score": 0.60933566,
+          "rerank_score": 0.05545815311472479
+        }
+      ]
+    },
+    {
+      "query": "顾客信任不是靠打折建立的，这个观点怎么讲",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.0,
+      "topk_before": [
+        {
+          "id": "225884af-8562-5f69-b116-adb31f01074e",
+          "qdrant_score": 0.6228719,
+          "rerank_score": null
+        },
+        {
+          "id": "ed664367-321a-513f-931c-46c5ea4fb1f8",
+          "qdrant_score": 0.6216916,
+          "rerank_score": null
+        },
+        {
+          "id": "36fa797d-4184-522e-a8a8-f707b53d5c72",
+          "qdrant_score": 0.61684924,
+          "rerank_score": null
+        },
+        {
+          "id": "45dfd8c0-84d8-55e2-94b2-ecb9efbdd914",
+          "qdrant_score": 0.6136174,
+          "rerank_score": null
+        },
+        {
+          "id": "78389759-d5ee-5e6f-815f-da3c5d14b609",
+          "qdrant_score": 0.6037371,
+          "rerank_score": null
+        },
+        {
+          "id": "1c5b5b9c-7bba-5ac1-8ac7-c570af99d8a1",
+          "qdrant_score": 0.5891341,
+          "rerank_score": null
+        },
+        {
+          "id": "24e28890-5345-5671-b289-dd35d5ce9396",
+          "qdrant_score": 0.5880929,
+          "rerank_score": null
+        },
+        {
+          "id": "35c08212-2591-5051-9b9d-cb52ae651f89",
+          "qdrant_score": 0.58400357,
+          "rerank_score": null
+        },
+        {
+          "id": "02c2de96-d545-533a-bc40-b678b0224512",
+          "qdrant_score": 0.5832988,
+          "rerank_score": null
+        },
+        {
+          "id": "08236392-009b-59a0-9fce-be1ff1741c5d",
+          "qdrant_score": 0.58275104,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "225884af-8562-5f69-b116-adb31f01074e",
+          "qdrant_score": 0.6228719,
+          "rerank_score": 0.1346381380690682
+        },
+        {
+          "id": "ed664367-321a-513f-931c-46c5ea4fb1f8",
+          "qdrant_score": 0.6216916,
+          "rerank_score": 0.1346381380690682
+        },
+        {
+          "id": "36fa797d-4184-522e-a8a8-f707b53d5c72",
+          "qdrant_score": 0.61684924,
+          "rerank_score": 0.1346381380690682
+        },
+        {
+          "id": "45dfd8c0-84d8-55e2-94b2-ecb9efbdd914",
+          "qdrant_score": 0.6136174,
+          "rerank_score": 0.1346381380690682
+        },
+        {
+          "id": "78389759-d5ee-5e6f-815f-da3c5d14b609",
+          "qdrant_score": 0.6037371,
+          "rerank_score": 0.1346381380690682
+        },
+        {
+          "id": "1c5b5b9c-7bba-5ac1-8ac7-c570af99d8a1",
+          "qdrant_score": 0.5891341,
+          "rerank_score": 0.1346381380690682
+        },
+        {
+          "id": "24e28890-5345-5671-b289-dd35d5ce9396",
+          "qdrant_score": 0.5880929,
+          "rerank_score": 0.1346381380690682
+        },
+        {
+          "id": "35c08212-2591-5051-9b9d-cb52ae651f89",
+          "qdrant_score": 0.58400357,
+          "rerank_score": 0.1346381380690682
+        }
+      ]
+    },
+    {
+      "query": "想写一篇企业价值观内容，但不要像公司公告",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.130558,
+      "topk_before": [
+        {
+          "id": "f9ce331e-30ad-5321-ad1f-b13a1a603ec9",
+          "qdrant_score": 0.5704765,
+          "rerank_score": null
+        },
+        {
+          "id": "45dfd8c0-84d8-55e2-94b2-ecb9efbdd914",
+          "qdrant_score": 0.56353104,
+          "rerank_score": null
+        },
+        {
+          "id": "31e209a8-0680-5ed4-a308-301872d6da4d",
+          "qdrant_score": 0.5538958,
+          "rerank_score": null
+        },
+        {
+          "id": "2b661e45-9478-5671-9f16-8e859030db54",
+          "qdrant_score": 0.55216205,
+          "rerank_score": null
+        },
+        {
+          "id": "7603afa2-795a-5b1b-84b7-a7c3d2e38303",
+          "qdrant_score": 0.5492343,
+          "rerank_score": null
+        },
+        {
+          "id": "58fab9b9-e4a3-5dd4-bc4b-a8518ff299d3",
+          "qdrant_score": 0.5452024,
+          "rerank_score": null
+        },
+        {
+          "id": "6054a98e-4d1f-5c0d-9f7c-a404499268a0",
+          "qdrant_score": 0.54138297,
+          "rerank_score": null
+        },
+        {
+          "id": "ee93d38c-5b4d-5054-aedf-34e89a35a659",
+          "qdrant_score": 0.5393387,
+          "rerank_score": null
+        },
+        {
+          "id": "b2ab6e4e-4351-5687-a686-65f144744c22",
+          "qdrant_score": 0.5377417,
+          "rerank_score": null
+        },
+        {
+          "id": "1b35eadb-6f39-5755-ae22-992fb1b54b03",
+          "qdrant_score": 0.52923954,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "7decce7a-19d4-5f31-b1dd-ab82b151dd31",
+          "qdrant_score": 0.51336956,
+          "rerank_score": 0.2804480363732122
+        },
+        {
+          "id": "f9ce331e-30ad-5321-ad1f-b13a1a603ec9",
+          "qdrant_score": 0.5704765,
+          "rerank_score": 0.14988989846011225
+        },
+        {
+          "id": "45dfd8c0-84d8-55e2-94b2-ecb9efbdd914",
+          "qdrant_score": 0.56353104,
+          "rerank_score": 0.14988989846011225
+        },
+        {
+          "id": "31e209a8-0680-5ed4-a308-301872d6da4d",
+          "qdrant_score": 0.5538958,
+          "rerank_score": 0.14988989846011225
+        },
+        {
+          "id": "2b661e45-9478-5671-9f16-8e859030db54",
+          "qdrant_score": 0.55216205,
+          "rerank_score": 0.14988989846011225
+        },
+        {
+          "id": "58fab9b9-e4a3-5dd4-bc4b-a8518ff299d3",
+          "qdrant_score": 0.5452024,
+          "rerank_score": 0.14988989846011225
+        },
+        {
+          "id": "6054a98e-4d1f-5c0d-9f7c-a404499268a0",
+          "qdrant_score": 0.54138297,
+          "rerank_score": 0.14988989846011225
+        },
+        {
+          "id": "ee93d38c-5b4d-5054-aedf-34e89a35a659",
+          "qdrant_score": 0.5393387,
+          "rerank_score": 0.14988989846011225
+        }
+      ]
+    },
+    {
+      "query": "新店开业怎么讲品牌和城市的关系",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.0,
+      "topk_before": [
+        {
+          "id": "cceaece5-e41c-5343-b07e-81408d3706a3",
+          "qdrant_score": 0.598318,
+          "rerank_score": null
+        },
+        {
+          "id": "48c0aac0-9582-51d8-a32f-52eccb79718b",
+          "qdrant_score": 0.5610235,
+          "rerank_score": null
+        },
+        {
+          "id": "6bd38bf7-86d5-5fcf-b8de-1a1e62b62f8d",
+          "qdrant_score": 0.5583619,
+          "rerank_score": null
+        },
+        {
+          "id": "44ec9bbd-66a4-53a1-9d2a-3ba610b94993",
+          "qdrant_score": 0.55483544,
+          "rerank_score": null
+        },
+        {
+          "id": "e342e238-c79b-535c-952a-e62b3edb3e6e",
+          "qdrant_score": 0.55176985,
+          "rerank_score": null
+        },
+        {
+          "id": "225884af-8562-5f69-b116-adb31f01074e",
+          "qdrant_score": 0.545051,
+          "rerank_score": null
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.5450394,
+          "rerank_score": null
+        },
+        {
+          "id": "f3a13685-5d9a-5782-ba26-7a0118fc1675",
+          "qdrant_score": 0.53945345,
+          "rerank_score": null
+        },
+        {
+          "id": "36fa797d-4184-522e-a8a8-f707b53d5c72",
+          "qdrant_score": 0.5361761,
+          "rerank_score": null
+        },
+        {
+          "id": "7d35408d-debf-573b-9297-6cdc8f957283",
+          "qdrant_score": 0.5357891,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "cceaece5-e41c-5343-b07e-81408d3706a3",
+          "qdrant_score": 0.598318,
+          "rerank_score": 0.06491730591509368
+        },
+        {
+          "id": "48c0aac0-9582-51d8-a32f-52eccb79718b",
+          "qdrant_score": 0.5610235,
+          "rerank_score": 0.06491730591509368
+        },
+        {
+          "id": "6bd38bf7-86d5-5fcf-b8de-1a1e62b62f8d",
+          "qdrant_score": 0.5583619,
+          "rerank_score": 0.06491730591509368
+        },
+        {
+          "id": "44ec9bbd-66a4-53a1-9d2a-3ba610b94993",
+          "qdrant_score": 0.55483544,
+          "rerank_score": 0.06491730591509368
+        },
+        {
+          "id": "e342e238-c79b-535c-952a-e62b3edb3e6e",
+          "qdrant_score": 0.55176985,
+          "rerank_score": 0.06491730591509368
+        },
+        {
+          "id": "225884af-8562-5f69-b116-adb31f01074e",
+          "qdrant_score": 0.545051,
+          "rerank_score": 0.06491730591509368
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.5450394,
+          "rerank_score": 0.06491730591509368
+        },
+        {
+          "id": "36fa797d-4184-522e-a8a8-f707b53d5c72",
+          "qdrant_score": 0.5361761,
+          "rerank_score": 0.06491730591509368
+        }
+      ]
+    },
+    {
+      "query": "团队坚持做一件小事很多年，适合怎么变成品牌故事",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.034915,
+      "topk_before": [
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.56515634,
+          "rerank_score": null
+        },
+        {
+          "id": "600c2f47-53f2-5d4b-9a14-da8306cd9078",
+          "qdrant_score": 0.55489844,
+          "rerank_score": null
+        },
+        {
+          "id": "d56d8ca2-6941-5dba-9bca-629eedd2da59",
+          "qdrant_score": 0.5480691,
+          "rerank_score": null
+        },
+        {
+          "id": "612728e1-3522-52d3-8fce-d5e097669adb",
+          "qdrant_score": 0.5418187,
+          "rerank_score": null
+        },
+        {
+          "id": "28d59fda-5e01-50b5-88ac-da5cfddaf2f4",
+          "qdrant_score": 0.5404365,
+          "rerank_score": null
+        },
+        {
+          "id": "d88665f7-d868-5782-831e-1b22c2bde149",
+          "qdrant_score": 0.53058887,
+          "rerank_score": null
+        },
+        {
+          "id": "45dfd8c0-84d8-55e2-94b2-ecb9efbdd914",
+          "qdrant_score": 0.52718246,
+          "rerank_score": null
+        },
+        {
+          "id": "b1ef0652-5c11-5de7-b8e3-5cb8110a1adf",
+          "qdrant_score": 0.5226963,
+          "rerank_score": null
+        },
+        {
+          "id": "2b661e45-9478-5671-9f16-8e859030db54",
+          "qdrant_score": 0.52241576,
+          "rerank_score": null
+        },
+        {
+          "id": "8a6f1321-8ad0-541a-ae4b-5ceed9fc8cea",
+          "qdrant_score": 0.51987314,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "7decce7a-19d4-5f31-b1dd-ab82b151dd31",
+          "qdrant_score": 0.51104635,
+          "rerank_score": 0.11367734758538087
+        },
+        {
+          "id": "f3a13685-5d9a-5782-ba26-7a0118fc1675",
+          "qdrant_score": 0.51128525,
+          "rerank_score": 0.10518829287337128
+        },
+        {
+          "id": "28d59fda-5e01-50b5-88ac-da5cfddaf2f4",
+          "qdrant_score": 0.5404365,
+          "rerank_score": 0.07904507635674142
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.56515634,
+          "rerank_score": 0.07876240867231185
+        },
+        {
+          "id": "600c2f47-53f2-5d4b-9a14-da8306cd9078",
+          "qdrant_score": 0.55489844,
+          "rerank_score": 0.07876240867231185
+        },
+        {
+          "id": "d56d8ca2-6941-5dba-9bca-629eedd2da59",
+          "qdrant_score": 0.5480691,
+          "rerank_score": 0.07876240867231185
+        },
+        {
+          "id": "612728e1-3522-52d3-8fce-d5e097669adb",
+          "qdrant_score": 0.5418187,
+          "rerank_score": 0.07876240867231185
+        },
+        {
+          "id": "d88665f7-d868-5782-831e-1b22c2bde149",
+          "qdrant_score": 0.53058887,
+          "rerank_score": 0.07876240867231185
+        }
+      ]
+    },
+    {
+      "query": "怎么把创始人的个人判断，转成品牌的方法论",
+      "ok": true,
+      "rerank_applied": true,
+      "candidates_count_before": 30,
+      "candidates_count_after": 8,
+      "topk_order_changed": true,
+      "rerank_score_spread_top10": 0.089108,
+      "topk_before": [
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.6485377,
+          "rerank_score": null
+        },
+        {
+          "id": "258c4310-2161-5eb4-aba3-e6d30255f96c",
+          "qdrant_score": 0.64087504,
+          "rerank_score": null
+        },
+        {
+          "id": "80f5e3f8-67c5-57ff-ab70-5397d41a80e1",
+          "qdrant_score": 0.63169116,
+          "rerank_score": null
+        },
+        {
+          "id": "3a6b4db9-d24e-528a-b811-37b632314b86",
+          "qdrant_score": 0.61729276,
+          "rerank_score": null
+        },
+        {
+          "id": "00dd8fb8-f8b0-53e0-8d04-27a087b9012a",
+          "qdrant_score": 0.61470777,
+          "rerank_score": null
+        },
+        {
+          "id": "da47151f-0611-5baa-b967-7653bfe00040",
+          "qdrant_score": 0.61380154,
+          "rerank_score": null
+        },
+        {
+          "id": "f9ce331e-30ad-5321-ad1f-b13a1a603ec9",
+          "qdrant_score": 0.6099975,
+          "rerank_score": null
+        },
+        {
+          "id": "fe6605eb-2a41-52f9-9a99-9666a8862873",
+          "qdrant_score": 0.6010224,
+          "rerank_score": null
+        },
+        {
+          "id": "ee93d38c-5b4d-5054-aedf-34e89a35a659",
+          "qdrant_score": 0.59849316,
+          "rerank_score": null
+        },
+        {
+          "id": "fd8aa45a-db3d-58d9-8ce5-d181b02c352f",
+          "qdrant_score": 0.59640753,
+          "rerank_score": null
+        }
+      ],
+      "topk_after": [
+        {
+          "id": "77f25b64-6aee-5fdd-ac80-f0303965da8e",
+          "qdrant_score": 0.56250393,
+          "rerank_score": 0.11663423053043004
+        },
+        {
+          "id": "a297ccce-22e5-587d-b5d5-8928723edb2e",
+          "qdrant_score": 0.6485377,
+          "rerank_score": 0.027525984138440082
+        },
+        {
+          "id": "258c4310-2161-5eb4-aba3-e6d30255f96c",
+          "qdrant_score": 0.64087504,
+          "rerank_score": 0.027525984138440082
+        },
+        {
+          "id": "80f5e3f8-67c5-57ff-ab70-5397d41a80e1",
+          "qdrant_score": 0.63169116,
+          "rerank_score": 0.027525984138440082
+        },
+        {
+          "id": "3a6b4db9-d24e-528a-b811-37b632314b86",
+          "qdrant_score": 0.61729276,
+          "rerank_score": 0.027525984138440082
+        },
+        {
+          "id": "00dd8fb8-f8b0-53e0-8d04-27a087b9012a",
+          "qdrant_score": 0.61470777,
+          "rerank_score": 0.027525984138440082
+        },
+        {
+          "id": "da47151f-0611-5baa-b967-7653bfe00040",
+          "qdrant_score": 0.61380154,
+          "rerank_score": 0.027525984138440082
+        },
+        {
+          "id": "f9ce331e-30ad-5321-ad1f-b13a1a603ec9",
+          "qdrant_score": 0.6099975,
+          "rerank_score": 0.027525984138440082
+        }
+      ]
+    }
+  ],
+  "risk_flags": []
+}

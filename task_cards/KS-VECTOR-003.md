@@ -8,6 +8,8 @@ files_touched:
   - knowledge_serving/tests/test_vector_offline.py
 artifacts:
   - knowledge_serving/scripts/qdrant_filter_smoke.py
+  - knowledge_serving/audit/qdrant_filter_smoke_KS-VECTOR-003.json
+  - knowledge_serving/audit/qdrant_filter_staging_KS-FIX-11.json
 s_gates: [S10]
 plan_sections:
   - "§8"
@@ -44,6 +46,8 @@ status: done
 |---|---|---|---|
 | `qdrant_filter_smoke.py` | py | 是 | 是 |
 | `test_vector_offline.py` | py | 是 | 是 |
+| `qdrant_filter_smoke_KS-VECTOR-003.json` | json | 是（offline 辅助证据） | 是 |
+| `qdrant_filter_staging_KS-FIX-11.json` | json（含 env / checked_at / git_commit / evidence_level） | 是（staging runtime 证据） | 是 |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
@@ -80,6 +84,7 @@ artifact: smoke report
 - [x] smoke 入 git（qdrant_filter_smoke.py + test_vector_offline.py + canonical audit json）
 - [x] CI pass（`python3 knowledge_serving/scripts/qdrant_filter_smoke.py --offline` exit 0；8 sampled cases 全过；`python3 -m pytest knowledge_serving/tests/test_vector_offline.py` 16/16 pass；`python3 scripts/validate_serving_tree.py` exit 0；2026-05-13 W7 收口重跑：上游 KS-VECTOR-002 schema 17 字段 + KS-VECTOR-001 chunks 重出后 smoke 仍 8/8）
 - [x] 审查员 pass（独立审查员 2026-05-13 两轮收口：① 首轮 FAIL → 4 项 finding 逐项闭环；② 二轮 CONDITIONAL_PASS finding #1 `view_schema_version` 治理债 → 按 E8 升级至上游 KS-VECTOR-001/002 接线修复，schema 17 字段 + 编译器透传 + 498 chunks 重出 + staging apply 重跑，三元锚定完成）
+- [x] staging Qdrant filter runtime pass（2026-05-14 FIX-11 收口：`qdrant_filter_smoke.py --staging` exit 0；真实 Qdrant collection=`ks_chunks__mp_20260512_002`；pass/fail/skip=9/0/0；cross_tenant_hits=0；audit=`knowledge_serving/audit/qdrant_filter_staging_KS-FIX-11.json`，含 `env=staging` / `checked_at` / `git_commit` / `evidence_level=runtime_verified`）
 
 ## 12. W7 收口跨卡引用 / W7 cross-card reverse refs（2026-05-13）
 

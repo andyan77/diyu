@@ -67,8 +67,8 @@ status: done
 | 路径 | 格式 | canonical | 入 git | CI artifact |
 |---|---|---|---|---|
 | `knowledge_serving/scripts/upload_serving_views_to_ecs.py` | py | 是 | 是 | — |
-| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json` | json | 是（**仅 apply 写**的可回放证据） | 是 | 是 |
-| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.dry_run.json` | json | 是（**仅 dry-run 写**的 sidecar，永不覆盖 apply 证据） | 是 | 是 |
+| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json` | json（含 env / checked_at / git_commit / evidence_level） | 是（**仅 apply 写**的可回放证据） | 是 | 是 |
+| `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.dry_run.json` | json（含 env / checked_at / git_commit / evidence_level，辅助证据） | 是（**仅 dry-run 写**的 sidecar，永不覆盖 apply 证据） | 是 | 是 |
 | `knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.ddl.sql` | sql | 是（dry-run 副产） | 是 | 是 |
 
 ## 6. 对抗性 / 边缘性测试
@@ -137,13 +137,13 @@ artifact: knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json
 
 ## 11. DoD
 - [x] 脚本入 git（`knowledge_serving/scripts/upload_serving_views_to_ecs.py`）— 待 commit
-- [x] dry-run pass（CI 命令 exit 0；audit json + DDL sql 落盘 + COMMENT ON TABLE 含批次元数据）
-- [x] DDL 跨次重跑 byte-identical（实测 sha256=`4b0f9ea236991c4d918ff7782b40385b54a7b4fe6493cbc902f4d677e1bbf441`）
+- [x] dry-run pass（2026-05-14 复跑 CI 命令 exit 0；audit json + DDL sql 落盘 + COMMENT ON TABLE 含批次元数据）
+- [x] DDL 跨次重跑 byte-identical（2026-05-14 复跑 sha256=`90045aa669ed65a1fa65ea7538bb5d79b2173c7dd782ae0c493ea3eb954eeffc`）
 - [x] KS-COMPILER-013 前置门禁负样本（report 缺失 / 任一 S 门 fail / CSV compile_run_id 漂移 / source_manifest_hash 漂移）全部 fail-closed
 - [x] CSV 治理三联缺列负样本（删 `pack_view.compile_run_id` 实测）fail-closed
 - [x] `knowledge.*` 拦截负样本 fail-closed
-- [x] staging apply pass — 2026-05-13 实测：`--env staging --apply` exit 0；`post_verify_status=pass`；12/12 表行数对齐（pack=201 / ct=18 / recipe=18 / play=29 / runtime=24 / overlay=7 / evidence=201 / tenant=2 / frm=19 / retrieval=18 / merge=8 / bundle_log=0）
-- [x] prod apply pass — 2026-05-13 实测：`--env prod --apply --signoff faye --model-policy-version mp_20260512_002` exit 0；`post_verify_status=pass`；audit 双签落 `human_signoff={signed_by:faye, signed_at:2026-05-12T18:27:13Z}` + `model_policy_version=mp_20260512_002`；prod 闸门 negative 路径（缺 signoff / 缺 model_policy_version）已在前轮 fail-closed 实测
+- [x] staging apply pass — 2026-05-14 复跑：`--env staging --apply` exit 0；`post_verify_status=pass`；`evidence_level=runtime_verified`；audit 含 `env=staging` / `checked_at=2026-05-14T07:36:47Z` / `git_commit=47687b9f3f0bb26fbfcc0d40abbf06ac3259d874`；12/12 表行数对齐（pack=201 / ct=18 / recipe=18 / play=29 / runtime=24 / overlay=7 / evidence=201 / tenant=2 / frm=19 / retrieval=18 / merge=8 / bundle_log=20，note：bundle_log 是 runtime 日志表，跨 e2e_smoke 运行 append 递增是正常现象，每次 apply 取当前 CSV 快照对账）
+- [x] prod apply pass — 2026-05-14 复跑（独立 artifact 补证 / standalone prod artifact backfill）：`--env prod --apply --signoff faye --model-policy-version mp_20260512_002` exit 0；`post_verify_status=pass`；12/12 表 expected==actual（pack=201 / ct=18 / recipe=18 / play=29 / runtime=24 / overlay=7 / evidence=201 / tenant=2 / frm=19 / retrieval=18 / merge=8 / bundle_log=156）；audit 双签落 `human_signoff={signed_by:faye, signed_at:2026-05-14T16:50:18Z}` + `model_policy_version=mp_20260512_002` + `evidence_level=runtime_verified` + `git_commit=9bf2ff6` + `compile_run_id=5b5e5fc1f6199ec6` + `source_manifest_hash=b3967bca…adfc2` + `view_schema_version=3c0863a75967`；独立 prod artifact 落 [upload_views_KS-DIFY-ECS-003.prod.json](../knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.prod.json)（与 [.staging.json](../knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.staging.json) 同时保留，每 env 独立稳定证据）；`deploy_ledger.jsonl` 末尾 append env=prod 行；prod 闸门 negative 路径（缺 signoff / 缺 model_policy_version）已在前轮 fail-closed 实测
 - [x] ECS 端独立旁路验证 — `pg_class` + `obj_description` 直接回读，12 张表 `COMMENT ON TABLE` 全部含 `compile_run_id=5b5e5fc1f6199ec6;source_manifest_hash=b3967bca…adfc2;view_schema_version=3c0863a75967;task_card=KS-DIFY-ECS-003`
 - [x] 审查员 finding 1/2/3 全部闭环（治理列硬门 / spec 对齐 4 policy 表口径 / 状态收口）
 - [x] 卡片状态与 `dag.csv` 同步 `done`

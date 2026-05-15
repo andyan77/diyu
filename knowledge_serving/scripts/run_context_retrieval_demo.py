@@ -15,8 +15,10 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import os
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -54,6 +56,7 @@ EVAL_FIELDS = [
     "selected_recipe_id",
     "structured_views_count",
     "vector_mode",
+    "vector_candidate_count",
     "overlay_layers_seen",
     "merged_overlay_payload_empty",
     "expected_fallback_status",
@@ -64,6 +67,10 @@ EVAL_FIELDS = [
     "bundle_hash",
     "case_status",
     "notes",
+    "env",
+    "checked_at",
+    "git_commit",
+    "evidence_level",
 ]
 
 
@@ -75,6 +82,25 @@ def _log_line(buf: list[str], msg: str) -> None:
     line = f"[{datetime.now(timezone.utc).strftime('%H:%M:%S')}] {msg}"
     print(line)
     buf.append(line)
+
+
+def _now_iso() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _git_commit() -> str:
+    proc = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.stdout.strip() if proc.returncode == 0 else "unknown"
+
+
+def _sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def _read_governance_from_view() -> dict[str, str]:
@@ -212,32 +238,43 @@ def run_case(case: dict, *, live: bool, log_buf: list[str]) -> dict:
 
     # ---- 步 8: vector_retrieval (offline 默认跳过) ----
     if live:
-        try:
-            from qdrant_client import QdrantClient
-            import dashscope
+        vector_res = None
+        vector_mode = "structured_only"
+        vector_candidate_count = 0
+        last_error: Exception | None = None
+        for attempt in range(1, 4):
+            try:
+                from qdrant_client import QdrantClient
+                import dashscope
 
-            def _embed(text: str) -> list[float]:
-                dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
-                r = dashscope.TextEmbedding.call(model="text-embedding-v3", input=text)
-                return list(r.output["embeddings"][0]["embedding"])
+                def _embed(text: str) -> list[float]:
+                    dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
+                    r = dashscope.TextEmbedding.call(model="text-embedding-v3", input=text)
+                    return list(r.output["embeddings"][0]["embedding"])
 
-            qclient = QdrantClient(url=os.environ["QDRANT_URL_STAGING"], timeout=10.0)
-            vector_res = vret.vector_retrieve(
-                query=case["user_query"],
-                allowed_layers=allowed_layers,
-                content_type=content_type,
-                embed_fn=_embed,
-                qdrant_client=qclient,
-            )
-            vector_mode = vector_res["mode"]
-        except Exception as e:
-            notes.append(f"vector_live_failed: {type(e).__name__}: {e}")
-            vector_res = None
-            vector_mode = "structured_only"
+                qclient = QdrantClient(url=os.environ["QDRANT_URL_STAGING"], timeout=10.0)
+                vector_res = vret.vector_retrieve(
+                    query=case["user_query"],
+                    allowed_layers=allowed_layers,
+                    content_type=content_type,
+                    embed_fn=_embed,
+                    qdrant_client=qclient,
+                )
+                vector_mode = vector_res["mode"]
+                vector_candidate_count = len(vector_res.get("candidates") or [])
+                if attempt > 1:
+                    notes.append(f"vector_live_retry_ok: attempt={attempt}")
+                break
+            except Exception as e:
+                last_error = e
+                time.sleep(1)
+        if vector_res is None and last_error is not None:
+            notes.append(f"vector_live_failed: {type(last_error).__name__}: {last_error}")
     else:
         vector_res = None
         vector_mode = "structured_only_offline"
-    _log_line(log_buf, f"  step8 vector: mode={vector_mode}")
+        vector_candidate_count = 0
+    _log_line(log_buf, f"  step8 vector: mode={vector_mode} candidates={vector_candidate_count}")
 
     # ---- 步 9: brand_overlay_retrieve ----
     overlay = bovr.brand_overlay_retrieve(
@@ -353,6 +390,7 @@ def run_case(case: dict, *, live: bool, log_buf: list[str]) -> dict:
         "selected_recipe_id": recipe_id,
         "structured_views_count": str(structured_views_count),
         "vector_mode": vector_mode,
+        "vector_candidate_count": str(vector_candidate_count),
         "overlay_layers_seen": ";".join(overlay_layers_seen) or "none",
         "merged_overlay_payload_empty": str(merged_payload_empty),
         "expected_fallback_status": expected_fb,
@@ -447,17 +485,43 @@ def main() -> int:
     parser.add_argument("--all", action="store_true", help="跑全部 4 个 case")
     parser.add_argument("--case", type=int, help="只跑某一个 case（1..4）")
     parser.add_argument("--live", action="store_true", help="启用真 dashscope + Qdrant（需出网 + tunnel）")
+    parser.add_argument("--staging", action="store_true", help="标记本次验收使用 staging 外部依赖")
+    parser.add_argument(
+        "--default-mode",
+        choices=("offline", "vector_enabled"),
+        default="offline",
+        help="demo 默认模式；vector_enabled 会启用真 Qdrant/DashScope 路径",
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        help="写 runtime audit JSON",
+    )
     parser.add_argument(
         "--eval-csv", type=Path, default=EVAL_CSV, help="输出 eval csv 路径（默认 canonical）"
     )
     args = parser.parse_args()
 
+    if args.default_mode == "vector_enabled":
+        args.live = True
+        if not args.all and args.case is None:
+            args.all = True
+
     if not args.all and args.case is None:
         parser.error("必须指定 --all 或 --case=N")
 
     cases_to_run = CASES if args.all else [CASES[args.case - 1]]
+    checked_at = _now_iso()
+    git_commit = _git_commit()
+    env = "staging" if args.staging else "local"
+    evidence_level = "runtime_verified" if args.live else "offline_auxiliary"
     log_buf: list[str] = []
-    _log_line(log_buf, f"KS-RETRIEVAL-009 demo 启动 live={args.live} cases={len(cases_to_run)}")
+    _log_line(
+        log_buf,
+        f"KS-RETRIEVAL-009 demo 启动 live={args.live} cases={len(cases_to_run)} "
+        f"env={env} checked_at={checked_at} git_commit={git_commit} "
+        f"evidence_level={evidence_level}",
+    )
 
     # 清理 bundle log（每次 demo 重新写）
     if DEMO_BUNDLE_LOG.exists():
@@ -473,6 +537,10 @@ def main() -> int:
             row["case_id"] = case["case_id"]
             row["case_status"] = "FAIL"
             row["notes"] = f"exception:{type(e).__name__}:{e}"
+        row["env"] = env
+        row["checked_at"] = checked_at
+        row["git_commit"] = git_commit
+        row["evidence_level"] = evidence_level
         rows.append(row)
 
     # 写 eval csv（覆盖式，确定性 evidence）
@@ -502,8 +570,47 @@ def main() -> int:
     print(f"  run_log  = {RUN_LOG.relative_to(REPO_ROOT)}")
     print(f"  bundle_log (CI artifact) = {DEMO_BUNDLE_LOG}")
 
+    vector_rows = [r for r in rows if r.get("vector_mode") == "vector"]
+    vector_hits = sum(int(r.get("vector_candidate_count") or 0) for r in vector_rows)
+    strict_vector_ok = (
+        args.default_mode != "vector_enabled"
+        or (len(vector_rows) == len(rows) and vector_hits > 0)
+    )
+    if args.out:
+        audit = {
+            "audit_for": "KS-RETRIEVAL-009",
+            "env": env,
+            "checked_at": checked_at,
+            "timestamp": checked_at,
+            "git_commit": git_commit,
+            "evidence_level": evidence_level,
+            "default_mode": args.default_mode,
+            "live": args.live,
+            "case_count": len(rows),
+            "pass_count": pass_count,
+            "fail_count": fail_count,
+            "vector_cases_count": len(vector_rows),
+            "vector_hits": vector_hits,
+            "min_vector_candidate_count": min(
+                [int(r.get("vector_candidate_count") or 0) for r in rows],
+                default=0,
+            ),
+            "strict_vector_ok": strict_vector_ok,
+            "eval_csv": str(args.eval_csv.relative_to(REPO_ROOT)),
+            "eval_csv_sha256": _sha256_file(args.eval_csv),
+            "run_log": str(RUN_LOG.relative_to(REPO_ROOT)),
+            "rows": rows,
+            "verdict": "PASS" if fail_count == 0 and pass_count > 0 and strict_vector_ok else "FAIL",
+        }
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(
+            json.dumps(audit, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        print(f"  audit = {args.out.resolve().relative_to(REPO_ROOT)}")
+
     # 任一 fail / 任一 case 未跑 = 整体 fail
-    if fail_count > 0 or pass_count == 0:
+    if fail_count > 0 or pass_count == 0 or not strict_vector_ok:
         return 1
     return 0
 

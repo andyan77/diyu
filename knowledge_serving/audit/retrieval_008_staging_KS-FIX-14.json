@@ -1,0 +1,30 @@
+{
+  "audit_for": "KS-RETRIEVAL-008",
+  "checked_at": "2026-05-14T17:12:13Z",
+  "csv_count": 156,
+  "env": "staging",
+  "evidence_level": "runtime_verified",
+  "extra_in_pg": [],
+  "git_commit": "40f6d3c06d90b97a751a60314eaa21b70c62fc58",
+  "mismatch": 0,
+  "missing_in_pg": [],
+  "mode": "reconcile_read",
+  "pg_count": 156,
+  "queries_requested": 30,
+  "raw_result": {
+    "csv_count": 156,
+    "extra_in_pg": [],
+    "generated_at": "2026-05-14T17:12:13Z",
+    "missing_in_pg": [],
+    "mode": "reconcile_read",
+    "pg_count": 156,
+    "replay_errors": [],
+    "replayed_count": 0
+  },
+  "replay_errors": [],
+  "replayed_count": 0,
+  "row_count": 156,
+  "row_count_at_least_requested": true,
+  "timestamp": "2026-05-14T17:12:13Z",
+  "verdict": "PASS"
+}

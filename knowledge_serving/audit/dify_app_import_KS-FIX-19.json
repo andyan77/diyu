@@ -1,0 +1,39 @@
+{
+  "task_id": "KS-FIX-19",
+  "corrects": "KS-DIFY-ECS-008",
+  "wave": "W12",
+  "checked_at_utc": "2026-05-15T07:36:57Z",
+  "git_commit": "42b6797c7f9d79f30d471acee11a8fcec43d6f07",
+  "verdict": "PASS",
+  "evidence_level": "runtime_verified",
+  "reason": "Dify staging chat-messages 真调通 + 期望字段齐",
+  "command": "source scripts/load_env.sh && python3 knowledge_serving/scripts/check_dsl_url_alignment.py --strict && python3 knowledge_serving/scripts/dify_import_and_test.py --staging --strict",
+  "exit_code": 0,
+  "dify_app_id": "b0f54b62-6571-41d8-98c5-ee04d5c0e28a",
+  "chat_response_ok": true,
+  "dify_api_url_actual": "https://api.dify.ai/v1",
+  "dify_api_url_is_placeholder": false,
+  "dify_api_key_present": true,
+  "dify_reachable": true,
+  "dsl_path": "dify/chatflow.dsl",
+  "dsl_alignment_check": {
+    "ran": true,
+    "exit_code": 0,
+    "stdout_tail": "t\",\n      \"in_openapi\": true,\n      \"in_app\": true,\n      \"method_in_openapi\": true,\n      \"method_in_app\": true\n    },\n    {\n      \"node_id\": \"n10_log_write\",\n      \"method\": \"POST\",\n      \"url_raw\": \"${SERVING_API_BASE}/internal/context_bundle_log\",\n      \"stripped_path\": \"/internal/context_bundle_log\",\n      \"in_openapi\": true,\n      \"in_app\": true,\n      \"method_in_openapi\": true,\n      \"method_in_app\": true\n    }\n  ],\n  \"drift\": [],\n  \"openapi_paths_not_in_app\": [],\n  \"strict_mode\": true\n}\n",
+    "stderr_tail": "/home/faye/.local/lib/python3.10/site-packages/pydantic/_internal/_fields.py:149: UserWarning: Field \"model_policy\" has conflict with protected namespace \"model_\".\n\nYou may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.\n  warnings.warn(\n✅ 3 DSL URL(s) 与 openapi + FastAPI app 全对齐\n"
+  },
+  "chat_response_excerpt": "{\"event\": \"message\", \"task_id\": \"bcaf02f0-a705-491b-ac51-ea8a179d0d3a\", \"id\": \"fefa44e8-910a-4568-b0d0-860f96e1796c\", \"message_id\": \"fefa44e8-910a-4568-b0d0-860f96e1796c\", \"conversation_id\": \"928c2ad9-0282-4274-b9b4-3a4866a0477e\", \"mode\": \"advanced-chat\", \"answer\": \"{\\n  \\\"status\\\": \\\"needs_review\\\",\\n  \\\"reason\\\": \\\"fallback_status indicates blocked_missing_*\\\",\\n  \\\"bundle_excerpt\\\": \\\"{\\\\\\\"request_id\\\\\\\":\\\\\\\"req_api_20260515T073625Z_64012ed7\\\\\\\",\\\\\\\"status\\\\\\\":\\\\\\\"ok\\\\\\\",\\\\\\\"elapsed_ms\\\\\\\":527,\\\\\\\"bundle\\\\\\\":{\\\\\\\"request_id\\\\\\\":\\\\\\\"req_api_20260515T073625Z_64012ed7\\\\\\\",\\\\\\\"tenant_id\\\\\\\":\\\\\\\"tenant_faye_main\\\\\\\",\\\\\\\"resolved_brand_layer\\\\\\\":\\\\\\\"brand_faye\\\\\\\",\\\\\\\"allowed_layers\\\\\\\":[\\\\\\\"domain_general\\\\\\\",\\\\\\\"brand_faye\\\\\\\"],\\\\\\\"content_type\\\\\\\":\\\\\\\"outfit_of_the_day\\\\\\\",\\\\\\\"recipe\\\\\\\":{",
+  "expected_response_fields": [
+    "bundle.domain_packs",
+    "bundle.play_cards",
+    "bundle.runtime_assets",
+    "bundle.brand_overlays",
+    "bundle.evidence",
+    "fallback_status"
+  ],
+  "next_steps_when_unblocked": [
+    "1) 在 .env 配置 staging Dify API URL + API key（DIFY_API_URL / DIFY_API_KEY）",
+    "2) 重跑本脚本 --staging --strict 取得真实 dify_app_id + chat response",
+    "3) artifact verdict 由 BLOCKED 翻 PASS，再回写 KS-DIFY-ECS-008 DoD"
+  ]
+}

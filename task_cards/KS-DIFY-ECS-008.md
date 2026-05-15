@@ -16,7 +16,19 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - python3 scripts/validate_dify_dsl.py
-status: not_started
+status: done
+runtime_verified_at: "2026-05-15"
+closed_by: KS-FIX-19
+runtime_evidence: |
+  2026-05-15 KS-FIX-19 close：DIFY_API_URL=https://api.dify.ai/v1 +
+  DIFY_API_KEY=app-<REDACTED> + DIFY_APP_ID=5ff5960c-... 真接通。
+  dify_import_and_test.py --staging --strict exit 0；
+  Dify chatflow /chat-messages 真返回 mode=advanced-chat + 真 bundle
+  (tenant_faye_main / brand_faye / recipe / elapsed_ms=563)；
+  6 期望字段（domain_packs / play_cards / runtime_assets / brand_overlays /
+  evidence / fallback_status）全部出现在 chat response 中。
+  artifact: knowledge_serving/audit/dify_app_import_KS-FIX-19.json
+    (verdict=PASS, evidence_level=runtime_verified, chat_response_ok=true)
 ---
 
 # KS-DIFY-ECS-008 · Dify Chatflow 10 节点
@@ -79,6 +91,7 @@ artifact: validate report
 > 阻断项：Agent 绕过限制。
 
 ## 11. DoD
-- [ ] DSL + doc 入 git
-- [ ] validator pass
-- [ ] 审查员 pass
+- [x] DSL + doc 入 git
+- [x] validator pass（scripts/validate_dify_dsl.py + knowledge_serving/scripts/check_dsl_url_alignment.py --strict）
+- [x] 审查员 pass（KS-FIX-19 真 staging chat-messages PASS · 2026-05-15）
+- [x] **真 staging runtime evidence**：dify_app_import_KS-FIX-19.json verdict=PASS / chat_response_ok=true / 6 期望字段齐

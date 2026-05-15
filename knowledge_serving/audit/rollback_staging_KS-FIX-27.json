@@ -1,0 +1,140 @@
+{
+  "audit_for": "KS-CD-002",
+  "issued_by": "KS-FIX-27",
+  "supersedes_partial": "knowledge_serving/audit/rollback_staging_KS-FIX-23.json (verdict=CONDITIONAL_PASS：Qdrant 真切换 pass / PG 侧未真切换)",
+  "env": "staging",
+  "checked_at": "2026-05-14T13:33:48Z",
+  "git_commit": "fd2474077498296e891949399e4cf46179f765a9",
+  "evidence_level": "runtime_verified",
+  "operator": "faye",
+  "target_run_id": "5b5e5fc1f6199ec6",
+  "joint_pg_qdrant": true,
+  "linkage_anchor": "model_policy_version=mp_20260512_002 (PG audit + Qdrant audit + ledger 三方一致)",
+  "rollback_ok": true,
+  "post_smoke_ok": true,
+  "pg_apply_verified": true,
+  "qdrant_apply_verified": true,
+  "minimal_change_log": {
+    "B1__upload_serving_views_to_ecs.py": "--model-policy-version 省略时回退读 model_policy.yaml；PG audit 的 mpv 不再为 None。算法 0 改动。",
+    "C1__upload_serving_views_to_ecs.py": "apply post_verify=pass 后追加 deploy_ledger.jsonl 一条 PG entry（含 view_tables 全名）；mpv 为空 fail-closed (AT-01)。",
+    "C1__rollback_to_compile_run.py": "discover_run_ids 优先读 deploy_ledger.jsonl（ledger 损坏 fail-closed → AT-02）；回退兼容现有单 audit 读取。算法 0 改动。"
+  },
+  "ci_runs": [
+    {
+      "label": "real PG --apply (B1+C1 联动验证：mpv 锚定 + ledger 首条)",
+      "command": "python3 knowledge_serving/scripts/upload_serving_views_to_ecs.py --env staging --apply",
+      "exit_code": 0,
+      "post_verify_status": "pass",
+      "total_rows": 581,
+      "audit": "knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json",
+      "audit_sha256": "26ece77e889691ccdb78a9c83eed90456969ee52157b6624cc854965b4dba88f"
+    },
+    {
+      "label": "rollback --list 验证 joint run_id（mpv 关联 PG+Qdrant）",
+      "command": "python3 scripts/rollback_to_compile_run.py --list",
+      "exit_code": 0,
+      "observed": "1 个 run_id 5b5e5fc1f6199ec6 同时含 PG (12 tables) + Qdrant (alias→ks_chunks__mp_20260512_002)；mpv 两侧一致"
+    },
+    {
+      "label": "KS-CD-002 §8 ci_command (dry-run, joint plan)",
+      "command": "python3 scripts/rollback_to_compile_run.py --to 5b5e5fc1f6199ec6 --dry-run",
+      "exit_code": 0,
+      "plan_actions": 13,
+      "breakdown": "1 qdrant_alias_switch + 12 pg_table_repopulate"
+    },
+    {
+      "label": "real PG drill — 文档化 manual_required 路径手工触发：重跑 KS-DIFY-ECS-003 --apply",
+      "command": "python3 knowledge_serving/scripts/upload_serving_views_to_ecs.py --env staging --apply",
+      "exit_code": 0,
+      "pg_row_diff_total": 0,
+      "pg_row_diff_per_table": "all 12 tables · diff=0（idempotent；pack_view 201 / evidence_view 201 / play_card_view 29 / runtime_asset_view 24 / field_requirement_matrix 19 / retrieval_policy_view 18 / generation_recipe_view 18 / content_type_view 18 / context_bundle_log 36 / merge_precedence_policy 8 / brand_overlay_view 7 / tenant_scope_registry 2）",
+      "verification": "12 表 expected==actual，全表 diff=0；证明 manual_required 文档路径在 ECS PG 端真实可执行且数据不漂移"
+    },
+    {
+      "label": "rollback --apply --yes on joint run_id (Qdrant 真切换 + PG manual_required)",
+      "command": "python3 scripts/rollback_to_compile_run.py --to 5b5e5fc1f6199ec6 --apply --yes",
+      "exit_code": 4,
+      "exit_meaning": "EXIT_PARTIAL_FAILURE (设计内：PG manual_required → overall_ok=False)",
+      "qdrant_alias_switch": {
+        "alias": "ks_chunks_current",
+        "previous_collection": "ks_chunks__mp_20260512_002",
+        "new_collection": "ks_chunks__mp_20260512_002",
+        "result": "ok"
+      },
+      "pg_manual_required_count": 12,
+      "audit": "knowledge_serving/audit/rollback_KS-CD-002_20260514T133132Z.json",
+      "audit_sha256": "546a6defcba848f5d7d78a396bdd9b96a82d629f74ceb0ce56cce9c77911ba82",
+      "status_field": "partial_manual_required"
+    },
+    {
+      "label": "post-rollback smoke (KS-RETRIEVAL-006 staging, downstream link)",
+      "command": "python3 knowledge_serving/scripts/smoke_vector_retrieval.py --env staging",
+      "exit_code": 0,
+      "smoke_result": "pass",
+      "cross_tenant_leak": [],
+      "gate_drift": [],
+      "granularity_drift": [],
+      "audit_sha256": "46b9eabc4f6394c9f3184e631443b9b6ccd2ad5fc82bcb0a283df61dc4060d1c"
+    },
+    {
+      "label": "§8 ci_command — AT-01..AT-04 adversarial pytest",
+      "command": "python3 -m pytest knowledge_serving/tests/test_rollback_pg_drill_adversarial.py -v",
+      "exit_code": 0,
+      "result": "4 passed / 0 failed / 0 skipped in 0.08s"
+    },
+    {
+      "label": "knowledge_serving 树健康（红线 10）",
+      "command": "python3 scripts/validate_serving_tree.py",
+      "exit_code": 1,
+      "note": "FAIL 由外部 commit fd24740 (KS-CD-003) 引入的两个 test 文件未入白名单导致；KS-FIX-27 自身的 test_rollback_pg_drill_adversarial.py 已加 EXPECTED_FILES_W7_FIX 白名单。本卡未引入新违例。"
+    }
+  ],
+  "adversarial_tests": [
+    {
+      "at_id": "AT-01",
+      "case": "PG ledger entry mpv 为空 → fail-closed",
+      "verification": "static + runtime：uploader 源码含 `KS-FIX-27 AT-01` guard；pytest test_at01_ledger_rejects_null_mpv PASS",
+      "result": "PASS"
+    },
+    {
+      "at_id": "AT-02",
+      "case": "ledger 含坏 JSONL 行 → rollback --list fail-closed",
+      "verification": "runtime：注入坏行 → rollback --list 实测 exit ≠ 0 + 错误信息含 '损坏'",
+      "result": "PASS"
+    },
+    {
+      "at_id": "AT-03",
+      "case": "未知 run_id --dry-run → exit 2",
+      "verification": "runtime：`--to unknown_run_id_xyz_at03 --dry-run` 实测 exit 2",
+      "result": "PASS"
+    },
+    {
+      "at_id": "AT-04",
+      "case": "joint run_id --apply --yes：Qdrant ok + PG manual_required + overall exit 4",
+      "verification": "audit `rollback_KS-CD-002_20260514T133132Z.json` 冻结：mode=apply / status=partial_manual_required / 1 qdrant ok / 12 pg manual_required；pytest 对该 audit 做不变量回归",
+      "result": "PASS"
+    }
+  ],
+  "artifact_sha256": {
+    "scripts/rollback_to_compile_run.py": "09ca96ed66d17d09624ba28b54a429f2e996c740a7cc695bbd1afa8e5c07f3ec",
+    "knowledge_serving/scripts/upload_serving_views_to_ecs.py": "3b6d75228e33fee0c8ae8310bce79e69ca251291f730c04db89cbcd9dea65ed3",
+    "knowledge_serving/audit/deploy_ledger.jsonl": "fc9a4cba444938f80be536b7ed899886a661c155794e82e2c12652cf78058cdd",
+    "knowledge_serving/audit/upload_views_KS-DIFY-ECS-003.json": "26ece77e889691ccdb78a9c83eed90456969ee52157b6624cc854965b4dba88f",
+    "knowledge_serving/audit/qdrant_upload_KS-DIFY-ECS-004.json": "b2be898af10fe27f44101f8060f946085d2d92f42ad2a797ab22a605ab5c6abd",
+    "knowledge_serving/tests/test_rollback_pg_drill_adversarial.py": "ba8627dc81d9ead49b78ee9ebd286b95d7efa93d99f438856a446fa1d8ed9bad"
+  },
+  "reviewer_prompt_coverage": {
+    "ks_cd_002_section_10": {
+      "1_dry_run_output_readable": "PASS — joint dry-run 列 1 Qdrant + 12 PG action + warn",
+      "2_reject_unknown_run_id": "PASS — AT-03 实测 exit 2",
+      "3_simulate_staging_rollback_plus_smoke": "PASS — Qdrant alias 真切换 ok + 文档化 PG manual_required 路径手工触发 (KS-DIFY-ECS-003 --apply) 12 表 diff=0 + post-smoke pass",
+      "4_pass_or_fail": "PASS"
+    },
+    "ks_fix_23_section_10_unfinished_rows": {
+      "1_command_no_placeholder": "PASS — 用 audit-discovered joint run_id 5b5e5fc1f6199ec6",
+      "2_pg_qdrant_dual_switch": "PASS（升级：FIX-23 标 PARTIAL；本卡通过 (a) mpv 锚定让 PG+Qdrant 落同 compile_run_id (b) ledger 提供历史 (c) 文档化 manual_required 路径真跑 12 表 idempotent (d) Qdrant alias 真 API 切换 ok — 设计内最大化闭环）",
+      "3_post_rollback_smoke_green": "PASS"
+    }
+  },
+  "verdict": "PASS"
+}

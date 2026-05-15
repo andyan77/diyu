@@ -15,7 +15,12 @@ validate_model_policy.py · KS-POLICY-005 校验器
 退出码 / exit code: 0 全绿 / 1 fail。
 """
 from __future__ import annotations
+import argparse
+import datetime as _dt
+import hashlib
+import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -51,7 +56,118 @@ def warn(msg: str) -> None:
     warnings.append(msg)
 
 
+def _git_commit() -> str:
+    try:
+        proc = subprocess.run(
+            ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if proc.returncode == 0:
+            return proc.stdout.strip()
+    except Exception:
+        pass
+    return "unknown"
+
+
+def _key_fingerprint(var: str) -> str:
+    val = os.environ.get(var)
+    if not val:
+        return "unset"
+    return "sha256:" + hashlib.sha256(val.encode("utf-8")).hexdigest()[:8]
+
+
+def _build_payload(env_refs: list, errs: list[str], warns: list[str],
+                   policy: dict, env_label: str | None) -> dict:
+    fingerprints = {var: _key_fingerprint(var) for _, var in env_refs}
+    has_keys = all(v != "unset" for v in fingerprints.values())
+    emb = policy.get("embedding") or {}
+    rr = policy.get("rerank") or {}
+    la = policy.get("llm_assist") or {}
+    models_inventory = {
+        "embedding": {
+            "provider": emb.get("provider"),
+            "model": emb.get("model"),
+            "dimension": emb.get("dimension"),
+            "endpoint": emb.get("endpoint"),
+        },
+        "rerank": {
+            "enabled": rr.get("enabled"),
+            "provider": rr.get("provider"),
+            "model": rr.get("model"),
+            "endpoint": rr.get("endpoint"),
+            "fallback_when_unavailable": rr.get("fallback_when_unavailable"),
+        },
+        "llm_assist": {
+            "enabled": la.get("enabled"),
+            "primary": {
+                "provider": (la.get("primary") or {}).get("provider"),
+                "model": (la.get("primary") or {}).get("model"),
+                "endpoint": (la.get("primary") or {}).get("endpoint"),
+            },
+            "fallback": {
+                "provider": (la.get("fallback") or {}).get("provider"),
+                "model": (la.get("fallback") or {}).get("model"),
+                "endpoint": (la.get("fallback") or {}).get("endpoint"),
+            },
+        },
+    }
+    return {
+        "card": "KS-POLICY-005",
+        "checked_at": _dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "env": env_label or ("staging" if has_keys else "no_env"),
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified" if not errs else "runtime_verified_fail",
+        "policy_path": str(POLICY_PATH.relative_to(ROOT)),
+        "model_policy_version": policy.get("model_policy_version"),
+        "error_count": len(errs),
+        "warn_count": len(warns),
+        "errors": errs,
+        "warnings": warns,
+        "models": models_inventory,
+        "key_fingerprints": fingerprints,
+    }
+
+
+def _write_default_report(payload: dict) -> None:
+    out = ROOT / "scripts" / "validate_model_policy.report"
+    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _write_out_snapshot(out_path: Path, payload: dict) -> None:
+    """KS-FIX-05 §5 canonical snapshot：白名单守门，禁写 clean_output/"""
+    if not out_path.is_absolute():
+        out_path = ROOT / out_path
+    resolved = out_path.resolve()
+    clean_output = (ROOT / "clean_output").resolve()
+    if str(resolved).startswith(str(clean_output)):
+        sys.stderr.write(
+            f"❌ --out 拒绝指向 clean_output/ 子树 / clean_output is SSOT, not audit sink: {resolved}\n"
+        )
+        sys.exit(2)
+    allowed_roots = [
+        (ROOT / "knowledge_serving" / "audit").resolve(),
+        (ROOT / "task_cards" / "corrections" / "audit").resolve(),
+    ]
+    if not any(str(resolved).startswith(str(r)) for r in allowed_roots):
+        sys.stderr.write(f"❌ --out 路径不在允许的 audit 目录下 / illegal audit sink: {resolved}\n")
+        sys.exit(2)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="KS-POLICY-005 model_policy validator (KS-FIX-05 兼容 --staging/--strict/--out)"
+    )
+    parser.add_argument("--staging", action="store_true",
+                        help="标记当前 env 为 staging（artifact 中 env=staging）")
+    parser.add_argument("--strict", action="store_true",
+                        help="严格模式：warn_count > 0 也按 fail 退出 1（KS-FIX-05 默认）")
+    parser.add_argument("--out", default=None,
+                        help="canonical snapshot 落到指定路径（必须落在 knowledge_serving/audit/ 或 "
+                             "task_cards/corrections/audit/ 下；禁写 clean_output/）")
+    args = parser.parse_args()
+
     if not POLICY_PATH.exists():
         print(f"❌ 缺失 / missing: {POLICY_PATH}")
         return 2
@@ -108,6 +224,13 @@ def main() -> int:
         if not os.environ.get(var):
             warn(f"M8 env var {var!r}（{label}）未在当前 shell / not set in shell")
 
+    # KS-POLICY-005 §8 artifact + KS-FIX-05 §5 snapshot
+    env_label = "staging" if args.staging else None
+    payload = _build_payload(env_refs, errors, warnings, p, env_label)
+    _write_default_report(payload)
+    if args.out:
+        _write_out_snapshot(Path(args.out), payload)
+
     # Report
     print(f"已校验 / checked: {POLICY_PATH.name}")
     if warnings:
@@ -118,6 +241,10 @@ def main() -> int:
         print(f"\n❌ errors ({len(errors)}):")
         for e in errors:
             print(f"   - {e}")
+        return 1
+    # KS-FIX-05 fail-closed: --strict 把 warn 抬成 fail（密钥漂移在 CI 阶段拦下）
+    if args.strict and warnings:
+        print(f"\n❌ --strict 下 warn_count={len(warnings)} > 0 → fail-closed exit 1")
         return 1
     print(f"\n✅ M1-M7 全绿 / all checks passed")
     return 0

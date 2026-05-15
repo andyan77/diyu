@@ -67,6 +67,13 @@ LOG_FIELDS = [
     "llm_assist_model",
     "model_policy_version",
     "created_at",
+    # KS-DIFY-ECS-010 W11 外审收口 / strict S8 byte-identical replay 扩字段：
+    # 之前 log 只冗余 retrieved_*_ids，replay 无法重建完整 bundle 来对比 bundle_hash。
+    # 落盘完整 bundle 的 canonical JSON 是最稳的方案：
+    # - vector 候选混入的 evidence 行不会因为 Qdrant 时间漂移而无法重建
+    # - business_brief / recipe / generation_constraints / brand_overlays 全部 bundle 内字段都保留
+    # - replay 端 cbb.compute_bundle_hash(parsed) 必须严格等于 context_bundle_hash
+    "context_bundle_json",
 ]
 
 
@@ -115,12 +122,40 @@ def _ensure_canonical(path: Path) -> Path:
     return p
 
 
-def _join_ids(values: Iterable[Any] | None) -> str:
-    """list[str] → ';' joined；空列表 → 'none'（显式标记，禁止空字符串）。"""
+def _serialize_id_list(values: Iterable[Any] | None) -> str:
+    """list[str] → JSON-encoded string（schema array 真源对齐 / KS-DIFY-ECS-006 W11 收口）。
+
+    旧版 `_join_ids` 用 ';' 拼接，导致 `validate_serving_governance.py` preflight
+    把 array 字段看成 string 报 type mismatch（control_tables.schema 期望 array）。
+    改为 JSON 编码，CSV cell 反序列化（`json.loads`）即可还原 schema 期望类型；
+    空 list / None 都落 `"[]"`，保留显式"非空字符串"语义，配合下游空字段守门。
+    """
     if values is None:
-        return "none"
-    vals = [str(v) for v in values if v is not None and str(v) != ""]
-    return ";".join(vals) if vals else "none"
+        vals: list[str] = []
+    else:
+        vals = [str(v) for v in values if v is not None and str(v) != ""]
+    return json.dumps(vals, ensure_ascii=False, separators=(",", ":"))
+
+
+def _serialize_json_blob(value: Any, *, expected: str) -> str:
+    """dict / list / 字符串列表 → canonical JSON 编码（KS-DIFY-ECS-010 W11 strict S8 扩字段）。
+
+    与 cbb.compute_bundle_hash 用同一 separators 保证 replay 重建后 hash 严格一致。
+    expected ∈ {"object", "array"} 用于守门：传错类型立刻 raise，避免 schema 漂移。
+    """
+    if expected == "object":
+        if value is None:
+            value = {}
+        if not isinstance(value, dict):
+            raise LogWriteError(f"expected object/dict, got {type(value).__name__}")
+    elif expected == "array":
+        if value is None:
+            value = []
+        if not isinstance(value, list):
+            raise LogWriteError(f"expected array/list, got {type(value).__name__}")
+    else:
+        raise LogWriteError(f"_serialize_json_blob expected ∈ object|array, got {expected!r}")
+    return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
 
 def _now_iso() -> str:
@@ -159,18 +194,18 @@ def _build_row(
         "request_id": bundle.get("request_id", ""),
         "tenant_id": bundle.get("tenant_id", ""),
         "resolved_brand_layer": bundle.get("resolved_brand_layer", ""),
-        "allowed_layers": _join_ids(bundle.get("allowed_layers")),
+        "allowed_layers": _serialize_id_list(bundle.get("allowed_layers")),
         "user_query_hash": str(bundle_meta.get("user_query_hash", "")),
         "classified_intent": classified_intent or "",
         "content_type": bundle.get("content_type", ""),
         "selected_recipe_id": selected_recipe_id or "",
-        "retrieved_pack_ids": _join_ids(retrieved_ids.get("pack_ids")),
-        "retrieved_play_card_ids": _join_ids(retrieved_ids.get("play_card_ids")),
-        "retrieved_asset_ids": _join_ids(retrieved_ids.get("asset_ids")),
-        "retrieved_overlay_ids": _join_ids(retrieved_ids.get("overlay_ids")),
-        "retrieved_evidence_ids": _join_ids(retrieved_ids.get("evidence_ids")),
+        "retrieved_pack_ids": _serialize_id_list(retrieved_ids.get("pack_ids")),
+        "retrieved_play_card_ids": _serialize_id_list(retrieved_ids.get("play_card_ids")),
+        "retrieved_asset_ids": _serialize_id_list(retrieved_ids.get("asset_ids")),
+        "retrieved_overlay_ids": _serialize_id_list(retrieved_ids.get("overlay_ids")),
+        "retrieved_evidence_ids": _serialize_id_list(retrieved_ids.get("evidence_ids")),
         "fallback_status": bundle.get("fallback_status", ""),
-        "missing_fields": _join_ids(bundle.get("missing_fields")),
+        "missing_fields": _serialize_id_list(bundle.get("missing_fields")),
         "blocked_reason": blocked_reason or "none",
         "context_bundle_hash": str(bundle_meta.get("bundle_hash", "")),
         "final_output_hash": final_output_hash or "disabled",
@@ -184,6 +219,10 @@ def _build_row(
         "llm_assist_model": _resolve_model_field(model_policy, "llm_assist", "model"),
         "model_policy_version": str(model_policy.get("model_policy_version") or "disabled"),
         "created_at": created_at or _now_iso(),
+        # KS-DIFY-ECS-010 W11 strict S8 扩字段：完整 bundle canonical JSON 落盘，
+        # 用同一 separators / sort_keys 与 cbb.compute_bundle_hash 对齐，保证
+        # 反序列化后 hash 严格等于 context_bundle_hash
+        "context_bundle_json": _serialize_json_blob(bundle, expected="object"),
     }
 
     # 字段完整性硬门：任一字段空字符串 → raise（强制 "disabled" 显式）。

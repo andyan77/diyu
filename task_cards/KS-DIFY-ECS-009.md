@@ -8,6 +8,7 @@ files_touched:
   - knowledge_serving/tests/test_guardrail.py
 artifacts:
   - knowledge_serving/serving/guardrail.py
+  - knowledge_serving/audit/guardrail_KS-DIFY-ECS-009.json
 s_gates: [S11]
 plan_sections:
   - "§10"
@@ -77,3 +78,4 @@ artifact: pytest report
 - [x] guardrail 入 git（commit `f368b37`）
 - [x] pytest 全绿（`python3 -m pytest knowledge_serving/tests/test_guardrail.py -v` → 19 passed）
 - [x] 审查员 pass（reviewer round-3：实现 / SKU 漏拦修复 / 入 git / purity gate 四道门全绿）
+- [x] sidecar audit envelope — runtime_verified（2026-05-14 KS-FIX-18 裁决会话补：`knowledge_serving/audit/guardrail_KS-DIFY-ECS-009.json`，含 env=local / checked_at / git_commit / evidence_level=runtime_verified / ci_exit_code=0 / 19p0f / 上游 KS-POLICY-002 yaml pytest exit 0 / 模块 + 测试 + policy yaml sha256 三件锚定；reviewer_prompt_coverage 把 §10 五项审查员要点逐一映射到对应 pytest case）

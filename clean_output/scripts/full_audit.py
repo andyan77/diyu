@@ -190,8 +190,30 @@ def main():
         "gates": results,
         "rendered_at": _dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
-    STATUS.write_text(json.dumps(audit_status, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\nstatus: {STATUS}")
+    # 幂等写入 / idempotent write（KS-DIFY-ECS-011 真实闭环要求）：
+    # rendered_at 时间戳每次都会变；只比对语义字段（summary + gates），
+    # 无变化即跳过 write，避免给 ECS mirror 制造无意义 drift。
+    def _semantic(obj: dict) -> dict:
+        v = {k: obj[k] for k in obj if k != "rendered_at"}
+        # gates 内若含 elapsed_ms 之类 per-run 抖动字段，也剔除
+        v["gates"] = [
+            {k: g[k] for k in g if k not in ("elapsed_ms",)}
+            for g in obj.get("gates", [])
+        ]
+        return v
+    will_write = True
+    if STATUS.exists():
+        try:
+            old = json.loads(STATUS.read_text(encoding="utf-8"))
+            if _semantic(old) == _semantic(audit_status):
+                will_write = False
+        except (json.JSONDecodeError, OSError):
+            pass
+    if will_write:
+        STATUS.write_text(json.dumps(audit_status, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"\nstatus: {STATUS}")
+    else:
+        print(f"\nstatus (幂等跳过 / idempotent skip): {STATUS}")
 
     # 末段自动渲染 final_report.md（防漂移）
     render = SCRIPTS / "render_final_report.py"

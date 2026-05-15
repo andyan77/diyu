@@ -1,0 +1,377 @@
+{
+  "task_card": "KS-VECTOR-003",
+  "corrects_via": "KS-FIX-11",
+  "mode": "online",
+  "env": "staging",
+  "checked_at": "2026-05-15T05:57:00Z",
+  "git_commit": "339ff9a5f12418789267d39ee007fd278122162a",
+  "evidence_level": "runtime_verified",
+  "qdrant_endpoint_label": "QDRANT_URL_STAGING",
+  "collection": "ks_chunks__mp_20260512_002",
+  "collection_points_count": 498,
+  "current_compile_run_id": "5b5e5fc1f6199ec6",
+  "current_source_manifest_hash": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2",
+  "source_chunks_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
+  "cases": [
+    {
+      "brands_hit_sample": [
+        "brand_faye",
+        "domain_general"
+      ],
+      "pass": true,
+      "case_id": "C1_brand_faye_plus_domain_general",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 497
+    },
+    {
+      "brands_hit_sample": [
+        "domain_general"
+      ],
+      "pass": true,
+      "case_id": "C2_domain_general_only",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 475
+    },
+    {
+      "gate_status_sample": [
+        "active"
+      ],
+      "pass": true,
+      "case_id": "C3_gate_active_only",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 497
+    },
+    {
+      "pass": true,
+      "case_id": "C4_cross_tenant_zero_hit",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_b"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          }
+        ]
+      },
+      "hits_count": 0
+    },
+    {
+      "pass": true,
+      "case_id": "C5_batch_anchor_stale_run_zero_hit",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "compile_run_id",
+            "match": {
+              "value": "deadbeefcafef00d"
+            }
+          }
+        ]
+      },
+      "hits_count": 0
+    },
+    {
+      "pass": true,
+      "case_id": "C5b_batch_anchor_current_run_positive",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "compile_run_id",
+            "match": {
+              "value": "5b5e5fc1f6199ec6"
+            }
+          }
+        ]
+      },
+      "hits_count": 497
+    },
+    {
+      "content_type_probe": "behind",
+      "content_types_hit_sample": [
+        "behind"
+      ],
+      "pass": true,
+      "case_id": "C7p_content_type_positive",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "content_type",
+            "match": {
+              "value": "behind"
+            }
+          }
+        ]
+      },
+      "hits_count": 4
+    },
+    {
+      "pass": true,
+      "case_id": "C7n_content_type_negative_zero_hit",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "content_type",
+            "match": {
+              "value": "synthetic_unknown_content_type_probe"
+            }
+          }
+        ]
+      },
+      "hits_count": 0
+    },
+    {
+      "pass": true,
+      "case_id": "C8_source_manifest_hash_current_positive",
+      "filter": {
+        "must": [
+          {
+            "key": "brand_layer",
+            "match": {
+              "any": [
+                "brand_faye",
+                "domain_general"
+              ]
+            }
+          },
+          {
+            "key": "gate_status",
+            "match": {
+              "value": "active"
+            }
+          },
+          {
+            "key": "granularity_layer",
+            "match": {
+              "any": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          {
+            "key": "compile_run_id",
+            "match": {
+              "value": "5b5e5fc1f6199ec6"
+            }
+          },
+          {
+            "key": "source_manifest_hash",
+            "match": {
+              "value": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2"
+            }
+          }
+        ]
+      },
+      "hits_count": 497
+    }
+  ],
+  "case_count": 9,
+  "pass_count": 9,
+  "fail_count": 0,
+  "skip_count": 0,
+  "cross_tenant_hits": 0,
+  "verdict": "pass"
+}

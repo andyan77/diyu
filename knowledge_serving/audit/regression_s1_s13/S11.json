@@ -1,0 +1,19 @@
+{
+  "task_id": "KS-FIX-26",
+  "gate": "S11",
+  "desc": "ECS E2E smoke / 三 reachable + 跨租户 0 串味",
+  "anchor_card": "KS-FIX-17",
+  "command": "bash scripts/qdrant_tunnel.sh up >/dev/null 2>&1 && unset HTTPS_PROXY HTTP_PROXY ALL_PROXY https_proxy http_proxy all_proxy && python3 scripts/ecs_e2e_smoke.py --env staging --enforce-external-deps   --audit knowledge_serving/audit/regression_s1_s13/S11_ecs_e2e_smoke.json; rc=$?; bash scripts/qdrant_tunnel.sh down >/dev/null 2>&1; exit $rc",
+  "verdict": "green",
+  "exit_code": 0,
+  "elapsed_sec": 17.05,
+  "started_at_utc": "2026-05-15T05:57:00+00:00",
+  "finished_at_utc": "2026-05-15T05:57:17+00:00",
+  "stdout_sha256": "47e64ce580b41ed2cc37b718214fd1e6ec6805645e0fa219cfc389ae6f20179e",
+  "stdout_excerpt": "=== KS-DIFY-ECS-006 ECS e2e smoke (env=staging) ===\n  qdrant.reachable=True qdrant_live_hit=True\n  pg.reachable=True dotenv_loaded=0 keys\n  ✅ sample_product_review            fallback=blocked_missing_business_brief                 leak=0 empty_fields=0\n  ✅ sample_store_daily               fallback=brand_partial_fallback                         leak=0 empty_fields=0\n  ✅ sample_founder_ip                fallback=blocked_missing_required_brand_fields          leak=0 empty_fields=0\n  ✅ s9_cross_tenant_control          fallback=domain_only                                    leak=0 empty_fields=0\n  gates={'csv_log_complete_all_fields': True, 's9_cross_tenant_zero_leak': True, 'no_silent_pass': True, 'three_samples_ran': True, 's9_control_ran': True, 'external_deps_reachable': True, 'external_deps_enforced': True}\n  pg_mirror.status=ok\n  smoke_result=pass\n  audit → knowledge_serving/audit/regression_s1_s13/S11_ecs_e2e_smoke.json\n",
+  "stderr_excerpt": "",
+  "evidence_level": "runtime_verified",
+  "mode": "rerun_canonical_hard_gate",
+  "no_mock_no_dry_run_as_evidence": true,
+  "no_clean_output_writes": true
+}

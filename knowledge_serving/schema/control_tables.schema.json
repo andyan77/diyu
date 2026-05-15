@@ -132,7 +132,12 @@
         "rerank_model_version":    { "type": "string" },
         "llm_assist_model":        { "type": "string", "description": "允许 'disabled' 字面量。" },
         "model_policy_version":    { "type": "string", "minLength": 1 },
-        "created_at":              { "type": "string", "format": "date-time" }
+        "created_at":              { "type": "string", "format": "date-time" },
+
+        "context_bundle_json":     {
+          "type": "object",
+          "description": "§S8 strict byte-identical replay (KS-DIFY-ECS-010 W11 外审收口)：完整 context_bundle 的 canonical JSON。replay 读出后 cbb.compute_bundle_hash() 必须严格等于 context_bundle_hash。CSV 中作 canonical JSON 字符串落盘（sort_keys + 紧凑 separators）。"
+        }
       },
       "required": [
         "request_id", "tenant_id", "resolved_brand_layer", "allowed_layers",
@@ -142,7 +147,8 @@
         "missing_fields", "blocked_reason", "context_bundle_hash", "final_output_hash",
         "compile_run_id", "source_manifest_hash", "view_schema_version",
         "embedding_model", "embedding_model_version", "rerank_model",
-        "rerank_model_version", "llm_assist_model", "model_policy_version", "created_at"
+        "rerank_model_version", "llm_assist_model", "model_policy_version", "created_at",
+        "context_bundle_json"
       ]
     }
   }

@@ -1,0 +1,114 @@
+name: serving_release_gate
+# KS-CD-001 §4 — 上线总闸 / serving release gate
+# KS-FIX-25 §4 — 真 CI runner（GitHub-hosted ubuntu-latest），调用 local_release_gate.sh 跑全套硬门
+#
+# Secrets（仓库 Settings → Actions → Secrets 配齐；缺失 → 对应 stage 标 BLOCKED 而非伪 PASS）：
+#   STAGING_API_BASE         e.g. https://kb.diyuai.cc
+#   DIFY_API_URL             https://api.dify.ai/v1
+#   DIFY_APP_TOKEN           <Dify Cloud app token>
+#   DIFY_APP_ID              5ff5960c-f8aa-437e-bd34-689f9bb71518
+#   DASHSCOPE_API_KEY        <embedding key>
+#
+# 红线（KS-FIX-25 §7 / KS-CD-001 §0）：
+#   1) 任一硬门 fail → exit 1 阻断；
+#   2) 禁止用 mock / TestClient / dry-run 作为 PASS 证据；
+#   3) 禁止 LLM 参与 governance 裁决（intent / brand_layer / fallback）；
+#   4) 真 staging 不可达 / secrets 缺失 → stage BLOCKED 而非 auto-PASS。
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'release_gate mode'
+        default: 'static'
+        type: choice
+        options: [static, full]
+
+permissions:
+  contents: read
+
+env:
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+
+  # ─── 1·lint ───────────────────────────────────────────────────────────
+  lint:
+    name: 1·lint task_cards + DSL
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -U pip pyyaml jsonschema requests fastapi pydantic
+      - run: python3 task_cards/validate_task_cards.py
+      - run: python3 task_cards/corrections/validate_corrections.py
+      - run: python3 scripts/validate_dify_dsl.py
+      - run: python3 scripts/validate_w3_input_whitelist.py
+      - run: python3 knowledge_serving/scripts/check_dsl_url_alignment.py --strict
+
+  # ─── 2·release_gate static (audit ledger) ─────────────────────────────
+  release_gate_static:
+    name: 2·release_gate static (audit ledger verdicts)
+    runs-on: ubuntu-latest
+    needs: [lint]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -U pip pyyaml jsonschema requests fastapi pydantic
+      - name: local_release_gate static mode
+        run: bash knowledge_serving/scripts/local_release_gate.sh --mode static --runner github-actions --git-commit "${{ github.sha }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci_release_gate_static
+          path: knowledge_serving/audit/ci_release_gate_KS-FIX-25.json
+
+  # ─── 3·release_gate full (real staging smokes; only on dispatch=full or main push) ──
+  release_gate_full:
+    name: 3·release_gate full (live staging smokes)
+    runs-on: ubuntu-latest
+    needs: [release_gate_static]
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event.inputs.mode == 'full' }}
+    timeout-minutes: 25
+    env:
+      STAGING_API_BASE: ${{ secrets.STAGING_API_BASE }}
+      DIFY_API_URL: ${{ secrets.DIFY_API_URL }}
+      DIFY_APP_TOKEN: ${{ secrets.DIFY_APP_TOKEN }}
+      DIFY_APP_ID: ${{ secrets.DIFY_APP_ID }}
+      DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -U pip pyyaml pytest requests
+      - name: BLOCKED check
+        run: |
+          missing=""
+          for k in STAGING_API_BASE DIFY_API_URL DIFY_APP_TOKEN; do
+            v="${!k}"
+            if [ -z "$v" ]; then missing="$missing $k"; fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::missing secrets:$missing — release_gate_full BLOCKED, refuses auto-PASS"
+            exit 1
+          fi
+      - name: local_release_gate full mode
+        run: bash knowledge_serving/scripts/local_release_gate.sh --mode full --runner github-actions --git-commit "${{ github.sha }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci_release_gate_full
+          path: |
+            knowledge_serving/audit/ci_release_gate_KS-FIX-25.json
+            knowledge_serving/audit/dify_app_import_KS-FIX-19.json
+            knowledge_serving/audit/cross_tenant_KS-FIX-24.json

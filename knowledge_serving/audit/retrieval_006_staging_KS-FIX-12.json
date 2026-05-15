@@ -1,0 +1,57 @@
+{
+  "task_card": "KS-FIX-12",
+  "corrects": "KS-DIFY-ECS-007",
+  "env": "staging",
+  "checked_at": "2026-05-14T10:07:38Z",
+  "git_commit": "3befe7452c1206304260a4c9246a12ceddabf3dc",
+  "evidence_level": "runtime_verified",
+  "verdict": "pass",
+  "mode": "live_api_e2e_three_track",
+  "transport": "fastapi TestClient (in-process ASGI) + real dashscope text-embedding-v3 + real ECS Qdrant via ssh tunnel",
+  "source_chunks_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
+  "cases": [
+    {
+      "id": "C1_default_path_mode_vector",
+      "description": "默认路径（structured_only 缺省）→ vector_retrieve 真调，mode=vector，candidate_count>0",
+      "http_status": 200,
+      "elapsed_sec": 1.488,
+      "response_meta_vector_meta": {
+        "mode": "vector",
+        "candidate_count": 2,
+        "rerank_applied": false,
+        "collection_name": "ks_chunks_current"
+      },
+      "request_id": "req_api_20260514T100736Z_e1a4078e",
+      "pass": true
+    },
+    {
+      "id": "C2_structured_only_opt_in_skips_vector",
+      "description": "structured_only=True 显式开 → vector_retrieve 不被调，mode=structured_only_opt_in",
+      "http_status": 200,
+      "elapsed_sec": 0.03,
+      "response_meta_vector_meta": {
+        "mode": "structured_only_opt_in",
+        "candidate_count": 0
+      },
+      "pass": true
+    },
+    {
+      "id": "C3_qdrant_unreachable_returns_503",
+      "description": "mode=vector + Qdrant 不可达（QDRANT_URL=127.0.0.1:1）→ 503 fail-closed，不静默 None",
+      "http_status": 503,
+      "elapsed_sec": 0.59,
+      "response_detail_error": "qdrant_unreachable",
+      "response_detail_reason": "qdrant_search_failed: ResponseHandlingException",
+      "request_id": "req_api_20260514T100738Z_0566b76a",
+      "pass": true
+    }
+  ],
+  "pass_count": 3,
+  "fail_count": 0,
+  "red_lines_verified": {
+    "vector_res_None_硬编码已删（仅 structured_only=True 保留 None）": "true",
+    "default_path_无静默退化": "true",
+    "qdrant_down_fail_closed_503": "true",
+    "structured_only_opt_in_兼容": "true"
+  }
+}

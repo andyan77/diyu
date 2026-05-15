@@ -51,6 +51,25 @@ MIN_CANDIDATE_TPL = dedent(
     """
 ).strip()
 
+CONTENT_TYPE_CANDIDATE_TPL = dedent(
+    """
+    pack_id: {pack_id}
+    granularity_layer: L1
+    schema_version: candidate_v1
+    pack_type: product_attribute
+    brand_layer: domain_general
+    state: drafted
+
+    knowledge_assertion: minimal
+
+    nine_table_projection:
+      relation:
+        - {{relation_id: RE-x-1, source_type: ContentType, target_type: ContentType, relation_kind: compatible_with_content_type, properties_json: '{{"content_type_id":"{content_type_id}"}}'}}
+      call_mapping:
+        - {{mapping_id: CM-x-1, runtime_method: content_generation, input_types: "ContentType={content_type_id}+Evidence", output_types: [Y]}}
+    """
+).strip()
+
 MANIFEST = {
     "manifest_hash": "abcd" * 16,
     "generated_at": "2026-05-12 00:00:00",
@@ -93,6 +112,14 @@ def write_candidate(ws: dict[str, Path], pack_id: str, runtime_method: str) -> N
     fp = ws["domain_dir"] / f"{pack_id}.yaml"
     fp.write_text(
         MIN_CANDIDATE_TPL.format(pack_id=pack_id, runtime_method=runtime_method),
+        encoding="utf-8",
+    )
+
+
+def write_content_type_candidate(ws: dict[str, Path], pack_id: str, content_type_id: str) -> None:
+    fp = ws["domain_dir"] / f"{pack_id}.yaml"
+    fp.write_text(
+        CONTENT_TYPE_CANDIDATE_TPL.format(pack_id=pack_id, content_type_id=content_type_id),
         encoding="utf-8",
     )
 
@@ -196,6 +223,31 @@ def test_alias_match_populates_source_pack_ids(tmp_path):
     assert row0["coverage_status"] == "partial"  # 2 packs → partial
     assert row0["traceability_status"] == "partial"
     assert row0["default_call_pool"] == "true"
+
+
+def test_content_type_projection_populates_source_pack_ids(tmp_path):
+    """真实采集路径：pack_id / relation.properties_json / ContentType=<id> 会生成覆盖。"""
+    canonical = (
+        "canonical_content_type_id,name_zh,name_en,aliases,coverage_status\n"
+        + "product_review,产品评测,Product Review,product_eval,partial\n"
+        + "\n".join(f"ct_{i:02d},类型{i},Type {i},alias_{i}a,partial" for i in range(17))
+        + "\n"
+    )
+    ws = setup_workspace(tmp_path, canonical_csv=canonical)
+    write_content_type_candidate(
+        ws,
+        "KP-product_attribute-content-type-north-star-product-review",
+        "product_review",
+    )
+    r = run_compiler(ws)
+    assert r.returncode == 0, r.stderr
+    with ws["output"].open("r", encoding="utf-8") as fh:
+        rows = list(csv.DictReader(fh))
+    row = next(r for r in rows if r["canonical_content_type_id"] == "product_review")
+    assert json.loads(row["source_pack_ids"]) == [
+        "KP-product_attribute-content-type-north-star-product-review"
+    ]
+    assert row["coverage_status"] == "partial"
 
 
 def test_coverage_complete_threshold(tmp_path):

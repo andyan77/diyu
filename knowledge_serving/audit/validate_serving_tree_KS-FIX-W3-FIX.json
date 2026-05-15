@@ -1,0 +1,21 @@
+{
+  "card": "KS-FIX-04",
+  "checked_at": "2026-05-14T07:54:20Z",
+  "env": "local",
+  "git_commit": "d2d20a566a64b648de7c409778c76ee2de11f4cf",
+  "evidence_level": "runtime_verified",
+  "exit_code": 0,
+  "strict": true,
+  "expected_plan_files": 22,
+  "allowed_file_count": 110,
+  "required_file_count": 110,
+  "gitkeep_count": 2,
+  "errors": [],
+  "e8_decision": {
+    "decision": "spec_holds_data_aligns",
+    "rationale": "W3+ 已落新文件全部通过 EXPECTED_FILES_W3..W12 白名单立法纳入；purity 当前 exit 0 = 目录数据已与 spec 对齐，不需要反向放宽 spec。",
+    "signed_by": "faye",
+    "signed_at": "2026-05-14",
+    "scope": "KS-FIX-04 W2 closure"
+  }
+}

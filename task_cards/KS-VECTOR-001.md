@@ -8,6 +8,7 @@ files_touched:
   - knowledge_serving/vector_payloads/qdrant_chunks.jsonl
 artifacts:
   - knowledge_serving/vector_payloads/qdrant_chunks.jsonl
+  - knowledge_serving/audit/build_qdrant_payloads_KS-VECTOR-001.json
 s_gates: [S10]
 plan_sections:
   - "§8"
@@ -48,6 +49,7 @@ status: done
 |---|---|---|---|---|
 | `build_qdrant_payloads.py` | py | 是 | 是 | — |
 | `qdrant_chunks.jsonl` | jsonl | 派生 | 是 | 是 |
+| `build_qdrant_payloads_KS-VECTOR-001.json` | json（含 env / checked_at / git_commit / evidence_level） | 是（真实 rebuild 证据） | 是 | 是 |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
@@ -82,7 +84,7 @@ artifact: qdrant_chunks.jsonl
 > 阻断项：字段缺；hash 不可复算；view_schema_version 与 view 列漂移。
 
 ## 11. DoD
-- [x] jsonl 落盘 / artifact written — `knowledge_serving/vector_payloads/qdrant_chunks.jsonl` rows=498 size=11.7MB（2026-05-13）
+- [x] jsonl 落盘 / artifact written — `knowledge_serving/vector_payloads/qdrant_chunks.jsonl` rows=498 size=11.7MB（2026-05-14 复跑真实 embedding rebuild）
 - [x] CI pass — `build_qdrant_payloads.py --check` exit 0；pytest 15/15 green（含 7 个 F1-F7 恶意 fixture 全部 fail-closed；2026-05-13 W7 收口后 payload 字段 16→17）
 - [x] 治理一致性 — KS-COMPILER-013 前置 gate（S1-S7 全绿）作为启动 fail-closed 门禁；clean_output 零写；批次锚定 compile_run_id=`5b5e5fc1f6199ec6` / source_manifest_hash=`b3967bca...adfc2` 全链路存在
 - [x] 审查员可执行项 — §10 的 5 条抽样 + hash 复算（已在 `derive_chunk_text` 中按 view 镜像各 compile_*_view.py 公式 + 启动期 hash 漂移检测）
@@ -110,3 +112,11 @@ artifact: qdrant_chunks.jsonl
 | view_schema_version 取值一致性 | 全 498 条 = `3c0863a75967`，与 7 view csv 同名列单值取值完全一致 | `runtime_verified` |
 | §3 输入契约补强 | 显式写入「字段清单交叉对照硬要求：plan §8 + plan §2」，防同款漂移再现 | `static_verified` |
 | pytest 增长 | 12/12 → 15/15（test_build_qdrant_payloads.py 增加 §6 测试覆盖；`test_payload_has_16_fields_full` 重命名为 `test_payload_has_17_fields_full`，required set 增加 `view_schema_version`）| `runtime_verified` |
+
+## 14. FIX-09 对应复跑收口 / 2026-05-14
+
+| 项 | 实测值 / evidence | 验证级别 |
+|---|---|---|
+| 真实 embedding rebuild | `source scripts/load_env.sh && python3 knowledge_serving/scripts/build_qdrant_payloads.py` exit 0；498/498 调 embedding endpoint；非 dry-run | `runtime_verified` |
+| rebuild audit | `knowledge_serving/audit/build_qdrant_payloads_KS-VECTOR-001.json` 含 `env` / `checked_at` / `git_commit` / `evidence_level=runtime_verified` / `embedding_api_call_count` / `embedding_input_count=498` | `runtime_verified` |
+| 原卡 ci_commands | `python3 knowledge_serving/scripts/build_qdrant_payloads.py --check` exit 0；`python3 -m pytest knowledge_serving/scripts/tests/test_build_qdrant_payloads.py` exit 0（15 passed） | `runtime_verified` |

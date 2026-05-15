@@ -20,7 +20,7 @@
 
 ## 卡片状态总览
 
-<!-- AUTO-SYNCED at 2026-05-12T23:46:17
+<!-- AUTO-SYNCED at 2026-05-14T10:32:50
      status source: audit/extraction_log.csv (event timestamps)
      numbers source: live disk (manifest.json + csv + sqlite)
      DO NOT HAND-EDIT -->

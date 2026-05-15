@@ -1,0 +1,52 @@
+{
+  "cases": [
+    {
+      "description": "默认路径 structured_only 缺省，真 socket POST，mode=vector",
+      "elapsed_sec": 3.649,
+      "http_status": 200,
+      "id": "C1_default_path_real_http",
+      "pass": true,
+      "request_id": "req_api_20260514T114215Z_722ef797",
+      "response_meta_vector_meta": {
+        "candidate_count": 2,
+        "collection_name": "ks_chunks_current",
+        "mode": "vector",
+        "rerank_applied": false
+      }
+    },
+    {
+      "description": "structured_only=True 显式开，真 socket POST，mode=structured_only_opt_in",
+      "elapsed_sec": 0.024,
+      "http_status": 200,
+      "id": "C2_structured_only_real_http",
+      "pass": true,
+      "response_meta_vector_meta": {
+        "candidate_count": 0,
+        "mode": "structured_only_opt_in"
+      }
+    },
+    {
+      "description": "独立 uvicorn 子进程 QDRANT_URL=127.0.0.1:1，真 socket POST，503 fail-closed",
+      "elapsed_sec": 3.581,
+      "http_status": 503,
+      "id": "C3_qdrant_down_real_http_503",
+      "pass": true,
+      "request_id": "req_api_20260514T114220Z_03c964e9",
+      "response_detail_error": "qdrant_unreachable",
+      "response_detail_reason": "qdrant_search_failed: ResponseHandlingException"
+    }
+  ],
+  "checked_at": "2026-05-14T11:42:24Z",
+  "corrects": "KS-DIFY-ECS-007",
+  "env": "staging",
+  "evidence_level": "runtime_verified",
+  "fail_count": 0,
+  "git_commit": "86d4d36dfe4bf8938c8829772449bf49316f2112",
+  "mode": "live_http_wire_three_track",
+  "pass_count": 3,
+  "source_chunks_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
+  "task_card": "KS-FIX-12",
+  "transport": "uvicorn standalone process + urllib real socket POST + real dashscope text-embedding-v3 + real ECS Qdrant via ssh tunnel",
+  "uvicorn_command": "python3 -m uvicorn knowledge_serving.serving.api.retrieve_context:create_app --factory --host 127.0.0.1 --port <port>",
+  "verdict": "pass"
+}

@@ -186,11 +186,15 @@ def aggregate_source_packs(
     返回 (canonical_id -> sorted pack_ids list, 未登记别名 warning 列表)。
     """
     bucket: dict[str, set[str]] = {r["canonical_content_type_id"]: set() for r in canonical_rows}
+    canonical_ids = set(bucket)
     unregistered: dict[str, set[str]] = {}  # alias -> set of pack_ids that used it
     for fp, data in candidates:
         pack_id = (data.get("pack_id") or "").strip()
         if not pack_id:
             continue
+        for cid in extract_content_type_ids(data, canonical_ids):
+            bucket[cid].add(pack_id)
+
         proj_cm = (data.get("nine_table_projection") or {}).get("call_mapping") or []
         runtime_methods: list[str] = []
         for cm in proj_cm:
@@ -198,6 +202,7 @@ def aggregate_source_packs(
                 rm = (cm.get("runtime_method") or "").strip()
                 if rm:
                     runtime_methods.append(rm)
+                runtime_methods.extend(extract_content_type_tokens(cm.get("input_types"), canonical_ids))
             # bare-string call_mapping 是 mapping_id（如 CM-xxx），不含独立 runtime_method 字段 → 跳过
         # 兼容 candidate 顶层 content_type / content_type_tag（如有）
         for k in ("content_type", "content_type_tag"):
@@ -220,6 +225,64 @@ def aggregate_source_packs(
         for alias, pids in unregistered.items()
     )
     return aggregated, warnings
+
+
+def normalize_content_type_token(value: str) -> str:
+    return value.strip().lower().replace("-", "_").replace(" ", "_")
+
+
+def add_if_canonical(out: set[str], value: Any, canonical_ids: set[str]) -> None:
+    if isinstance(value, str):
+        token = normalize_content_type_token(value)
+        if token in canonical_ids:
+            out.add(token)
+
+
+def extract_content_type_tokens(value: Any, canonical_ids: set[str]) -> set[str]:
+    out: set[str] = set()
+    if isinstance(value, str):
+        for match in re.findall(r"ContentType\s*=\s*([A-Za-z0-9_-]+)", value):
+            add_if_canonical(out, match, canonical_ids)
+    elif isinstance(value, list):
+        for item in value:
+            out.update(extract_content_type_tokens(item, canonical_ids))
+    elif isinstance(value, dict):
+        for item in value.values():
+            out.update(extract_content_type_tokens(item, canonical_ids))
+    return out
+
+
+def extract_content_type_ids(data: dict[str, Any], canonical_ids: set[str]) -> set[str]:
+    """从候选包真实投影中采集 content_type 覆盖 / collect real content-type coverage.
+
+    来源只限当前 candidate 的结构化字段：pack_id 北极星命名、relation.properties_json、
+    call_mapping.input_types 中的 ContentType=<id>。不凭自然语言正文猜测。
+    """
+    out: set[str] = set()
+    pack_id = str(data.get("pack_id") or "")
+    marker = "content-type-north-star-"
+    if marker in pack_id:
+        add_if_canonical(out, pack_id.split(marker, 1)[1], canonical_ids)
+
+    relations = (data.get("nine_table_projection") or {}).get("relation") or []
+    for rel in relations:
+        if not isinstance(rel, dict) or rel.get("relation_kind") != "compatible_with_content_type":
+            continue
+        raw = rel.get("properties_json")
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        try:
+            props = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        for key in ("content_type_id", "source_ct"):
+            add_if_canonical(out, props.get(key), canonical_ids)
+        for key in ("applies_to", "cross_ct_applicable", "content_types"):
+            vals = props.get(key)
+            if isinstance(vals, list):
+                for val in vals:
+                    add_if_canonical(out, val, canonical_ids)
+    return out
 
 
 def build_row(

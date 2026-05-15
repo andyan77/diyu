@@ -64,6 +64,7 @@ CONTROL_DIR = REPO_ROOT / "knowledge_serving" / "control"
 MANIFEST_PATH = REPO_ROOT / "clean_output" / "audit" / "source_manifest.json"
 CANDIDATES_DIR = REPO_ROOT / "clean_output" / "candidates"
 OUTPUT_PATH = REPO_ROOT / "knowledge_serving" / "vector_payloads" / "qdrant_chunks.jsonl"
+AUDIT_PATH = REPO_ROOT / "knowledge_serving" / "audit" / "build_qdrant_payloads_KS-VECTOR-001.json"
 GOV_VALIDATOR = REPO_ROOT / "knowledge_serving" / "scripts" / "validate_serving_governance.py"
 
 # index_version 锚定 view_schema_version + embedding_model_version 的组合；变更触发 KS-DIFY-ECS-004 重建
@@ -138,6 +139,29 @@ class BuildError(Exception):
 
 def sha256_text(s: str) -> str:
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def now_iso() -> str:
+    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+
+def git_commit() -> str:
+    proc = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.stdout.strip() if proc.returncode == 0 else "unknown"
 
 
 def _load_json_list(s: str) -> list:
@@ -334,10 +358,21 @@ def _embed_batch_dashscope(texts: list[str], model: str) -> list[list[float]]:
     return [e["embedding"] for e in out_sorted]
 
 
-def embed_texts(texts: list[str], *, model: str, dry_run: bool, batch_size: int = 10, max_attempts: int = 6) -> list[list[float]]:
+def embed_texts(
+    texts: list[str],
+    *,
+    model: str,
+    dry_run: bool,
+    batch_size: int = 10,
+    max_attempts: int = 6,
+    stats: dict[str, int] | None = None,
+) -> list[list[float]]:
     if dry_run:
         # 占位 0 向量 / placeholder zero vector（仅 --dry-run；不入生产）
         return [[0.0] * 1024 for _ in texts]
+    if stats is not None:
+        stats["embedding_api_call_count"] = 0
+        stats["embedding_input_count"] = 0
     vectors: list[list[float]] = []
     for i in range(0, len(texts), batch_size):
         batch = texts[i:i + batch_size]
@@ -345,6 +380,9 @@ def embed_texts(texts: list[str], *, model: str, dry_run: bool, batch_size: int 
         for attempt in range(max_attempts):
             try:
                 vectors.extend(_embed_batch_dashscope(batch, model))
+                if stats is not None:
+                    stats["embedding_api_call_count"] += 1
+                    stats["embedding_input_count"] += len(batch)
                 last_err = None
                 break
             except Exception as e:  # 网络抖动 / proxy / dashscope 临时不可用都重试
@@ -446,6 +484,43 @@ def run_check() -> int:
     return 0
 
 
+def write_build_audit(
+    *,
+    dry_run: bool,
+    rows: int,
+    embedding_model: str,
+    embedding_model_version: str,
+    embedding_dim: int,
+    index_version: str,
+    stats: dict[str, int],
+) -> None:
+    audit = {
+        "task_card": "KS-VECTOR-001",
+        "checked_at": now_iso(),
+        "env": os.environ.get("DIYU_ENV") or os.environ.get("APP_ENV") or "local",
+        "git_commit": git_commit(),
+        "evidence_level": "dry_run_auxiliary" if dry_run else "runtime_verified",
+        "mode": "dry_run" if dry_run else "rebuild",
+        "artifact_path": str(OUTPUT_PATH.relative_to(REPO_ROOT)),
+        "artifact_sha256": sha256_file(OUTPUT_PATH),
+        "artifact_byte_size": OUTPUT_PATH.stat().st_size,
+        "rows": rows,
+        "embedding_model": embedding_model,
+        "embedding_model_version": embedding_model_version,
+        "embedding_dimension": embedding_dim,
+        "index_version": index_version,
+        "embedding_api_call_count": stats.get("embedding_api_call_count", 0),
+        "embedding_input_count": stats.get("embedding_input_count", 0),
+        "evidence_note": (
+            "runtime_verified means this run called the configured embedding endpoint; "
+            "dry_run_auxiliary is never production completion evidence"
+        ),
+    }
+    AUDIT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    AUDIT_PATH.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    log.info("[OK] audit → %s", AUDIT_PATH.relative_to(REPO_ROOT))
+
+
 # ---------- build 模式 / build mode ----------
 
 @dataclass
@@ -506,8 +581,9 @@ def run_build(dry_run: bool) -> int:
     # 4. 调 embedding（或 dry-run 占位）
     texts = [p.chunk_text for p in plans]
     log.info("embedding %s%s ...", embedding_model, "（dry-run 占位 / placeholder）" if dry_run else "")
+    stats: dict[str, int] = {}
     try:
-        vectors = embed_texts(texts, model=embedding_model, dry_run=dry_run)
+        vectors = embed_texts(texts, model=embedding_model, dry_run=dry_run, stats=stats)
     except BuildError as e:
         log.error("[FAIL] embedding 调用失败 / embedding failed: %s", e)
         return 2
@@ -546,6 +622,16 @@ def run_build(dry_run: bool) -> int:
 
     # 6. self-check
     rc = run_check()
+    if rc == 0 and not dry_run:
+        write_build_audit(
+            dry_run=dry_run,
+            rows=len(paired),
+            embedding_model=embedding_model,
+            embedding_model_version=embedding_model_version,
+            embedding_dim=embedding_dim,
+            index_version=index_version,
+            stats=stats,
+        )
     return rc
 
 

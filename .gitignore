@@ -25,6 +25,11 @@ __pycache__/
 # ============================================================
 _staging/
 
+# KS-SCHEMA-005 §8 artifact：每次跑 validate_serving_tree.py 刷新的 CI 证据，不入 git
+scripts/validate_serving_tree.report
+# KS-POLICY-005 §8 artifact：每次跑 validate_model_policy.py 刷新的 CI 证据，不入 git
+scripts/validate_model_policy.report
+
 # ============================================================
 # 编辑器与系统 / editor & OS
 # ============================================================

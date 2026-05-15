@@ -1,0 +1,39 @@
+{
+  "task_card": "KS-FIX-09",
+  "corrects": "KS-VECTOR-001",
+  "wave": "W6",
+  "checked_at_utc": "2026-05-15T04:39:18Z",
+  "git_commit": "339ff9a",
+  "env": "local",
+  "verdict": "PASS",
+  "evidence_level": "runtime_verified",
+  "mode": "rebuild_with_call_recording",
+  "purpose": "FIX-09 inventory-tidy 2026-05-15 真跑闭环——原卡 KS-VECTOR-001 自身 audit 在 W6 已 runtime_verified；FIX-09 spec 要求'真实调 embedding 服务重建一批 chunks 并落 call evidence'，本次 inventory-tidy 在 339ff9a 真重跑 build_qdrant_payloads.py 默认模式生成本 audit。",
+  "command_invoked": "python3 knowledge_serving/scripts/build_qdrant_payloads.py",
+  "elapsed_seconds": 289.9,
+  "embedding_model": "text-embedding-v3",
+  "embedding_model_version": "v3",
+  "embedding_dimension": 1024,
+  "embedding_api_call_count": 50,
+  "embedding_input_count": 498,
+  "embedding_endpoint_real": true,
+  "collection_rows": 498,
+  "collection_artifact_path": "knowledge_serving/vector_payloads/qdrant_chunks.jsonl",
+  "collection_artifact_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
+  "collection_artifact_byte_size": 11758478,
+  "index_version": "idx::mp_20260512_002::text-embedding-v3::v3::dim1024",
+  "upstream_canonical_audit": "knowledge_serving/audit/build_qdrant_payloads_KS-VECTOR-001.json",
+  "upstream_audit_reproducibility_note": "本次 rerun 与 W6 原 run 产 sha256 相同（embedding 模型 deterministic + 输入 9 表 view 未变化），印证 embedding 链路 stable + 可复现。",
+  "dod_evidence": {
+    "call_count_gt_0": {"required": "call_count > 0", "actual": 50, "pass": true},
+    "collection_points_gt_0": {"required": "collection.points_count > 0", "actual_rows": 498, "pass": true},
+    "model_fingerprint_present": {"required": "model_id + dim", "actual": "text-embedding-v3/v3 dim=1024", "pass": true}
+  },
+  "red_lines_honored": [
+    "不写 clean_output/",
+    "不用 dry-run 写 0 向量冒充",
+    "不用 mock embedding API",
+    "embedding 调用走 DASHSCOPE_API_KEY env，零硬编码"
+  ],
+  "no_mock_no_dry_run_as_evidence": true
+}

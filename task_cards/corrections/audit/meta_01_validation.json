@@ -1,0 +1,53 @@
+{
+  "task_card": "META-01",
+  "checked_at": "2026-05-14 11:39:00",
+  "git_commit": "ea68c5fe94dfbbc6dac1c85bef60402ddfb47587",
+  "evidence_level": "runtime_verified",
+  "env": "local",
+  "validations": {
+    "validate_corrections_py": {
+      "exit": 0,
+      "warnings_count": 60,
+      "errors": 0
+    },
+    "validate_task_cards_py": {
+      "exit": 0,
+      "cards": 57
+    },
+    "validate_serving_tree_py": {
+      "exit": 0
+    },
+    "all_pytest": {
+      "exit": 0,
+      "cases": 17,
+      "cases_passed": 17,
+      "files": [
+        "test_corrections_meta.py (7 AT)",
+        "test_task_card_ci_contract.py (2 KS-S0-004 + 2 parametrized FIX-01/02)",
+        "test_qdrant_health_schema_gate.py (4)",
+        "test_serving_tree_whitelist_provenance.py (3)"
+      ]
+    }
+  },
+  "c16_c19_implementation": {
+    "c16_at_id_required": "implemented + pytest function 存在校验（C16+）",
+    "c17_sec16_required": "implemented",
+    "c18_double_write_contract": "implemented",
+    "c19_fix25_26_prereq_gate": "implemented",
+    "grading": "not_started=warn, in_progress=fail, done&grandfather(FIX-01/02)=warn, done=fail",
+    "grading_runtime_verified": "test_at_07_grading_enforces_status_transition_to_fail 实跑确认"
+  },
+  "round_3_remediation": {
+    "blocker_h1_pytest_function_existence": "C16+ 强化：解析 §12 AT 映射表，grep test 文件中实际 def，缺失即 issue_fn",
+    "blocker_h5_param_ci_contract": "test_parametrized_ci_contract_all_active_fix_cards 参数化覆盖所有 status in {in_progress,done} FIX 卡",
+    "blocker_template_syntax": "test_fix_card_template.py 占位函数改名 test_at_NN_template_placeholder + pytest.skip",
+    "blocker_doc_inconsistency": "META-01 §6 fail-closed 分级声明显式区分 not_started=warn vs in_progress/done=fail；加'核心流程硬约束'段",
+    "new_at_07": "grading 状态跳变实测：临时改 KS-FIX-03 status=in_progress 跑 validator，C16/17/18 必须从 warn 升级到 error"
+  },
+  "templates_delivered": [
+    "task_cards/corrections/templates/fix_card_template.md",
+    "task_cards/corrections/templates/test_fix_card_template.py"
+  ],
+  "fix04_overflow_audit_table": "task_cards/corrections/README.md §10 — 25 项全部 cross-verified",
+  "notes": "C16-C19 + 7 AT pytest 全闭环；剩余 24 张 FIX 卡起跑前 status 跳变即触发 fail-closed。"
+}

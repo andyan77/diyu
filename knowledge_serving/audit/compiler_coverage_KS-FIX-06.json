@@ -1,0 +1,68 @@
+{
+  "card": "KS-FIX-06",
+  "checked_at": "2026-05-14T07:56:45Z",
+  "env": "local",
+  "git_commit": "f318971e32e3064558fc4d6ebb49179c3275e8f9",
+  "evidence_level": "runtime_verified",
+  "threshold": 0.95,
+  "distribution": {
+    "pass": 1,
+    "skip": 10,
+    "fail": 0
+  },
+  "fail_closed_triggered": false,
+  "per_log": {
+    "brand_overlay_view.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "content_type_view.compile.log": {
+      "verdict": "pass",
+      "ratio": 1.0,
+      "covered": 18,
+      "total": 18
+    },
+    "evidence_view.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "field_requirement_matrix.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "generation_recipe_view.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "merge_precedence_policy.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "pack_view.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "play_card_view.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "retrieval_policy_view.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "runtime_asset_view.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    },
+    "tenant_scope_registry.compile.log": {
+      "verdict": "skip",
+      "reason": "no coverage_breakdown in log"
+    }
+  },
+  "e8_decision": {
+    "decision": "path_A_real_assertion",
+    "rationale": "view 编译器中有 coverage_breakdown 字段者实测断言 (complete+partial)/total >= 0.95；无 coverage_breakdown 的编译器（control 编译器与非 coverage-bearing view）合理 skip，因其本不主张 coverage——这是数据真实结构，非假绿兜底。F2 fail-closed：若 skip>0 且 pass=0 则整体 fail，防止全 skip 蒙混。",
+    "signed_by": "faye",
+    "signed_at": "2026-05-14"
+  }
+}

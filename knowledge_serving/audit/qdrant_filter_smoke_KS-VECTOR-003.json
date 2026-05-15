@@ -1,7 +1,12 @@
 {
   "task_card": "KS-VECTOR-003",
   "mode": "offline",
-  "generated_at": "2026-05-13T09:11:04Z",
+  "env": "local",
+  "generated_at": "2026-05-14T11:40:16Z",
+  "checked_at": "2026-05-14T11:40:16Z",
+  "git_commit": "86d4d36dfe4bf8938c8829772449bf49316f2112",
+  "evidence_level": "offline_auxiliary",
+  "source_chunks_sha256": "67fdcaec98b2821d93df702441190b5394d6e283e4c1baf3015d083367150234",
   "chunks_corpus_path": "knowledge_serving/vector_payloads/qdrant_chunks.jsonl",
   "chunks_total": 498,
   "current_compile_run_id": "5b5e5fc1f6199ec6",

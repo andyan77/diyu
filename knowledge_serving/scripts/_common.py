@@ -181,9 +181,30 @@ def safe_relative(p: Path) -> str:
         return str(p)
 
 
+def _git_commit() -> str:
+    try:
+        import subprocess
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if proc.returncode == 0:
+            return proc.stdout.strip()
+    except Exception:
+        pass
+    return "unknown"
+
+
 def write_log(report: dict[str, Any], log_path: Path, *, ok: bool, message: str = "") -> None:
     log_path.parent.mkdir(parents=True, exist_ok=True)
-    payload = {"ok": ok, "message": message, **report}
+    import datetime as _dt
+    governance = {
+        "checked_at": _dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "env": "local",
+        "git_commit": _git_commit(),
+        "evidence_level": "runtime_verified" if ok else "runtime_verified_fail",
+    }
+    payload = {"ok": ok, "message": message, **governance, **report}
     log_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 

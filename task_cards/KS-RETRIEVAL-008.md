@@ -10,6 +10,7 @@ files_touched:
 artifacts:
   - knowledge_serving/serving/context_bundle_builder.py
   - knowledge_serving/serving/log_writer.py
+  - knowledge_serving/audit/retrieval_008_staging_KS-FIX-14.json
 s_gates: [S8]
 plan_sections:
   - "§6.12"
@@ -49,6 +50,7 @@ status: done
 | `context_bundle_builder.py` | py | 是 | 是 |
 | `log_writer.py` | py | 是 | 是 |
 | `test_bundle_log.py` | py | 是 | 是 |
+| `knowledge_serving/audit/retrieval_008_staging_KS-FIX-14.json` | json（含 env / checked_at / git_commit / evidence_level） | 是（staging PG mirror runtime 证据） | 是 |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
@@ -101,3 +103,28 @@ artifact: pytest report
 - 回归证据：`python3 -m pytest knowledge_serving/tests/` → 211 passed；
   `bash knowledge_serving/scripts/lint_no_duplicate_log.sh` → context_bundle_log 单 canonical 守门 OK；
   `python3 task_cards/validate_task_cards.py` → 57 cards, DAG closed, S0-S13 covered
+
+## 13. 2026-05-14 KS-FIX-14 staging mirror 闭环补证
+
+- 原 §8 pytest 复跑：`python3 -m pytest knowledge_serving/tests/test_bundle_log.py -v` → exit 0（22 passed）
+- staging PG mirror reconcile 真实读 PG：`source scripts/load_env.sh && python3 knowledge_serving/scripts/reconcile_context_bundle_log_mirror.py --staging --reconcile --queries 30 --out knowledge_serving/audit/retrieval_008_staging_KS-FIX-14.json` → exit 0；csv_count=36 / pg_count=36 / mismatch=0 / row_count_at_least_requested=true
+- 上下游回归：KS-RETRIEVAL-007 `test_merge_fallback.py` 25 passed；KS-DIFY-ECS-005 `test_log_dual_write.py` 11 passed；KS-RETRIEVAL-009 demo 4/4 PASS；KS-PROD-003 LLM boundary 22 passed；`validate_serving_tree.py` OK
+- runtime envelope：`knowledge_serving/audit/retrieval_008_staging_KS-FIX-14.json`（env=staging / checked_at=2026-05-14T14:05:33Z / git_commit=77dc3886f92097add4f6809ee739faa1a0fd122f / evidence_level=runtime_verified / verdict=PASS）
+
+### KS-FIX-14 §1 严格口径补证（2026-05-14 14:19Z）
+
+- **本轮新跑 30 distinct queries**（uvicorn /v1/retrieve_context POST × 30 distinct payload）：首轮 28×200 ok + 2×500 (transient dashscope DNS) → retry 2/2 attempt-1 ok → 30 个独立 request_id 全部落 canonical CSV
+- **CSV delta**：baseline 36 → post-drill 66 = +30；30 个新 rid 全部 verified in CSV
+- **PG mirror**：reconcile --apply replayed=30 errors=0 → post-verify csv=pg=66 / missing=0 / extra=0 / mismatch=0
+- **30 query 多样性**：2 tenants (`tenant_demo` / `tenant_faye_main`) × 7 content_types × 30 distinct topic；intent=content_generation
+- **审计更新**：`knowledge_serving/audit/retrieval_008_staging_KS-FIX-14.json` 现 git_commit=d0b9bcb / checked_at=2026-05-14T14:19:13Z / verdict=PASS / 含 30 rid 完整清单
+
+### KS-FIX-14 反假绿修复 + 全量 mirror 闭合复审（2026-05-14 17:12Z）
+
+- **复审 finding**：原 reconcile 脚本退出码漏检 `missing_in_pg`；实测 csv_count=156 / pg_count=152 / missing=4 时仍 exit 0（典型 E2 假绿，FIX-14 §6 row1 守护规则）。
+- **测试先行**：新增 [knowledge_serving/tests/test_reconcile_exit_code.py](../knowledge_serving/tests/test_reconcile_exit_code.py) AT-01..AT-04（pytest 4 passed）。
+- **脚本修复**：[reconcile_context_bundle_log_mirror.py](../knowledge_serving/scripts/reconcile_context_bundle_log_mirror.py) ① envelope `mismatch` 改 post-state（`unreplayed_missing = max(missing - replayed, 0)`）；② main() 加 `if unreplayed_missing > 0: return 2`。
+- **fail-closed 实测**：read-only 仍漏 4 行 → exit 2（先证守门生效）。
+- **真实 backfill**：`--apply --queries 30` → replayed=4 errors=0 → csv=pg=156 / mismatch=0 → exit 0。
+- **最终复测**：`--reconcile --queries 30 --out retrieval_008_staging_KS-FIX-14.json` → exit 0；envelope `verdict=PASS` / `mismatch=0` / `checked_at=2026-05-14T17:12:13Z` / `git_commit=40f6d3c` / `evidence_level=runtime_verified` / `mode=reconcile_read`。
+- **W9 波次状态**：staging PG mirror 真闭环；W9 从复审 FAIL 升回 PASS。

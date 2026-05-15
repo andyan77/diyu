@@ -7,8 +7,11 @@
     "domain_general"
   ],
   "candidate_count": 30,
+  "checked_at": "2026-05-14T13:48:42Z",
   "collection_name": "ks_chunks_current",
   "cross_tenant_leak": [],
+  "env": "staging",
+  "evidence_level": "runtime_verified",
   "filter": {
     "must": [
       {
@@ -42,7 +45,8 @@
   "gate_status_hit": [
     "active"
   ],
-  "generated_at": "2026-05-13T09:07:47Z",
+  "generated_at": "2026-05-14T13:48:42Z",
+  "git_commit": "d881f550d73e8cfda9dd47da6674e3c3db68baeb",
   "granularity_drift": [],
   "granularity_hit": [
     "L1"
@@ -60,5 +64,6 @@
   "query": "大衣搭配陈列要点",
   "query_embedding_dim": 1024,
   "rerank_applied": false,
-  "task_card": "KS-RETRIEVAL-006"
+  "task_card": "KS-RETRIEVAL-006",
+  "verdict": "pass"
 }

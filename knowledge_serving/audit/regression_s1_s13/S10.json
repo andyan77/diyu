@@ -1,0 +1,19 @@
+{
+  "task_id": "KS-FIX-26",
+  "gate": "S10",
+  "desc": "Vector retrieval 真路径 / qdrant + embedding 真跑",
+  "anchor_card": "KS-FIX-15",
+  "command": "bash scripts/qdrant_tunnel.sh up >/dev/null 2>&1 && unset HTTPS_PROXY HTTP_PROXY ALL_PROXY https_proxy http_proxy all_proxy && python3 knowledge_serving/scripts/qdrant_filter_smoke.py --staging && cp knowledge_serving/audit/qdrant_filter_staging_KS-FIX-11.json    knowledge_serving/audit/regression_s1_s13/S10_qdrant_filter.json && git checkout HEAD -- knowledge_serving/audit/qdrant_filter_staging_KS-FIX-11.json                      knowledge_serving/audit/qdrant_filter_smoke_KS-VECTOR-003.json; rc=$?; bash scripts/qdrant_tunnel.sh down >/dev/null 2>&1; exit $rc",
+  "verdict": "green",
+  "exit_code": 0,
+  "elapsed_sec": 9.381,
+  "started_at_utc": "2026-05-15T05:56:51+00:00",
+  "finished_at_utc": "2026-05-15T05:57:00+00:00",
+  "stdout_sha256": "e846f849fc4b7ef96b5f4473197f0b3acecb0e0e151998c23b7e08d3230e2654",
+  "stdout_excerpt": "=== KS-VECTOR-003 online staging filter smoke ===\n  collection            = ks_chunks__mp_20260512_002\n  collection_points     = 498\n  pass/fail/skip        = 9/0/0\n  cross_tenant_hits     = 0\n  audit                 = knowledge_serving/audit/qdrant_filter_staging_KS-FIX-11.json\n    ✅ C1_brand_faye_plus_domain_general hits=497\n    ✅ C2_domain_general_only hits=475\n    ✅ C3_gate_active_only hits=497\n    ✅ C4_cross_tenant_zero_hit hits=0\n    ✅ C5_batch_anchor_stale_run_zero_hit hits=0\n    ✅ C5b_batch_anchor_current_run_positive hits=497\n    ✅ C7p_content_type_positive hits=4\n    ✅ C7n_content_type_negative_zero_hit hits=0\n    ✅ C8_source_manifest_hash_current_positive hits=497\n\n  ✅ STAGING SMOKE PASS\n",
+  "stderr_excerpt": "",
+  "evidence_level": "runtime_verified",
+  "mode": "rerun_canonical_hard_gate",
+  "no_mock_no_dry_run_as_evidence": true,
+  "no_clean_output_writes": true
+}

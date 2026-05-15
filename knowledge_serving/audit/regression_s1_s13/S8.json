@@ -1,0 +1,19 @@
+{
+  "task_id": "KS-FIX-26",
+  "gate": "S8",
+  "desc": "PG 双写一致 / serving views ↔ ECS PG reconcile",
+  "anchor_card": "KS-FIX-13",
+  "command": "python3 knowledge_serving/scripts/pg_dual_write.py --staging --reconcile --strict --out /home/faye/diyu/knowledge_serving/audit/regression_s1_s13/S8_pg_dual_write.json",
+  "verdict": "green",
+  "exit_code": 0,
+  "elapsed_sec": 50.505,
+  "started_at_utc": "2026-05-15T05:55:36+00:00",
+  "finished_at_utc": "2026-05-15T05:56:26+00:00",
+  "stdout_sha256": "cbc19959280a9f7da718af1f791d9291d56f2aeed111ae66d0eb486c9d2afe96",
+  "stdout_excerpt": "{\n  \"row_count\": 180,\n  \"pg_count\": 180,\n  \"only_csv\": 0,\n  \"only_pg\": 0,\n  \"sha256_mismatch\": 0,\n  \"verdict\": \"PASS\",\n  \"audit\": \"knowledge_serving/audit/regression_s1_s13/S8_pg_dual_write.json\"\n}\n",
+  "stderr_excerpt": "",
+  "evidence_level": "runtime_verified",
+  "mode": "rerun_canonical_hard_gate",
+  "no_mock_no_dry_run_as_evidence": true,
+  "no_clean_output_writes": true
+}

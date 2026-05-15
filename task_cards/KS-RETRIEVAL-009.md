@@ -10,6 +10,7 @@ artifacts:
   - knowledge_serving/scripts/run_context_retrieval_demo.py
   - knowledge_serving/logs/retrieval_eval_sample.csv
   - knowledge_serving/logs/run_context_retrieval_demo.log
+  - knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json
 s_gates: [S7, S8, S9, S10, S11]
 plan_sections:
   - "§B Phase3"
@@ -47,6 +48,7 @@ status: done
 | `run_context_retrieval_demo.py` | py | 是 | 是 | — |
 | `retrieval_eval_sample.csv` | csv | 是（运行证据） | 是 | 是 |
 | `run_context_retrieval_demo.log` | log | 否 | 否 | 是 |
+| `knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json` | json（含 env / checked_at / git_commit / evidence_level） | 是（staging vector runtime 证据） | 是 | 是 |
 
 ## 6. 对抗性 / 边缘性测试
 | 测试 | 期望 |
@@ -116,3 +118,11 @@ artifact: retrieval_eval_sample.csv, run_context_retrieval_demo.log
 
 - ✅ GOV#2 "模块未接 retrieve_context()" → 本卡把 RETRIEVAL-001..008 在 4 case 上串通
 - ✅ EVIDENCE#3 "空 overlay payload" → case_S9 实测 `merged_overlay_payload_empty=True`，fallback 走 `domain_only`，未被占位伪造
+
+## 13. 2026-05-14 KS-FIX-15 vector path 补证
+
+- 原 §8 ci_command 复跑：`python3 knowledge_serving/scripts/run_context_retrieval_demo.py --all` → exit 0（4/4 PASS；`retrieval_eval_sample.csv` 刷新并含 env / checked_at / git_commit / evidence_level 列）
+- staging vector 默认模式复跑：`source scripts/load_env.sh && bash scripts/qdrant_tunnel.sh up && python3 knowledge_serving/scripts/run_context_retrieval_demo.py --staging --default-mode=vector_enabled --out knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json && bash scripts/qdrant_tunnel.sh down` → exit 0；4/4 case PASS；4/4 `vector_mode=vector`；vector_hits=8；min_vector_candidate_count=2
+- 直接上游回归：KS-RETRIEVAL-001..004 pytest group → 85 passed；KS-RETRIEVAL-005 governance preflight + pytest → 21 passed；KS-RETRIEVAL-006..008 pytest group → 70 passed
+- 直接下游 KS-DIFY-ECS-007 回归：`python3 -m pytest knowledge_serving/tests/test_api.py -q` → exit 0；15 passed
+- runtime envelope：`knowledge_serving/audit/retrieval_009_vector_path_KS-FIX-15.json`（env=staging / checked_at=2026-05-14T15:11:03Z / git_commit=5440990b0a19fd31fb5d8a29de2dabfd5400a96f / evidence_level=runtime_verified / default_mode=vector_enabled / verdict=PASS）

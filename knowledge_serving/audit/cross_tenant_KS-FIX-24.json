@@ -1,0 +1,207 @@
+{
+  "task_id": "KS-FIX-24",
+  "corrects": "KS-PROD-002",
+  "wave": "W12",
+  "checked_at_utc": "2026-05-15T03:03:47Z",
+  "git_commit": "339ff9a5f12418789267d39ee007fd278122162a",
+  "verdict": "CONDITIONAL_PASS",
+  "evidence_level": "partial_runtime_verified",
+  "reasons": [
+    "Group C (5 tests) deferred to future_multi_brand_expansion_gate: 当前业务现实是单品牌上线，第二品牌实测在真实第二品牌客户上线时触发；不计入当前上线阻断"
+  ],
+  "command": "source scripts/load_env.sh && python3 -m pytest knowledge_serving/tests/test_tenant_isolation_e2e.py -v --staging --api-base https://kb.diyuai.cc --tenants 2 --queries 30 --strict",
+  "exit_code": 0,
+  "api_base_url": "https://kb.diyuai.cc",
+  "tenants_targeted": [
+    "tenant_faye_main",
+    "tenant_demo"
+  ],
+  "query_count_configured": 30,
+  "pass_count": 24,
+  "fail_count": 0,
+  "skipped_count": 5,
+  "cross_brand_leak": 0,
+  "items": [
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[1-product_review-\\u8bf7\\u5e2e\\u6211\\u5199\\u4e00\\u6bb5\\u4ea7\\u54c1\\u6d4b\\u8bc4-brief0]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 5.900966452027205
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[2-store_daily-\\u8bb0\\u5f55\\u4eca\\u5929\\u95e8\\u5e97\\u91cc\\u7684\\u5c0f\\u6545\\u4e8b-brief1]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 2.1258601790177636
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[3-founder_ip-\\u7528\\u521b\\u59cb\\u4eba\\u53e3\\u543b\\u804a\\u4e00\\u804a\\u9762\\u6599\\u9009\\u62e9-brief2]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.436043947993312
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[4-process_trace-\\u8bb0\\u5f55\\u8fd9\\u6279\\u65b0\\u6b3e\\u6253\\u7248\\u5230\\u51fa\\u8d27\\u7684\\u8fc7\\u7a0b-brief3]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.4298236340400763
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[5-product_review-\\u8bb2\\u8bb2\\u8fd9\\u4ef6\\u5927\\u8863\\u7684\\u7248\\u578b\\u4eae\\u70b9-brief4]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.8283581149880774
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[6-store_daily-\\u4eca\\u5929\\u63a5\\u5f85\\u4e86\\u4e00\\u4f4d\\u8001\\u5ba2\\u6237-brief5]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.4273953459924087
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[7-founder_ip-\\u6211\\u505a\\u8fd9\\u4e2a\\u54c1\\u724c\\u7684\\u521d\\u8877-brief6]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.4282172010280192
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[8-product_review-\\u5bf9\\u6bd4\\u4e00\\u4e0b\\u4e0d\\u540c sku \\u7684\\u624b\\u611f\\u5dee\\u5f02-brief7]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.2704425089759752
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[9-store_daily-\\u672c\\u5468\\u9648\\u5217\\u600e\\u4e48\\u8c03\\u6574-brief8]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.3930902660358697
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_A_tenant_faye_main_only_sees_faye_or_domain[10-founder_ip-\\u4e0b\\u5468\\u65b0\\u54c1\\u60f3\\u8bf4\\u70b9\\u4ec0\\u4e48-brief9]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.5462691449793056
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[1-product_review-\\u8bf7\\u5e2e\\u6211\\u5199\\u4e00\\u6bb5\\u4ea7\\u54c1\\u6d4b\\u8bc4-brief0]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.4463506199535914
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[2-store_daily-\\u8bb0\\u5f55\\u4eca\\u5929\\u95e8\\u5e97\\u91cc\\u7684\\u5c0f\\u6545\\u4e8b-brief1]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.5171582459588535
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[3-founder_ip-\\u7528\\u521b\\u59cb\\u4eba\\u53e3\\u543b\\u804a\\u4e00\\u804a\\u9762\\u6599\\u9009\\u62e9-brief2]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.4896428509964608
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[4-process_trace-\\u8bb0\\u5f55\\u8fd9\\u6279\\u65b0\\u6b3e\\u6253\\u7248\\u5230\\u51fa\\u8d27\\u7684\\u8fc7\\u7a0b-brief3]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.406721686013043
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[5-product_review-\\u8bb2\\u8bb2\\u8fd9\\u4ef6\\u5927\\u8863\\u7684\\u7248\\u578b\\u4eae\\u70b9-brief4]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.5118486799765378
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[6-store_daily-\\u4eca\\u5929\\u63a5\\u5f85\\u4e86\\u4e00\\u4f4d\\u8001\\u5ba2\\u6237-brief5]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.3942170559894294
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[7-founder_ip-\\u6211\\u505a\\u8fd9\\u4e2a\\u54c1\\u724c\\u7684\\u521d\\u8877-brief6]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.2476516020251438
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[8-product_review-\\u5bf9\\u6bd4\\u4e00\\u4e0b\\u4e0d\\u540c sku \\u7684\\u624b\\u611f\\u5dee\\u5f02-brief7]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.3270038270275109
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[9-store_daily-\\u672c\\u5468\\u9648\\u5217\\u600e\\u4e48\\u8c03\\u6574-brief8]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.7993223009980284
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_B_tenant_demo_never_sees_brand_faye[10-founder_ip-\\u4e0b\\u5468\\u65b0\\u54c1\\u60f3\\u8bf4\\u70b9\\u4ec0\\u4e48-brief9]",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.1975852680043317
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_C_synthetic_brand_b_deferred_to_future_expansion_gate[1-product_review-\\u8bf7\\u5e2e\\u6211\\u5199\\u4e00\\u6bb5\\u4ea7\\u54c1\\u6d4b\\u8bc4-brief0]",
+      "outcome": "skipped",
+      "when": "call",
+      "duration": 9.356200462207198e-05
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_C_synthetic_brand_b_deferred_to_future_expansion_gate[2-store_daily-\\u8bb0\\u5f55\\u4eca\\u5929\\u95e8\\u5e97\\u91cc\\u7684\\u5c0f\\u6545\\u4e8b-brief1]",
+      "outcome": "skipped",
+      "when": "call",
+      "duration": 7.827399531379342e-05
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_C_synthetic_brand_b_deferred_to_future_expansion_gate[3-founder_ip-\\u7528\\u521b\\u59cb\\u4eba\\u53e3\\u543b\\u804a\\u4e00\\u804a\\u9762\\u6599\\u9009\\u62e9-brief2]",
+      "outcome": "skipped",
+      "when": "call",
+      "duration": 8.44610040076077e-05
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_C_synthetic_brand_b_deferred_to_future_expansion_gate[4-process_trace-\\u8bb0\\u5f55\\u8fd9\\u6279\\u65b0\\u6b3e\\u6253\\u7248\\u5230\\u51fa\\u8d27\\u7684\\u8fc7\\u7a0b-brief3]",
+      "outcome": "skipped",
+      "when": "call",
+      "duration": 7.102900417521596e-05
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_C_synthetic_brand_b_deferred_to_future_expansion_gate[5-product_review-\\u8bb2\\u8bb2\\u8fd9\\u4ef6\\u5927\\u8863\\u7684\\u7248\\u578b\\u4eae\\u70b9-brief4]",
+      "outcome": "skipped",
+      "when": "call",
+      "duration": 7.477897452190518e-05
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_D1_user_query_brand_name_does_not_switch_resolved_layer",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 1.8386307780165225
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_D2_payload_brand_layer_field_rejected",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 0.5172687700251117
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_D3_unregistered_tenant_returns_403",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 0.5290883709676564
+    },
+    {
+      "nodeid": "knowledge_serving/tests/test_tenant_isolation_e2e.py::test_D5_fuzz_30_random_no_leak",
+      "outcome": "passed",
+      "when": "call",
+      "duration": 41.149274897994474
+    }
+  ],
+  "deferred_group_c": 5,
+  "group_c_category": "future_multi_brand_expansion_gate",
+  "group_c_deferred_reason": "2026-05-15 用户范围裁决：当前生产上线目标限定为 domain_general + brand_faye 单品牌生产上线隔离门禁；第二品牌 tenant 是未来真实第二品牌上线时触发的扩展门禁（future_multi_brand_expansion_gate），不是当前笛语上线前置条件。详见 task_cards/KS-PROD-002.md frontmatter 的launch_scope_decision 与 future_multi_brand_expansion_gate 段。",
+  "launch_scope": "single_brand",
+  "no_testclient_used": true,
+  "transport": "requests.post (real HTTP)",
+  "future_full_pass_path": "当真实第二品牌客户上线时按 task_cards/KS-PROD-002.md future_multi_brand_expansion_gate 列出的 5 项门禁全部 runtime_verified 后，verdict 翻 PASS。禁止用合成 brand_b 污染 staging 真源走假绿。"
+}

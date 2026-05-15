@@ -415,3 +415,96 @@ def test_pg_up_no_outbox_pending(
     assert pg_rows[0]["request_id"] == "req_pgup_001"
     # outbox 不应有 pending 条目（PG 成功就不入队）
     assert not outbox.exists() or lw.read_outbox(outbox) == []
+
+
+# ------------------------------------------------------------------
+# W12 KS-CD-001 §8.1 补证：reconcile PG reader 不能再静默丢行
+# ------------------------------------------------------------------
+
+import importlib.util as _ilu
+
+
+def _load_reconcile_module():
+    """直接加载 reconcile 脚本（它是 scripts/ 下的 CLI，没有 package）。"""
+    path = REPO_ROOT / "knowledge_serving" / "scripts" / "reconcile_context_bundle_log_mirror.py"
+    spec = _ilu.spec_from_file_location("reconcile_mirror_under_test", path)
+    mod = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _build_csv_row_with_dirty_bundle() -> str:
+    """构造一行 psql --csv 输出，context_bundle_json 内含字面 \\n / " / ,。
+
+    用 csv.writer 自身生成，保证完全符合 RFC 4180——这正是 psql --csv 输出做的。
+    """
+    import csv as _csv
+    import io as _io
+    from knowledge_serving.serving import log_writer as _lw
+
+    dirty_bundle = (
+        '{"business_brief":{"category":"outerwear,winter","note":"line1\n'
+        'line2 with \\"quoted\\" word\nline3, with comma"}}'
+    )
+    row = {f: f"v_{f}" for f in _lw.LOG_FIELDS}
+    row["request_id"] = "req_dirty_001"
+    row["context_bundle_json"] = dirty_bundle
+    buf = _io.StringIO()
+    w = _csv.writer(buf)
+    w.writerow([row[f] for f in _lw.LOG_FIELDS])
+    return buf.getvalue()
+
+
+def test_pg_reader_handles_embedded_newlines_quotes_commas(monkeypatch):
+    """W12 fake-green 回归：context_bundle_json 含真实换行/引号/逗号时，
+    reader 仍读出 1 行完整 29 字段，且 context_bundle_json 内换行原样保留。"""
+    mod = _load_reconcile_module()
+    raw_csv = _build_csv_row_with_dirty_bundle()
+
+    captured = {}
+
+    def fake_ssh_psql(sql, *, csv_mode=False):
+        captured["csv_mode"] = csv_mode
+        return raw_csv
+
+    monkeypatch.setattr(mod, "_ssh_psql", fake_ssh_psql)
+    # env 校验在 _ssh_psql 里，monkeypatch 后不再触发；但为防 reader 内部访问环境，
+    # 顺便注一组占位 env。
+    for k in ("ECS_HOST", "ECS_USER", "ECS_SSH_KEY_PATH", "PG_USER", "PG_DATABASE"):
+        monkeypatch.setenv(k, "x")
+
+    rows = mod._live_pg_reader()
+    assert captured["csv_mode"] is True, "reader 必须用 psql --csv 模式"
+    assert len(rows) == 1, f"应读出 1 行；实际 {len(rows)}（旧 splitlines 实现会拆坏）"
+    r = rows[0]
+    assert set(r.keys()) == set(lw.LOG_FIELDS)
+    assert r["request_id"] == "req_dirty_001"
+    # 关键断言：换行 / 引号 / 逗号都不丢
+    assert "\n" in r["context_bundle_json"], "字段内换行必须原样保留"
+    assert '\\"quoted\\"' in r["context_bundle_json"], "字段内引号必须原样保留（JSON 转义形式）"
+    assert "outerwear,winter" in r["context_bundle_json"], "字段内逗号必须原样保留"
+
+
+def test_pg_reader_fail_closed_on_column_count_drift(monkeypatch):
+    """W12 fail-closed：列数漂移必须立即 sys.exit，不能 silent continue
+    重蹈 fake-green 覆辙。"""
+    mod = _load_reconcile_module()
+
+    # 28 列（少 1 列）→ 必须 fail，绝不允许吞掉
+    import csv as _csv
+    import io as _io
+    buf = _io.StringIO()
+    _csv.writer(buf).writerow([f"col{i}" for i in range(len(lw.LOG_FIELDS) - 1)])
+    short_row = buf.getvalue()
+
+    monkeypatch.setattr(mod, "_ssh_psql", lambda sql, **kw: short_row)
+    for k in ("ECS_HOST", "ECS_USER", "ECS_SSH_KEY_PATH", "PG_USER", "PG_DATABASE"):
+        monkeypatch.setenv(k, "x")
+
+    with pytest.raises(SystemExit) as ei:
+        mod._live_pg_reader()
+    msg = str(ei.value)
+    assert "字段数漂移" in msg or "column count drift" in msg
+    assert f"expected={len(lw.LOG_FIELDS)}" in msg
+    assert f"actual={len(lw.LOG_FIELDS) - 1}" in msg
+    assert "row 0" in msg

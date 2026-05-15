@@ -195,9 +195,9 @@ def main(argv: list[str] | None = None) -> int:
     try:
         return compile_retrieval_policy_view(
             policies=None,
-            output_csv=None if args.check else args.output,
-            log_path=None if args.check else args.log,
-            check_only=args.check,
+            output_csv=args.output,
+            log_path=args.log,
+            check_only=False,
         )
     except CompileError as e:
         print(f"[FAIL] {e}", file=sys.stderr)

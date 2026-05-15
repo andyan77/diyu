@@ -1,0 +1,19 @@
+{
+  "task_id": "KS-FIX-26",
+  "gate": "S5",
+  "desc": "Pack metadata fingerprint 重复运行幂等",
+  "anchor_card": "KS-COMPILER-013",
+  "command": "python3 knowledge_serving/scripts/validate_serving_governance.py --gate S5 --report knowledge_serving/audit/regression_s1_s13/S5_governance.report",
+  "verdict": "green",
+  "exit_code": 0,
+  "elapsed_sec": 0.359,
+  "started_at_utc": "2026-05-15T05:55:35+00:00",
+  "finished_at_utc": "2026-05-15T05:55:35+00:00",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_excerpt": "",
+  "stderr_excerpt": "INFO [OK] S1-S7 全绿 / all gates pass (report=knowledge_serving/audit/regression_s1_s13/S5_governance.report)\n",
+  "evidence_level": "runtime_verified",
+  "mode": "rerun_canonical_hard_gate",
+  "no_mock_no_dry_run_as_evidence": true,
+  "no_clean_output_writes": true
+}

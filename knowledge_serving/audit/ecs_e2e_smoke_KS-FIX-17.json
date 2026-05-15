@@ -1,0 +1,180 @@
+{
+  "case_exceptions": [],
+  "checked_at": "2026-05-14T17:34:59Z",
+  "csv_log": {
+    "expected_field_count": 29,
+    "field_issues": [],
+    "found": [
+      "ks-dify-ecs-006-sample_product_review-20260514T173416Z",
+      "ks-dify-ecs-006-sample_store_daily-20260514T173416Z",
+      "ks-dify-ecs-006-sample_founder_ip-20260514T173416Z",
+      "ks-dify-ecs-006-s9_cross_tenant_control-20260514T173416Z"
+    ],
+    "missing": []
+  },
+  "degraded": {
+    "pg": false,
+    "qdrant_live_skip_reason": null,
+    "qdrant_live_skipped": false,
+    "qdrant_unreachable": false
+  },
+  "dotenv_loaded_keys": [],
+  "elapsed_seconds": 44.529,
+  "env": "staging",
+  "evidence_level": "runtime_verified",
+  "finished_at": "2026-05-14T17:34:59Z",
+  "gates": {
+    "csv_log_complete_all_fields": true,
+    "external_deps_enforced": true,
+    "external_deps_reachable": true,
+    "no_silent_pass": true,
+    "s9_control_ran": true,
+    "s9_cross_tenant_zero_leak": true,
+    "three_samples_ran": true
+  },
+  "git_commit": "e7d3671dde2f6b82045c7680d29f17582538fd77",
+  "governance_snapshot": {
+    "compile_run_id": "5b5e5fc1f6199ec6",
+    "gate_policy": "active_only",
+    "granularity_layers": [
+      "L1",
+      "L2",
+      "L3"
+    ],
+    "source_manifest_hash": "b3967bca40aa93759d3f9d80a548ca12115fd91df9064d997d8d585d8c6adfc2",
+    "traceability_required": true,
+    "view_schema_version": "3c0863a75967"
+  },
+  "infra_probe": {
+    "pg": {
+      "reachable": true,
+      "select1": ""
+    },
+    "qdrant": {
+      "body_head": "all shards are ready",
+      "reachable": true,
+      "status": 200,
+      "url": "http://127.0.0.1:6333"
+    }
+  },
+  "pg_mirror": {
+    "outbox": {
+      "outbox_path": "/home/faye/diyu/knowledge_serving/control/context_bundle_log_outbox.jsonl",
+      "pending_pg_sync": [],
+      "replayed": []
+    },
+    "status": "ok"
+  },
+  "run_token": "20260514T173416Z",
+  "samples": [
+    {
+      "actual_fallback_status": "blocked_missing_business_brief",
+      "allowed_layers": [
+        "domain_general",
+        "brand_faye"
+      ],
+      "case_id": "sample_product_review",
+      "content_type": "product_review",
+      "context_bundle_hash": "sha256:e103d46490b8296451e44f90eaf072fc3da42b98e90cb6955fc78125658eeda2",
+      "cross_tenant_leak_count": 0,
+      "cross_tenant_leak_layers": [],
+      "expected_fallback_status": "blocked_missing_business_brief",
+      "fallback_match": true,
+      "log_empty_fields": [],
+      "log_row_field_count": 29,
+      "notes": [],
+      "recipe_id": "RECIPE-product_review-text-xiaohongshu-a326868327",
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T173416Z",
+      "resolved_brand_layer": "brand_faye",
+      "tenant_id": "tenant_faye_main",
+      "user_query_hash": "sha256:f9853b88b3663a78a7b7b05a7d570e66294ea3cfd6d73956cd184b177bf3c4f8",
+      "vector_brand_leak": 0,
+      "vector_candidates_total": 2,
+      "vector_mode": "vector"
+    },
+    {
+      "actual_fallback_status": "brand_partial_fallback",
+      "allowed_layers": [
+        "domain_general",
+        "brand_faye"
+      ],
+      "case_id": "sample_store_daily",
+      "content_type": "store_daily",
+      "context_bundle_hash": "sha256:94f8688f068f9adf9c2240153c54b852ea756ce0937df4680497538d4351ab1a",
+      "cross_tenant_leak_count": 0,
+      "cross_tenant_leak_layers": [],
+      "expected_fallback_status": "brand_partial_fallback",
+      "fallback_match": true,
+      "log_empty_fields": [],
+      "log_row_field_count": 29,
+      "notes": [],
+      "recipe_id": "RECIPE-store_daily-text-xiaohongshu-8f0a08b38f",
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T173416Z",
+      "resolved_brand_layer": "brand_faye",
+      "tenant_id": "tenant_faye_main",
+      "user_query_hash": "sha256:2afba0b517f645b700e0701c0f0f9858b767f7989b46e98c6748faa31b0933c4",
+      "vector_brand_leak": 0,
+      "vector_candidates_total": 2,
+      "vector_mode": "vector"
+    },
+    {
+      "actual_fallback_status": "blocked_missing_required_brand_fields",
+      "allowed_layers": [
+        "domain_general",
+        "brand_faye"
+      ],
+      "case_id": "sample_founder_ip",
+      "content_type": "founder_ip",
+      "context_bundle_hash": "sha256:006aafad48862b8ed9862411ee02d234886dc0fcdd49b564d8dfcd39ff697ca4",
+      "cross_tenant_leak_count": 0,
+      "cross_tenant_leak_layers": [],
+      "expected_fallback_status": "blocked_missing_required_brand_fields",
+      "fallback_match": true,
+      "log_empty_fields": [],
+      "log_row_field_count": 29,
+      "notes": [],
+      "recipe_id": "RECIPE-founder_ip-text-xiaohongshu-24d0adb574",
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T173416Z",
+      "resolved_brand_layer": "brand_faye",
+      "tenant_id": "tenant_faye_main",
+      "user_query_hash": "sha256:319134bcaa72354b6023ba6c14d9a20e07b093b65279a2b186fd966fe6a0ca28",
+      "vector_brand_leak": 0,
+      "vector_candidates_total": 2,
+      "vector_mode": "vector"
+    },
+    {
+      "actual_fallback_status": "domain_only",
+      "allowed_layers": [
+        "domain_general"
+      ],
+      "case_id": "s9_cross_tenant_control",
+      "content_type": "product_review",
+      "context_bundle_hash": "sha256:4c8251b89cfefd633d3ac94e01819df663b0e3b9ed6fbb9612287b0b949fc4e4",
+      "cross_tenant_leak_count": 0,
+      "cross_tenant_leak_layers": [],
+      "expected_fallback_status": "domain_only",
+      "fallback_match": true,
+      "log_empty_fields": [],
+      "log_row_field_count": 29,
+      "notes": [],
+      "recipe_id": "RECIPE-product_review-text-xiaohongshu-a326868327",
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T173416Z",
+      "resolved_brand_layer": "domain_general",
+      "tenant_id": "tenant_demo",
+      "user_query_hash": "sha256:9c2e0c11be55603c0ddcc130a4b782d3cf92ca68e15b8cb92bc14741476eecbf",
+      "vector_brand_leak": 0,
+      "vector_candidates_total": 2,
+      "vector_mode": "vector"
+    }
+  ],
+  "smoke_result": "pass",
+  "started_at": "2026-05-14T17:34:14Z",
+  "task_id": "KS-DIFY-ECS-006",
+  "vector_evidence": {
+    "live_hit": true,
+    "modes_seen": [
+      "vector"
+    ],
+    "note": "vector_live_evidence=true 表示本次确实跑了真 Qdrant 召回；false 表示 Qdrant 不可达或缺 embedding 依赖，按卡 §6 降级 structured_only"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "task_card": "KS-FIX-01",
+  "env": "staging",
+  "base_url": "http://127.0.0.1:6333",
+  "qdrant_url": "http://127.0.0.1:6333",
+  "checked_at": "2026-05-14 16:58:49",
+  "overall": "healthy",
+  "version": "1.12.5",
+  "collections": [
+    "ks_chunks__mp_20260512_002"
+  ],
+  "evidence_level": "runtime_verified",
+  "warnings": [],
+  "git_commit": "6d7d5c96620dbb760b6c6d7363c8f9facc92be0b",
+  "probes": [
+    {
+      "path": "/",
+      "label": "service banner",
+      "http_code": 200,
+      "ok": true,
+      "elapsed_ms": 99,
+      "body_preview": "{\"title\":\"qdrant - vector search engine\",\"version\":\"1.12.5\",\"commit\":\"27260abda78509e1a3e8822c8d8819c4fe189f5b\"}"
+    },
+    {
+      "path": "/healthz",
+      "label": "healthz endpoint",
+      "http_code": 200,
+      "ok": true,
+      "elapsed_ms": 145,
+      "body_preview": "healthz check passed"
+    },
+    {
+      "path": "/readyz",
+      "label": "readyz endpoint",
+      "http_code": 200,
+      "ok": true,
+      "elapsed_ms": 145,
+      "body_preview": "all shards are ready"
+    },
+    {
+      "path": "/collections",
+      "label": "collections list",
+      "http_code": 200,
+      "ok": true,
+      "elapsed_ms": 145,
+      "body_preview": "{\"result\":{\"collections\":[{\"name\":\"ks_chunks__mp_20260512_002\"}]},\"status\":\"ok\",\"time\":4.315e-6}"
+    }
+  ],
+  "fallback_signal": "none"
+}
