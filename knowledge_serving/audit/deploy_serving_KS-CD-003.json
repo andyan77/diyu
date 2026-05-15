@@ -1,51 +1,13 @@
 {
   "task_id": "KS-CD-003",
   "env": "staging",
-  "checked_at": "2026-05-15T03:27:07Z",
-  "git_commit": "339ff9a",
+  "checked_at": "2026-05-15T07:06:13Z",
+  "git_commit": "42b6797c7f9d",
   "mode": "apply",
   "evidence_level": "runtime_verified",
-  "verdict": "PASS",
-  "image_tag": "diyu-serving:4240cdd555d4",
+  "image_tag": "diyu-serving:42b6797c7f9d",
   "ecs_host": "8.217.175.36",
   "host_port": "8005",
   "container_port": "8000",
-  "container_name": "diyu-serving",
-  "container_status_at_audit": "Up 12 hours (healthy) → restarted at 11:22 CST → Up healthy",
-  "deploy_commits": [
-    "fd24740",
-    "d881f55",
-    "d0b9bcb",
-    "b08a2dd",
-    "4240cdd"
-  ],
-  "endpoints_public": [
-    "https://kb.diyuai.cc/v1/retrieve_context",
-    "https://kb.diyuai.cc/v1/guardrail",
-    "https://kb.diyuai.cc/internal/context_bundle_log"
-  ],
-  "nginx_snippet": "/etc/nginx/snippets/diyu-serving.conf (3 location blocks)",
-  "isolation_red_lines": {
-    "process_isolation": "独立容器 diyu-serving，与 diyu-agent 进程级隔离",
-    "code_isolation": "独立镜像 diyu-serving:* — 不与 diyu-agent 共享代码",
-    "config_isolation": "独立 /opt/diyu-serving/.env — chmod 600 root only",
-    "pg_account_isolation": "serving_writer 低权账号 — see least_privilege_KS-CD-003.json",
-    "data_ssot_direction": "ECS 是部署副本；clean_output/ 是数据真源 — 本容器只读 serving.* + 写 serving.context_bundle_log，不反向写 knowledge.*"
-  },
-  "runtime_evidence": {
-    "x2_dify_cloud_chain": {
-      "audit": "knowledge_serving/audit/dify_app_import_KS-FIX-19.json",
-      "verdict": "PASS",
-      "dify_app_id": "5ff5960c-f8aa-437e-bd34-689f9bb71518",
-      "dify_api_url_actual": "https://api.dify.ai/v1",
-      "chain": "本地 → Dify Cloud chatflow → kb.diyuai.cc → ECS diyu-serving:8005 (serving_writer) → 真 bundle 返回"
-    },
-    "least_privilege_closure": {
-      "audit": "knowledge_serving/audit/least_privilege_KS-CD-003.json",
-      "verdict": "PASS",
-      "evidence_level": "runtime_verified"
-    }
-  },
-  "no_testclient_no_mock_no_dry_run_as_evidence": true,
-  "no_clean_output_writes": true
+  "extra": {"smoke_exit": 0, "smoke_result": "healthz_ok_after=3s healthz=200 guardrail=200"}
 }

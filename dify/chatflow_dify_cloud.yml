@@ -130,6 +130,9 @@ workflow:
           desc: 单点调用 deterministic 端点，砸碎 n1-n4 双源漂移
           method: post
           url: "{{#env.SERVING_API_BASE#}}/v1/input_preflight"
+          authorization:
+            type: no-auth
+            config: null
           headers: |
             Content-Type: application/json
           params: ""
@@ -162,8 +165,15 @@ workflow:
           desc: 只抽字段不做判断；真源 = serving 容器 /v1/input_preflight
           code_language: python3
           code: |
+            import json
+            def _coerce(p):
+                if isinstance(p, str):
+                    try: return json.loads(p) if p else {}
+                    except Exception: return {}
+                return p or {}
             def main(p) -> dict:
-                t = (p or {}).get("tenant") or {}
+                p = _coerce(p)
+                t = p.get("tenant") or {}
                 return {
                     "resolved_brand_layer": t.get("resolved_brand_layer") or "",
                     "allowed_layers": t.get("allowed_layers") or [],
@@ -192,8 +202,15 @@ workflow:
           desc: 只抽字段不做判断；真源 = intent_classifier.INTENT_ENUM (5 类)
           code_language: python3
           code: |
+            import json
+            def _coerce(p):
+                if isinstance(p, str):
+                    try: return json.loads(p) if p else {}
+                    except Exception: return {}
+                return p or {}
             def main(p) -> dict:
-                i = (p or {}).get("intent") or {}
+                p = _coerce(p)
+                i = p.get("intent") or {}
                 return {
                     "classified_intent": i.get("classified_intent") or "",
                     "intent_status": i.get("intent_status") or "needs_review",
@@ -220,8 +237,15 @@ workflow:
           desc: 只抽字段不做判断；真源 = content_type_canonical.csv (18 canonical + aliases)
           code_language: python3
           code: |
+            import json
+            def _coerce(p):
+                if isinstance(p, str):
+                    try: return json.loads(p) if p else {}
+                    except Exception: return {}
+                return p or {}
             def main(p) -> dict:
-                c = (p or {}).get("content_type") or {}
+                p = _coerce(p)
+                c = p.get("content_type") or {}
                 return {
                     "content_type": c.get("content_type") or "",
                     "content_type_status": c.get("content_type_status") or "needs_review",
@@ -249,8 +273,14 @@ workflow:
           code_language: python3
           code: |
             import json
+            def _coerce(p):
+                if isinstance(p, str):
+                    try: return json.loads(p) if p else {}
+                    except Exception: return {}
+                return p or {}
             def main(p, brief_json: str) -> dict:
-                b = (p or {}).get("business_brief") or {}
+                p = _coerce(p)
+                b = p.get("business_brief") or {}
                 try:
                     brief = json.loads(brief_json) if brief_json else {}
                 except Exception:

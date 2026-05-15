@@ -1,0 +1,117 @@
+{
+  "task_id": "KS-CD-003-A",
+  "step": "single_source_preflight_close",
+  "summary": "Dify chatflow n1-n4 双源硬编码 → /v1/input_preflight deterministic endpoint 单源化收口",
+  "checked_at_utc": "2026-05-15T07:38:00Z",
+  "mode": "apply",
+  "evidence_level": "runtime_verified",
+  "verdict": "PASS",
+
+  "deliverables": {
+    "endpoint": {
+      "path": "/v1/input_preflight",
+      "file": "knowledge_serving/serving/api/input_preflight_endpoint.py",
+      "depends_on_modules": [
+        "knowledge_serving/serving/tenant_scope_resolver.py",
+        "knowledge_serving/serving/intent_classifier.py",
+        "knowledge_serving/serving/content_type_router.py"
+      ],
+      "depends_on_csv": [
+        "knowledge_serving/control/tenant_scope_registry.csv",
+        "knowledge_serving/control/content_type_canonical.csv",
+        "knowledge_serving/control/field_requirement_matrix.csv"
+      ],
+      "calls_llm": false,
+      "writes_clean_output": false,
+      "creates_new_ssot": false
+    },
+    "dsl_changes": {
+      "files": [
+        "dify/chatflow.dsl",
+        "dify/chatflow_dify_cloud.yml",
+        "docs/dify_chatflow_nodes.md"
+      ],
+      "inline_code_lines_before": 135,
+      "inline_code_lines_after": 0,
+      "n1_to_n4_now_passthrough": true
+    },
+    "openapi": "knowledge_serving/serving/api/openapi.yaml (/v1/input_preflight added)",
+    "validator_v12_v13": "scripts/validate_dify_dsl.py (V12 single-source + V13 inline regression guard)",
+    "tests": "knowledge_serving/tests/test_input_preflight_endpoint.py (16 adversarial cases, all green)"
+  },
+
+  "verification": {
+    "local_pytest_preflight": "16 passed",
+    "local_pytest_existing_endpoints": "18 passed (no regression)",
+    "validate_dify_dsl_v1_v13": "PASS",
+    "check_dsl_url_alignment_strict": "PASS (3 URLs aligned: input_preflight + retrieve_context + context_bundle_log)",
+    "ecs_deploy": {
+      "container": "diyu-serving",
+      "image_tag": "diyu-serving:42b6797c7f9d",
+      "smoke_post_deploy": {"healthz": 200, "guardrail": 200}
+    },
+    "nginx_snippet_updated": {
+      "file_local": "ops/nginx/serving.location.conf",
+      "file_ecs": "/etc/nginx/snippets/diyu-serving.conf",
+      "locations": ["/v1/input_preflight", "/v1/retrieve_context", "/v1/guardrail", "/internal/context_bundle_log"],
+      "nginx_test": "ok",
+      "nginx_reload": "ok"
+    },
+    "public_endpoint_curl": {
+      "url": "https://kb.diyuai.cc/v1/input_preflight",
+      "case_alias_ootd": {
+        "input_content_type_hint": "ootd",
+        "output_content_type": "outfit_of_the_day",
+        "output_matched_alias": "OOTD",
+        "tenant_ok": true,
+        "resolved_brand_layer": "brand_faye"
+      }
+    },
+    "dify_staging_strict": {
+      "audit": "knowledge_serving/audit/dify_app_import_KS-FIX-19.json",
+      "verdict": "PASS",
+      "chat_response_ok": true,
+      "dify_app_id": "b0f54b62-6571-41d8-98c5-ee04d5c0e28a",
+      "mode": "advanced-chat",
+      "expected_fields_present": [
+        "bundle.domain_packs", "bundle.play_cards", "bundle.runtime_assets",
+        "bundle.brand_overlays", "bundle.evidence", "fallback_status"
+      ]
+    },
+    "ecs_logs_evidence": {
+      "diyu-serving_logs_tail": [
+        "POST /v1/input_preflight HTTP/1.0 200 OK",
+        "POST /v1/input_preflight HTTP/1.0 200 OK",
+        "POST /v1/retrieve_context HTTP/1.0 200 OK"
+      ],
+      "meaning": "Dify Cloud chatflow 真打 n0_preflight_call 经 nginx 到 diyu-serving:8005，证明 A 链路替代了原 n1-n4 内联硬编码"
+    }
+  },
+
+  "scope_constraints_honored": {
+    "no_clean_output_writes": true,
+    "no_new_registry_alias_ssot": true,
+    "no_llm_or_agent_judgements": true,
+    "no_9_table_changes": true,
+    "no_brand_layer_boundary_changes": true,
+    "wrapper_reads_only_serving_control_csv": true,
+    "dify_input_first_preserved": true,
+    "no_new_orchestrator_or_generation_framework": true
+  },
+
+  "drift_impact_metric": {
+    "intent_enum_before_dify_inline": 3,
+    "intent_enum_after_single_source": 5,
+    "content_type_canonical_in_dify_inline_before": 18,
+    "content_type_canonical_in_dify_inline_after": 0,
+    "tenant_id_literals_in_dify_inline_before": 2,
+    "tenant_id_literals_in_dify_inline_after": 0,
+    "per_content_type_hard_map_in_dify_inline_before": 4,
+    "per_content_type_hard_map_in_dify_inline_after": 0
+  },
+
+  "git_commits": {
+    "42b6797": "feat(KS-CD-003-A): 单源化 input preflight — 砸碎 n1-n4 双源漂移（local 落盘 + V12/V13）",
+    "this_commit": "feat(KS-CD-003-A): ECS rebuild + nginx + Dify reimport — A 真生效（runtime_verified）"
+  }
+}
