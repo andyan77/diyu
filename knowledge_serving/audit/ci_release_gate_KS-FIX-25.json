@@ -2,10 +2,10 @@
   "task_id": "KS-FIX-25",
   "corrects": "KS-CD-001",
   "wave": "W13",
-  "checked_at_utc": "2026-05-15T05:58:55Z",
+  "checked_at_utc": "2026-05-15T08:33:24Z",
   "mode": "static",
   "runner": "local",
-  "git_commit": "339ff9a",
+  "git_commit": "4af17a2",
   "verdict": "PASS",
   "evidence_level": "static_verified",
   "reasons": [],
@@ -14,7 +14,7 @@
       "name": "validate_task_cards",
       "verdict": "PASS",
       "reason": null,
-      "artifact": "VALIDATION PASS: 58 cards, DAG closed, S0-S13 covered."
+      "artifact": "VALIDATION PASS: 78 cards, DAG closed, S0-S13 covered."
     },
     {
       "name": "validate_corrections",
