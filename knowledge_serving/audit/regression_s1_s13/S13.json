@@ -1,0 +1,19 @@
+{
+  "task_id": "KS-FIX-26",
+  "gate": "S13",
+  "desc": "CI release gate 总闸 / 5 validators + audit ledger",
+  "anchor_card": "KS-FIX-25",
+  "command": "bash knowledge_serving/scripts/local_release_gate.sh --mode static --runner local",
+  "verdict": "green",
+  "exit_code": 0,
+  "elapsed_sec": 0.605,
+  "started_at_utc": "2026-05-15T05:58:55+00:00",
+  "finished_at_utc": "2026-05-15T05:58:55+00:00",
+  "stdout_sha256": "8a7a916914c5fb80ae4f1477e17ba06b1dc3fb9563222f020fa7c5bb77281e6f",
+  "stdout_excerpt": "verdict=PASS  stages=24  → knowledge_serving/audit/ci_release_gate_KS-FIX-25.json\n",
+  "stderr_excerpt": "[release_gate] stage 1: static validators\n[release_gate] stage 2: audit ledger aggregation\n[release_gate] aggregating verdict → knowledge_serving/audit/ci_release_gate_KS-FIX-25.json\n",
+  "evidence_level": "runtime_verified",
+  "mode": "rerun_canonical_hard_gate",
+  "no_mock_no_dry_run_as_evidence": true,
+  "no_clean_output_writes": true
+}

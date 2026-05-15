@@ -1,0 +1,13 @@
+# validate_serving_governance.report
+generated_at: 2026-05-15T05:55:36.092364+00:00
+compile_run_id: 5b5e5fc1f6199ec6
+
+[preflight schema_validation]
+status: pass
+checked_rows: 725
+violations: ()
+
+[S6 play_card_completeness]
+status: pass
+checked_rows: 29
+violations: ()

@@ -1,0 +1,19 @@
+{
+  "task_id": "KS-FIX-26",
+  "gate": "S9",
+  "desc": "context_bundle_log mirror 一致 / 审计可回放",
+  "anchor_card": "KS-FIX-14",
+  "command": "python3 knowledge_serving/scripts/reconcile_context_bundle_log_mirror.py --staging --reconcile --queries 5 --out knowledge_serving/audit/regression_s1_s13/S9_reconcile.json",
+  "verdict": "green",
+  "exit_code": 0,
+  "elapsed_sec": 24.597,
+  "started_at_utc": "2026-05-15T05:56:26+00:00",
+  "finished_at_utc": "2026-05-15T05:56:51+00:00",
+  "stdout_sha256": "897605b71e169224699d91baab366b76c208dac1306f5401907e64f7bc235b85",
+  "stdout_excerpt": "[reconcile] csv=/home/faye/diyu/knowledge_serving/control/context_bundle_log.csv apply=False env=staging\n{\n  \"csv_count\": 180,\n  \"pg_count\": 180,\n  \"missing_in_pg\": [],\n  \"extra_in_pg\": [],\n  \"replayed_count\": 0,\n  \"replay_errors\": [],\n  \"mismatch\": 0,\n  \"row_count_at_least_requested\": true\n}\naudit → knowledge_serving/audit/reconcile_context_bundle_log_mirror.json\nruntime audit → knowledge_serving/audit/regression_s1_s13/S9_reconcile.json\n",
+  "stderr_excerpt": "",
+  "evidence_level": "runtime_verified",
+  "mode": "rerun_canonical_hard_gate",
+  "no_mock_no_dry_run_as_evidence": true,
+  "no_clean_output_writes": true
+}

@@ -4,17 +4,23 @@ phase: Production-Readiness
 wave: W14
 depends_on: [KS-CD-001]
 files_touched:
-  - knowledge_serving/scripts/run_serving_regression_tests.py
+  - knowledge_serving/scripts/regression_s1_s13.py
 artifacts:
-  - knowledge_serving/scripts/run_serving_regression_tests.py
-  - knowledge_serving/audit/regression_report_KS-PROD-001.json
+  - knowledge_serving/scripts/regression_s1_s13.py
+  - knowledge_serving/audit/regression_s1_s13_KS-FIX-26.json
 s_gates: [S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, S13]
 plan_sections:
   - "§12"
 writes_clean_output: false
 ci_commands:
-  - python3 knowledge_serving/scripts/run_serving_regression_tests.py --all
-status: not_started
+  - python3 knowledge_serving/scripts/regression_s1_s13.py --staging --strict
+status: done
+runtime_verified_at: "2026-05-15"
+closed_by: KS-FIX-26
+runtime_evidence: |
+  W14 KS-FIX-26 真闭环（2026-05-15）：13/13 S gate green，master audit
+  knowledge_serving/audit/regression_s1_s13_KS-FIX-26.json verdict=PASS。
+  详见 task_cards/corrections/KS-FIX-26.md。
 ---
 
 # KS-PROD-001 · S1-S13 总回归
@@ -75,6 +81,7 @@ artifact: regression_report_KS-PROD-001.json
 > 阻断项：skip 未解释；任一门 fail。
 
 ## 11. DoD
-- [ ] 总回归脚本入 git
-- [ ] CI pass
-- [ ] 审查员 pass
+- [x] 总回归脚本入 git（knowledge_serving/scripts/regression_s1_s13.py，由 KS-FIX-26 W14 真做）
+- [x] CI pass（13/13 S gate green，master audit verdict=PASS）
+- [x] 审查员 pass（FIX-26 AT-01/02/03 真测 PASS）
+- [ ] 用户最终上线签字（prod 上线前由用户确认）

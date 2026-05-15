@@ -1,0 +1,15 @@
+# validate_serving_governance.report
+generated_at: 2026-05-15T05:55:36.411367+00:00
+compile_run_id: 5b5e5fc1f6199ec6
+
+[preflight schema_validation]
+status: pass
+checked_rows: 725
+violations: ()
+
+[S7 fallback_policy_coverage]
+status: pass
+checked_rows: 19
+canonical_count: 18
+frm_count: 18
+violations: ()
