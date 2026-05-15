@@ -1,7 +1,23 @@
 # Dify Chatflow 10 节点说明（KS-DIFY-ECS-008）
 
-> 与 [`dify/chatflow.dsl`](../dify/chatflow.dsl) 一对一对应；任一改动必须同步两端，并跑
-> `python3 scripts/validate_dify_dsl.py` 校验。
+> 本项目维护**两份 DSL**：
+> - [`dify/chatflow.dsl`](../dify/chatflow.dsl) — 项目内 canonical 抽象，由 `scripts/validate_dify_dsl.py` V1-V11 守门
+> - [`dify/chatflow_dify_cloud.yml`](../dify/chatflow_dify_cloud.yml) — **Dify Cloud 原生 DSL**，可直接 Studio import
+>
+> 两份语义一对一对应；任一改动必须同步两端，并跑 `python3 scripts/validate_dify_dsl.py` + `python3 -c "import yaml; yaml.safe_load(open('dify/chatflow_dify_cloud.yml'))"` 双重校验。
+>
+> ## Dify Cloud 导入步骤
+>
+> 1. 登录 `https://cloud.dify.ai` → Studio
+> 2. **Create App → Import DSL file** → 选 `dify/chatflow_dify_cloud.yml`
+> 3. 导入后在 Studio 顶部 **环境变量** 把 `SERVING_API_BASE` 改成你的真 staging URL（缺省 `https://api.diyu.staging.internal` 是占位）
+> 4. 在 LLM 节点（n7）确认 model.provider/name 与你 Dify Cloud 已接入的模型匹配（缺省 `langgenius/tongyi/tongyi` + `qwen-plus`）
+> 5. 在 HTTP 节点（n5 / n8 / n10）确认 endpoint 路径（默认按 [openapi.yaml](../knowledge_serving/serving/api/openapi.yaml) 的 `/v1/retrieve_context`；guardrail / log_write 需要 KS-FIX-18 / 后续卡补 wrapper endpoint）
+> 6. Run / Test 一条 query 看 n5 是否真出 200 bundle
+>
+> ## 导入前先做（强烈建议）
+>
+> 把 `app.diyu.staging.internal` 替换为你能真访问的 staging URL，否则 n5/n8/n10 会 DNS 失败、整条 chatflow 跑不通。也可以先用 ngrok / cloudflared 把本地 uvicorn 暴露成公网 HTTPS 临时跑通。
 
 ## 核心红线（必须背下来）
 
@@ -24,7 +40,7 @@
 | 2 | `n2_intent_canonical_check` | `intent_canonical_check` | code | `intent_hint` 落在 canonical 枚举内则透传；否则 `needs_review`；禁 LLM/Agent（input-first 红线）|
 | 3 | `n3_content_type_canonical_map` | `content_type_canonical_map` | code | 走 `content_type_canonical.csv` alias→canonical 确定性映射；禁 LLM/Agent（input-first 红线）|
 | 4 | `n4_business_brief_check` | `business_brief_check` | code | 按 content_type 检查 `business_brief` 必填字段；输出 `business_brief_missing_fields` |
-| 5 | `n5_retrieve_context_call` | `retrieve_context_call` | http_request | POST `${SERVING_API_BASE}/api/v1/retrieve_context`；必须 `uses_tenant_filter=true` + `no_direct_table_query=true`；禁直查 9 表 view |
+| 5 | `n5_retrieve_context_call` | `retrieve_context_call` | http_request | POST `${SERVING_API_BASE}/v1/retrieve_context`；必须 `uses_tenant_filter=true` + `no_direct_table_query=true`；禁直查 9 表 view |
 | 6 | `n6_fallback_status_branch` | `fallback_status_branch` | if_else | 按 `fallback_status` 分流；`blocked_*` 直接绕过 LLM 走 output_evidence；禁 LLM/Agent |
 | 7 | `n7_llm_generation` | `llm_generation` | llm | 仅消费 `context_bundle` 输出 `draft_output`；不接管任何治理判断 |
 | 8 | `n8_guardrail` | `guardrail` | code | 走 `guardrail_policy` 静态规则（禁词 / 长度 / 字段守门）；不调 LLM |

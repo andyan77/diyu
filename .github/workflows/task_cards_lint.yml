@@ -1,0 +1,67 @@
+name: task_cards_lint
+# KS-CD-001 §4-step1 — 第一道门 / first gate: 校验任务卡 + 纠偏卡 DAG 闭环
+# KS-FIX-25 §4-step1 — 真 CI runner 入口（GitHub Actions hosted runner）
+# 触发：PR + push 到 main；任何卡 frontmatter / DAG 不闭环立刻 fail。
+
+on:
+  pull_request:
+    paths:
+      - 'task_cards/**'
+      - 'knowledge_serving/scripts/check_dsl_url_alignment.py'
+      - 'scripts/validate_w3_input_whitelist.py'
+      - 'scripts/validate_dify_dsl.py'
+      - 'dify/chatflow.dsl'
+      - 'knowledge_serving/serving/api/openapi.yaml'
+      - '.github/workflows/task_cards_lint.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'task_cards/**'
+      - '.github/workflows/task_cards_lint.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate task_cards + corrections + DSL
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: install yaml + jsonschema (no other deps)
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pyyaml jsonschema
+
+      - name: validate_task_cards
+        run: python3 task_cards/validate_task_cards.py
+
+      - name: validate_corrections
+        run: python3 task_cards/corrections/validate_corrections.py
+
+      - name: validate_w3_input_whitelist
+        run: python3 scripts/validate_w3_input_whitelist.py
+
+      - name: validate_dify_dsl
+        run: python3 scripts/validate_dify_dsl.py
+
+      - name: check_dsl_url_alignment (strict)
+        run: python3 knowledge_serving/scripts/check_dsl_url_alignment.py --strict
+
+      - name: upload lint logs (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: task_cards_lint_logs
+          path: |
+            knowledge_serving/audit/*.report
+            task_cards/corrections/audit/
+          if-no-files-found: ignore
+          retention-days: 30

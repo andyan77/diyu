@@ -86,6 +86,50 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponseWithRequestId"
 
+  /internal/context_bundle_log:
+    post:
+      summary: 写入 context_bundle_log（canonical CSV + PG mirror outbox）
+      description: |
+        Dify chatflow n10_log_write 节点写回 / Dify writes context_bundle_log from chatflow.
+        红线：仍由后端从 tenant_id 推断 brand_layer；调用方不得 override。
+      operationId: writeContextBundleLog
+      responses:
+        "200":
+          description: 写入成功
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status: { type: string, example: ok }
+        "400":
+          description: 入参校验失败
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/guardrail:
+    post:
+      summary: guardrail 静态规则校验 / static guardrail check
+      description: |
+        KS-FIX-18 落盘 / KS-FIX-18 deliverable. 静态规则（禁词 / 长度 / 字段守门）；不调 LLM。
+      operationId: guardrailCheck
+      responses:
+        "200":
+          description: 校验完成（pass 或 blocked，详见 body）
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: 入参校验失败
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     # 注：入参 **没有** brand_layer 字段。下面用 additionalProperties=false 防 override 漏入。

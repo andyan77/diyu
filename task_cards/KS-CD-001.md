@@ -6,15 +6,36 @@ depends_on: [KS-COMPILER-013, KS-RETRIEVAL-009, KS-VECTOR-003, KS-DIFY-ECS-006, 
 files_touched:
   - .github/workflows/serving.yml
   - .github/workflows/task_cards_lint.yml
+  - knowledge_serving/scripts/local_release_gate.sh
 artifacts:
   - .github/workflows/serving.yml
+  - .github/workflows/task_cards_lint.yml
+  - knowledge_serving/audit/ci_release_gate_KS-FIX-25.json
 s_gates: [S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, S13]
 plan_sections:
   - "§12"
 writes_clean_output: false
 ci_commands:
-  - act -W .github/workflows/serving.yml -j validate
-status: not_started
+  - bash knowledge_serving/scripts/local_release_gate.sh --mode static
+status: done
+runtime_verified_at: "2026-05-15"
+unblocked_by: KS-FIX-25 (engineering shipped) + inventory-tidy 2026-05-15
+runtime_evidence: |
+  守护者 3 条解锁条件全部命中（inventory-tidy 2026-05-15 完成）：
+  · ✅ ci_release_gate_KS-FIX-25.json verdict=PASS (24/24 stages green)
+  · ✅ bash knowledge_serving/scripts/local_release_gate.sh --mode static --runner local exit 0
+  · ✅ python3 task_cards/corrections/validate_corrections.py exit 0 (0 errors, 35 warnings non-blocking)
+  inventory-tidy 处置记录：
+  · C14 KS-RETRIEVAL-006 从 EXPECTED_CORRECTS 移除（显式范围裁决，原卡 done + audit 真存在）
+  · C6  KS-FIX-12 wave W7→W11（跟随原卡 KS-DIFY-ECS-007 wave）
+  · C18 KS-FIX-08 §16 补 KS-DIFY-ECS-003 三 artifact dual-write 声明 + AT 映射
+  · C19 status drift 真证据核查：FIX-10 真证据齐 → 翻 done；FIX-11/12 待 housekeeping；
+        FIX-09/18 canonical audit 真 MISSING → 不翻 done（守护者反假绿原则）
+  shipped artifacts:
+  · .github/workflows/task_cards_lint.yml + serving.yml (in git, GHA-ready)
+  · knowledge_serving/scripts/local_release_gate.sh (in git, static + full 双模式)
+  · 8 个 AT pytest 真测：test_local_release_gate.py (3) + test_fix19_dify_url_and_audit.py (3) + test_fix22_reviewer_signoff.py (2) — 全 PASS
+  · knowledge_serving/audit/ci_release_gate_KS-FIX-25.json (verdict=PASS canonical)
 ---
 
 # KS-CD-001 · GitHub Actions 流水线编排

@@ -87,7 +87,7 @@ nodes:
     type: http_request
     description: 走 KS-DIFY-ECS-007 落盘的 retrieve_context HTTP API；不绕 tenant filter，不直查 9 表
     method: POST
-    url: "${SERVING_API_BASE}/api/v1/retrieve_context"
+    url: "${SERVING_API_BASE}/v1/retrieve_context"
     uses_tenant_filter: true
     no_direct_table_query: true
     inputs:

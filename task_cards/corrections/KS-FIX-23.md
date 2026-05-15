@@ -41,11 +41,19 @@ status: done
 | `audit/rollback_staging_KS-FIX-23.json` | json | 是 | 是 | runtime_verified |
 
 ## 6. 对抗性 / 边缘性测试
-| 测试 | 期望 |
-|---|---|
-| `<run_id>` 占位符仍存 | **fail-closed**：脚本拒绝 |
-| 未知 run_id | exit 1 |
-| 回滚后 smoke fail | exit 1 |
+| AT | 测试 | 期望 |
+|---|---|---|
+| AT-01 | `<run_id>` 占位符仍存 → 脚本必须 fail-closed | exit 1 + 不执行任何 apply |
+| AT-02 | 未知 run_id → fail-closed | exit 1 |
+| AT-03 | 回滚后 KS-RETRIEVAL-006 staging smoke fail | exit 1（rollback 视为失败） |
+
+## 12. AT 映射 / test_id 映射
+
+| AT | pytest function | 测试文件 |
+|---|---|---|
+| AT-01 | `test_at01_ledger_rejects_null_mpv` | knowledge_serving/tests/test_rollback_pg_drill_adversarial.py |
+| AT-02 | `test_at02_corrupted_ledger_fail_closed` | knowledge_serving/tests/test_rollback_pg_drill_adversarial.py |
+| AT-03 | `test_at03_unknown_run_id_exit_2` | knowledge_serving/tests/test_rollback_pg_drill_adversarial.py |
 
 ## 7. 治理语义一致性
 - 不写 `clean_output/`。
@@ -69,3 +77,14 @@ pass:    rollback_ok=true 且 post_smoke_ok=true
 - [x] artifact runtime_verified（`knowledge_serving/audit/rollback_staging_KS-FIX-23.json`，含 env=staging / checked_at=2026-05-14T13:02:51Z / git_commit=dd8cdda / evidence_level=runtime_verified / 三个上游 audit 路径+sha256 / 两个 adversarial PASS）
 - [x] 审查员 pass（reviewer_prompt_coverage 覆盖 KS-CD-002 §10 四项 + KS-FIX-23 §10 三项，verdict=PASS）
 - [x] 原卡 KS-CD-002 回写（§11 DoD 四项全 [x] + 锚定 runtime 证据）
+
+## 16. 被纠卡同步 / Original card sync (C17 / H3 / H4)
+
+**目标原卡**：`task_cards/KS-CD-002.md`
+
+**H4 双写契约 / dual-write contract**：
+
+| 原卡 artifact | 本卡刷新方式 | 备注 |
+|---|---|---|
+| `knowledge_serving/audit/rollback_staging_KS-FIX-23.json` | 本卡 §5 直接 rollback_to_compile_run.py 真跑写出 | canonical PG-side runtime evidence |
+| `knowledge_serving/audit/rollback_KS-CD-002_20260514T134842Z.json` | **无需同步**（理由：该 audit 是 per-drill timestamped instance / 时间戳实例快照，KS-CD-002 frontmatter 把它列入是历史 run 记录；本卡 canonical evidence 是 `rollback_staging_KS-FIX-23.json`。两类 audit 互补不互替：时间戳实例 = run-by-run history；canonical = 本卡固化的 verdict。） | C18 豁免成立 |

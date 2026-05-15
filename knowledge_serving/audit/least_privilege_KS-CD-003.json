@@ -1,0 +1,52 @@
+{
+  "task_id": "KS-CD-003",
+  "step": "least_privilege_pg_account",
+  "closes_dod_item": "DB user serving_writer PG account isolation",
+  "checked_at_utc": "2026-05-15T03:27:07Z",
+  "git_commit": "339ff9a",
+  "mode": "apply",
+  "evidence_level": "runtime_verified",
+  "verdict": "PASS",
+  "actions": [
+    "CREATE ROLE serving_writer LOGIN PASSWORD <generated 48-hex>",
+    "GRANT USAGE ON SCHEMA serving TO serving_writer",
+    "GRANT SELECT ON ALL TABLES IN SCHEMA serving TO serving_writer",
+    "GRANT INSERT ON serving.context_bundle_log TO serving_writer",
+    "ALTER DEFAULT PRIVILEGES IN SCHEMA serving GRANT SELECT ON TABLES TO serving_writer",
+    "REVOKE ALL ON SCHEMA knowledge FROM serving_writer",
+    "REVOKE ALL ON SCHEMA knowledge_industrial FROM serving_writer",
+    "REVOKE ALL ON SCHEMA gateway FROM serving_writer",
+    "rewrite /opt/diyu-serving/.env PG_USER=serving_writer + PG_PASSWORD=<new>",
+    "backup /opt/diyu-serving/.env.bak.20260515-112230",
+    "docker restart diyu-serving"
+  ],
+  "acl_tests": {
+    "serving_select_pack_view": {"expected": "rows", "actual": "201", "pass": true},
+    "serving_insert_context_bundle_log": {"expected": "INSERT 0 1", "actual": "INSERT 0 1", "pass": true},
+    "knowledge_select_persona": {"expected": "permission denied for schema knowledge", "actual": "permission denied for schema knowledge", "pass": true},
+    "knowledge_industrial_select": {"expected": "permission denied for schema knowledge_industrial", "actual": "permission denied for schema knowledge_industrial", "pass": true}
+  },
+  "container_post_switch": {
+    "name": "diyu-serving",
+    "status": "Up healthy",
+    "logs_tail_clean": true
+  },
+  "endpoint_smoke_post_switch": {
+    "guardrail": {"http": 200, "real_pg_select_serving_views": true},
+    "retrieve_context_needs_review_intent": {"http": 200, "request_id_returned": true},
+    "dify_app_import_KS-FIX-19_full_chain": {
+      "result": "PASS",
+      "audit": "knowledge_serving/audit/dify_app_import_KS-FIX-19.json",
+      "chat_response_ok": true,
+      "meaning": "Dify Cloud → kb.diyuai.cc → diyu-serving (serving_writer) → real PG SELECT serving.* + INSERT bundle_log 全链 PASS"
+    }
+  },
+  "red_line_enforced": {
+    "principle": "least_privilege",
+    "before": "diyu-serving 容器以高权 PG 账号 diyu 运行 — 理论上能读 knowledge.* / knowledge_industrial.*",
+    "after": "diyu-serving 容器以低权 PG 账号 serving_writer 运行 — 仅 SELECT serving.* + INSERT serving.context_bundle_log，对 knowledge.* / knowledge_industrial.* / gateway.* 写读全部 permission denied"
+  },
+  "no_clean_output_writes": true,
+  "no_mock_no_testclient_no_dry_run_as_evidence": true,
+  "secret_handling": "PG_PASSWORD 不入 git；明文仅存于 /opt/diyu-serving/.env (chmod 600 root only) 与 /tmp/sw_pw.txt（本地一次性）"
+}

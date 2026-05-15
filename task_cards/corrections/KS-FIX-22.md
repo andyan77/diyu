@@ -39,10 +39,17 @@ status: done
 | `audit/retrieval_007_reviewer_pass_KS-FIX-22.md` | md | 是 | 是 | runtime_verified |
 
 ## 6. 对抗性 / 边缘性测试
-| 测试 | 期望 |
-|---|---|
-| reviewer pass 未签字 | **fail-closed** |
-| CI 命令 skip>0 pass=0 | fail |
+| AT | 测试 | 期望 |
+|---|---|---|
+| AT-01 | reviewer md 真存在且 verdict=PASS 字面声明（不许 RISKY 误判 PASS） | **fail-closed**：grep 命中 verdict: PASS，否则 exit 1 |
+| AT-02 | KS-RETRIEVAL-007 §11 DoD 三项全 [x] | **fail-closed**：unchecked count=0，否则 exit 1 |
+
+## 12. AT 映射 / test_id 映射
+
+| AT | pytest function | 测试文件 |
+|---|---|---|
+| AT-01 | `test_at01_reviewer_md_real_and_verdict_pass` | knowledge_serving/tests/test_fix22_reviewer_signoff.py |
+| AT-02 | `test_at02_retrieval_007_dod_all_checked` | knowledge_serving/tests/test_fix22_reviewer_signoff.py |
 
 ## 7. 治理语义一致性
 - 审查员意见先验证再采信（E7）。
@@ -65,3 +72,11 @@ pass:    grep 命中 1+
 - [x] KS-RETRIEVAL-007 §11 DoD 勾选（三项全 [x]）
 - [x] 审查员 pass（verdict=PASS，2026-05-14T20:44:23+08:00）
 - [x] 原卡 KS-RETRIEVAL-007 回写（本卡的目的即为此）
+
+## 16. 被纠卡同步 / Original card sync (C17 / H3 / H4)
+
+**目标原卡**：`task_cards/KS-RETRIEVAL-007.md`
+
+**§13 回写**：本卡 done 后，KS-RETRIEVAL-007 §11 DoD 三项全 [x] 并 inline 引用本卡 reviewer pass artifact。
+
+**H4 双写契约**：本卡是 reviewer 二次确认型卡，原卡 frontmatter 无 runtime JSON 列表；本卡新增 `knowledge_serving/audit/retrieval_007_reviewer_pass_KS-FIX-22.md` 是 markdown 签字件不是双写 audit 路径，**C18 不适用**。

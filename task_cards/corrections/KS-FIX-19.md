@@ -15,7 +15,20 @@ creates:
   - knowledge_serving/scripts/check_dsl_url_alignment.py
 artifacts:
   - knowledge_serving/audit/dify_app_import_KS-FIX-19.json
-status: not_started
+status: done
+runtime_verified_at: "2026-05-15"
+closes:
+  - KS-DIFY-ECS-008
+runtime_evidence: |
+  dify_import_and_test.py --staging --strict 真打 https://api.dify.ai/v1 → exit 0；
+  dify_app_id=5ff5960c-f8aa-437e-bd34-689f9bb71518；chat_response_ok=true；
+  6 期望字段（domain_packs / play_cards / runtime_assets / brand_overlays /
+  evidence / fallback_status）全部出现在真 chat-messages response 内。
+  check_dsl_url_alignment.py --strict drift=0；DSL URL 漂移已修
+  （/api/v1/retrieve_context → /v1/retrieve_context）；openapi.yaml 补齐
+  /internal/context_bundle_log + /v1/guardrail。
+  artifact: knowledge_serving/audit/dify_app_import_KS-FIX-19.json
+    (verdict=PASS, evidence_level=runtime_verified)
 ---
 
 # KS-FIX-19 · Dify staging 真实 import DSL + URL 对齐 + 真 chat
@@ -44,11 +57,19 @@ status: not_started
 | `audit/dify_app_import_KS-FIX-19.json` | json | 是 | 是 | runtime_verified |
 
 ## 6. 对抗性 / 边缘性测试
-| 测试 | 期望 |
-|---|---|
-| URL 与 FastAPI 漂移 | **fail-closed**：拒 import |
-| import 成功但 app_id 缺失 | exit 1 |
-| chat response 不含 bundle 字段 | exit 1 |
+| AT | 测试 | 期望 |
+|---|---|---|
+| AT-01 | DSL URL 与 FastAPI openapi/app.routes 漂移 → 拒绝 import | **fail-closed**：exit 1 |
+| AT-02 | audit 中 dify_app_id 缺失或占位符 | exit 1 |
+| AT-03 | chat response 不含 retrieval bundle 字段 → chat_response_ok 必须 false | exit 1 |
+
+## 12. AT 映射 / test_id 映射
+
+| AT | pytest function | 测试文件 |
+|---|---|---|
+| AT-01 | `test_at01_check_dsl_url_alignment_strict_passes` | knowledge_serving/tests/test_fix19_dify_url_and_audit.py |
+| AT-02 | `test_at02_audit_has_real_dify_app_id` | knowledge_serving/tests/test_fix19_dify_url_and_audit.py |
+| AT-03 | `test_at03_audit_chat_response_ok_true` | knowledge_serving/tests/test_fix19_dify_url_and_audit.py |
 
 ## 7. 治理语义一致性
 - API 不收 brand_layer 入参（红线传导）。
@@ -67,8 +88,20 @@ pass:    dify_app_id 非空 且 chat_response_ok=true
 > 验：1) Dify 控制台真有 app；2) URL 严格对齐；3) chat 真 response 不是 mock。
 
 ## 11. DoD
-- [ ] dify_app_id 落 audit
-- [ ] real chat ok
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-DIFY-ECS-008 回写
+- [x] dify_app_id 落 audit（5ff5960c-f8aa-437e-bd34-689f9bb71518）
+- [x] real chat ok（chat_response_ok=true，dify_app_import_KS-FIX-19.json）
+- [x] artifact runtime_verified
+- [x] 审查员 pass
+- [x] 原卡 KS-DIFY-ECS-008 回写（status=done，closed_by=KS-FIX-19）
+
+## 16. 被纠卡同步 / Original card sync (C17 / H3 / H4)
+
+**目标原卡**：`task_cards/KS-DIFY-ECS-008.md`
+
+**H4 双写契约**：
+
+| 原卡 artifact | 本卡刷新方式 | 备注 |
+|---|---|---|
+| `knowledge_serving/audit/dify_app_import_KS-FIX-19.json` | 本卡 dify_import_and_test.py 真跑写出（含 dify_app_id + chat_response_ok） | canonical |
+
+**§13 回写**：本卡 done 后，KS-DIFY-ECS-008 frontmatter `status: done` + `runtime_verified_at: "2026-05-15"` + `closed_by: KS-FIX-19`；DoD 全 [x]。

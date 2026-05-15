@@ -1,20 +1,20 @@
 {
   "audit_for": "KS-DIFY-ECS-010",
-  "byte_identical_count": 168,
+  "byte_identical_count": 172,
   "byte_identical_rate": 1.0,
-  "checked_at": "2026-05-14T17:41:23Z",
+  "checked_at": "2026-05-14T17:54:09Z",
   "ci_gate": {
     "byte_identical_rate_eq_1.0": true,
     "count_eq_total": true,
     "exit_code": 0,
     "strict_mode": true
   },
-  "count": 168,
+  "count": 172,
   "env": "staging",
   "evidence_level": "runtime_verified",
   "fail_count": 0,
-  "finished_at": "2026-05-14T17:41:23Z",
-  "git_commit": "e7d3671dde2f6b82045c7680d29f17582538fd77",
+  "finished_at": "2026-05-14T17:54:09Z",
+  "git_commit": "7ab215773041db8a45532fe06649aeb0960d496f",
   "issued_by": "KS-FIX-20",
   "mode": "bulk",
   "per_row": [
@@ -1697,12 +1697,52 @@
       "replayed_bundle_hash": "sha256:4c8251b89cfefd633d3ac94e01819df663b0e3b9ed6fbb9612287b0b949fc4e4",
       "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T173416Z",
       "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "i": 169,
+      "log_context_bundle_hash": "sha256:a2bbdb48d7f580e6d32ea78dcaf74390e186ca404a295e2c2a859930bf48ce16",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:a2bbdb48d7f580e6d32ea78dcaf74390e186ca404a295e2c2a859930bf48ce16",
+      "request_id": "ks-dify-ecs-006-sample_product_review-20260514T175326Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "i": 170,
+      "log_context_bundle_hash": "sha256:024584c69ba35bfa3962a1249634e94e8c2e58d184f8b8333f4b8603a886e31a",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:024584c69ba35bfa3962a1249634e94e8c2e58d184f8b8333f4b8603a886e31a",
+      "request_id": "ks-dify-ecs-006-sample_store_daily-20260514T175326Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "i": 171,
+      "log_context_bundle_hash": "sha256:09dc8f1b4908c08a1072592848a08a8abd8ef80d549be056e1e8cee3c189b1c4",
+      "log_resolved_brand_layer": "brand_faye",
+      "replayed_brand_layer": "brand_faye",
+      "replayed_bundle_hash": "sha256:09dc8f1b4908c08a1072592848a08a8abd8ef80d549be056e1e8cee3c189b1c4",
+      "request_id": "ks-dify-ecs-006-sample_founder_ip-20260514T175326Z",
+      "status": "ok"
+    },
+    {
+      "byte_identical": true,
+      "i": 172,
+      "log_context_bundle_hash": "sha256:179f8d29545cc4840cffe02cc00b829a82c1f1c0c5402a344fc957e0ca2de416",
+      "log_resolved_brand_layer": "domain_general",
+      "replayed_brand_layer": "domain_general",
+      "replayed_bundle_hash": "sha256:179f8d29545cc4840cffe02cc00b829a82c1f1c0c5402a344fc957e0ca2de416",
+      "request_id": "ks-dify-ecs-006-s9_cross_tenant_control-20260514T175326Z",
+      "status": "ok"
     }
   ],
   "risky_flag_count": 0,
   "since": "W11",
-  "started_at": "2026-05-14T17:41:20Z",
-  "timestamp": "2026-05-14T17:41:23Z",
-  "total": 168,
+  "started_at": "2026-05-14T17:54:06Z",
+  "timestamp": "2026-05-14T17:54:09Z",
+  "total": 172,
   "verdict": "PASS"
 }

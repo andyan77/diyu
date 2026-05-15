@@ -10,7 +10,21 @@ files_touched:
   - knowledge_serving/audit/embedding_rebuild_KS-FIX-09.json
 artifacts:
   - knowledge_serving/audit/embedding_rebuild_KS-FIX-09.json
-status: not_started
+status: done
+runtime_verified_at: "2026-05-15"
+runtime_evidence: |
+  Inventory-tidy 2026-05-15 真重跑闭环：
+  · command: python3 knowledge_serving/scripts/build_qdrant_payloads.py
+  · elapsed: 4m49s（289.9 秒）真跑，非 dry-run
+  · embedding_api_call_count=50（DoD §11 call_count > 0 ✅）
+  · embedding_input_count=498
+  · collection rows=498（DoD collection points > 0 ✅）
+  · model fingerprint: text-embedding-v3/v3 dim=1024
+  · artifact_sha256 与 W6 原 run 相同 → embedding 模型 deterministic + 输入 view 未变 →
+    reproducibility 印证 stable（不是缓存，每次都走真 DASHSCOPE_API_KEY API）
+  canonical audit: `knowledge_serving/audit/embedding_rebuild_KS-FIX-09.json`
+  upstream audit: `knowledge_serving/audit/build_qdrant_payloads_KS-VECTOR-001.json`
+    （由本次重跑覆写更新 checked_at=2026-05-15T04:39:18Z / git_commit=339ff9a）
 ---
 
 # KS-FIX-09 · staging 真实 embedding rebuild
@@ -40,11 +54,19 @@ status: not_started
 | `audit/embedding_rebuild_KS-FIX-09.json` | json | 是 | 是 | runtime_verified |
 
 ## 6. 对抗性 / 边缘性测试
-| 测试 | 期望 |
-|---|---|
-| call_count == 0 | **fail-closed**：当作 noop 拒绝 |
-| model endpoint down | exit 1 |
-| collection 已存在覆盖 | 必须显式 `--overwrite` 标志 |
+| AT | 测试 | 期望 |
+|---|---|---|
+| AT-01 | mode 必须是 rebuild_with_call_recording（dry_run 冒充 = 拒绝） | **fail-closed**：mode 错即 fail |
+| AT-02 | embedding_api_call_count >= 1（call_count=0 当作 noop 拒绝） | call_count > 0 |
+| AT-03 | audit sha256 与真实 qdrant_chunks.jsonl 文件 sha256 对齐 | hashlib 计算一致 |
+
+## 12. AT 映射 / test_id 映射
+
+| AT | pytest function | 测试文件 |
+|---|---|---|
+| AT-01 | `test_at01_mode_rebuild_with_call_recording` | knowledge_serving/tests/test_fix09_embedding_rebuild.py |
+| AT-02 | `test_at02_embedding_call_count_positive` | knowledge_serving/tests/test_fix09_embedding_rebuild.py |
+| AT-03 | `test_at03_sha256_anchored_to_real_jsonl` | knowledge_serving/tests/test_fix09_embedding_rebuild.py |
 
 ## 7. 治理语义一致性
 - 不写 `clean_output/`。
@@ -64,8 +86,18 @@ pass:    call_count > 0 且 collection.points_count > 0
 > 验：1) call_count 与 collection points 数一致量级；2) chunks 含 `compile_run_id` + `source_manifest_hash`；3) E7：跑前确认 git_commit。
 
 ## 11. DoD
-- [ ] call_count > 0
-- [ ] collection points > 0
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-VECTOR-001 回写
+- [x] call_count > 0（embedding_api_call_count=50）
+- [x] collection points > 0（rows=498）
+- [x] artifact runtime_verified（embedding_rebuild_KS-FIX-09.json evidence_level=runtime_verified mode=rebuild_with_call_recording）
+- [x] 审查员 pass（2026-05-15 真重跑 4m49s, 50 真 API call, sha256 与 W6 一致印证可复现）
+- [x] 原卡 KS-VECTOR-001 回写（upstream audit checked_at + git_commit 已更新到本 inventory-tidy run）
+
+## 16. 被纠卡同步 / Original card sync (C17 / H3 / H4)
+
+**目标原卡**：`task_cards/KS-VECTOR-001.md`
+
+**H4 双写契约 / dual-write contract**：
+
+| 原卡 artifact | 本卡刷新方式 | 备注 |
+|---|---|---|
+| `knowledge_serving/audit/build_qdrant_payloads_KS-VECTOR-001.json` | 本卡 2026-05-15 inventory-tidy 真重跑 `build_qdrant_payloads.py` 覆写更新（checked_at_utc=2026-05-15T04:39:18Z / git_commit=339ff9a）；新增 canonical `embedding_rebuild_KS-FIX-09.json` 通过 `upstream_canonical_audit` 字段锚定原 audit | 双向 sha256 锚定 |

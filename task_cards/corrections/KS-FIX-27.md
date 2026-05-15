@@ -147,4 +147,5 @@ artifact: knowledge_serving/audit/rollback_staging_KS-FIX-27.json
 | 原卡 artifact | 本卡刷新方式 | 备注 |
 |---|---|---|
 | `knowledge_serving/audit/rollback_staging_KS-FIX-23.json` | **无需同步**（理由：FIX-23 已闭关、artifact 内 verdict=CONDITIONAL_PASS 是冻结快照，本卡新增独立 audit `rollback_staging_KS-FIX-27.json` 记录 PG 侧补全证据；两份 audit 各管各的 finding，不应互相覆盖。原卡 §11 DoD 同时引用两份 audit 形成完整闭环。） | C18 豁免成立 |
+| `knowledge_serving/audit/rollback_KS-CD-002_20260514T134842Z.json` | **无需同步**（理由：该 audit 是 rollback 演练 per-drill timestamped instance / 时间戳实例快照，KS-CD-002 frontmatter 列入是历史 run 记录；本卡 PG 侧补全后写出 `rollback_staging_KS-FIX-27.json` 作为 canonical PG-side evidence。两类 audit 互补不互替：时间戳实例 = run-by-run history；canonical = PG 侧 verdict。原卡 §11 DoD 同时引用两份。） | C18 豁免成立 |
 | `scripts/rollback_to_compile_run.py` | 本卡 §5 直接 edit 入 git（discover_run_ids 加 ledger 读取） | wrapper 不需要 |

@@ -1,0 +1,166 @@
+{
+  "task_id": "KS-FIX-25",
+  "corrects": "KS-CD-001",
+  "wave": "W13",
+  "checked_at_utc": "2026-05-15T05:58:55Z",
+  "mode": "static",
+  "runner": "local",
+  "git_commit": "339ff9a",
+  "verdict": "PASS",
+  "evidence_level": "static_verified",
+  "reasons": [],
+  "stages": [
+    {
+      "name": "validate_task_cards",
+      "verdict": "PASS",
+      "reason": null,
+      "artifact": "VALIDATION PASS: 58 cards, DAG closed, S0-S13 covered."
+    },
+    {
+      "name": "validate_corrections",
+      "verdict": "PASS",
+      "reason": null,
+      "artifact": "  [KS-FIX-01] C16 §6 表缺 AT-NN test_id token"
+    },
+    {
+      "name": "validate_dify_dsl",
+      "verdict": "PASS",
+      "reason": null,
+      "artifact": null
+    },
+    {
+      "name": "validate_w3_input_whitelist",
+      "verdict": "PASS",
+      "reason": null,
+      "artifact": null
+    },
+    {
+      "name": "dsl_url_alignment",
+      "verdict": "PASS",
+      "reason": null,
+      "artifact": null
+    },
+    {
+      "name": "audit:KS-FIX-01",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "qdrant_health_KS-FIX-01.json"
+    },
+    {
+      "name": "audit:KS-FIX-02",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "ecs_mirror_dryrun_KS-FIX-02.json"
+    },
+    {
+      "name": "audit:KS-FIX-03",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "ecs_mirror_verify_KS-FIX-03.json"
+    },
+    {
+      "name": "audit:KS-FIX-04",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "purity_check_KS-FIX-04.json"
+    },
+    {
+      "name": "audit:KS-FIX-05",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "model_policy_staging_snapshot_KS-FIX-05.json"
+    },
+    {
+      "name": "audit:KS-FIX-06",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "compiler_coverage_KS-FIX-06.json"
+    },
+    {
+      "name": "audit:KS-FIX-08",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "pg_apply_KS-FIX-08.json"
+    },
+    {
+      "name": "audit:KS-FIX-10",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "qdrant_apply_KS-FIX-10.json"
+    },
+    {
+      "name": "audit:KS-FIX-11",
+      "verdict": "PASS",
+      "reason": "pass",
+      "artifact": "qdrant_filter_staging_KS-FIX-11.json"
+    },
+    {
+      "name": "audit:KS-FIX-12",
+      "verdict": "PASS",
+      "reason": "pass",
+      "artifact": "retrieval_006_staging_KS-FIX-12.json"
+    },
+    {
+      "name": "audit:KS-FIX-13",
+      "verdict": "PASS",
+      "reason": "PASS",
+      "artifact": "dual_write_staging_KS-FIX-13.json"
+    },
+    {
+      "name": "audit:KS-FIX-14",
+      "verdict": "PASS",
+      "reason": "PASS",
+      "artifact": "retrieval_008_staging_KS-FIX-14.json"
+    },
+    {
+      "name": "audit:KS-FIX-15",
+      "verdict": "PASS",
+      "reason": "PASS",
+      "artifact": "retrieval_009_vector_path_KS-FIX-15.json"
+    },
+    {
+      "name": "audit:KS-FIX-16",
+      "verdict": "PASS",
+      "reason": "PASS",
+      "artifact": "api_ecs_deployment_KS-FIX-16.json"
+    },
+    {
+      "name": "audit:KS-FIX-17",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "ecs_e2e_smoke_KS-FIX-17.json"
+    },
+    {
+      "name": "audit:KS-FIX-19",
+      "verdict": "PASS",
+      "reason": "PASS",
+      "artifact": "dify_app_import_KS-FIX-19.json"
+    },
+    {
+      "name": "audit:KS-FIX-20",
+      "verdict": "PASS",
+      "reason": "PASS",
+      "artifact": "replay_KS-FIX-20.json"
+    },
+    {
+      "name": "audit:KS-FIX-21",
+      "verdict": "PASS",
+      "reason": "evidence_level=runtime_verified",
+      "artifact": "rerank_runtime_KS-FIX-21.json"
+    },
+    {
+      "name": "audit:KS-FIX-24",
+      "verdict": "PASS",
+      "reason": "CONDITIONAL_PASS",
+      "artifact": "cross_tenant_KS-FIX-24.json"
+    }
+  ],
+  "stage_counts": {
+    "PASS": 24,
+    "CONDITIONAL_PASS": 0,
+    "FAIL": 0,
+    "BLOCKED": 0
+  },
+  "no_clean_output_writes": true,
+  "no_mock_no_testclient_no_dry_run_as_evidence": true
+}

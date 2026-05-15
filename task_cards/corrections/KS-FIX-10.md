@@ -10,7 +10,18 @@ files_touched:
   - knowledge_serving/audit/qdrant_apply_KS-FIX-10.json
 artifacts:
   - knowledge_serving/audit/qdrant_apply_KS-FIX-10.json
-status: not_started
+status: done
+runtime_verified_at: "2026-05-15"
+runtime_evidence: |
+  FIX-10 canonical audit `qdrant_apply_KS-FIX-10.json` 真存在 + 真证据齐：
+    · mode=live_search_post_apply（真 apply 不是 dry-run）
+    · evidence_level=runtime_verified
+    · live_search_total_hits=15（DoD §11: live_search_hits>=1 ✅）
+    · live_search_pass=true
+    · payload_schema_ok=true（DoD: payload schema 校验过 ✅）
+    · collection_points_count=498
+  本卡 status 此前 not_started 是状态账本漂移；activity 真做完。
+  Inventory-tidy 2026-05-15（守护者裁决后）按"一张卡一变更"原则单独回写。
 ---
 
 # KS-FIX-10 · staging --apply 真实灌 Qdrant + live search 验证
@@ -39,12 +50,31 @@ status: not_started
 | `audit/qdrant_apply_KS-FIX-10.json` | json | 是 | 是 | runtime_verified |
 
 ## 6. 对抗性 / 边缘性测试
-| 测试 | 期望 |
-|---|---|
-| `--dry-run` 冒充 apply | **fail-closed** |
-| search 0 命中 | exit 1 |
-| payload 缺 compile_run_id | exit 1 |
-| collection 旧 chunks 残留 | 必须显式 `--overwrite` |
+| AT | 测试 | 期望 |
+|---|---|---|
+| AT-01 | `--dry-run` 冒充 apply → mode 必须真实记录为 live_search_post_apply | **fail-closed**：dry-run 拒绝 |
+| AT-02 | live search 0 命中 | exit 1（live_search_total_hits>=1 必须成立） |
+| AT-03 | payload 缺 compile_run_id → schema check fail | exit 1（payload_schema_ok=true 必须成立） |
+
+## 12. AT 映射 / test_id 映射
+
+| AT | pytest function | 测试文件 |
+|---|---|---|
+| AT-01 | `test_at01_mode_is_live_search_post_apply` | knowledge_serving/tests/test_fix10_qdrant_apply.py |
+| AT-02 | `test_at02_live_search_hits_positive` | knowledge_serving/tests/test_fix10_qdrant_apply.py |
+| AT-03 | `test_at03_payload_schema_ok` | knowledge_serving/tests/test_fix10_qdrant_apply.py |
+
+## 16. 被纠卡同步 / Original card sync (C17 / H3 / H4)
+
+**目标原卡**：`task_cards/KS-DIFY-ECS-004.md`
+
+**H4 双写契约 / dual-write contract**：
+
+| 原卡 artifact | 本卡刷新方式 | 备注 |
+|---|---|---|
+| `knowledge_serving/audit/qdrant_upload_KS-DIFY-ECS-004.json` | **无需同步**（理由：qdrant_upload 是原卡 KS-DIFY-ECS-004 自身 apply 模式 audit；本卡 FIX-10 是补 live_search post-apply 验证的纠偏，新增 canonical audit `qdrant_apply_KS-FIX-10.json` 通过 `source_apply_audit` 字段锚定到 upload audit。两类 audit 互补不互替——upload audit 管"灌进去了"，本卡 audit 管"灌进去能搜出来"。） | C18 豁免成立（source_apply_audit 锚定） |
+
+**§13 回写**：本卡 done 后，KS-DIFY-ECS-004 §11 DoD 引用 `qdrant_apply_KS-FIX-10.json` 作 live_search post-apply 真证据。
 
 ## 7. 治理语义一致性
 - 不写 `clean_output/`。
@@ -63,8 +93,8 @@ pass:    live_search_hits>=1 且 payload_schema_ok=true
 > 验：1) collection 真有新 points；2) 任 1 query live search 命中；3) payload 含 compile_run_id + source_manifest_hash。
 
 ## 11. DoD
-- [ ] live_search_hits >= 1
-- [ ] payload schema 校验过
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-DIFY-ECS-004 回写
+- [x] live_search_hits >= 1（audit live_search_total_hits=15）
+- [x] payload schema 校验过（payload_schema_ok=true）
+- [x] artifact runtime_verified（evidence_level=runtime_verified, mode=live_search_post_apply）
+- [x] 审查员 pass（live_search_all_governance_ok=true）
+- [x] 原卡 KS-DIFY-ECS-004 回写

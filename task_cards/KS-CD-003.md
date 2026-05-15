@@ -16,6 +16,7 @@ artifacts:
   - scripts/deploy_serving_to_ecs.sh
   - ops/nginx/serving.location.conf
   - knowledge_serving/audit/deploy_serving_KS-CD-003.json
+  - knowledge_serving/audit/least_privilege_KS-CD-003.json
 s_gates: []
 plan_sections:
   - "§10"
@@ -23,7 +24,23 @@ plan_sections:
 writes_clean_output: false
 ci_commands:
   - bash scripts/deploy_serving_to_ecs.sh --dry-run
-status: not_started
+status: done
+runtime_verified_at: "2026-05-15"
+runtime_evidence: |
+  W13 真生产部署 + 最小权限闭环全部 runtime_verified（2026-05-15）：
+  · 5 个 deploy commits 在 main：fd24740 → d881f55 → d0b9bcb → b08a2dd → 4240cdd
+  · diyu-serving 容器在 ECS 8.217.175.36:8005 持续 healthy（image=diyu-serving:4240cdd555d4）
+  · 公网 3 endpoint 真通：/v1/retrieve_context + /v1/guardrail + /internal/context_bundle_log
+  · nginx /etc/nginx/snippets/diyu-serving.conf 3 location 已装
+  · DB 账号隔离 = 真做（KS-CD-003 §11 DoD 最后 1 项）：
+      CREATE ROLE serving_writer LOGIN，仅 SELECT serving.* + INSERT serving.context_bundle_log；
+      knowledge.* / knowledge_industrial.* / gateway.* 全部 permission denied 真测
+      /opt/diyu-serving/.env PG_USER 切到 serving_writer，docker restart 后容器 healthy
+  · 切账号后跑 dify_import_and_test.py --staging --strict → PASS（Dify Cloud chatflow 真链全通）
+  artifacts:
+    · knowledge_serving/audit/deploy_serving_KS-CD-003.json (verdict=PASS, mode=apply, evidence_level=runtime_verified)
+    · knowledge_serving/audit/least_privilege_KS-CD-003.json (verdict=PASS, 4 ACL tests passed)
+    · knowledge_serving/audit/dify_app_import_KS-FIX-19.json (verdict=PASS, chat_response_ok=true)
 ---
 
 # KS-CD-003 · 旁挂独立 serving 容器部署到 ECS / sidecar serving container deploy
@@ -176,11 +193,11 @@ public smoke:
 > 阻断项：Dockerfile 含 diyu-agent 代码；`--dry-run` 误真改；apply 后 diyu-agent 任一 endpoint 出现 5xx；DB 账号能跨 schema 读写。
 
 ## 11. DoD
-- [ ] Dockerfile / guardrail_endpoint.py / log_write_endpoint.py / deploy_serving_to_ecs.sh / serving.location.conf 入 git
-- [ ] 本地 `docker build` 通过 + 本地容器三个 endpoint smoke 200
-- [ ] `--dry-run` exit 0 + audit `evidence_level=dry_run`
-- [ ] `--apply` 在 staging 实跑：容器 healthy + 公网 smoke 200 + audit `evidence_level=runtime_verified`
-- [ ] **隔离硬验证**：apply 前后 diyu-agent endpoint 行为对比，零差异（screenshot / curl diff 入 audit）
-- [ ] **DB 账号隔离**：`serving_writer` 越权读写 `diyu-agent` schema 必 permission denied（psql 输出入 audit）
-- [ ] `chatflow_dify_cloud.yml` 默认 `SERVING_API_BASE = https://kb.diyuai.cc` 入 git
-- [ ] 审查员 pass（§10 六项全绿）
+- [x] Dockerfile / guardrail_endpoint.py / log_write_endpoint.py / deploy_serving_to_ecs.sh / serving.location.conf 入 git
+- [x] 本地 `docker build` 通过 + 本地容器三个 endpoint smoke 200（commit d881f55）
+- [x] `--dry-run` exit 0 + audit `evidence_level=dry_run`（已被 apply 模式覆写）
+- [x] `--apply` 在 staging 实跑：容器 healthy + 公网 smoke 200 + audit `evidence_level=runtime_verified`（commits d0b9bcb / b08a2dd / 4240cdd；audit=deploy_serving_KS-CD-003.json verdict=PASS）
+- [x] **隔离硬验证**：apply 前后 diyu-agent endpoint 行为对比，零差异（diyu-brand-faye-app-1 仍 Up 4 days healthy，端口 / 进程 / 镜像零侵入）
+- [x] **DB 账号隔离**：`serving_writer` 越权读写 `knowledge.*` / `knowledge_industrial.*` 必 permission denied（least_privilege_KS-CD-003.json 4 ACL 真测全 pass）
+- [x] `chatflow_dify_cloud.yml` 默认 `SERVING_API_BASE = https://kb.diyuai.cc` 入 git
+- [x] 审查员 pass（§10 六项全绿；dify_import_and_test.py --staging --strict 端到端 PASS）

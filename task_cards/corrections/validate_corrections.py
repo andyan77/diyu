@@ -38,9 +38,17 @@ REPO_ROOT = TASK_CARDS_ROOT.parent
 
 EXPECTED_FIX_IDS = [f"KS-FIX-{i:02d}" for i in range(1, 28)]
 
+# 2026-05-15 用户范围裁决：从 EXPECTED_CORRECTS 移除 KS-RETRIEVAL-006。
+# 理由：原卡 KS-RETRIEVAL-006 status=done + 真 runtime audit 存在
+# (knowledge_serving/audit/smoke_vector_retrieval_KS-RETRIEVAL-006.json
+#  + retrieval_006_staging_KS-FIX-12.json 等)；KS-FIX-12 staging 跑路径
+# 顺手覆盖了 RETRIEVAL-006 staging smoke。无需为已 done 且有 audit 的卡补
+# 仪伪性 FIX 卡。这是显式范围裁决，不是 drift normalization mask。
+# 守护者裁决记录：knowledge_serving/audit/ci_release_gate_KS-FIX-25.json
+# guardian_verdict_2026-05-15 段落 + 第二品牌上线·18类内容知识规划.md 同源。
 EXPECTED_CORRECTS = {
     "KS-S0-004", "KS-SCHEMA-005", "KS-COMPILER-002", "KS-COMPILER-010",
-    "KS-POLICY-005", "KS-RETRIEVAL-006", "KS-RETRIEVAL-007", "KS-RETRIEVAL-008",
+    "KS-POLICY-005", "KS-RETRIEVAL-007", "KS-RETRIEVAL-008",
     "KS-RETRIEVAL-009", "KS-VECTOR-001", "KS-VECTOR-003",
     "KS-DIFY-ECS-001", "KS-DIFY-ECS-002", "KS-DIFY-ECS-003", "KS-DIFY-ECS-004",
     "KS-DIFY-ECS-005", "KS-DIFY-ECS-006", "KS-DIFY-ECS-007", "KS-DIFY-ECS-008",

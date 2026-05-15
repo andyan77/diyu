@@ -1,0 +1,723 @@
+{
+  "task_id": "KS-PROD-002-step4",
+  "covers": "KS-PROD-002 §4 step 4 (log resolved_brand_layer ↔ tenant consistency)",
+  "wave": "W12",
+  "checked_at_utc": "2026-05-15T02:17:11Z",
+  "git_commit": "339ff9a5f12418789267d39ee007fd278122162a",
+  "verdict": "PASS",
+  "evidence_level": "runtime_verified",
+  "data_source": "ssh diyu@8.217.175.36 → docker exec diyu-infra-postgres-1 → diyu_brand_faye.serving.context_bundle_log",
+  "expected_mapping": {
+    "tenant_faye_main": "brand_faye",
+    "tenant_demo": "domain_general"
+  },
+  "total_rowcount": 156,
+  "audited_rows": 100,
+  "mismatch_count": 0,
+  "unknown_tenants_seen": [],
+  "mismatches": [],
+  "audited": [
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:53:02Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:53:01Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:59Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:58Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:46Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:37Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:31Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:27Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:13Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:09Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:07Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:52:03Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:47:34Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:47:32Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:47:31Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:47:29Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:47:16Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:47:05Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:46:54Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:46:47Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:43:26Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:43:24Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:43:17Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:43:16Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:42:46Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:42:44Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:42:37Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:42:30Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:41:47Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:41:46Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:41:45Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:41:45Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:40:53Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:40:52Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:40:52Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:40:51Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:40:15Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:40:13Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:40:02Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:40:00Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:39:18Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:39:06Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:38:55Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:38:53Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T15:38:06Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:38:05Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:38:04Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T15:38:03Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:55:20Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:54:56Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:54:55Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:54:17Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:44:09Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:44:04Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:43:55Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:43:48Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:32:14Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:32:13Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:32:12Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:32:11Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:32:10Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:32:05Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:32:04Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:32:03Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:45Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:44Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:38Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:26Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:25Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:24Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:22Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:22Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:09Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:08Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:02Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:31:01Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:55Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:31Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:30Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:29Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:28Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:27Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:15Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:14Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:30:08Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:29:44Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:29:43Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:29:42Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:29:41Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:29:40Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:17:27Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:17:21Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:16:00Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:15:54Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:15:53Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:15:52Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:15:51Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:15:50Z"
+    },
+    {
+      "tenant_id": "tenant_demo",
+      "resolved": "domain_general",
+      "expected": "domain_general",
+      "ok": true,
+      "created_at": "2026-05-14T14:15:49Z"
+    },
+    {
+      "tenant_id": "tenant_faye_main",
+      "resolved": "brand_faye",
+      "expected": "brand_faye",
+      "ok": true,
+      "created_at": "2026-05-14T14:15:48Z"
+    }
+  ],
+  "no_clean_output_written": true,
+  "transport": "real SSH + real PG read-only query"
+}

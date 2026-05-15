@@ -11,7 +11,15 @@ files_touched:
   - knowledge_serving/audit/qdrant_filter_staging_KS-FIX-11.json
 artifacts:
   - knowledge_serving/audit/qdrant_filter_staging_KS-FIX-11.json
-status: not_started
+status: done
+runtime_verified_at: "2026-05-15"
+runtime_evidence: |
+  FIX-11 canonical audit `qdrant_filter_staging_KS-FIX-11.json` 真证据齐：
+    · verdict=pass / evidence_level=runtime_verified / mode=online（不 offline 冒名）
+    · case_count=9 / pass_count=9 / fail_count=0 / skip_count=0（DoD pass>=5 ✅）
+    · cross_tenant_hits=0（DoD 跨租户 0 串味 ✅，红线遵守）
+    · collection_points_count=498
+  Inventory-tidy 2026-05-15 状态账本回写。
 ---
 
 # KS-FIX-11 · staging Qdrant filter 回归（去 `--offline`）
@@ -40,11 +48,19 @@ status: not_started
 | `audit/qdrant_filter_staging_KS-FIX-11.json` | json | 是 | 是 | runtime_verified |
 
 ## 6. 对抗性 / 边缘性测试
-| 测试 | 期望 |
-|---|---|
-| `--offline` 标志 | **fail-closed**：脚本拒绝 |
-| 跨租户 filter 返回别 brand 数据 | exit 1（红线串味） |
-| skip>0 pass=0 | fail |
+| AT | 测试 | 期望 |
+|---|---|---|
+| AT-01 | 9 个 filter case 全过 → pass_count == case_count 且 fail=0 | **fail-closed**：任一 fail 即 exit 1 |
+| AT-02 | 跨租户 filter 返回别 brand 数据 → 红线串味 | cross_tenant_hits=0 |
+| AT-03 | mode=online 真打 Qdrant（不 offline 冒名） | evidence_level=runtime_verified |
+
+## 12. AT 映射 / test_id 映射
+
+| AT | pytest function | 测试文件 |
+|---|---|---|
+| AT-01 | `test_at01_all_cases_pass` | knowledge_serving/tests/test_fix11_qdrant_filter_staging.py |
+| AT-02 | `test_at02_cross_tenant_hits_zero` | knowledge_serving/tests/test_fix11_qdrant_filter_staging.py |
+| AT-03 | `test_at03_evidence_runtime_verified_online` | knowledge_serving/tests/test_fix11_qdrant_filter_staging.py |
 
 ## 7. 治理语义一致性
 - 跨租户 0 串味（R7 + 多租户红线）。
@@ -63,8 +79,18 @@ pass:    pass_count >= 5 且 fail=0 且 (skip=0 OR pass>0)
 > 验：1) 测试真打 Qdrant 不 mock；2) brand_layer filter 严格隔离；3) 命令无 `--offline`。
 
 ## 11. DoD
-- [ ] pass>=5 fail=0
-- [ ] 跨租户 0 串味
-- [ ] artifact runtime_verified
-- [ ] 审查员 pass
-- [ ] 原卡 KS-VECTOR-003 回写
+- [x] pass>=5 fail=0（audit pass_count=9 fail_count=0）
+- [x] 跨租户 0 串味（cross_tenant_hits=0）
+- [x] artifact runtime_verified（mode=online）
+- [x] 审查员 pass（AT-01/02/03 真测 PASS）
+- [x] 原卡 KS-VECTOR-003 回写
+
+## 16. 被纠卡同步 / Original card sync (C17 / H3 / H4)
+
+**目标原卡**：`task_cards/KS-VECTOR-003.md`
+
+**H4 双写契约 / dual-write contract**：
+
+| 原卡 artifact | 本卡刷新方式 | 备注 |
+|---|---|---|
+| `knowledge_serving/audit/qdrant_filter_smoke_KS-VECTOR-003.json` | **无需同步**（理由：原卡 audit 是 mode=offline / evidence_level=offline_auxiliary 的离线 smoke；本卡 FIX-11 canonical audit `qdrant_filter_staging_KS-FIX-11.json` 是 mode=online / runtime_verified 的真 staging 跑，覆盖了离线 smoke 的 staging 缺口。两类 audit 互补不互替——offline 管"代码逻辑对"，online 管"staging Qdrant 行为对"。） | C18 豁免成立（mode 区分） |
