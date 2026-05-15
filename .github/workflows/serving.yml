@@ -64,7 +64,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
-      - run: pip install -U pip pyyaml
+      - run: pip install -U pip pyyaml jsonschema requests fastapi pydantic
       - name: local_release_gate static mode
         run: bash knowledge_serving/scripts/local_release_gate.sh --mode static --runner github-actions --git-commit "${{ github.sha }}"
       - uses: actions/upload-artifact@v4
