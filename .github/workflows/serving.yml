@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
-      - run: pip install -U pip pyyaml jsonschema requests
+      - run: pip install -U pip pyyaml jsonschema requests fastapi pydantic
       - run: python3 task_cards/validate_task_cards.py
       - run: python3 task_cards/corrections/validate_corrections.py
       - run: python3 scripts/validate_dify_dsl.py

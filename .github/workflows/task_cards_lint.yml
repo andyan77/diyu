@@ -38,7 +38,7 @@ jobs:
       - name: install yaml + jsonschema (no other deps)
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install pyyaml jsonschema
+          python3 -m pip install pyyaml jsonschema fastapi pydantic
 
       - name: validate_task_cards
         run: python3 task_cards/validate_task_cards.py
