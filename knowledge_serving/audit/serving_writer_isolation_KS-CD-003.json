@@ -1,0 +1,84 @@
+{
+  "task_id": "KS-CD-003",
+  "subgate": "§11_DoD_serving_writer_isolation",
+  "checked_at_utc": "2026-05-15T06:26:17Z",
+  "git_commit": "1a9f018bf83887705d9fd48d80b07ed50d528188",
+  "ecs_host": "8.217.175.36",
+  "pg_container": "diyu-infra-postgres-1",
+  "pg_database": "diyu_brand_faye",
+  "pg_role_under_test": "serving_writer",
+  "command": "ssh root@8.217.175.36 'docker exec -i diyu-infra-postgres-1 psql -U diyu -d diyu_brand_faye' < knowledge_serving/scripts/sql/verify_serving_writer_isolation.sql",
+  "ssh_exit_code": 0,
+  "verdict": "PASS",
+  "evidence_level": "runtime_verified",
+  "failures": [],
+  "rules_checked": {
+    "R1": "serving_writer is login-only non-super role",
+    "R2": "USAGE granted only on serving + public; knowledge/knowledge_industrial/gateway = false",
+    "R3": "table grants confined to serving schema with INSERT,SELECT only",
+    "R4": "no forbidden privilege (UPDATE/DELETE/TRUNCATE/REFERENCES/TRIGGER) anywhere"
+  },
+  "sections": {
+    "role_attributes": [
+      [
+        "rolname",
+        "rolsuper",
+        "rolcreaterole",
+        "rolcreatedb",
+        "rolcanlogin"
+      ],
+      [
+        "serving_writer",
+        "f",
+        "f",
+        "f",
+        "t"
+      ]
+    ],
+    "schema_usage": [
+      [
+        "schema",
+        "has_usage"
+      ],
+      [
+        "gateway",
+        "f"
+      ],
+      [
+        "knowledge",
+        "f"
+      ],
+      [
+        "knowledge_industrial",
+        "f"
+      ],
+      [
+        "public",
+        "t"
+      ],
+      [
+        "serving",
+        "t"
+      ]
+    ],
+    "table_grants": [
+      [
+        "table_schema",
+        "n_tables",
+        "privs"
+      ],
+      [
+        "serving",
+        "13",
+        "INSERT,SELECT"
+      ]
+    ],
+    "forbidden_privs_probe": [
+      [
+        "table_schema",
+        "privilege_type"
+      ]
+    ]
+  },
+  "stderr_tail": ""
+}
